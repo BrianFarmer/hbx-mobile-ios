@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "hbxNavigationController.h"
+#import "LeftMenuSlideOutTableViewController.h"
+//#import <AWSCore/AWSCore.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

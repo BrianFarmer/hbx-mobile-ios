@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import <AWSCore/AWSCore.h>
+#import "Constants.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
+    LeftMenuSlideOutTableViewController *leftMenu = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+
+    [hbxNavigationController sharedInstance].leftMenu = leftMenu;
+    [hbxNavigationController sharedInstance].menuRevealAnimationDuration = .18;
+    
+    AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:CognitoRegionType
+                                                                                                    identityPoolId:CognitoIdentityPoolId];
+    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:DefaultServiceRegionType
+                                                                         credentialsProvider:credentialsProvider];
+    AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
+
     return YES;
 }
 

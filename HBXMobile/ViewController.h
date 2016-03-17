@@ -9,7 +9,21 @@
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController
+{
+    IBOutlet UILabel *lblStatus;
+    IBOutlet UITextField *txtEmail;
+    IBOutlet UITextField *txtPassword;
+//    IBOutlet UIButton *submitButton;
+    
+    BOOL bSaveUserInfo;
+    BOOL bUseTouchID;
+    
+    NSString *responseString;
+}
 
+@property (strong, nonatomic) IBOutlet UIButton *submitButton;
+@property (strong, nonatomic) IBOutlet UIButton *enableTouchIdButton;
+@property (strong, nonatomic) IBOutlet UIButton *saveUserInfoButton;
 
 @end
 
