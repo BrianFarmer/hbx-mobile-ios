@@ -78,7 +78,7 @@
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveUserInfo"])
     {
         txtEmail.text = username;
-        txtPassword.text = password;
+//        txtPassword.text = password;
         
         bSaveUserInfo = true;
         [self.saveUserInfoButton setImage:[self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]] forState:UIControlStateNormal];

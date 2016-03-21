@@ -14,6 +14,7 @@
 		133E79321C8F8FC000F4A117 /* bronze-circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 133E79311C8F8FC000F4A117 /* bronze-circle.png */; };
 		1367AFBD1C9993B1008CF742 /* MyPlanCoverageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1367AFBC1C9993B1008CF742 /* MyPlanCoverageTableViewController.m */; };
 		1367AFC01C99A0A6008CF742 /* MyPlanWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1367AFBF1C99A0A6008CF742 /* MyPlanWebViewController.m */; };
+		1371B9C91CA016DA0017A803 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1371B9C81CA016DA0017A803 /* sampleMyPlanJSON.txt */; };
 		137327531C8DE60D00B0F6E1 /* MyAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137327521C8DE60D00B0F6E1 /* MyAccountViewController.m */; };
 		137327561C8DECA800B0F6E1 /* hbxNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137327551C8DECA800B0F6E1 /* hbxNavigationController.m */; };
 		137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */; };
@@ -68,6 +69,7 @@
 		1367AFBC1C9993B1008CF742 /* MyPlanCoverageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPlanCoverageTableViewController.m; sourceTree = "<group>"; };
 		1367AFBE1C99A0A6008CF742 /* MyPlanWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPlanWebViewController.h; sourceTree = "<group>"; };
 		1367AFBF1C99A0A6008CF742 /* MyPlanWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPlanWebViewController.m; sourceTree = "<group>"; };
+		1371B9C81CA016DA0017A803 /* sampleMyPlanJSON.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sampleMyPlanJSON.txt; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		137327511C8DE60D00B0F6E1 /* MyAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountViewController.h; sourceTree = "<group>"; };
 		137327521C8DE60D00B0F6E1 /* MyAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountViewController.m; sourceTree = "<group>"; };
 		137327541C8DECA800B0F6E1 /* hbxNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hbxNavigationController.h; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 			children = (
 				13FF47461C8A2D2900C7C851 /* Images */,
 				13FF470D1C8A2C5600C7C851 /* main.m */,
+				1371B9C81CA016DA0017A803 /* sampleMyPlanJSON.txt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				133E792D1C8F8EED00F4A117 /* carefirst.jpg in Resources */,
 				13FF474F1C8A2D5E00C7C851 /* menu-icon.png in Resources */,
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
+				1371B9C91CA016DA0017A803 /* sampleMyPlanJSON.txt in Resources */,
 				13FF474D1C8A2D5E00C7C851 /* checkbox-pressed.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

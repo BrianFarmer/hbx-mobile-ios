@@ -13,6 +13,11 @@
     IBOutlet UITableView    *myAccountTable;
     
     NSMutableArray *tableData;
+    NSDictionary *dictionary;
+  
+    NSArray *subscriberPlans;
+    NSArray *coverageKeys;
+    NSArray *planKeys;
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;

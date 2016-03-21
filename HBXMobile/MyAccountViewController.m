@@ -13,7 +13,19 @@
 @end
 
 @implementation MyAccountViewController
-
+/*
+- (NSDictionary *) indexKeyedDictionaryFromArray:(NSArray *)array
+{
+    NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
+    [array enumerateObjectsUsingBlock:
+     ^(id obj, NSUInteger idx, BOOL *stop){
+         NSNumber *index = [NSNumber numberWithInteger:idx];
+         [mutableDictionary setObject:obj forKey:index];
+     }];
+    NSDictionary *result = [NSDictionary.alloc initWithDictionary:mutableDictionary];
+    return result;
+}
+*/
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -25,6 +37,57 @@
     CGSize screenSize = screenBound.size;
     
     myAccountTable.frame = CGRectMake(0,20,screenSize.width,600); //self.view.frame.size.width,500);
+    
+    NSString* filepath = [[NSBundle mainBundle] pathForResource:@"sampleMyPlanJSON" ofType:@"txt"];
+    NSData *data = [NSData dataWithContentsOfFile:filepath];
+    NSString *jsonString = [[NSString alloc] initWithContentsOfFile:filepath encoding:NSUTF8StringEncoding error:nil];//[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+    NSError *error = nil;
+//    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    subscriberPlans = [dictionary valueForKeyPath:@"subscriber_plans"];
+    
+    
+    
+    
+//    NSArray *values = [dictionary allKeys]; //objectAtIndex:0];
+    coverageKeys = [[dictionary valueForKeyPath:@"subscriber_plans"][0] allKeys]; //]objectForKey:@"PlanName"];
+    
+    NSDictionary *dict=[dictionary valueForKeyPath:@"subscriber_plans.plan"][0];
+//    planKeys = [[coverageKeys valueForKeyPath:@"plan"] allKeys]; //]objectForKey:@"PlanName"];
+
+    NSString *pt = [dict valueForKey:@"name"];
+        NSString *pt1 = [subscriberPlans valueForKey:@"date_coverage_effective"][0];
+//               NSDictionary *pDict = [subscriberPlans objectAtIndex:2];
+    
+    
+    NSArray *pa= [subscriberPlans valueForKey:@"members_covered"][0];
+    NSString *greeting = [pa componentsJoinedByString:@","];
+//    NSString *pt = [coverageKeys objectAtIndex:0];
+    
+//    NSString *categoryString=[[dictionary valueForKeyPath:@"MyPlan"][0] objectForKey:@"PlanName"];
+//    NSString *idString=[[results valueForKeyPath:@"data.abcd"][0] objectForKey:@"id"];
+//    NSString *titleString=[[results valueForKeyPath:@"data.abcd"][0] objectForKey:@"title"];
+
+//    NSArray *val = [[dictionary valueForKeyPath:@"MyPlan"][0] allValues];
+/*
+    NSArray *values = [[dictionary12 allKeys]objectAtIndex:0];
+    id val = nil;
+//    NSArray *values = [dictionary12 allValues];
+    
+    if ([values count] != 0)
+        val = [values objectAtIndex:0];
+    
+//        NSString *test = [NSString stringWithFormat:@"%@", [dictionary12 objectForKey:@"PlanName"]];
+//    NSString *test = [NSString stringWithFormat:@"%@", [dictionaryA objectForKey:@"PlanName"]];
+
+    
+//    NSArray *array = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&err];
+ //   NSDictionary *dictionary = [self indexKeyedDictionaryFromArray:[array objectAtIndex:0]]; //[array indexKeyedDictionary];
+ //   NSDictionary *dictionary = [array objectAtIndex:0];
+//    NSString *test = [dictionary objectForKey:@"ID"];
+//    NSLog(@"Test is %@",test);
+   */
     
     tableData = [[NSMutableArray alloc] init];
     
@@ -73,17 +136,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    return 3;
+    return [subscriberPlans count]; //[[dictionary valueForKeyPath:@"MyPlan"] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
 //    if (section == 0)
 //        return 2;
-    if (section == 1)
-        return 6;
+ //   if (section > 0 && section < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
+    return  [[subscriberPlans objectAtIndex:section] count]; //[[dictionary valueForKeyPath:@"MyPlan"][section] count];
     
-    return 1;
+//    return 1;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -108,7 +171,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([indexPath section] == 1)
+//    if ([indexPath section] > 0 && [indexPath section] < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
         return 44; //204;
     
     return 80; // [indexPath row] * 20;
@@ -386,62 +449,84 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
+        if ([indexPath section] == 1 && [indexPath row] == 0)
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        else
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
         
 //        cell = [self getCellContentViewNames:simpleTableIdentifier myCell:cell];
     }
     
 //    cell.backgroundColor = [UIColor clearColor];
 
-    if ([indexPath section] == 1)
+    
+//    if ([indexPath section] > 0 && [indexPath section] < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
     {
-
+        NSDictionary *planValues = [dictionary valueForKeyPath:@"subscriber_plans.plan"][indexPath.section];
+        cell.textLabel.text = @"";
+        cell.detailTextLabel.text = @"";
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.textLabel.font = [UIFont systemFontOfSize:18];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        
         if ([indexPath row] == 0)
         {
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textAlignment = NSTextAlignmentLeft;
 
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:18]; //[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             
             cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
-            cell.textLabel.text = @"BlueChoice HMO HSA Bronze $6,550";
-
+ //           cell.textLabel.text = [keyNames objectAtIndex:0]; //[[dictionary valueForKeyPath:@"MyPlan"][indexPath.section] objectForKey:]; //@"BlueChoice HMO HSA Bronze $6,550";
+ //           NSDictionary *pDict = [subscriberPlans objectAtIndex:indexPath.row];
+            
+//            cell.textLabel.text = [[subscriberPlans objectAtIndex:[indexPath section] objectAtIndex:1];
+            cell.textLabel.text = [planValues valueForKey:@"name"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
       //      cell.detailTextLabel.text = @"BRONZE";
         }
 
         if ([indexPath row] == 1)
         {
-            cell.textLabel.text = @"HMO";
-            cell.detailTextLabel.text = @"BRONZE";
+            cell.textLabel.text = [planValues valueForKey:@"type"];
+            //cell.detailTextLabel.text = [[dictionary valueForKeyPath:@"MyPlan"][indexPath.section-1] objectForKey:@"HMO"];;
+            cell.detailTextLabel.text = [planValues valueForKey:@"level"];
         }
         
         if ([indexPath row] == 2)
         {
             cell.textLabel.text = @"Effective Date";
-            cell.detailTextLabel.text = @"04/01/2016";
+           // cell.detailTextLabel.text = [[dictionary valueForKeyPath:@"MyPlan"][indexPath.section-1] objectForKey:@"Effective Date"];;
+            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"date_coverage_effective"][indexPath.section];
         }
         if ([indexPath row] == 3)
         {
             cell.textLabel.text = @"DC Health Link ID";
-            cell.detailTextLabel.text = @"297338";
+            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"dc_health_link_id"][indexPath.section];
         }
         if ([indexPath row] == 4)
         {
             cell.textLabel.text = @"Covered";
-            cell.detailTextLabel.text = @"John";
+//                NSString *greeting = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
+            cell.detailTextLabel.text = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
         }
         if ([indexPath row] == 5)
         {
             cell.textLabel.text = @"Premium";
-            cell.detailTextLabel.text = @"$306.67/month";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
         }
     
         if ([indexPath row] == 6)
         {
             cell.textLabel.text = @"Plan Selected";
-            cell.detailTextLabel.text = @"03/08/2016 (4:38PM)";
+            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"date_selected"][indexPath.section];
         }
-        
+
+        if ([indexPath row] == 7)
+        {
+            cell.textLabel.text = @"Coverage Selected";
+            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"coverage_status"][indexPath.section];
+        }
+
         /*
         UIImageView *pImage = (UIImageView *)[cell viewWithTag:13];
         UILabel *lblPlan = (UILabel *)[cell viewWithTag:10];
@@ -503,7 +588,7 @@
      cell.imageView.image = [ChoosePlanViewController imageWithImage:pimg scaledToSize:CGSizeMake(50,10)]; //[UIImage imageNamed:[[tableData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row*2+1]];
      */
     }
-    if ([indexPath section] == 0)
+    if ([indexPath section] == 22)
     {
 //        UILabel *plabel = [[UILabel alloc] initWithFrame:CGRectMake(15,32, 200, 30)];
 //        plabel.text = @"John Doe";
@@ -511,7 +596,7 @@
         cell.textLabel.text = @"John Doe";
     }
     
-    if ([indexPath section] == 2)
+    if ([indexPath section] == 22)
     {
         cell.textLabel.text = @"Notifications";
 //        UILabel *plabel = [[UILabel alloc] initWithFrame:CGRectMake(15,0, 200, 80)];

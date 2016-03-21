@@ -134,7 +134,14 @@
     if ([indexPath row] == 0 && [indexPath section] == 0)
         [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://dc.checkbookhealth.org/hie/dc/2016/assets/pdfs/86052DC0400005-01.pdf"];
     else
-        [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://individual.carefirst.com/individuals-families/home.page"];
+    {
+        NSURL *url = [NSURL URLWithString:@"https://individual.carefirst.com/individuals-families/home.page"];
+        
+        if (![[UIApplication sharedApplication] openURL:url]) {
+            NSLog(@"%@%@",@"Failed to open url:",[url description]);
+        }
+//        [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://individual.carefirst.com/individuals-families/home.page"];
+    }
     
 }
 

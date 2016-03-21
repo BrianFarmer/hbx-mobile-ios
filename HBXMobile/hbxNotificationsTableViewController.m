@@ -205,9 +205,12 @@
     }
     else
     {
+        if ([indexPath row] == 0)
+        {
         hbxNotificationsTableViewController *yourViewController = [[hbxNotificationsTableViewController alloc] initWithStyle:UITableViewStylePlain];
         yourViewController.level = 1;
         [self.navigationController pushViewController:yourViewController animated:YES];
+        }
     }
     
 }
