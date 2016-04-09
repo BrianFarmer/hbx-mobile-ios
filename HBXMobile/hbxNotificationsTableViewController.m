@@ -5,11 +5,13 @@
 //  Created by David Boyd on 3/11/16.
 //  Copyright © 2016 David Boyd. All rights reserved.
 //
-
+#import <QuartzCore/QuartzCore.h>
 #import "hbxNotificationsTableViewController.h"
 #import "startUploadOfDocumentViewController.h"
 
 @interface hbxNotificationsTableViewController ()
+
+@property (nonatomic) UIImagePickerController *imagePickerController;
 
 @end
 
@@ -184,9 +186,18 @@
         
             [myAlertView show];
 #else
-            startUploadOfDocumentViewController *yourViewController = [[startUploadOfDocumentViewController alloc] init];
-            yourViewController.view.frame = CGRectMake(0, 0, 400, 800);
-            [self.navigationController pushViewController:yourViewController animated:YES];
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+            UIViewController *students = [mainStoryboard instantiateViewControllerWithIdentifier:@"StartUpload"];
+            [self.navigationController pushViewController:students animated:YES];
+            
+//            startUploadOfDocumentViewController *yourViewController = [[startUploadOfDocumentViewController alloc] init];
+ //           yourViewController.view.frame = CGRectMake(0, 0, 400, 800);
+ //           [self.navigationController pushViewController:yourViewController animated:YES];
+            
+//            hbxNotificationsTableViewController *yourViewController = [[hbxNotificationsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+//            yourViewController.level = 1;
+//            [self.navigationController pushViewController:yourViewController animated:YES];
+
   //                      [self.view presentViewController:yourViewController animated:YES completion:NULL];
             
 #endif
@@ -197,8 +208,47 @@
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
             picker.allowsEditing = YES;
+            picker.modalPresentationStyle = UIModalPresentationFullScreen;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
+            
+//            picker.
+            picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerCameraCaptureModePhoto];
+            picker.showsCameraControls=NO;
+//            overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+
+            picker.allowsEditing = NO;
+            picker.delegate = self;
+
+            UIView *main_overlay_view = [[UIView alloc] initWithFrame:self.view.bounds];
+            
+            // Clear view (live camera feed) created and added to main overlay view
+            // ------------------------------------------------------------------------
+            UIView *clear_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+            clear_view.opaque = NO;
+            clear_view.backgroundColor = [UIColor clearColor];
+            [main_overlay_view addSubview:clear_view];
+            
+ //           picker.cameraOverlayView = overlay.view;
+ //           UIView *overlay_view = [self createCustomOverlayView];
+     //       for(int i = 0; i < 2; i++) {
+   //             self.HeightOfButtons = 100;
+                UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+                // when a button is touched, UIImagePickerController snaps a picture
+            [button addTarget:self action:@selector(takePicture:) forControlEvents:UIControlEventTouchUpInside];
+            button.frame = CGRectMake( self.view.frame.size.width / 2 - 150, self.view.frame.size.height - 100, 300, 75);
+            //[button setBackgroundColor:[UIColor lightGrayColor]];
+            button.layer.cornerRadius = 10; // this value vary as per your desire
+            button.clipsToBounds = YES;
+            button.backgroundColor = [UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:0.5];
+            [button setImage:[self imageFromSystemBarButton:UIBarButtonSystemItemCamera]
+                         forState:UIControlStateNormal];
+
+                [main_overlay_view addSubview:button];
+      //      }
+            [picker setCameraOverlayView:main_overlay_view];
+            
+            self.imagePickerController = picker;
+            
             [self presentViewController:picker animated:YES completion:NULL];
         
         }
@@ -207,12 +257,43 @@
     {
         if ([indexPath row] == 0)
         {
-        hbxNotificationsTableViewController *yourViewController = [[hbxNotificationsTableViewController alloc] initWithStyle:UITableViewStylePlain];
-        yourViewController.level = 1;
-        [self.navigationController pushViewController:yourViewController animated:YES];
+            hbxNotificationsTableViewController *yourViewController = [[hbxNotificationsTableViewController alloc] initWithStyle:UITableViewStylePlain];
+            yourViewController.level = 1;
+            [self.navigationController pushViewController:yourViewController animated:YES];
         }
     }
     
+}
+
+- (UIImage *)imageFromSystemBarButton:(UIBarButtonSystemItem)systemItem {
+    // Holding onto the oldItem (if any) to set it back later
+    // could use left or right, doesn't matter
+    UIBarButtonItem *oldItem = self.navigationItem.rightBarButtonItem;
+    
+    UIBarButtonItem *tempItem = [[UIBarButtonItem alloc]
+                                 initWithBarButtonSystemItem:systemItem
+                                 target:nil
+                                 action:nil];
+    
+    // Setting as our right bar button item so we can traverse its subviews
+    self.navigationItem.rightBarButtonItem = tempItem;
+    
+    // Don't know whether this is considered as PRIVATE API or not
+    UIView *itemView = (UIView *)[self.navigationItem.rightBarButtonItem performSelector:@selector(view)];
+    
+    UIImage *image = nil;
+    // Traversing the subviews to find the ImageView and getting its image
+    for (UIView *subView in itemView.subviews) {
+        if ([subView isKindOfClass:[UIImageView class]]) {
+            image = ((UIImageView *)subView).image;
+            break;
+        }
+    }
+    
+    // Setting our oldItem back since we have the image now
+    self.navigationItem.rightBarButtonItem = oldItem;
+    
+    return image;
 }
 
 - (IBAction)selectPhoto:(UIButton *)sender {
@@ -228,15 +309,75 @@
     
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
- /*
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.imageView.image = chosenImage;
- */
+//********** TAKE PICTURE **********
+-(void)takePicture12:(id)sender
+{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     
+    //Use camera if device has one otherwise use photo library
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    }
+    else
+    {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    [imagePicker setDelegate:self];
+    
+    //Show image picker
+    [self presentModalViewController:imagePicker animated:YES];
+    //Modal so we wait for it to complete
+}
+
+- (void)takePicture:(id)sender{
+    [self.imagePickerController takePicture];
+//    [picker dismissViewControllerAnimated:YES completion:NULL];
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+//    UIViewController *startUpload = [mainStoryboard instantiateViewControllerWithIdentifier:@"StartUpload"];
+//    [self.navigationController pushViewController:startUpload animated:YES];
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+ 
+    UIImage *chosenImage = info[UIImagePickerControllerOriginalImage]; //info[UIImagePickerControllerOriginalImage]; //[UIImagePickerControllerEditedImage];
+
+    CGFloat width = chosenImage.size.width;
+    CGFloat height = chosenImage.size.height;
+    
+//    UIImage *initialImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+//    NSData *data = UIImagePNGRepresentation(initialImage);
+    
+//    CGFloat gg = initialImage.scale;
+/*
+    initialImage = [UIImage imageWithCGImage:[UIImage imageWithData:data].CGImage
+                                       scale:2
+                                 orientation:initialImage.imageOrientation];
+*/
+    UIImage *scaledImage =
+    [UIImage imageWithCGImage:[chosenImage CGImage]
+                        scale:(chosenImage.scale * 2.0)
+                  orientation:(chosenImage.imageOrientation)];
+    
+    width = scaledImage.size.width;
+    height = scaledImage.size.height;
+//    self.imageView.image = scaledImage;
+    
+ 
+    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    startUploadOfDocumentViewController *startUpload = [mainStoryboard instantiateViewControllerWithIdentifier:@"StartUpload"];
+    
+//    startUpload.imageView.image = scaledImage;
+    startUpload.selectedImage = scaledImage;
+    
+    [self.navigationController pushViewController:startUpload animated:YES];
+
     [picker dismissViewControllerAnimated:YES completion:NULL];
-//    startUploadOfDocumentViewController *yourViewController = [[startUploadOfDocumentViewController alloc] init];
-//    [self.navigationController pushViewController:yourViewController animated:YES];
+
+    return;
     
     [self.navigationController popViewControllerAnimated:NO];
  

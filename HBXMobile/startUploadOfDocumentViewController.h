@@ -11,5 +11,6 @@
 @interface startUploadOfDocumentViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *startUploadButton;
-
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UIImage *selectedImage;
 @end

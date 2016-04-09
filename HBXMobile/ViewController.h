@@ -10,10 +10,12 @@
 
 @interface ViewController : UIViewController
 {
-    IBOutlet UILabel *lblStatus;
+    IBOutlet UILabel *lblDisclaimer;
     IBOutlet UITextField *txtEmail;
     IBOutlet UITextField *txtPassword;
 //    IBOutlet UIButton *submitButton;
+    IBOutlet UILabel *lblEnableTouchID;
+    IBOutlet UILabel *lblSaveUserID;
     
     BOOL bSaveUserInfo;
     BOOL bUseTouchID;

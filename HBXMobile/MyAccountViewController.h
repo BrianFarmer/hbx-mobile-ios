@@ -11,6 +11,7 @@
 @interface MyAccountViewController : UIViewController
 {
     IBOutlet UITableView    *myAccountTable;
+    IBOutlet UITabBar       *myTabBar;
     
     NSMutableArray *tableData;
     NSDictionary *dictionary;
@@ -18,6 +19,9 @@
     NSArray *subscriberPlans;
     NSArray *coverageKeys;
     NSArray *planKeys;
+    
+    int type;
+    
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;

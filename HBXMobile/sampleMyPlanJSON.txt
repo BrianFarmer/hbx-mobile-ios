@@ -26,7 +26,8 @@
 "plan" : {
         "name": "Kaiser DENTAL Plan",
         "type": "HMO",
-        "care_type" : "dental",         "carrier_contact_info": {
+        "care_type" : "dental",
+        "carrier_contact_info": {
         "phone" : "202-545-6667"
 }
 },
@@ -37,7 +38,7 @@
 "date_selected":"2012-03-22T18:25:43.511Z",
 "coverage_status": "enrolled",
 "document_validation_status": "verified"
-},
+}
 ],
 "broker": {
 "name": "Socrates Patanjali",

@@ -9,5 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface MyPlanCoverageTableViewController : UITableViewController
+{
+    BOOL    showCovered;
+}
 
+    @property (strong, nonatomic) NSString *covered;
+    @property(nonatomic, assign) int type;
 @end

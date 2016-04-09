@@ -46,12 +46,22 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationController.navigationBarHidden = YES;
     
-    
-    
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    self.submitButton.frame = CGRectMake(20, self.submitButton.frame.origin.y, screenSize.width - 40, self.submitButton.frame.size.height);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        // Place iPhone/iPod specific code here...
+        self.submitButton.frame = CGRectMake(20, self.submitButton.frame.origin.y, screenSize.width - 40, self.submitButton.frame.size.height);
+        txtEmail.frame = CGRectMake(20, txtEmail.frame.origin.y, screenSize.width - 40, txtEmail.frame.size.height);
+        txtPassword.frame = CGRectMake(20, txtPassword.frame.origin.y, screenSize.width - 40, txtPassword.frame.size.height);
+        self.enableTouchIdButton.frame = CGRectMake(screenSize.width - 160, self.enableTouchIdButton.frame.origin.y, 24, self.enableTouchIdButton.frame.size.height);
+        lblEnableTouchID.frame = CGRectMake(self.enableTouchIdButton.frame.origin.x + 29, lblEnableTouchID.frame.origin.y, screenSize.width - 40, lblEnableTouchID.frame.size.height);
+        lblDisclaimer.frame = CGRectMake(20, lblDisclaimer.frame.origin.y, screenSize.width - 40, lblDisclaimer.frame.size.height);
+    } else {
+        // Place iPad-specific code here...
+        self.submitButton.frame = CGRectMake(screenSize.width /2 - 100, self.submitButton.frame.origin.y, 200, self.submitButton.frame.size.height);
+    }
     
     UIImage *btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox.png"]];
     [self.enableTouchIdButton setImage:btnImage forState:UIControlStateNormal];
@@ -101,6 +111,8 @@
 
 - (IBAction)handleButtonClick:(id)sender
 {
+        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
+                [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 #if !(TARGET_IPHONE_SIMULATOR)
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if( [txtEmail.text caseInsensitiveCompare:@"john@dc.gov"] == NSOrderedSame )        //For DEMO Only
@@ -124,10 +136,13 @@
             [[NSUserDefaults standardUserDefaults] setBool:bUseTouchID forKey:@"useTouchID"];
 
             [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+ //               [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
         }
         
     }
 #else
+//    [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+//    [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
     [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 #endif
 }
@@ -208,7 +223,9 @@
                                                                    delegate:self
                                                           cancelButtonTitle:@"OK"
                                                           otherButtonTitles:nil, nil];
-                [alertView show];
+                // Commented this out if touchid is not enabled.
+                // Maybe add some code to ask or something
+                //                [alertView show];
             });
         }
     }

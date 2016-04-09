@@ -7,6 +7,8 @@
 //
 
 #import "MyAccountViewController.h"
+#import "MyPlanCoverageTableViewController.h"
+#import "showPlanDetailViewController.h"
 
 @interface MyAccountViewController ()
 
@@ -29,6 +31,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+//    [[myTabBar.items objectAtIndex:0] setTitle:NSLocalizedString(@"BotonMapas", @"comment")];
+//    UITabBarItem *tabItem = [[[tabBarController tabBar] items] objectAtIndex:INDEX];
+//    [[myTabBar.items objectAtIndex:0] setTitle:@"TEST"];
+//    UITabBarItem *item = [myTabBar.items objectAtIndex:0];
+//    [item setTitle:@"fgfdgd"];
+//    UITabBarItem *tabBarItem1 = [self.tabBarController.tabBar.items objectAtIndex:0];
+        UITabBarItem *tabBarItem1 = [myTabBar.items objectAtIndex:0];
+    //    [tabBarItem1.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    //    tabBarItem1.image = [UIImage imageNamed:@"piggy48.png"];
+    //    tabBarItem1.selectedImage = [UIImage imageNamed:@"piggy48.png" ];
+    tabBarItem1.image = [UIImage imageNamed:@"cloud_download-arrow-32.png"];
+    tabBarItem1.selectedImage = [UIImage imageNamed:@"cloud_download-arrow-32.png" ];
+    
+    UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:1];
+    tabBarItem2.image = [UIImage imageNamed:@"phone.png"];
+    tabBarItem2.selectedImage = [UIImage imageNamed:@"phone.png" ];
+    
+    UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:2];
+    tabBarItem3.image = [UIImage imageNamed:@"email.png"];
+    tabBarItem3.selectedImage = [UIImage imageNamed:@"email.png" ];
+    
+ //   self.tabBarController.tabBar.delegate = self;
+    myTabBar.delegate = self;
+    
+    
     [myAccountTable setBackgroundColor:[UIColor clearColor]];
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.leftBarButtonItem = nil;
@@ -36,7 +63,7 @@
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    myAccountTable.frame = CGRectMake(0,20,screenSize.width,600); //self.view.frame.size.width,500);
+    myAccountTable.frame = CGRectMake(0,20,screenSize.width,screenSize.height-80); //self.view.frame.size.width,500);
     
     NSString* filepath = [[NSBundle mainBundle] pathForResource:@"sampleMyPlanJSON" ofType:@"txt"];
     NSData *data = [NSData dataWithContentsOfFile:filepath];
@@ -99,6 +126,28 @@
 //    myAccountTable.rowHeight = 104;
     myAccountTable.separatorStyle = UITableViewCellSelectionStyleNone;
 
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, myAccountTable.frame.size.width, 54)];
+    
+    UIView *whiteRoundedCornerView = [[UIView alloc] initWithFrame:CGRectMake(5,5,self.view.frame.size.width - 10,44)];
+    whiteRoundedCornerView.backgroundColor = [UIColor whiteColor];
+    whiteRoundedCornerView.layer.masksToBounds = NO;
+    whiteRoundedCornerView.layer.cornerRadius = 3.0;
+    whiteRoundedCornerView.layer.shadowOffset = CGSizeMake(-1, 1);
+    whiteRoundedCornerView.layer.shadowOpacity = 0.5;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
+    imageView.image = [UIImage imageNamed:@"images.jpeg"];
+    [whiteRoundedCornerView addSubview:imageView];
+    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(70, whiteRoundedCornerView.frame.size.height/2 - 10, whiteRoundedCornerView.frame.size.width - 70, 0)];
+    labelView.text = @"Company ABC";
+    [labelView sizeToFit];
+ //   [labelView setCenter:headerView.center];
+    [whiteRoundedCornerView addSubview:labelView];
+
+    [headerView addSubview:whiteRoundedCornerView];
+    [headerView sendSubviewToBack:whiteRoundedCornerView];
+
+    myAccountTable.tableHeaderView = headerView;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -107,6 +156,8 @@
     
     [self.navigationItem setHidesBackButton:YES];
     [self.navigationItem setTitle:@"My DC Health Link"];
+    
+    type = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -124,6 +175,61 @@
     return YES;
 }
 
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    
+    if (item.tag == 0)
+    {
+        [self performSegueWithIdentifier:@"Show Notifications" sender:nil];
+    }
+    else if(item.tag == 1)
+    {
+        NSString *actionSheetTitle = @"Contact"; //Action Sheet Title
+ //       NSString *destructiveTitle = @"Destructive Button"; //Action Sheet Button Titles
+        NSString *other1 = @"Medical";
+        NSString *other2 = @"Dental";
+        NSString *other3 = @"Broker";
+        NSString *other4 = @"Case Worker";
+        NSString *other5 = @"Generic";
+        NSString *cancelTitle = @"Cancel";
+        
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]
+                                      initWithTitle:nil //actionSheetTitle
+                                      delegate:self
+                                      cancelButtonTitle:cancelTitle
+                                      destructiveButtonTitle:nil //destructiveTitle
+                                      otherButtonTitles:other1, other2, other3, other4, other5, nil];
+        
+        [actionSheet showInView:self.view];
+////        SettingsViewController *ViewController = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
+ //       [self presentViewController:ViewController animated:NO completion:nil];
+    }
+    else if (item.tag == 2)
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:"]];
+}
+/*
+-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController*)viewController
+{
+ 
+     // prepare your transition
+//     CATransition *transition;
+//     transition = [CATransition animation];
+//     transition.type = kCATransitionFromRight;
+//     transition.duration = 0.5;
+     
+     // prepare your view switching
+     //    [[[ViewController view]layer]addAnimation:transition forKey:nil];
+     [[self.view layer] addAnimation:transition forKey:nil];
+    
+    CATransition *animation = [CATransition animation];
+    [animation setType:kCATransitionMoveIn]; //@"rippleEffect"]; //kCATransitionFade];
+    [animation setDuration:0.25];
+    //    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:
+    //                                  kCAMediaTimingFunctionEaseIn]];
+    [self.view.window.layer addAnimation:animation forKey:@"fadeTransition"];
+    
+}
+*/
 /*
 #pragma mark - Navigation
 
@@ -143,12 +249,38 @@
     
 //    if (section == 0)
 //        return 2;
- //   if (section > 0 && section < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
-    return  [[subscriberPlans objectAtIndex:section] count]; //[[dictionary valueForKeyPath:@"MyPlan"][section] count];
-    
-//    return 1;
+
+    return  9;  //[[subscriberPlans objectAtIndex:section] count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 10;
+    
+    return 2.0;
+}
+/*
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if(section == 0)
+    {
+        UIView *shadowView  =  [[UIView alloc] initWithFrame: CGRectMake(0,0,320,40)];
+        shadowView.backgroundColor = [UIColor whiteColor];
+        
+        // Doing the Decoration Part
+        shadowView.layer.shadowColor = [[UIColor blackColor] CGColor];
+        shadowView.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+        shadowView.layer.shadowRadius = 3.0f;
+        shadowView.layer.shadowOpacity = 1.0f;
+        
+        return shadowView;
+    }
+    return nil;
+}
+*/
+
+/*
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *v = [UIView new];
@@ -163,11 +295,8 @@
     }
     return v;
 }
+*/
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 2.0;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -320,6 +449,23 @@
     
     /////////////////////////////////
     //
+    // HOW MANY COVERED ROUND BUTTON
+    /////////////////////////////////
+    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.tag=30;
+    [button setFrame:CGRectMake(150, 2, 30, 30)];
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 0)];
+
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setBackgroundColor:[UIColor grayColor]];
+    button.layer.cornerRadius = 15; // this value vary as per your desire
+    button.clipsToBounds = YES;
+    
+    button.font = [UIFont boldSystemFontOfSize:12];
+    [cell.contentView addSubview:button];
+    
+    /////////////////////////////////
+    //
     // PREMIUM LABEL
     /////////////////////////////////
     lblTemp = [[UILabel alloc] initWithFrame:CGRectMake(180, 65, 120, 10)];
@@ -449,16 +595,33 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-        if ([indexPath section] == 1 && [indexPath row] == 0)
+        if ([indexPath section] == 1 && ([indexPath row] == 0 || [indexPath row] == 4))
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
         else
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
         
+        CGRect screenBound = [[UIScreen mainScreen] bounds];
+        CGSize screenSize = screenBound.size;
+        
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag=30;
+        [button setFrame:CGRectMake(screenSize.width - 70, 5, 37, 37)];
+        [button setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 0)];
+        
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setBackgroundColor:self.view.backgroundColor];//[UIColor grayColor]];
+        button.layer.cornerRadius = 18; // this value vary as per your desire
+        button.clipsToBounds = YES;
+        button.hidden = TRUE;
+        button.font = [UIFont boldSystemFontOfSize:14];
+        [cell.contentView addSubview:button];
+
 //        cell = [self getCellContentViewNames:simpleTableIdentifier myCell:cell];
     }
     
 //    cell.backgroundColor = [UIColor clearColor];
-
+    UIButton *button = (UIButton *)[cell viewWithTag:30];
+    button.hidden = TRUE;
     
 //    if ([indexPath section] > 0 && [indexPath section] < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
     {
@@ -468,6 +631,7 @@
         cell.textLabel.textColor = [UIColor blackColor];
         cell.textLabel.font = [UIFont systemFontOfSize:18];
         cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:16];
         
         if ([indexPath row] == 0)
         {
@@ -496,7 +660,17 @@
         {
             cell.textLabel.text = @"Effective Date";
            // cell.detailTextLabel.text = [[dictionary valueForKeyPath:@"MyPlan"][indexPath.section-1] objectForKey:@"Effective Date"];;
-            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"date_coverage_effective"][indexPath.section];
+            NSString *dateStr = [subscriberPlans valueForKey:@"date_coverage_effective"][indexPath.section]; //@"2011-07-06 00:00:00";
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
+            //          NSDate *date = [formatter dateFromString:@"2011-01-12T14:17:55.043Z"];
+            NSDate *date = [formatter dateFromString:dateStr];
+            //         NSLog(@"Date: %@", date);
+            //         NSLog(@"1970: %f", [date timeIntervalSince1970]);
+            //         NSLog(@"sDate: %@", [formatter stringFromDate:date]);
+                        [formatter setDateFormat:@"MM/dd/yyyy"];
+            cell.detailTextLabel.text = [formatter stringFromDate:date]; //[subscriberPlans valueForKey:@"date_coverage_effective"][indexPath.section];
         }
         if ([indexPath row] == 3)
         {
@@ -505,9 +679,16 @@
         }
         if ([indexPath row] == 4)
         {
-            cell.textLabel.text = @"Covered";
-//                NSString *greeting = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
-            cell.detailTextLabel.text = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
+            
+            button.hidden = FALSE;
+            cell.textLabel.text = @"# of Covered Members"; //@"Covered";
+            //NSString *greeting = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
+            //cell.detailTextLabel.text = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
+
+            NSString *p = [NSString stringWithFormat:@"%ld", [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] count]];
+            // [button setTitle:@"2" forState:UIControlStateNormal];
+            [button setTitle:p forState:UIControlStateNormal];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if ([indexPath row] == 5)
         {
@@ -518,13 +699,36 @@
         if ([indexPath row] == 6)
         {
             cell.textLabel.text = @"Plan Selected";
-            cell.detailTextLabel.text = [subscriberPlans valueForKey:@"date_selected"][indexPath.section];
+            
+            NSString *dateStr = [subscriberPlans valueForKey:@"date_selected"][indexPath.section]; //@"2011-07-06 00:00:00";
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+  //          NSDate *date = [formatter dateFromString:@"2011-01-12T14:17:55.043Z"];
+            NSDate *date = [formatter dateFromString:dateStr];
+   //         NSLog(@"Date: %@", date);
+   //         NSLog(@"1970: %f", [date timeIntervalSince1970]);
+   //         NSLog(@"sDate: %@", [formatter stringFromDate:date]);
+            NSDateFormatter *dtF = [[NSDateFormatter alloc] init];
+            [dtF setDateFormat:@"MM/dd/yyyy"];
+          //Removed to not include time
+            //[dtF setDateFormat:@"MM-dd-yyyy (hh:mm a)"];
+            NSLog(@"sDate: %@", [dtF stringFromDate:date]);
+            
+            cell.detailTextLabel.text = [dtF stringFromDate:date]; //[subscriberPlans valueForKey:@"date_selected"][indexPath.section];
         }
 
         if ([indexPath row] == 7)
         {
             cell.textLabel.text = @"Coverage Selected";
             cell.detailTextLabel.text = [subscriberPlans valueForKey:@"coverage_status"][indexPath.section];
+        }
+
+        if ([indexPath row] == 8)
+        {
+            cell.textLabel.text = @"Carrier Contact Info";
+            cell.detailTextLabel.text = @"";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
         /*
@@ -667,11 +871,52 @@
 {
     [tableView1 deselectRowAtIndexPath:[tableView1 indexPathForSelectedRow] animated:YES];
 
-    if ([indexPath section] == 1 && [indexPath row] == 0)
-        [self performSegueWithIdentifier:@"Show Plan Details" sender:nil];
+//    if ([indexPath section] == 0 && [indexPath row] == 0)
+    if ([indexPath row] == 0)
+    {
+ //       [self performSegueWithIdentifier:@"Show Shop Plan Details" sender:nil];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        showPlanDetailViewController *selectPlanController = [mainStoryboard instantiateViewControllerWithIdentifier:@"Plan Detail View"];
+  //      selectPlanController.level = 1;
+        [self.navigationController pushViewController:selectPlanController animated:YES];
+
+    }
+
+    if ([indexPath row] == 4)
+    {
+        type = 0;
+        [self performSegueWithIdentifier:@"Show Plan Details" sender:[[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "]];
+    }
+    
+    if ([indexPath row] == 8)
+    {
+        NSDictionary *carrierInfo = [dictionary valueForKeyPath:@"subscriber_plans.plan.carrier_contact_info"][indexPath.section];
+        NSString *ci = [NSString stringWithFormat:@"%@,%@,%@", [carrierInfo valueForKey:@"phone"], [carrierInfo valueForKey:@"email"], @"https://individual.carefirst.com/individuals-families/home.page"];
+        type = 1;
+        [self performSegueWithIdentifier:@"Show Plan Details" sender:ci];
+    }
 
     if ([indexPath section] == 2)
-        [self performSegueWithIdentifier:@"Show Notifications" sender:nil];
+        [self performSegueWithIdentifier:@"Show Notifications" sender:[[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "]];
 }
+
+
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+     if ([[segue identifier] isEqualToString:@"Show Plan Details"])
+     { 
+         // Get destination view
+         MyPlanCoverageTableViewController *vc = [segue destinationViewController];
+         vc.covered = (NSString *)sender;
+         vc.type = type;
+         
+ // Get button tag number (or do whatever you need to do here, based on your object
+ //       NSInteger tagIndex = [(UIButton *)sender tag];
+ 
+ // Pass the information to your destination view
+ //        [vc setSelectedButton:tagIndex];
+     }
+ }
+
 
 @end

@@ -10,6 +10,9 @@
 #import "MyPlanWebViewController.h"
 
 @interface MyPlanCoverageTableViewController ()
+{
+    NSMutableArray *pCovered;
+}
 
 @end
 
@@ -17,6 +20,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    showCovered = FALSE;
+//    self.type = 2;
+    
+//    if ([self.covered length] > 0)
+    {
+        pCovered = [[NSMutableArray alloc] init];
+        pCovered = [self.covered componentsSeparatedByString:@","];
+//        showCovered = TRUE;
+//        self.type = 0;
+    }
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -34,11 +48,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    return 2;
+ //   if (showCovered)
+        return [pCovered count];
+    
+//    if (self.type == 0)
+//        return 2;
+    
+ //   return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
+    
     return 1;
 }
 
@@ -103,10 +124,31 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
     }
     
-
+    if (self.type == 0)
+    {
+        cell.textLabel.text = [pCovered objectAtIndex:indexPath.section];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    else if (self.type == 1)
+    {
+        cell.detailTextLabel.text = [pCovered objectAtIndex:indexPath.section];
+        
+        if (indexPath.section == 0)
+            cell.textLabel.text = @"Phone number:";
+        else if (indexPath.section == 1)
+            cell.textLabel.text = @"Email address:";
+        else
+        {
+            cell.textLabel.text = @"Website:";
+            cell.detailTextLabel.text = @"CareFirst HomePage";
+        }
+    }
+    /*
+    else
+    {
         cell.textLabel.numberOfLines = 0;
         if ([indexPath row] == 0 && [indexPath section] == 0)
         {
@@ -116,7 +158,8 @@
         }
         else
             cell.textLabel.text = @"CareFirst Website";
-    
+    }
+     */
     return cell;
 }
 
@@ -131,9 +174,13 @@
     
     [self.view addSubview:webView];
     */
-    if ([indexPath row] == 0 && [indexPath section] == 0)
-        [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://dc.checkbookhealth.org/hie/dc/2016/assets/pdfs/86052DC0400005-01.pdf"];
-    else
+    if (self.type == 0)
+        return;
+    
+//    if ([indexPath row] == 0 && [indexPath section] == 0)
+//        [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://dc.checkbookhealth.org/hie/dc/2016/assets/pdfs/86052DC0400005-01.pdf"];
+//    else
+    if ([indexPath row] == 0 && [indexPath section] == 2)
     {
         NSURL *url = [NSURL URLWithString:@"https://individual.carefirst.com/individuals-families/home.page"];
         
@@ -142,6 +189,8 @@
         }
 //        [self performSegueWithIdentifier:@"Show Plan PDF" sender:@"https://individual.carefirst.com/individuals-families/home.page"];
     }
+    else
+        return;
     
 }
 

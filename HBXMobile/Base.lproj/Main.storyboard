@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Acm-hi-XzD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Acm-hi-XzD">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -25,34 +25,22 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Uvf-fY-ff6">
-                                <rect key="frame" x="13" y="340" width="335" height="41"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.18288326029999999" green="0.51144777990000001" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Log In">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleButtonClick:" destination="dkx-z0-nzr" eventType="touchDown" id="TgX-cZ-6Bg"/>
-                                    <action selector="handleButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bzA-mo-GN4"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Touch ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NSC-fx-oUg">
-                                <rect key="frame" x="239" y="266" width="122" height="21"/>
+                                <rect key="frame" x="239" y="254" width="122" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save User ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oGJ-Yn-oPw">
-                                <rect key="frame" x="41" y="266" width="105" height="21"/>
+                                <rect key="frame" x="53" y="254" width="105" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="30f-a9-oVN">
-                                <rect key="frame" x="210" y="265" width="24" height="24"/>
+                                <rect key="frame" x="210" y="253" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="checkbox.png"/>
                                 <connections>
@@ -68,11 +56,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SAn-8X-zUE">
-                                <rect key="frame" x="13" y="263" width="24" height="24"/>
+                                <rect key="frame" x="25" y="251" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="checkbox.png"/>
                                 <connections>
                                     <action selector="saveUserInfoButton:" destination="dkx-z0-nzr" eventType="touchUpInside" id="cAd-LC-87j"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Uvf-fY-ff6">
+                                <rect key="frame" x="13" y="298" width="335" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.18288326029999999" green="0.51144777990000001" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Log In">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleButtonClick:" destination="dkx-z0-nzr" eventType="touchDown" id="TgX-cZ-6Bg"/>
+                                    <action selector="handleButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bzA-mo-GN4"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -82,11 +82,14 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="enableTouchIdButton" destination="30f-a9-oVN" id="qeH-1G-pOx"/>
+                        <outlet property="lblDisclaimer" destination="GW4-me-1nB" id="nng-Cw-34v"/>
+                        <outlet property="lblEnableTouchID" destination="NSC-fx-oUg" id="STW-PK-cII"/>
                         <outlet property="saveUserInfoButton" destination="SAn-8X-zUE" id="ev0-Xn-YP7"/>
                         <outlet property="submitButton" destination="Uvf-fY-ff6" id="njP-mz-MfV"/>
                         <outlet property="txtEmail" destination="0dT-mP-gI9" id="yqH-jK-Flb"/>
                         <outlet property="txtPassword" destination="erv-af-Cdj" id="SWQ-LX-uWi"/>
                         <segue destination="m89-FY-wnh" kind="push" identifier="Show My Account" id="4hg-ej-X60"/>
+                        <segue destination="XT4-Sd-mMV" kind="push" identifier="Select Plan Employee" id="btB-dW-lJ0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -96,13 +99,13 @@
         <!--My Account View Controller-->
         <scene sceneID="zp1-NI-hi2">
             <objects>
-                <viewController title="My Account View Controller" id="m89-FY-wnh" customClass="MyAccountViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="My Account" title="My Account View Controller" id="m89-FY-wnh" customClass="MyAccountViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FOs-zD-eKj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="cxE-sf-FUq">
-                                <rect key="frame" x="0.0" y="65" width="375" height="595"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="502"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -110,6 +113,19 @@
                                     <outlet property="delegate" destination="m89-FY-wnh" id="K3C-sD-gyu"/>
                                 </connections>
                             </tableView>
+                            <tabBar contentMode="scaleToFill" id="vc0-dV-ERs">
+                                <rect key="frame" x="0.0" y="618" width="375" height="49"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <tabBarItem title="Notifications" image="cloud_download-arrow-32.png" badgeValue="2" id="CtW-fy-PQS"/>
+                                    <tabBarItem tag="1" title="Contact" selectedImage="phone.png" id="qmF-f8-7dB"/>
+                                    <tabBarItem tag="2" title="Email" id="cEb-sf-vTG"/>
+                                </items>
+                                <connections>
+                                    <outlet property="delegate" destination="m89-FY-wnh" id="0wT-g0-eJF"/>
+                                </connections>
+                            </tabBar>
                         </subviews>
                         <color key="backgroundColor" red="0.55248800210000004" green="0.7043914657" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -117,6 +133,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="myAccountTable" destination="cxE-sf-FUq" id="QCf-yJ-W6h"/>
+                        <outlet property="myTabBar" destination="vc0-dV-ERs" id="6cz-Gt-3ja"/>
                         <segue destination="0oG-Oe-gTI" kind="push" identifier="Show Notifications" id="I4w-CN-r92"/>
                         <segue destination="z7k-vE-8m5" kind="push" identifier="Show Plan Details" id="D2K-eH-2kW"/>
                     </connections>
@@ -124,6 +141,80 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ygk-M4-G7G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="757.5" y="400.5"/>
+        </scene>
+        <!--SHOP Employee-->
+        <scene sceneID="e3a-OR-qnz">
+            <objects>
+                <viewController storyboardIdentifier="SHOP Employee" title="SHOP Employee" id="XT4-Sd-mMV" customClass="selectPlanViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ws5-Rd-gkd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rqk-SH-s7K">
+                                <rect key="frame" x="67" y="146" width="240" height="399"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="XT4-Sd-mMV" id="1dO-iS-Yj0"/>
+                                    <outlet property="delegate" destination="XT4-Sd-mMV" id="zQq-xO-glF"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.55248800210000004" green="0.7043914657" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="nPs-rM-KLR"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="plansTable" destination="Rqk-SH-s7K" id="oc6-Q6-f3B"/>
+                        <segue destination="1A4-gW-Del" kind="push" identifier="Show Plan PDF a" id="oVP-Ce-9Cp"/>
+                        <segue destination="ArG-0i-Wyt" kind="push" identifier="Show Shop Plan Details" id="fvN-ti-iZn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t0u-Ee-4IE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="757.5" y="1146.5"/>
+        </scene>
+        <!--Plan Details-->
+        <scene sceneID="kaw-kc-tHJ">
+            <objects>
+                <viewController storyboardIdentifier="Plan Detail View" title="Plan Details" id="ArG-0i-Wyt" customClass="showPlanDetailViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="l2M-Yp-hKQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="2OI-7f-q5x">
+                                <rect key="frame" x="124" y="77" width="228" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="CO-PAY"/>
+                                    <segment title="COINSURANCE"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentSwitch:" destination="ArG-0i-Wyt" eventType="valueChanged" id="BOP-2y-EC2"/>
+                                </connections>
+                            </segmentedControl>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="lOr-XQ-PrM">
+                                <rect key="frame" x="20" y="134" width="335" height="499"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ArG-0i-Wyt" id="iaY-sR-J0h"/>
+                                    <outlet property="delegate" destination="ArG-0i-Wyt" id="0gA-yh-mjc"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="592-fa-zZj"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="planDetailTable" destination="lOr-XQ-PrM" id="vhx-DL-vgy"/>
+                        <outlet property="planType" destination="2OI-7f-q5x" id="AwV-ld-Iaz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0dC-Uy-WVt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1256.5" y="1146.5"/>
         </scene>
         <!--Show Notifications-->
         <scene sceneID="ncZ-YR-VBO">
@@ -150,6 +241,9 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="nHJ-rs-gs5"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <segue destination="sYl-Ju-g9u" kind="push" id="GHZ-7A-vnm"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ac5-nJ-XMf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -158,7 +252,7 @@
         <!--Start Upload-->
         <scene sceneID="szU-Ga-JlI">
             <objects>
-                <viewController title="Start Upload" id="sYl-Ju-g9u" customClass="startUploadOfDocumentViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StartUpload" title="Start Upload" id="sYl-Ju-g9u" customClass="startUploadOfDocumentViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aAb-ep-xEE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -175,11 +269,17 @@
                                     <action selector="startUploadClick:" destination="sYl-Ju-g9u" eventType="touchUpInside" id="8uA-r8-Gbl"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Rbp-fa-hKk">
+                                <rect key="frame" x="67" y="177" width="240" height="147"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="TwE-n3-dhS"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="imageView" destination="Rbp-fa-hKk" id="6AX-72-gmf"/>
                         <outlet property="progressView" destination="3id-VD-3sw" id="XhP-hA-WLi"/>
                         <outlet property="startUploadButton" destination="N0Z-XP-Y83" id="pxk-5z-uYt"/>
                     </connections>
@@ -253,7 +353,7 @@
         <!--My Plan Web View-->
         <scene sceneID="iuD-ok-kwF">
             <objects>
-                <viewController title="My Plan Web View" id="1A4-gW-Del" customClass="MyPlanWebViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HBXMobile Web View" title="My Plan Web View" id="1A4-gW-Del" customClass="MyPlanWebViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Em-kJ-6qh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -261,7 +361,7 @@
                             <webView contentMode="scaleToFill" id="nS9-gM-FrC">
                                 <rect key="frame" x="-11" y="66" width="386" height="601"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -298,5 +398,10 @@
     </scenes>
     <resources>
         <image name="checkbox.png" width="16" height="16"/>
+        <image name="cloud_download-arrow-32.png" width="32" height="32"/>
+        <image name="phone.png" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="oVP-Ce-9Cp"/>
+    </inferredMetricsTieBreakers>
 </document>
