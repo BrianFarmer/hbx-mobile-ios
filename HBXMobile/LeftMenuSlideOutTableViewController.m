@@ -8,7 +8,6 @@
 
 #import "LeftMenuSlideOutTableViewController.h"
 
-
 @interface LeftMenuSlideOutTableViewController ()
 
 @end
@@ -151,7 +150,7 @@
         vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"MainLogin"];
     
     
-    [[hbxNavigationController sharedInstance] pushViewController:vc animated:TRUE];
+    [[SlideNavigationController sharedInstance] pushViewController:vc animated:TRUE];
      
 /*
     [[hbxNavigationController sharedInstance] popToRootAndSwitchToViewController:vc

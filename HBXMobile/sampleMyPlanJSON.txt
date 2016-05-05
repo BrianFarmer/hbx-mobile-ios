@@ -6,6 +6,7 @@
         "type": "HMO",
         "care_type" : "medical",
         "level": "BRONZE",
+        "deductible": "6550",
         "benefits_summary_url": "http://hmo.bluechoice.bcbs.com/summary555.pdf",
         "carrier_contact_info": {
                      "phone" : "301-545-6767",
@@ -26,6 +27,7 @@
 "plan" : {
         "name": "Kaiser DENTAL Plan",
         "type": "HMO",
+        "deductible": "",
         "care_type" : "dental",
         "carrier_contact_info": {
         "phone" : "202-545-6667"

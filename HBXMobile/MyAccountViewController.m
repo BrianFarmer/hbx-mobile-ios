@@ -30,40 +30,51 @@
 */
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }
+                                             forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }
+                                             forState:UIControlStateSelected];
+    
+  //   [[UITabBar appearance] setTintColor:[UIColor redColor]];
+    [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:(10/255.0) green:(64/255.0) blue:(99/255.0) alpha:1]];
     // Do any additional setup after loading the view.
-//    [[myTabBar.items objectAtIndex:0] setTitle:NSLocalizedString(@"BotonMapas", @"comment")];
-//    UITabBarItem *tabItem = [[[tabBarController tabBar] items] objectAtIndex:INDEX];
-//    [[myTabBar.items objectAtIndex:0] setTitle:@"TEST"];
-//    UITabBarItem *item = [myTabBar.items objectAtIndex:0];
-//    [item setTitle:@"fgfdgd"];
-//    UITabBarItem *tabBarItem1 = [self.tabBarController.tabBar.items objectAtIndex:0];
-        UITabBarItem *tabBarItem1 = [myTabBar.items objectAtIndex:0];
+
+    UITabBarItem *tabBarItem1 = [myTabBar.items objectAtIndex:0];
     //    [tabBarItem1.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    //    tabBarItem1.image = [UIImage imageNamed:@"piggy48.png"];
-    //    tabBarItem1.selectedImage = [UIImage imageNamed:@"piggy48.png" ];
-    tabBarItem1.image = [UIImage imageNamed:@"cloud_download-arrow-32.png"];
-    tabBarItem1.selectedImage = [UIImage imageNamed:@"cloud_download-arrow-32.png" ];
+
+    tabBarItem1.image = [[UIImage imageNamed:@"bell.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+    tabBarItem1.selectedImage = [[UIImage imageNamed:@"bell.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:1];
-    tabBarItem2.image = [UIImage imageNamed:@"phone.png"];
-    tabBarItem2.selectedImage = [UIImage imageNamed:@"phone.png" ];
+    tabBarItem2.image = [[UIImage imageNamed:@"profile_mobiledchl.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+    tabBarItem2.selectedImage = [[UIImage imageNamed:@"profile_mobiledchl.png" ] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     
     UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:2];
-    tabBarItem3.image = [UIImage imageNamed:@"email.png"];
-    tabBarItem3.selectedImage = [UIImage imageNamed:@"email.png" ];
+    tabBarItem3.image = [UIImage imageNamed:@"bell.png"];
+    tabBarItem3.selectedImage = [UIImage imageNamed:@"bell.png" ];
     
  //   self.tabBarController.tabBar.delegate = self;
     myTabBar.delegate = self;
     
     
-    [myAccountTable setBackgroundColor:[UIColor clearColor]];
+    [myAccountTable setBackgroundColor:[UIColor colorWithRed:(228/255.0) green:(228/255.0) blue:(228/255.0) alpha:1]];//[UIColor lightGrayColor]];//E4E4E4
+
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.leftBarButtonItem = nil;
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Log out" style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
+    
+ //   self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    [self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{
+                                         NSFontAttributeName: [UIFont fontWithName:@"Roboto-Regular" size:16.0],
+                                         NSForegroundColorAttributeName: [UIColor whiteColor]
+                                         } forState:UIControlStateNormal];
     
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    myAccountTable.frame = CGRectMake(0,20,screenSize.width,screenSize.height-80); //self.view.frame.size.width,500);
+    myAccountTable.frame = CGRectMake(20,20,screenSize.width-40,myTabBar.frame.origin.y-90); //self.view.frame.size.width,500);
     
     NSString* filepath = [[NSBundle mainBundle] pathForResource:@"sampleMyPlanJSON" ofType:@"txt"];
     NSData *data = [NSData dataWithContentsOfFile:filepath];
@@ -73,8 +84,6 @@
 //    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     subscriberPlans = [dictionary valueForKeyPath:@"subscriber_plans"];
-    
-    
     
     
 //    NSArray *values = [dictionary allKeys]; //objectAtIndex:0];
@@ -116,36 +125,39 @@
 //    NSLog(@"Test is %@",test);
    */
     
+/*
     tableData = [[NSMutableArray alloc] init];
     
     [tableData addObject:[NSArray arrayWithObjects:@"BlueChoice HMO HSA Bronze $6,550", @"carefirst.jpg", @"176.57", @"HMO", @"Bronze", @"DC-Metro", @"6,550", @"http://www.yahoo.com", nil] ];
     [tableData addObject:[NSArray arrayWithObjects:@"BlueChoice HMO HSA Bronze $6,000", @"carefirst.jpg", @"183.52", @"HMO", @"Bronze", @"DC-Metro", @"6,000", @"http://www.yahoo.com", nil] ];
     [tableData addObject:[NSArray arrayWithObjects:@"KP DC Bronze 6000/20%/HSA/Dental/Ped Dental", @"kaiser.jpg", @"251.83", @"HMO", @"Bronze", @"DC-Metro", @"6,000", @"http://www.yahoo.com", nil] ];
     [tableData addObject:[NSArray arrayWithObjects:@"KP DC Bronze 5000/50/HSA/Dental/Ped Dental", @"kaiser.jpg", @"255.66", @"HMO", @"Bronze", @"DC-Metro", @"5,000", @"http://www.yahoo.com", nil] ];
-    
+*/
 //    myAccountTable.rowHeight = 104;
     myAccountTable.separatorStyle = UITableViewCellSelectionStyleNone;
 
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, myAccountTable.frame.size.width, 54)];
-    
-    UIView *whiteRoundedCornerView = [[UIView alloc] initWithFrame:CGRectMake(5,5,self.view.frame.size.width - 10,44)];
+        headerView.backgroundColor = [UIColor whiteColor];
+/*
+    UIView *whiteRoundedCornerView = [[UIView alloc] initWithFrame:CGRectMake(5,5,self.view.frame.size.width - 10,54)];
     whiteRoundedCornerView.backgroundColor = [UIColor whiteColor];
     whiteRoundedCornerView.layer.masksToBounds = NO;
     whiteRoundedCornerView.layer.cornerRadius = 3.0;
     whiteRoundedCornerView.layer.shadowOffset = CGSizeMake(-1, 1);
     whiteRoundedCornerView.layer.shadowOpacity = 0.5;
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-    imageView.image = [UIImage imageNamed:@"images.jpeg"];
-    [whiteRoundedCornerView addSubview:imageView];
-    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(70, whiteRoundedCornerView.frame.size.height/2 - 10, whiteRoundedCornerView.frame.size.width - 70, 0)];
-    labelView.text = @"Company ABC";
+ */
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(headerView.frame.size.width-42, headerView.frame.size.height/2-13, 32, 26)];
+    imageView.image = [UIImage imageNamed:@"header-employer-2.png"];
+    [headerView addSubview:imageView];
+    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(10, headerView.frame.size.height/2 - 10, headerView.frame.size.width - 70, 0)];
+    labelView.text = @"DC BRAU COMPANY";
+    labelView.textColor = [UIColor lightGrayColor];
+     [labelView setFont:[UIFont fontWithName:@"Roboto-Regular" size:17]];
     [labelView sizeToFit];
- //   [labelView setCenter:headerView.center];
-    [whiteRoundedCornerView addSubview:labelView];
+    [headerView addSubview:labelView];
 
-    [headerView addSubview:whiteRoundedCornerView];
-    [headerView sendSubviewToBack:whiteRoundedCornerView];
+ //   [headerView addSubview:headerView];
+//    [headerView sendSubviewToBack:whiteRoundedCornerView];
 
     myAccountTable.tableHeaderView = headerView;
 }
@@ -155,7 +167,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationItem setHidesBackButton:YES];
-    [self.navigationItem setTitle:@"My DC Health Link"];
+//    [self.navigationItem setTitle:@"My DC Health Link"];
     
     type = 0;
 }
@@ -256,7 +268,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return 10;
+        return 1;
     
     return 2.0;
 }
@@ -301,9 +313,17 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    if ([indexPath section] > 0 && [indexPath section] < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
-        return 44; //204;
+    if ([indexPath row] == 0)
+        return 44;
+
+    if ([indexPath row] == 7)
+        return 20;
+    if ([indexPath row] == 8)
+        return 75;
     
-    return 80; // [indexPath row] * 20;
+    return 35;
+    
+//    return 80; // [indexPath row] * 20;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -595,7 +615,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
     if (cell == nil) {
-        if ([indexPath section] == 1 && ([indexPath row] == 0 || [indexPath row] == 4))
+//        if ([indexPath section] == 1 && ([indexPath row] == 0 || [indexPath row] == 4))
+        if ([indexPath row] == 7 || [indexPath row] == 8)
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
         else
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
@@ -605,41 +626,85 @@
         
         UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.tag=30;
-        [button setFrame:CGRectMake(screenSize.width - 70, 5, 37, 37)];
-        [button setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 0)];
+//        [button setFrame:CGRectMake(screenSize.width - 70, 5, 37, 37)];
+        [button setFrame:CGRectMake(cell.frame.size.width - 80, 10, 80, 25)];
+ //       [button setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 0)];
         
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setBackgroundColor:self.view.backgroundColor];//[UIColor grayColor]];
-        button.layer.cornerRadius = 18; // this value vary as per your desire
+//        [button setBackgroundColor:self.view.backgroundColor];//[UIColor grayColor]];
+        [button setBackgroundColor:[UIColor colorWithRed:(86/255.0) green:(147/255.0) blue:(13/255.0) alpha:1]];
+        button.layer.cornerRadius = 4; //18 // this value vary as per your desire
         button.clipsToBounds = YES;
         button.hidden = TRUE;
-        button.font = [UIFont boldSystemFontOfSize:14];
+        button.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
         [cell.contentView addSubview:button];
-
-//        cell = [self getCellContentViewNames:simpleTableIdentifier myCell:cell];
+        
+        
+        UIButton* button1 = [UIButton buttonWithType:UIButtonTypeCustom];
+        button1.tag=31;
+        [button1 setFrame:CGRectMake(20, 0, 160, 35)];
+        button1.hidden = TRUE;
+        [button1 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [button1 setBackgroundColor:[UIColor clearColor]];
+        button1.font =[UIFont fontWithName:@"Roboto-Regular" size:16];
+        button1.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [cell.contentView addSubview:button1];
+        
+        UILabel *lblTemp = [[UILabel alloc] initWithFrame:CGRectMake(cell.frame.size.width/2-75, 5, 150, 50)];
+        lblTemp.backgroundColor = [UIColor clearColor];
+        lblTemp.textColor = [UIColor colorWithRed:(10/255.0) green:(64/255.0) blue:(99/255.0) alpha:1];//[UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+        lblTemp.tag = 21;
+        lblTemp.hidden = TRUE;
+       // lblTemp.clipsToBounds = YES;
+        lblTemp.textAlignment     = NSTextAlignmentCenter;
+        lblTemp.font = [UIFont fontWithName:@"Roboto-Regular" size:32.0];
+        [cell.contentView addSubview:lblTemp];
     }
     
+    cell.imageView.image = nil;
+
 //    cell.backgroundColor = [UIColor clearColor];
+    UILabel *lblPremium = (UILabel *)[cell viewWithTag:21];
+    lblPremium.hidden = TRUE;
+    
     UIButton *button = (UIButton *)[cell viewWithTag:30];
     button.hidden = TRUE;
     
+    UIButton *button1 = (UIButton *)[cell viewWithTag:31];
+    button1.hidden = TRUE;
+    
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];//[UIFont systemFontOfSize:18];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0]; //[UIFont boldSystemFontOfSize:16];
+    cell.textLabel.textColor = [UIColor darkGrayColor];
 //    if ([indexPath section] > 0 && [indexPath section] < [[dictionary valueForKeyPath:@"MyPlan"] count] + 1)
     {
         NSDictionary *planValues = [dictionary valueForKeyPath:@"subscriber_plans.plan"][indexPath.section];
         cell.textLabel.text = @"";
         cell.detailTextLabel.text = @"";
-        cell.textLabel.textColor = [UIColor blackColor];
-        cell.textLabel.font = [UIFont systemFontOfSize:18];
+
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:16];
-        
+//        cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16.0]; //[UIFont boldSystemFontOfSize:16];
         if ([indexPath row] == 0)
+        {
+            UIImage *pimg = [UIImage imageNamed:@"carefirst_logo_k_2935.png"];
+            //    cell.imageView.image = [ChoosePlanViewController imageWithImage:pimg scaledToWidth:50]; //[UIImage imageNamed:[[tableData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row*2+1]];
+            cell.imageView.image = pimg; //[ChoosePlanViewController imageWithImage:pimg scaledToSize:CGSizeMake(50,10)]; //[UIImage imageNamed:[[tableData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row*2+1]];
+            //        cell = [self getCellContentViewNames:simpleTableIdentifier myCell:cell];
+            NSString *p = [NSString stringWithFormat:@"%ld", [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] count]];
+            // [button setTitle:@"2" forState:UIControlStateNormal];
+  //          [button setFrame:CGRectMake(cell.frame.size.width - 80, 10, 80, 25)];
+     //       button.layer.cornerRadius = 4;
+            [button setTitle:@"Enrolled" forState:UIControlStateNormal];
+            button.hidden = FALSE;
+            
+        }
+        if ([indexPath row] == 1)
         {
             cell.textLabel.textAlignment = NSTextAlignmentLeft;
 
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:18]; //[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+       //     cell.textLabel.font = [UIFont boldSystemFontOfSize:18]; //[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             
-            cell.textLabel.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+            cell.textLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
  //           cell.textLabel.text = [keyNames objectAtIndex:0]; //[[dictionary valueForKeyPath:@"MyPlan"][indexPath.section] objectForKey:]; //@"BlueChoice HMO HSA Bronze $6,550";
  //           NSDictionary *pDict = [subscriberPlans objectAtIndex:indexPath.row];
             
@@ -649,14 +714,40 @@
       //      cell.detailTextLabel.text = @"BRONZE";
         }
 
-        if ([indexPath row] == 1)
+        if ([indexPath row] == 2)
         {
-            cell.textLabel.text = [planValues valueForKey:@"type"];
+            
+            /*
+             [(UIButton *)[cell viewWithTag:22] setTitle:@"Summary of Benefits and Coverage" forState:UIControlStateNormal];
+             UIButton *button = (UIButton *)[cell viewWithTag:17];
+             [button setImage:[UIImage imageNamed:@"bronze-circle.png"] forState:UIControlStateNormal];
+             [button setTitle:[[tableData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row*8+4]forState:UIControlStateNormal];
+             */
+            CGFloat spacing = 5; // the amount of spacing to appear between image and title
+            button1.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, spacing);
+            button1.titleEdgeInsets = UIEdgeInsetsMake(0, spacing, 0, 0);
+            
+            button1.hidden = FALSE;
+            NSString *pp = [NSString stringWithFormat:@"%@ • %@", [planValues valueForKey:@"level"], [planValues valueForKey:@"type"]];
+//            NSString *ss = [planValues valueForKey:@"level"];
+
+            [button1 setTitle:pp forState:UIControlStateNormal];
+            if ([[planValues valueForKey:@"level"] isEqualToString:@"BRONZE"])
+                [button1 setImage:[UIImage imageNamed:@"bronze-circle.png"] forState:UIControlStateNormal];
+            else if ([[planValues valueForKey:@"level"] isEqualToString:@"silver"])
+                [button1 setImage:[UIImage imageNamed:@"silver-circle.png"] forState:UIControlStateNormal];
+            else if ([[planValues valueForKey:@"level"] isEqualToString:@"gold"])
+                [button1 setImage:[UIImage imageNamed:@"gold-circle.png"] forState:UIControlStateNormal];
+            else if ([[planValues valueForKey:@"level"] isEqualToString:@"platinum"])
+                [button1 setImage:[UIImage imageNamed:@"platinum-circle.png"] forState:UIControlStateNormal];
+
+
+         //   cell.textLabel.text = [planValues valueForKey:@"type"];
             //cell.detailTextLabel.text = [[dictionary valueForKeyPath:@"MyPlan"][indexPath.section-1] objectForKey:@"HMO"];;
-            cell.detailTextLabel.text = [planValues valueForKey:@"level"];
+          //  cell.detailTextLabel.text = [planValues valueForKey:@"level"];
         }
         
-        if ([indexPath row] == 2)
+        if ([indexPath row] == 3)
         {
             cell.textLabel.text = @"Effective Date";
            // cell.detailTextLabel.text = [[dictionary valueForKeyPath:@"MyPlan"][indexPath.section-1] objectForKey:@"Effective Date"];;
@@ -672,30 +763,71 @@
                         [formatter setDateFormat:@"MM/dd/yyyy"];
             cell.detailTextLabel.text = [formatter stringFromDate:date]; //[subscriberPlans valueForKey:@"date_coverage_effective"][indexPath.section];
         }
-        if ([indexPath row] == 3)
+        if ([indexPath row] == 4)
         {
             cell.textLabel.text = @"DC Health Link ID";
             cell.detailTextLabel.text = [subscriberPlans valueForKey:@"dc_health_link_id"][indexPath.section];
         }
-        if ([indexPath row] == 4)
+        if ([indexPath row] == 5)
         {
             
-            button.hidden = FALSE;
-            cell.textLabel.text = @"# of Covered Members"; //@"Covered";
+            button.hidden = TRUE;
+            cell.textLabel.text = @"Covered Members"; //@"Covered";
             //NSString *greeting = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
             //cell.detailTextLabel.text = [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] componentsJoinedByString:@", "];
-
+           // [button setFrame:CGRectMake(cell.frame.size.width - 70, 3, 30, 30)];
+          //  button.layer.cornerRadius = 15;
             NSString *p = [NSString stringWithFormat:@"%ld", [[subscriberPlans valueForKey:@"members_covered"][indexPath.section] count]];
             // [button setTitle:@"2" forState:UIControlStateNormal];
-            [button setTitle:p forState:UIControlStateNormal];
+          //  [button setTitle:p forState:UIControlStateNormal];
+            cell.detailTextLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
+            cell.detailTextLabel.text = p;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+  
         }
+        
+        if ([indexPath row] == 7)
+        {
+ //           cell.textLabel.textColor = [UIColor colorWithRed:(86/255.0) green:(147/255.0) blue:(13/255.0) alpha:1];
+ //           cell.textLabel.text = @"MONTHLY PREMIUM";
+ //           cell.textLabel.textAlignment = UITextAlignmentCenter;
+            //cell.backgroundColor = [UIColor lightGrayColor];
+            cell.textLabel.text = @"";
+            lblPremium.hidden = FALSE;
+           // CGSize size = [@"MONTHLY PREMIUM" sizeWithAttributes:
+           //                @{NSFontAttributeName:
+           //                      [UIFont fontWithName:@"Roboto-Bold" size:16.0]}];
+     //        [button setFrame:CGRectMake(cell.frame.size.width - 70, 3, 30, 30)];
+            lblPremium.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
+            lblPremium.text = @"MONTHLY PREMIUM";
+            lblPremium.textColor = [UIColor colorWithRed:(86/255.0) green:(147/255.0) blue:(13/255.0) alpha:1];
+          //  CGRect newFrame = lblPremium.frame;
+          //  newFrame.size.height = size.height+25;
+
+      //      yourLabel.frame = newFrame;
+     //       [lblPremium setFrame:newFrame];
+           [lblPremium setFrame:CGRectMake(0, 0, cell.frame.size.width, 20)];
+         //   [lblPremium sizeToFit];
+
+//            cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
+        }
+        if ([indexPath row] == 8)
+        {
+            cell.textLabel.text = @"";
+            lblPremium.hidden = FALSE;
+        //                lblPremium.backgroundColor = [UIColor blueColor];
+            lblPremium.text = [NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
+            //[NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
+            //            cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
+        }
+ /*
         if ([indexPath row] == 5)
         {
             cell.textLabel.text = @"Premium";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.02f", [[subscriberPlans valueForKey:@"raw_monthly_premium"][indexPath.section] floatValue]];
         }
-    
+  
         if ([indexPath row] == 6)
         {
             cell.textLabel.text = @"Plan Selected";
@@ -730,7 +862,7 @@
             cell.detailTextLabel.text = @"";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-
+*/
         /*
         UIImageView *pImage = (UIImageView *)[cell viewWithTag:13];
         UILabel *lblPlan = (UILabel *)[cell viewWithTag:10];

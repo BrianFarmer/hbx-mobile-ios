@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "hbxNavigationController.h"
+#import "SlideNavigationController.h"
 
 @interface LeftMenuSlideOutTableViewController : UITableViewController
 

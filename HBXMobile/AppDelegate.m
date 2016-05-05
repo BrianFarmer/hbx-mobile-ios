@@ -33,13 +33,16 @@
         // iOS < 8 Notifications
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
     }
+
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     
     LeftMenuSlideOutTableViewController *leftMenu = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
 
-    [hbxNavigationController sharedInstance].leftMenu = leftMenu;
-    [hbxNavigationController sharedInstance].menuRevealAnimationDuration = .18;
+        LeftMenuSlideOutTableViewController *leftMenu1 = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+    
+    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
     
     AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:CognitoRegionType
                                                                                                     identityPoolId:CognitoIdentityPoolId];

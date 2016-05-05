@@ -1,0 +1,60 @@
+#
+#
+#
+# Link for iOS enforcement of certificate used in code
+# http://www.indelible.org/ink/trusted-ssl-certificates/
+
+# More info on iOS certicates
+# http://www.techrepublic.com/blog/software-engineer/use-https-certificate-handling-to-protect-your-ios-app/
+
+##########################################################
+#
+Backup your /Applications/MAMP/conf/ dir.
+
+Generate a (dummy) SSL Certificate
+
+$ cd ~
+
+# generate a private key (will request a password twice)
+$ openssl genrsa -des3 -out server.key 1024
+
+# generate certificate signing request (same password as above)
+$ openssl req -new -key server.key -out server.csr
+
+# Answer the questions
+Country Name (2 letter code) [AU]: US
+State or Province Name (full name) [Some-State]: DC
+Locality Name (eg, city) []: Washington
+Organization Name (eg, company) [Internet Widgits Pty Ltd]: HBX
+Organizational Unit Name (eg, section) []: Development
+Common Name (eg, YOUR name) []: localhost
+Email Address []: your_email@domain.com
+A challenge password []: # leave this empty
+An optional company name []: # leave this empty
+
+# generate the certificate
+$ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+# remove the password from the server key
+$ cp server.key server.tmp
+$ openssl rsa -in server.tmp -out server.key
+
+#create .pem file for xcode
+$ openssl x509 -in server.crt -out server.pem -outform pem
+
+# Move the certificate into your MAMP apache configuration folder
+$ cp server.crt /Applications/MAMP/conf/apache
+$ cp server.key /Applications/MAMP/conf/apache
+Open /Applications/MAMP/conf/apache/httpd.conf and uncomment Include /Applications/MAMP/conf/apache/extra/httpd-ssl.conf.
+
+Keep your vhost in /Applications/MAMP/conf/apache/extra/httpd-vhosts.conf just the same.
+
+In /Applications/MAMP/conf/apache/extra/httpd-ssl.conf, find the following block and edit the fields Server Name and Document Root with the values you already have in your vhost.
+
+#   General setup for the virtual host
+DocumentRoot "/Applications/MAMP/Library/htdocs"
+ServerName www.example.com:443
+ServerAdmin you@example.com
+ErrorLog "/Applications/MAMP/Library/logs/error_log"
+TransferLog "/Applications/MAMP/Library/logs/access_log"
+and edit in your DocumentRoot and ServerName settings:

@@ -16,6 +16,12 @@
 //    IBOutlet UIButton *submitButton;
     IBOutlet UILabel *lblEnableTouchID;
     IBOutlet UILabel *lblSaveUserID;
+    IBOutlet UIView *bottomView;
+    IBOutlet UIView *topView;
+    IBOutlet UISwitch *switchTouchId;
+    IBOutlet UISwitch *switchSaveMe;
+    
+    UIActivityIndicatorView *spinningWheel;
     
     BOOL bSaveUserInfo;
     BOOL bUseTouchID;
@@ -26,6 +32,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *submitButton;
 @property (strong, nonatomic) IBOutlet UIButton *enableTouchIdButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveUserInfoButton;
+//@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinningWheel;
 
 @end
 

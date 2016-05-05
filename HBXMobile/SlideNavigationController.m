@@ -1,19 +1,39 @@
 //
-//  hbxNavigationController.m
-//  HBXMobile
+//  SlideNavigationController.m
+//  SlideMenu
 //
-//  Created by David Boyd on 3/7/16.
-//  Copyright © 2016 David Boyd. All rights reserved.
+//  Created by Aryan Gh on 4/24/13.
+//  Copyright (c) 2013 Aryan Ghassemi. All rights reserved.
+//
+// https://github.com/aryaxt/iOS-Slide-Menu
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 //
 
-#import "hbxNavigationController.h"
+#import "SlideNavigationController.h"
 
 typedef enum {
     PopTypeAll,
     PopTypeRoot
 } PopType;
 
-@interface hbxNavigationController () <UIGestureRecognizerDelegate>
+@interface SlideNavigationController () <UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
@@ -22,7 +42,7 @@ typedef enum {
 
 @end
 
-@implementation hbxNavigationController
+@implementation SlideNavigationController
 
 NSString * const SlideNavigationControllerDidOpen = @"SlideNavigationControllerDidOpen";
 NSString * const SlideNavigationControllerDidClose = @"SlideNavigationControllerDidClose";
@@ -41,9 +61,9 @@ NSString  *const SlideNavigationControllerDidReveal = @"SlideNavigationControlle
 #define NOTIFICATION_USER_INFO_MENU_RIGHT @"right"
 #define NOTIFICATION_USER_INFO_MENU @"menu"
 
-static hbxNavigationController *singletonInstance;
+static SlideNavigationController *singletonInstance;
 
-+ (hbxNavigationController *)sharedInstance
++ (SlideNavigationController *)sharedInstance
 {
     if (!singletonInstance)
         NSLog(@"SlideNavigationController has not been initialized. Either place one in your storyboard or initialize one in code");
@@ -99,7 +119,10 @@ static hbxNavigationController *singletonInstance;
                     animated:(BOOL)animated
 {
     if ([self shouldDisplayMenu:MenuLeft forViewController:viewController])
+    {
         viewController.navigationItem.leftBarButtonItem = [self barButtonItemForMenu:MenuLeft];
+        viewController.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    }
     
 //    if ([self shouldDisplayMenu:MenuRight forViewController:viewController])
 //        viewController.navigationItem.rightBarButtonItem = [self barButtonItemForMenu:MenuRight];
