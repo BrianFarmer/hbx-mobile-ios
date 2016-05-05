@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		130E04611CAD9C2900D1D1A6 /* showPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 130E04601CAD9C2900D1D1A6 /* showPlanDetailViewController.m */; };
 		1310E2201CC8FD20001DF412 /* header-employer-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1310E21F1CC8FD20001DF412 /* header-employer-2.png */; };
-		1310E2261CC94616001DF412 /* profile_mobiledchl.png in Resources */ = {isa = PBXBuildFile; fileRef = 1310E2251CC94616001DF412 /* profile_mobiledchl.png */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
 		131B0E2A1C938B8400CD8310 /* hbxNotificationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 131B0E291C938B8400CD8310 /* hbxNotificationsTableViewController.m */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
@@ -44,6 +43,7 @@
 		13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 13A382241CDB2FE8006B5984 /* kaiser.jpg */; };
 		13A3822A1CDB303E006B5984 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382291CDB303E006B5984 /* bell.png */; };
 		13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */; };
+		13A3822E1CDB7AEE006B5984 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822D1CDB7AEE006B5984 /* sampleMyPlanJSON.txt */; };
 		13FF470E1C8A2C5600C7C851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF470D1C8A2C5600C7C851 /* main.m */; };
 		13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47101C8A2C5600C7C851 /* AppDelegate.m */; };
 		13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47131C8A2C5600C7C851 /* ViewController.m */; };
@@ -77,7 +77,6 @@
 		130E045F1CAD9C2900D1D1A6 /* showPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showPlanDetailViewController.h; sourceTree = "<group>"; };
 		130E04601CAD9C2900D1D1A6 /* showPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showPlanDetailViewController.m; sourceTree = "<group>"; };
 		1310E21F1CC8FD20001DF412 /* header-employer-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-employer-2.png"; sourceTree = "<group>"; };
-		1310E2251CC94616001DF412 /* profile_mobiledchl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_mobiledchl.png; sourceTree = "<group>"; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		131B0E281C938B8400CD8310 /* hbxNotificationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hbxNotificationsTableViewController.h; sourceTree = "<group>"; };
 		131B0E291C938B8400CD8310 /* hbxNotificationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hbxNotificationsTableViewController.m; sourceTree = "<group>"; };
@@ -121,6 +120,7 @@
 		13A382241CDB2FE8006B5984 /* kaiser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = kaiser.jpg; path = images/carriers/kaiser.jpg; sourceTree = "<group>"; };
 		13A382291CDB303E006B5984 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bell.png; path = images/bell.png; sourceTree = "<group>"; };
 		13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dchllogo_withouttag-2.png"; path = "images/dchllogo_withouttag-2.png"; sourceTree = "<group>"; };
+		13A3822D1CDB7AEE006B5984 /* sampleMyPlanJSON.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sampleMyPlanJSON.txt; sourceTree = "<group>"; };
 		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13FF470D1C8A2C5600C7C851 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		13FF470F1C8A2C5600C7C851 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -274,6 +274,7 @@
 		13FF470C1C8A2C5600C7C851 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13A3822D1CDB7AEE006B5984 /* sampleMyPlanJSON.txt */,
 				1316CEAA1CC50A4C0075B214 /* Fonts */,
 				134A09DB1CBE814D00CD3229 /* Notes */,
 				134A09D91CBE7D7F00CD3229 /* server.der */,
@@ -318,7 +319,6 @@
 				13A382221CDB2FCD006B5984 /* carriers */,
 				13A3821E1CDB2F4D006B5984 /* menu-icon.png */,
 				13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */,
-				1310E2251CC94616001DF412 /* profile_mobiledchl.png */,
 				1310E21F1CC8FD20001DF412 /* header-employer-2.png */,
 			);
 			name = Images;
@@ -446,7 +446,6 @@
 				13FF471C1C8A2C5600C7C851 /* Assets.xcassets in Resources */,
 				13A3821B1CDB2E3E006B5984 /* Roboto-Regular.ttf in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
-				1310E2261CC94616001DF412 /* profile_mobiledchl.png in Resources */,
 				13A3821D1CDB2E3E006B5984 /* Roboto-ThinItalic.ttf in Resources */,
 				13A382201CDB2F4D006B5984 /* menu-icon.png in Resources */,
 				13A382171CDB2E3E006B5984 /* Roboto-Light.ttf in Resources */,
@@ -458,6 +457,7 @@
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
 				13A382151CDB2E3E006B5984 /* Roboto-BoldItalic.ttf in Resources */,
+				13A3822E1CDB7AEE006B5984 /* sampleMyPlanJSON.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

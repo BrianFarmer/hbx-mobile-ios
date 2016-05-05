@@ -160,7 +160,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <items>
-                                    <tabBarItem title="Notifications" image="bell-2.png" badgeValue="2" id="CtW-fy-PQS"/>
+                                    <tabBarItem title="Notifications" image="bell.png" badgeValue="2" id="CtW-fy-PQS"/>
                                     <tabBarItem tag="1" title="Contact" selectedImage="phone.png" id="qmF-f8-7dB"/>
                                     <tabBarItem tag="2" title="Email" id="cEb-sf-vTG"/>
                                 </items>
@@ -440,7 +440,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
         </scene>
     </scenes>
     <resources>
-        <image name="bell-2.png" width="32" height="32"/>
+        <image name="bell.png" width="32" height="32"/>
         <image name="checkbox.png" width="16" height="16"/>
         <image name="phone.png" width="30" height="30"/>
     </resources>

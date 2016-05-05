@@ -15,19 +15,7 @@
 @end
 
 @implementation MyAccountViewController
-/*
-- (NSDictionary *) indexKeyedDictionaryFromArray:(NSArray *)array
-{
-    NSMutableDictionary *mutableDictionary = [[NSMutableDictionary alloc] init];
-    [array enumerateObjectsUsingBlock:
-     ^(id obj, NSUInteger idx, BOOL *stop){
-         NSNumber *index = [NSNumber numberWithInteger:idx];
-         [mutableDictionary setObject:obj forKey:index];
-     }];
-    NSDictionary *result = [NSDictionary.alloc initWithDictionary:mutableDictionary];
-    return result;
-}
-*/
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -47,8 +35,8 @@
     tabBarItem1.selectedImage = [[UIImage imageNamed:@"bell.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarItem *tabBarItem2 = [myTabBar.items objectAtIndex:1];
-    tabBarItem2.image = [[UIImage imageNamed:@"profile_mobiledchl.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
-    tabBarItem2.selectedImage = [[UIImage imageNamed:@"profile_mobiledchl.png" ] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+    tabBarItem2.image = [[UIImage imageNamed:@"bell.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
+    tabBarItem2.selectedImage = [[UIImage imageNamed:@"bell.png" ] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     
     UITabBarItem *tabBarItem3 = [myTabBar.items objectAtIndex:2];
     tabBarItem3.image = [UIImage imageNamed:@"bell.png"];
@@ -56,7 +44,6 @@
     
  //   self.tabBarController.tabBar.delegate = self;
     myTabBar.delegate = self;
-    
     
     [myAccountTable setBackgroundColor:[UIColor colorWithRed:(228/255.0) green:(228/255.0) blue:(228/255.0) alpha:1]];//[UIColor lightGrayColor]];//E4E4E4
 
@@ -94,45 +81,10 @@
 
     NSString *pt = [dict valueForKey:@"name"];
         NSString *pt1 = [subscriberPlans valueForKey:@"date_coverage_effective"][0];
-//               NSDictionary *pDict = [subscriberPlans objectAtIndex:2];
-    
     
     NSArray *pa= [subscriberPlans valueForKey:@"members_covered"][0];
     NSString *greeting = [pa componentsJoinedByString:@","];
-//    NSString *pt = [coverageKeys objectAtIndex:0];
     
-//    NSString *categoryString=[[dictionary valueForKeyPath:@"MyPlan"][0] objectForKey:@"PlanName"];
-//    NSString *idString=[[results valueForKeyPath:@"data.abcd"][0] objectForKey:@"id"];
-//    NSString *titleString=[[results valueForKeyPath:@"data.abcd"][0] objectForKey:@"title"];
-
-//    NSArray *val = [[dictionary valueForKeyPath:@"MyPlan"][0] allValues];
-/*
-    NSArray *values = [[dictionary12 allKeys]objectAtIndex:0];
-    id val = nil;
-//    NSArray *values = [dictionary12 allValues];
-    
-    if ([values count] != 0)
-        val = [values objectAtIndex:0];
-    
-//        NSString *test = [NSString stringWithFormat:@"%@", [dictionary12 objectForKey:@"PlanName"]];
-//    NSString *test = [NSString stringWithFormat:@"%@", [dictionaryA objectForKey:@"PlanName"]];
-
-    
-//    NSArray *array = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&err];
- //   NSDictionary *dictionary = [self indexKeyedDictionaryFromArray:[array objectAtIndex:0]]; //[array indexKeyedDictionary];
- //   NSDictionary *dictionary = [array objectAtIndex:0];
-//    NSString *test = [dictionary objectForKey:@"ID"];
-//    NSLog(@"Test is %@",test);
-   */
-    
-/*
-    tableData = [[NSMutableArray alloc] init];
-    
-    [tableData addObject:[NSArray arrayWithObjects:@"BlueChoice HMO HSA Bronze $6,550", @"carefirst.jpg", @"176.57", @"HMO", @"Bronze", @"DC-Metro", @"6,550", @"http://www.yahoo.com", nil] ];
-    [tableData addObject:[NSArray arrayWithObjects:@"BlueChoice HMO HSA Bronze $6,000", @"carefirst.jpg", @"183.52", @"HMO", @"Bronze", @"DC-Metro", @"6,000", @"http://www.yahoo.com", nil] ];
-    [tableData addObject:[NSArray arrayWithObjects:@"KP DC Bronze 6000/20%/HSA/Dental/Ped Dental", @"kaiser.jpg", @"251.83", @"HMO", @"Bronze", @"DC-Metro", @"6,000", @"http://www.yahoo.com", nil] ];
-    [tableData addObject:[NSArray arrayWithObjects:@"KP DC Bronze 5000/50/HSA/Dental/Ped Dental", @"kaiser.jpg", @"255.66", @"HMO", @"Bronze", @"DC-Metro", @"5,000", @"http://www.yahoo.com", nil] ];
-*/
 //    myAccountTable.rowHeight = 104;
     myAccountTable.separatorStyle = UITableViewCellSelectionStyleNone;
 
@@ -328,22 +280,6 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-     if (cell.IsMonth)
-     {
-     UIImageView *av = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 20, 20)];
-     av.backgroundColor = [UIColor clearColor];
-     av.opaque = NO;
-     av.image = [UIImage imageNamed:@"month-bar-bkgd.png"];
-     UILabel *monthTextLabel = [[UILabel alloc] init];
-     CGFloat font = 11.0f;
-     monthTextLabel.font = [BVFont HelveticaNeue:&font];
-     
-     cell.backgroundView = av;
-     cell.textLabel.font = [BVFont HelveticaNeue:&font];
-     cell.textLabel.textColor = [BVFont WebGrey];
-     }
-     */
     int iHt;
     
     if ([indexPath section] == 1)
@@ -789,10 +725,6 @@
         
         if ([indexPath row] == 7)
         {
- //           cell.textLabel.textColor = [UIColor colorWithRed:(86/255.0) green:(147/255.0) blue:(13/255.0) alpha:1];
- //           cell.textLabel.text = @"MONTHLY PREMIUM";
- //           cell.textLabel.textAlignment = UITextAlignmentCenter;
-            //cell.backgroundColor = [UIColor lightGrayColor];
             cell.textLabel.text = @"";
             lblPremium.hidden = FALSE;
            // CGSize size = [@"MONTHLY PREMIUM" sizeWithAttributes:
