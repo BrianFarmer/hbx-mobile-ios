@@ -18,5 +18,5 @@
 #warning To run this sample correctly, you must set an appropriate constants.
 AWSRegionType const CognitoRegionType = AWSRegionUSEast1; //AWSRegionUnknown; // e.g. AWSRegionUSEast1
 AWSRegionType const DefaultServiceRegionType = AWSRegionUSWest2; //AWSRegionUnknown; // e.g. AWSRegionUSEast1
-NSString *const CognitoIdentityPoolId = @"us-east-1:008dcf64-199b-4da6-89c6-e7cb50d17464";
-NSString *const S3BucketName = @"testhbx";
+NSString *const CognitoIdentityPoolId = @"enter-poolid-here";
+NSString *const S3BucketName = @"enter_bucket_name";

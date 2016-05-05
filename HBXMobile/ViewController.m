@@ -237,7 +237,7 @@
     
     //  NSString *post = [NSString stringWithFormat:@"article=1234&title=%@&text=%@&author=%@",@"username",@"password",@"bob"];
     //        NSString *post = [NSString stringWithFormat:@"article=1234&email=%@&password=%@&author=%@",@"dboyd5@hotmail.com",@"password",@"bob"];
-    NSString *post = [NSString stringWithFormat:@"email=%@",@"dboyd5@hotmail.com"];
+    NSString *post = [NSString stringWithFormat:@"email=%@",@"frodo@shire.com"];
     
     NSDictionary * postDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"", @"http://10.36.27.206:3000/", @"frodo@shire.com", @"Test123!", @"Test123!", @"invitation_id", @"Create account", nil]
                                                                 forKeys:[NSArray arrayWithObjects:@"authenticity_token", @"referer", @"email", @"password", @"password_confirmation", @"referer", @"commit", nil]];
@@ -247,16 +247,10 @@
     
     //    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu",[postData length]];
-
-//    [request setURL:[NSURL URLWithString:@"http://ec2-54-165-241-146.compute-1.amazonaws.com:3000/login"]];
-//    [request setURL:[NSURL URLWithString:@"https://localhost/MAMP/?language=English"]];
-//    [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/employers/employer_profiles/57167b16ea497f05d2000009?tab=home"]];
     
         [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/employers/employer_profiles/57167b16ea497f05d200000b/edit?add_staff=no&tab=profile"]];
     [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/"]];
     
-    //    [request setURL:[NSURL URLWithString:@"http://10.29.43.96:3000/articles"]];
-    //        [request setURL:[NSURL URLWithString:@"http://localhost:3000/curl_example"]];
     [request setHTTPMethod:@"GET"];
 //    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
 //    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
