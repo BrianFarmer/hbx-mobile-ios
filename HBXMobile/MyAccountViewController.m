@@ -417,7 +417,7 @@
     button.layer.cornerRadius = 15; // this value vary as per your desire
     button.clipsToBounds = YES;
     
-    button.font = [UIFont boldSystemFontOfSize:12];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [cell.contentView addSubview:button];
     
     /////////////////////////////////
@@ -572,7 +572,7 @@
         button.layer.cornerRadius = 4; //18 // this value vary as per your desire
         button.clipsToBounds = YES;
         button.hidden = TRUE;
-        button.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
         [cell.contentView addSubview:button];
         
         
@@ -582,7 +582,7 @@
         button1.hidden = TRUE;
         [button1 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [button1 setBackgroundColor:[UIColor clearColor]];
-        button1.font =[UIFont fontWithName:@"Roboto-Regular" size:16];
+        button1.titleLabel.font =[UIFont fontWithName:@"Roboto-Regular" size:16];
         button1.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [cell.contentView addSubview:button1];
         

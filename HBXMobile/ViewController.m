@@ -14,6 +14,18 @@
 
 #define FS_ERROR_KEY(code)                    [NSString stringWithFormat:@"%d", code]
 #define FS_ERROR_LOCALIZED_DESCRIPTION(code)  NSLocalizedStringFromTable(FS_ERROR_KEY(code), @"FSError", nil)
+#define METERS_PER_MILE 1609.344
+#define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+
+#define SCREEN_WIDTH ([[UIScreen mainScreen] bounds].size.width)
+#define SCREEN_HEIGHT ([[UIScreen mainScreen] bounds].size.height)
+#define SCREEN_MAX_LENGTH (MAX(SCREEN_WIDTH, SCREEN_HEIGHT))
+#define SCREEN_MIN_LENGTH (MIN(SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#define IS_IPHONE_4_OR_LESS (IS_IPHONE && SCREEN_MAX_LENGTH < 568.0)
+#define IS_IPHONE_5 (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
+#define IS_IPHONE_6 (IS_IPHONE && SCREEN_MAX_LENGTH == 667.0)
+#define IS_IPHONE_6P (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
 
 @interface ViewController ()
 
@@ -50,15 +62,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+#ifdef __IPHONE_8_0
+    if(IS_OS_8_OR_LATER) {
+        // Use one or the other, not both. Depending on what you put in info.plist
+//        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
+    }
+#endif
+    [self.locationManager startUpdatingLocation];
+    
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
-    
-    UIImage *img = [UIImage imageNamed:@"dchllogo_withouttag-2.png"];
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [imgView setImage:img];
-    // setContent mode aspect fit
-    [imgView setContentMode:UIViewContentModeScaleAspectFit];
-//    self.navigationItem.titleView = imgView;
+
     
     UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-50, 0, 100, 45)];
     pView1.backgroundColor = [UIColor clearColor];
@@ -70,8 +88,10 @@
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBarHidden = YES;
 
+
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
     spinningWheel = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     spinningWheel.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
     spinningWheel.center = self.view.center;
@@ -91,9 +111,7 @@
         }
     }
     
-
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
     {
         // Place iPhone/iPod specific code here...
         topView.frame = CGRectMake(25, 135, screenSize.width - 45, 330);
@@ -107,38 +125,40 @@
         lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40); //lblEnableTouchID.frame.size.height);
         switchTouchId.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchTouchId.frame.size.width - 40, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
         
- //       lblDisclaimer.frame = CGRectMake(20, lblDisclaimer.frame.origin.y, screenSize.width - 40, lblDisclaimer.frame.size.height);
         lblSaveUserID.frame = CGRectMake(20, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40); //lblSaveUserID.frame.size.height);
         switchSaveMe.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchSaveMe.frame.size.width - 40, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
 
+        bottomView.frame = CGRectMake(bottomView.frame.origin.x, bottomView.frame.origin.y + 60, screenSize.width, screenSize.height - (bottomView.frame.origin.y + 60));
         
-        bottomView.frame = CGRectMake(bottomView.frame.origin.x, bottomView.frame.origin.y, screenSize.width, screenSize.height - bottomView.frame.origin.x);
-
+        lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);//lblDisclaimer.frame.size.height);
         
-        UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator];
-
-        UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator1];
-
-        UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator2];
-        
-//        UIView * separator3 = [[UIView alloc] initWithFrame:CGRectMake(22, lblSaveUserID.frame.origin.y + lblSaveUserID.frame.size.height + 10, screenSize.width - 80, 1)];
-//        separator3.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
- //       [topiew addSubview:separator3];
-//        UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(x, y, 320, 1)];
-//        separator.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
-//        [self.view addSubview:separator];
-     //   [lblSaveUserID sizeToFit];
-    } else {
+    }
+    else
+    {
         // Place iPad-specific code here...
-        self.submitButton.frame = CGRectMake(screenSize.width /2 - 100, self.submitButton.frame.origin.y, 200, 45);
+  //      self.submitButton.frame = CGRectMake(screenSize.width /2 - 100, self.submitButton.frame.origin.y, 200, 45);
     }
     
+    NSString *dateStr = [NSString stringWithUTF8String:__DATE__];
+    NSString *timeStr = [NSString stringWithUTF8String:__TIME__];
+    
+    lblVersion.numberOfLines = 3;
+    lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
+    lblVersion.frame = CGRectMake(bottomView.frame.size.width - 50, bottomView.frame.size.height - 30, 70, 15);
+    lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+
+    UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, screenSize.width - 80, 1)];
+    separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    [topView addSubview:separator];
+    
+    UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, screenSize.width - 80, 1)];
+    separator1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    [topView addSubview:separator1];
+    
+    UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, screenSize.width - 80, 1)];
+    separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    [topView addSubview:separator2];
+
     self.submitButton.layer.cornerRadius = 10; // this value vary as per your desire
     self.submitButton.clipsToBounds = YES;
 
@@ -150,13 +170,13 @@
     
     NSString *password = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
     NSString *username = [keychainItem objectForKey:(__bridge id)kSecAttrLabel];
-    //    [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
+    //  [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
     //  [keychainItem setObject:@"dboyd5@@hotmail.com" forKey:(__bridge id)kSecAttrLabel];
-    // Get the stored data before the view loads
-    //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //  Get the stored data before the view loads
+    //  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    //    NSString *sSaveUser = [defaults objectForKey:@"saveUser"];
-    //    NSString *sEnableTouchID = [defaults objectForKey:@"enableTouchID"];
+    //  NSString *sSaveUser = [defaults objectForKey:@"saveUser"];
+    //  NSString *sEnableTouchID = [defaults objectForKey:@"enableTouchID"];
     UIImageView *pView = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-100, 50, 200, 45)];
     pView.backgroundColor = [UIColor clearColor];
     pView.image = [UIImage imageNamed:@"dchllogo_withouttag-2.png"];
@@ -167,7 +187,7 @@
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveUserInfo"])
     {
         txtEmail.text = username;
-//        txtPassword.text = password;
+//      txtPassword.text = password;
         
         bSaveUserInfo = true;
         [self.saveUserInfoButton setImage:[self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]] forState:UIControlStateNormal];
@@ -175,8 +195,6 @@
         bUseTouchID = [[NSUserDefaults standardUserDefaults] boolForKey:@"useTouchID"];
         if (bUseTouchID)
             [self.enableTouchIdButton setImage:[self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]] forState:UIControlStateNormal];
-        
-        
     }
 //    bUseTouchID = true;
     
@@ -215,15 +233,17 @@
             [[NSUserDefaults standardUserDefaults] setBool:bUseTouchID forKey:@"useTouchID"];
 
 //            [self loginToServer];
-            [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+ //           [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+          [self performSegueWithIdentifier:@"Broker View" sender:nil];
 //            [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
 //        }
         
 //    }
 #else
 //    [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
-   [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+//  [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 //    [self loginToServer];
+       [self performSegueWithIdentifier:@"Broker View" sender:nil];
 #endif
 }
 
@@ -408,6 +428,8 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    
+    self.navigationController.navigationBarHidden = YES;
 #if !(TARGET_IPHONE_SIMULATOR)
     if (bUseTouchID)
     {
@@ -421,7 +443,7 @@
                                 reply:^(BOOL success, NSError *error) {
                                     if (success) {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+                                            [self performSegueWithIdentifier:@"Broker View" sender:nil];
                                             //  lblStatus.text = @"You have logged in with Touch ID";
                                         });
                                     } else {

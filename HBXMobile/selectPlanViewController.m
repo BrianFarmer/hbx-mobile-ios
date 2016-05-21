@@ -320,7 +320,7 @@ button.tag=17;
 //    [button setTitle:@"Abc" forState:UIControlStateNormal];
 [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 [button setBackgroundColor:[UIColor clearColor]];
-button.font = [UIFont boldSystemFontOfSize:iFontSize];
+button.titleLabel.font = [UIFont boldSystemFontOfSize:iFontSize];
 
 [cell.contentView addSubview:button];
 /*

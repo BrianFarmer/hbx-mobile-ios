@@ -24,6 +24,24 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     UIEdgeInsets inset = UIEdgeInsetsMake(20, 0, 0, 0);
     self.tableView.contentInset = inset;
+/*
+    UIView *darkView = [[UIView alloc] initWithFrame:CGRectMake(0,120, 420, 140)];
+    darkView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(0/255.0) blue:(0/255.0) alpha:.4];
+    //    [self.view addSubview:darkView];
+    UIView *blueRoundedCornerView = [[UIView alloc] initWithFrame:CGRectMake(10,20, 395, 100)];
+    blueRoundedCornerView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(38/255.0) blue:(99/255.0) alpha:0.9];
+    blueRoundedCornerView.layer.masksToBounds = NO;
+    blueRoundedCornerView.layer.cornerRadius = 8.0;
+
+    [self.tableView setBackgroundView:nil];
+    [self.tableView  setBackgroundView:blueRoundedCornerView];//[[UIView alloc] init]];
+    [self.tableView  setBackgroundColor:UIColor.lightGrayColor];
+    //[self.tableView  setBackgroundColor:UIColor.clearColor];
+    //   myCollection.backgroundColor = [UIColor clearColor];
+*/    
+    
+ //   FXBlurView *wView = [[FXBlurView alloc] initWithFrame:CGRectMake(0,120, 420, 140)];
+
 }
 
 - (void)didReceiveMemoryWarning {

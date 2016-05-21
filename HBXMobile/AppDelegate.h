@@ -14,6 +14,9 @@
 @class SWRevealViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+{
+    NSDate *enteredBackground;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 

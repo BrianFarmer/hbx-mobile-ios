@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <mapkit/mapkit.h>
 
 @interface ViewController : UIViewController
 {
@@ -27,12 +28,15 @@
     BOOL bUseTouchID;
     
     NSString *responseString;
+    
+    IBOutlet UILabel *lblVersion;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton *submitButton;
 @property (strong, nonatomic) IBOutlet UIButton *enableTouchIdButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveUserInfoButton;
 //@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinningWheel;
+@property(nonatomic, retain) CLLocationManager *locationManager;
 
 @end
 
