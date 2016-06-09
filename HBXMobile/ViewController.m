@@ -10,6 +10,7 @@
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "KeychainItemWrapper.h"
 #import "LeftMenuSlideOutTableViewController.h"
+#import "BrokerAccountViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define FS_ERROR_KEY(code)                    [NSString stringWithFormat:@"%d", code]
@@ -26,6 +27,13 @@
 #define IS_IPHONE_5 (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
 #define IS_IPHONE_6 (IS_IPHONE && SCREEN_MAX_LENGTH == 667.0)
 #define IS_IPHONE_6P (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
+
+//#define HOST @"10.36.27.206:3000"
+#define HOST @"localhost:3000"
+#define GET_BROKER_ID           1000
+#define GET_BROKER_EMPLOYERS    1001
+#define INITIAL_GET             1002
+#define POST_LOGIN_DONE         1003
 
 @interface ViewController ()
 
@@ -266,10 +274,11 @@
             [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
             [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 
+    [self login];
 //            [self loginToServer];
  //           [self performSegueWithIdentifier:@"Show My Account" sender:nil];
  //         [self performSegueWithIdentifier:@"Broker View" sender:nil];
-        [self askSecurityQuestion:FALSE];
+   //     [self askSecurityQuestion:FALSE];
 //            [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
 //        }
         
@@ -279,7 +288,9 @@
 //  [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 //    [self loginToServer];
 
-    [self askSecurityQuestion:FALSE];
+//    [self askSecurityQuestion:FALSE];
+    [self login:sender];
+    
 //       [self performSegueWithIdentifier:@"Broker View" sender:nil];
 #endif
 }
@@ -326,11 +337,196 @@
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (NSString *)percentEscapeURLParameter:(NSString *)string
+{
+    return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                                     (CFStringRef)string,
+                                                                     NULL,
+                                                                     (CFStringRef)@":/?@!$&'()*+,;=",
+                                                                     kCFStringEncodingUTF8));
+}
+
+- (IBAction)login:(id)sender
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", HOST]]];
+    
+    [request setHTTPMethod:@"GET"];
+
+    REQUEST_TYPE = INITIAL_GET;
+    
+    [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+}
+
+-(void)POSTLogin
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    NSString *at = [self percentEscapeURLParameter:csrfToken];
+    //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
+    NSString *post = [NSString stringWithFormat:@"user[email]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
+    
+    NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
+    
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu",[postData length]];
+    
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", HOST];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                HOST, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    [request setHTTPBody:postData];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    customCookie_a = customCookie;
+    
+    REQUEST_TYPE = POST_LOGIN_DONE;
+    
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+    
+    reLoad = TRUE;
+
+
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+}
+
+- (void)showbroker
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    NSLog(@"%@", @"\r\r\rSHOWING PROFILE \r\r\r\r");
+    
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies", HOST];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    [request setHTTPMethod:@"GET"];
+    
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    
+    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                HOST, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie_a, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    REQUEST_TYPE = GET_BROKER_ID;
+    //    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+}
+
+- (void)showbrokeremployers
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    NSLog(@"%@", @"\r\r\rSHOWING PROFILE \r\r\r\r");
+    
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", HOST, _brokerId];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    [request setHTTPMethod:@"GET"];
+
+    
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                HOST, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie_a, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    REQUEST_TYPE = GET_BROKER_EMPLOYERS;
+
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+}
+
+/*
 -(void)loginToServer
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     [spinningWheel startAnimating];
-    
+ 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
     //  NSString *post = [NSString stringWithFormat:@"article=1234&title=%@&text=%@&author=%@",@"username",@"password",@"bob"];
@@ -368,6 +564,7 @@
         NSLog(@"Connection could not be made");
     }
 }
+*/
 
 - (BOOL)shouldTrustProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     // Load up the bundled certificate.
@@ -408,11 +605,74 @@
     }
 }
 
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)response
+{
+    if (response != nil)
+    {
+        
+        NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
+        int code = [httpResponse statusCode];
+        
+        NSArray* authToken = [NSHTTPCookie
+                              cookiesWithResponseHeaderFields:[response allHeaderFields]
+                              forURL:[NSURL URLWithString:@""]];
+        
+        if ([authToken count] > 0)
+        {
+            NSLog(@"cookies from the http POST %@", authToken);
+            for (int i = 0; i < [authToken count]; i++)
+            {
+                NSHTTPCookie *cookie = [authToken objectAtIndex:i];
+                NSLog(@"%@ for %@:%@",[cookie name], [cookie domain], [cookie value]);
+                if ([[cookie name] isEqualToString:@"_session_id"])
+                    customCookie_a = [cookie value];
+            }
+            //[self doReload];
+            reLoad = TRUE;
+        }
+    }
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    return request;
+}
+
+- ( void )connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    
+    NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
+    int code = [httpResponse statusCode];
+    
+    _responseData = [[NSMutableData alloc] init];
+    
+    NSDictionary *headerFields = [httpResponse allHeaderFields];
+    if ([[headerFields valueForKey:@"Set-Cookie"] length] > 0)
+    {
+        customCookie = [headerFields valueForKey:@"Set-Cookie"];
+        
+        //EXTRACT COOKIE SESSION_ID
+        //
+        NSRange startRange = [customCookie rangeOfString:@"="];
+        customCookie = [customCookie substringWithRange:NSMakeRange(startRange.location+1, customCookie.length - (startRange.location+1))];
+        
+        NSRange startRange1 = [customCookie rangeOfString:@";"];
+        customCookie = [customCookie substringWithRange:NSMakeRange(0, startRange1.location)];
+        //////////////////////////////
+        //////////////////////////////
+        
+    }
+    NSLog(@"\n\n COOKIE RECEIVED \n\n\n");
+    NSLog(@"\n\n-- %@ --\n\n", customCookie);
+    
+    NSLog(@"--> %@", [httpResponse allHeaderFields]);
+}
+
 // This method is used to receive the data which we get using post method.
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data
 {
     responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"%@", responseString);
+    [_responseData appendData:data];
 }
 
 // This method receives the error report in case of connection is not made to server.
@@ -431,13 +691,78 @@
 // This method is used to process the data after connection has made successfully.
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    /*
     NSLog(@"%s", __FUNCTION__);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
     [spinningWheel stopAnimating];
     [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+*/
+    // This method is used to process the data after connection has made successfully.
 
-    return;
-/*
+        NSLog(@"%s", __FUNCTION__);
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
+        
+        responseString = [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding];
+        
+        if (reLoad)
+        {
+            [self doReload];
+            return;
+        }
+        
+        NSLog(@"response: \r\r%@\r\r", responseString);
+        
+        //EXTRACT CSRF TOKEN
+        //
+        NSRange startRange = [responseString rangeOfString:@"<meta name=\"csrf-token\" content=\""];
+        if (startRange.length > 0)
+        {
+            NSString *substring = [responseString substringFromIndex:startRange.location+33];
+            //    NSLog(@"substring: '%@'", substring);
+            NSRange endRange = [substring rangeOfString:@"==\""];
+            
+            csrfToken = [substring substringWithRange:NSMakeRange(0, endRange.location+2)];
+            
+            NSLog(@"%@\n", csrfToken);
+        }
+    
+    
+    switch (REQUEST_TYPE) {
+        case GET_BROKER_ID:
+            {
+                NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+                
+                NSError *error = nil;
+                
+                NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                
+                _brokerId = [dictionary valueForKey:@"id"];
+                
+                [self showbrokeremployers];
+            }
+            break;
+        case GET_BROKER_EMPLOYERS:
+            [self performSegueWithIdentifier:@"Broker View" sender:nil];
+            break;
+        case INITIAL_GET:
+            [self POSTLogin];
+            break;
+        case POST_LOGIN_DONE:
+            
+            [self showbroker];
+            break;
+        default:
+            break;
+    }
+
+        //////////////////////////////
+        //////////////////////////////
+        
+        //    [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+//        REQUEST_TYPE = 0;
+        
+        return;
+    /*
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:@"RoR Server Response"
                                   message:responseString
@@ -465,6 +790,59 @@
     
     [self presentViewController:alert animated:YES completion:nil];
 */    
+}
+
+- (void)doReload
+{
+    reLoad = FALSE;
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    NSLog(@"%@", @"\r\r\rDOING RELOAD\r\r\r\r");
+    
+    NSError *error;
+    
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/", HOST];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    //    [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/"]];
+    
+    [request setHTTPMethod:@"GET"];
+    
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    //   [request setValue:customCookie forHTTPHeaderField:@"Cookie:"];
+    
+    
+    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    //    [request setValue:pCookie forHTTPHeaderField:@"Cookie:"];
+    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                HOST, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie_a, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    //    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+    //  customCookie = customCookie_a;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -514,6 +892,20 @@
         }
     }
 #endif
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"Broker View"])
+    {
+//        NSIndexPath *indexPath = [brokerTable indexPathForSelectedRow];
+        // Get destination view
+        BrokerAccountViewController *vc = [segue destinationViewController];
+        //       vc.covered = (NSString *)sender;
+//        tabTypeItem *ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+//        vc.bucket = indexPath.section;
+        vc.jsonData = responseString;
+    }
 }
 
 @end

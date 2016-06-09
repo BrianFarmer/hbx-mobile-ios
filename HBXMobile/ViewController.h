@@ -30,6 +30,18 @@
     NSString *responseString;
     
     IBOutlet UILabel *lblVersion;
+    
+    NSString *csrfToken;
+    NSString *customCookie;
+    NSString *customCookie_a;
+    NSMutableData *_responseData;
+    
+    NSURLConnection *conn;
+    
+    NSString *_brokerId;
+    
+    int REQUEST_TYPE;
+    BOOL reLoad;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton *submitButton;

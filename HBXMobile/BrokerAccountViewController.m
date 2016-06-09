@@ -64,11 +64,14 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-//    NSLog(@"%f", screenSize.width);
-    
+
+ /*
     NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
-    
     NSData *data = [NSData dataWithContentsOfURL:url];
+*/    
+    
+    NSData* data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    
     
 //    NSString* filepath = [[NSBundle mainBundle] pathForResource:@"brokerDataJson" ofType:@"txt"];
 //    NSData *data = [NSData dataWithContentsOfFile:filepath];

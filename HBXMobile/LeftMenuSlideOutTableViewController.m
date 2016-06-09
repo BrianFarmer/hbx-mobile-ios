@@ -53,13 +53,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    if (section == 0)
-    return 2;
+//    if (section == 0)
+//    return 2;
     
     return 1;
 }
@@ -132,12 +132,13 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
         
     }
-    
+    /*
     if ([indexPath section] == 0 && [indexPath row] == 0)
         cell.textLabel.text = @"View Coverage"; //[NSString stringWithFormat:@"View Coverage, indexPath.row];
     else if ([indexPath section] == 0 && [indexPath row] == 1)
         cell.textLabel.text = @"Notifications";
     else
+        */
         cell.textLabel.text = @"Logout";
     
 //    if ([indexPath row] == 5 && !self.iLevel)
@@ -157,14 +158,14 @@
                                                              bundle: nil];
     
     UIViewController *vc ;
-
+/*
     if ([indexPath section] == 0 && [indexPath row] == 1)
         vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"Show Notifications"];
     
     if ([indexPath section] == 0 && [indexPath row] == 1)
         vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"Show Notifications"];
-    
-    if ([indexPath section] == 1)
+ */
+    if ([indexPath section] == 0)
         vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"MainLogin"];
     
     

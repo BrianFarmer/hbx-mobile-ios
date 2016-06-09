@@ -77,7 +77,8 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
     NSMutableArray *open_enrollment;
     NSMutableArray *renewals;
     NSMutableArray *all_others;
-//    NSMutableArray *ao;
+
+
     
     NSMutableArray *ipath;
     
@@ -89,7 +90,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 
 //@property (nonatomic, strong) UIButton *searchButton;
 //@property (nonatomic, strong) UIBarButtonItem *searchItem;
-//@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) NSString *jsonData;;
 
 
 @end
