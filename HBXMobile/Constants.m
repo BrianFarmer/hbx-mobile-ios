@@ -15,7 +15,7 @@
 
 #import "Constants.h"
 
-#warning To run this sample correctly, you must set an appropriate constants.
+//#warning To run this sample correctly, you must set an appropriate constants.
 AWSRegionType const CognitoRegionType = AWSRegionUSEast1; //AWSRegionUnknown; // e.g. AWSRegionUSEast1
 AWSRegionType const DefaultServiceRegionType = AWSRegionUSWest2; //AWSRegionUnknown; // e.g. AWSRegionUSEast1
 NSString *const CognitoIdentityPoolId = @"enter-poolid-here";

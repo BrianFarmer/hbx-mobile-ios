@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BrokerAccountViewController.h"
 
-@interface brokerPlanDetailViewController : UIViewController
+@interface brokerPlanDetailViewController : UIViewController <MFMessageComposeViewControllerDelegate>
 {
     tabTypeItem *type;
     
@@ -20,6 +20,14 @@
     
     IBOutlet UITableView *myTable;
     IBOutlet UITabBar *myTabBar;
+    
+    NSArray *topSectionValues;
+    NSArray *topSectionNames;
+    
+    NSArray *midSectionValues;
+    NSArray *midSectionNames;
+    
+    int     globalFontSize;
     
 }
 

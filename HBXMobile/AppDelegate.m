@@ -28,18 +28,14 @@
         
         [application registerForRemoteNotifications];
     }
-    else
-    {
-        // iOS < 8 Notifications
+    else   // iOS < 8 Notifications
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
-    }
 
-    
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     
     LeftMenuSlideOutTableViewController *leftMenu = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
 
-    LeftMenuSlideOutTableViewController *leftMenu1 = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
+//    LeftMenuSlideOutTableViewController *leftMenu1 = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
     
     [SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;

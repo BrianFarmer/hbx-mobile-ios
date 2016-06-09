@@ -76,7 +76,6 @@
     
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
-
     
     UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-50, 0, 100, 45)];
     pView1.backgroundColor = [UIColor clearColor];
@@ -106,9 +105,12 @@
         hasTouchID = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
         if (!hasTouchID)
         {
- //           [self.enableTouchIdButton setHidden:TRUE];
- //           [lblEnableTouchID setHidden:TRUE];
+            [lblEnableTouchID setHidden:TRUE];
+            [switchTouchId setHidden:TRUE];
         }
+        else
+            [switchTouchId addTarget: self action: @selector(enableTouchIdSwitch:) forControlEvents:UIControlEventValueChanged];
+
     }
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
@@ -132,43 +134,59 @@
         
         lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);//lblDisclaimer.frame.size.height);
         
+ /*
+        UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, screenSize.width - 80, 1)];
+        separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+        [topView addSubview:separator];
+        
+        UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, screenSize.width - 80, 1)];
+        separator1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+        [topView addSubview:separator1];
+        
+        UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, screenSize.width - 80, 1)];
+        separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+        [topView addSubview:separator2];
+*/
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        topView.center = CGPointMake(CGRectGetMidX(self.view.bounds), topView.center.y);
+        bottomView.center = CGPointMake(CGRectGetMidX(self.view.bounds), bottomView.center.y);
+        
+
     }
     else
     {
         // Place iPad-specific code here...
   //      self.submitButton.frame = CGRectMake(screenSize.width /2 - 100, self.submitButton.frame.origin.y, 200, 45);
     }
-    
+/*
     NSString *dateStr = [NSString stringWithUTF8String:__DATE__];
     NSString *timeStr = [NSString stringWithUTF8String:__TIME__];
-    
+*/
     lblVersion.numberOfLines = 3;
     lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
     lblVersion.frame = CGRectMake(bottomView.frame.size.width - 50, bottomView.frame.size.height - 30, 70, 15);
     lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
 
-    UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, screenSize.width - 80, 1)];
+    UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, topView.frame.size.width - 22, 1)];
     separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [topView addSubview:separator];
     
-    UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, screenSize.width - 80, 1)];
+    UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, topView.frame.size.width - 22, 1)];
     separator1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [topView addSubview:separator1];
     
-    UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, screenSize.width - 80, 1)];
+    UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, topView.frame.size.width - 22, 1)];
     separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [topView addSubview:separator2];
 
     self.submitButton.layer.cornerRadius = 10; // this value vary as per your desire
     self.submitButton.clipsToBounds = YES;
-
-    UIImage *btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox.png"]];
-    [self.enableTouchIdButton setImage:btnImage forState:UIControlStateNormal];
-    [self.saveUserInfoButton setImage:btnImage forState:UIControlStateNormal];
     
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
     
-    NSString *password = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+//    NSString *password = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
     NSString *username = [keychainItem objectForKey:(__bridge id)kSecAttrLabel];
     //  [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
     //  [keychainItem setObject:@"dboyd5@@hotmail.com" forKey:(__bridge id)kSecAttrLabel];
@@ -189,16 +207,23 @@
         txtEmail.text = username;
 //      txtPassword.text = password;
         
-        bSaveUserInfo = true;
-        [self.saveUserInfoButton setImage:[self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]] forState:UIControlStateNormal];
+        switchSaveMe.on = TRUE;
+        bSaveUserInfo = TRUE;
         
         bUseTouchID = [[NSUserDefaults standardUserDefaults] boolForKey:@"useTouchID"];
         if (bUseTouchID)
-            [self.enableTouchIdButton setImage:[self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]] forState:UIControlStateNormal];
+        {
+            switchTouchId.on = TRUE;
+        }
     }
-//    bUseTouchID = true;
-    
-    
+    else
+    {
+        switchSaveMe.on = FALSE;
+        switchTouchId.on = FALSE;
+        
+        bSaveUserInfo = FALSE;
+        bUseTouchID = FALSE;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -206,17 +231,26 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)enableTouchIdSwitch:(id)sender {
+    if (switchTouchId.on)
+        NSLog(@"On");
+    else
+        NSLog(@"Off");
+    
+    [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
+}
+
 - (IBAction)handleButtonClick:(id)sender
 {
-        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
-                [self performSegueWithIdentifier:@"Show My Account" sender:nil];
+//        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
+//                [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 #if !(TARGET_IPHONE_SIMULATOR)
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    if( [txtEmail.text caseInsensitiveCompare:@"john@dc.gov"] == NSOrderedSame )        //For DEMO Only
 //    {
         // strings are equal except for possibly case
 //        if( [txtPassword.text isEqualToString:@"password"] ) {
-            if (bSaveUserInfo)
+            if (switchSaveMe.isOn)
             {
                 KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
                 [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
@@ -229,12 +263,13 @@
                 //delete information
             }
             
-            [[NSUserDefaults standardUserDefaults] setBool:bSaveUserInfo forKey:@"saveUserInfo"];
-            [[NSUserDefaults standardUserDefaults] setBool:bUseTouchID forKey:@"useTouchID"];
+            [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
+            [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 
 //            [self loginToServer];
  //           [self performSegueWithIdentifier:@"Show My Account" sender:nil];
-          [self performSegueWithIdentifier:@"Broker View" sender:nil];
+ //         [self performSegueWithIdentifier:@"Broker View" sender:nil];
+        [self askSecurityQuestion:FALSE];
 //            [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
 //        }
         
@@ -243,10 +278,53 @@
 //    [self performSegueWithIdentifier:@"Select Plan Employee" sender:nil];
 //  [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 //    [self loginToServer];
-       [self performSegueWithIdentifier:@"Broker View" sender:nil];
+
+    [self askSecurityQuestion:FALSE];
+//       [self performSegueWithIdentifier:@"Broker View" sender:nil];
 #endif
 }
 
+-(void)askSecurityQuestion:(BOOL)bIncorrect
+{
+    UIAlertController *alertController = nil;
+    
+    alertController = [UIAlertController  alertControllerWithTitle:@"Security Question"
+                                          message:@"What is your favorite color?"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
+     {
+         textField.placeholder = NSLocalizedString(@"Enter you answer here", @"Login");
+     }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"Cancel action");
+                                   }];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                                   UITextField *login = alertController.textFields.firstObject;
+                                   if ([login.text caseInsensitiveCompare:@"Blue"] == NSOrderedSame)
+                                       [self performSegueWithIdentifier:@"Broker View" sender:nil];
+                                   else
+                                       [self askSecurityQuestion:TRUE];
+                               }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    
+    [alertController.view setNeedsLayout];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
 -(void)loginToServer
 {
@@ -359,7 +437,7 @@
     [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 
     return;
-    
+/*
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:@"RoR Server Response"
                                   message:responseString
@@ -386,45 +464,7 @@
     [alert addAction:cancel];
     
     [self presentViewController:alert animated:YES completion:nil];
-    
-}
-
-- (IBAction)saveUserInfoButton:(id)sender {
-    UIImage *btnImage;
-    
-    if (bSaveUserInfo)
-    {
-        btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox.png"]];
-        
-        bSaveUserInfo = false;
-    }
-    else
-    {
-        btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]];
-        
-        bSaveUserInfo = true;
-    }
-    
-    [self.saveUserInfoButton setImage:btnImage forState:UIControlStateNormal];
-}
-
-- (IBAction)enableTouchIdButton:(id)sender {
-    UIImage *btnImage;
-    
-    if (bUseTouchID)
-    {
-        btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox.png"]];
-        
-        bUseTouchID = false;
-    }
-    else
-    {
-        btnImage = [self resizeImage:[UIImage imageNamed:@"checkbox-checked.png"]];
-        
-        bUseTouchID = true;
-    }
-    
-    [self.enableTouchIdButton setImage:btnImage forState:UIControlStateNormal];
+*/    
 }
 
 -(void)viewWillAppear:(BOOL)animated {

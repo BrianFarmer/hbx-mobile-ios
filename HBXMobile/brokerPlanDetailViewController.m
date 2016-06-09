@@ -7,7 +7,7 @@
 //
 
 #import "brokerPlanDetailViewController.h"
-#import "BrokerAccountViewController.h"
+#include "BrokerAccountViewController.h"
 #import  "QuartzCore/QuartzCore.h"
 #import <MapKit/MapKit.h>
 #import <MessageUI/MessageUI.h>
@@ -17,6 +17,8 @@
 @end
 
 @implementation brokerPlanDetailViewController
+
+#define SECTION_HEIGHT  50
 
 @synthesize type, bucket;
 
@@ -28,12 +30,22 @@
     
     CGRect sSize = [[UIApplication sharedApplication] statusBarFrame];
     
+    if (screenSize.height < 600)
+        globalFontSize = 12;
+    else
+    {
+        if ([UIScreen mainScreen].nativeScale > 2.8f)
+            globalFontSize = 14;
+        else
+            globalFontSize = 15;
+    }
+
     myTabBar.hidden = TRUE;
 //    int xx = myTabBar.frame.size.height;
 //    int yy = self.navigationController.navigationBar.frame.size.height;
     
     myTabBar.frame = CGRectMake(0,screenSize.height - self.navigationController.navigationBar.frame.size.height - 49 - sSize.size.height, screenSize.width, 49);
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600 && [UIScreen mainScreen].nativeScale < 2.8f)
     {
         vHeader.frame = CGRectMake(0,0,screenSize.width,135);
         pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:23.0];
@@ -61,35 +73,132 @@
                              lineBreakMode:NSLineBreakByWordWrapping].height/23;
     // '23' is font size
  */
+    NSString *notCompleted = [NSString stringWithFormat:@"%ld", [type.employeesTotal integerValue] - ([type.employeesEnrolled integerValue] + [type.employeesWaived integerValue])];
+
+    NSDate *today = [NSDate date];
     
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"MM-dd-yyyy"];
+    
+    NSDate *endDate = [f dateFromString:type.open_enrollment_ends];
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
+                                                        fromDate:today
+                                                          toDate:endDate
+                                                         options:NSCalendarWrapComponents];
+    
+    /////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+    ////
+    ////        TOP SECTION
+    ////
+    /////////////////////////////////////////////////
+    
+
+    if (type.status == (enrollmentState)NEEDS_ATTENTION)
+    {
+        NSDate *startDate = [f dateFromString:type.open_enrollment_begins];
+        [f setDateFormat:@"MMM dd, yyyy"];
+        topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", nil];
+        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", [components day]], nil];
+    }
+    else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
+    {
+        NSDate *startDate = [f dateFromString:type.open_enrollment_begins];
+        [f setDateFormat:@"MMM dd, yyyy"];
+
+        NSDate *today = [NSDate date];
+        
+        if ([startDate compare:today] == NSOrderedAscending)
+            topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+        else
+            topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+        
+        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", [components day]], type.employeesTotal, nil];
+    }
+    else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
+    {
+        NSDate *employerApplicationDate = [f dateFromString:type.renewal_application_due];
+        NSDate *planYearDate = [f dateFromString:type.planYear];
+        NSDate *binderDate = [f dateFromString:type.binder_payment_due];
+        
+        NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *components1 = [gregorianCalendar components:NSCalendarUnitDay
+                                                            fromDate:today
+                                                              toDate:employerApplicationDate
+                                                             options:NSCalendarWrapComponents];
+
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+        if ([type.binder_payment_due length] > 0)
+        {
+            topSectionNames = [[NSArray alloc] initWithObjects: @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
+            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", [components1 day]], [NSString stringWithFormat:@"%ld days left", [components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
+        }
+        else
+        {
+            topSectionNames = [[NSArray alloc] initWithObjects: @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
+            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", [components1 day]], [NSString stringWithFormat:@"%ld days left", [components day]], [f stringFromDate:planYearDate], nil];
+        }
+        
+    }
+    else
+    {
+        topSectionNames = [[NSArray alloc] initWithObjects: @"Total Premium", @"Employee Contribution", @"Employer Contribution", nil];
+        topSectionValues = [[NSArray alloc] initWithObjects: type.total_premium, type.employee_contribution, type.employer_contribution, nil];
+    }
+
+    /////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+    ////
+    ////        MIDDLE SECTION
+    ////
+    /////////////////////////////////////////////////
+    
+    if (type.status == (enrollmentState)NEEDS_ATTENTION)
+    {
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Must Participate to Meet Minimum", @"Enrolled", @"Waived", @"Not Completed", @"Total Employees", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: type.planMinimum, type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
+    }
+    else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)    {
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Completed", @"Total Employees", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
+    }
+    else
+    {
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Enrolled", @"Total Employees", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];        
+    }
+
+    /////////////////////////////////////////////////
+    /////////////////////////////////////////////////
     
     pCompanyFooter.frame = CGRectMake(0, pCompany.frame.origin.y + pCompany.frame.size.height, screenSize.width, pCompanyFooter.frame.size.height);
     pCompanyFooter.textAlignment = NSTextAlignmentCenter;
 //    pCompanyFooter.backgroundColor = [UIColor greenColor];
     
-    if (bucket == 0)
+    if (type.status == (enrollmentState)NEEDS_ATTENTION)
     {
-        pCompanyFooter.text = @"REQUIRES IMMEDIATE ATTENTION - TARGET NOT MET";
+        pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET";
         pCompanyFooter.textColor = [UIColor redColor];
 
     }
-    else if (bucket == 1)
+    else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET) //bucket == 1)
     {
-        pCompanyFooter.text = @"OPEN ENROLLMENT";
-        pCompanyFooter.textColor = [UIColor darkGrayColor];
+        pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS";
+        pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f]; //[UIColor yellowColor];
         
     }
-
-    else if (bucket == 2)
+    else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS) //bucket == 2)
     {
-        pCompanyFooter.text = @"UPCOMING OPEN ENROLLMENT";
-        pCompanyFooter.textColor = [UIColor darkGrayColor];
-    }
-   
-    else if (bucket == 3)
+        pCompanyFooter.text = @"RENEWAL IN PROGRESS";
+        pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f];
+    }   
+    else if (type.status == (enrollmentState)NO_ACTION_REQUIRED) //bucket == 3)
     {
-        pCompanyFooter.text = @"ALL OTHER CLIENTS";
-        pCompanyFooter.textColor = [UIColor darkGrayColor];
+        pCompanyFooter.text = @"IN COVERAGE";
+        pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
     //This works to stop swipe back
     //Thought I may need this is I added a tab to slide out contact menu
@@ -101,7 +210,7 @@
     int myTabBarY = myTabBar.frame.origin.y - 5;// - 65;
     int vHeaderHt = vHeader.frame.origin.y + vHeader.frame.size.height;
     
-    myTable.frame = CGRectMake(35, vHeader.frame.origin.y + vHeader.frame.size.height, screenSize.width-70, myTabBarY - vHeaderHt); //screenBound.origin.y + screenSize.height - 290); //  myTabBar.frame.origin.y-90);
+    myTable.frame = CGRectMake(30, vHeader.frame.origin.y + vHeader.frame.size.height, screenSize.width-65, myTabBarY - vHeaderHt); //screenBound.origin.y + screenSize.height - 290); //  myTabBar.frame.origin.y-90);
 
     myTable.backgroundColor = [UIColor clearColor];
     myTable.backgroundView = nil;
@@ -174,12 +283,18 @@
 }
 
 - (IBAction)smsEmployer:(id)sender {
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
     picker.messageComposeDelegate = self;
     picker.recipients = [NSArray arrayWithObjects:@"12024686571", nil];
  //   picker.body = yourTextField.text;
 
-    [self presentModalViewController:picker animated:YES];
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (IBAction)emailEmployer:(id)sender {
@@ -201,7 +316,7 @@
     // Email Content
     NSString *messageBody = @"<h1>Message Body</h1>"; // Change the message body to HTML
     // To address
-    NSArray *toRecipents = [NSArray arrayWithObject:@"dboyd.papermoon@gmail.com"];
+    NSArray *toRecipents = [NSArray arrayWithObject:@"healthcare@gmail.com"];
     
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
     mc.mailComposeDelegate = self;
@@ -298,62 +413,10 @@
 {
     if (item.tag == 0)
     {
-//NSURL *URL = [NSURL URLWithString:@"http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f"];
-//        NSURL *URL = [NSURL URLWithString:@"http://maps.google.com/maps?saddr=125,96&daddr=126,97"];
-//        [[UIApplication sharedApplication] openURL:URL];
-        
-        
-//        CLLocationCoordinate2D coordinate =    CLLocationCoordinate2DMake(self.location.latitude,self.location.longitude);
-        /*
-        NSString *text = @"My mail text";
-        NSURL *recipients = [NSURL URLWithString:@"mailto:foo@bar.com"];
-        
-        NSArray *activityItems = @[text, recipients];
-        
-        UIActivityViewController *activityController =
-        [[UIActivityViewController alloc]
-         initWithActivityItems:activityItems
-         applicationActivities:nil];
-        
-        [self presentViewController:activityController
-                           animated:YES completion:nil];
-         
-         */
-        /*
-        NSString *textToShare = @"Look at this awesome website for aspiring iOS Developers!";
-        NSURL *myWebsite = [NSURL URLWithString:@"http://www.codingexplorer.com/"];
-
-         NSArray *objectsToShare = @[textToShare, myWebsite];
-//        [self performSegueWithIdentifier:@"Show Notifications" sender:nil];
-        NSArray *excludedActivities = @[UIActivityTypeMessage, UIActivityTypeMail];
-        UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-        [self presentViewController:controller animated:YES completion:nil];
-*/
     }
     else if(item.tag == 1)
     {
-        NSString *actionSheetTitle = @"Contact"; //Action Sheet Title
-        //       NSString *destructiveTitle = @"Destructive Button"; //Action Sheet Button Titles
-        NSString *other1 = @"Medical";
-        NSString *other2 = @"Dental";
-        NSString *other3 = @"Broker";
-        NSString *other4 = @"Case Worker";
-        NSString *other5 = @"Generic";
-        NSString *cancelTitle = @"Cancel";
-        
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]
-                                      initWithTitle:nil //actionSheetTitle
-                                      delegate:self
-                                      cancelButtonTitle:cancelTitle
-                                      destructiveButtonTitle:nil //destructiveTitle
-                                      otherButtonTitles:other1, other2, other3, other4, other5, nil];
-        
-        [actionSheet showInView:self.view];
-        ////        SettingsViewController *ViewController = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
-        //       [self presentViewController:ViewController animated:NO completion:nil];
     }
-    else if (item.tag == 2)
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:"]];
 }
 
 /*
@@ -375,24 +438,29 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0)
-        return 3;
-    
-    if (section == 1 && bucket != 2)
-        return 5;
+        return [topSectionNames count];
+
+    if (section == 1)
+        return [midSectionNames count];
     
     return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
- //   if (section == 0)
-//        return 34.0;
-    return 24.0;
+
+    if (type.status == (enrollmentState)NO_ACTION_REQUIRED && section == 2)
+        return SECTION_HEIGHT;
+
+    if (section != 0 || (type.status == (enrollmentState)NO_ACTION_REQUIRED && section == 0))
+       return SECTION_HEIGHT - 20;
+        
+    return SECTION_HEIGHT;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 5.0f;
+    return 8.0f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -400,7 +468,7 @@
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         
         UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
-        tableViewHeaderFooterView.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0];
+        tableViewHeaderFooterView.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize]; //14
         tableViewHeaderFooterView.textLabel.textColor = [UIColor darkGrayColor];
         tableViewHeaderFooterView.textLabel.textAlignment = NSTextAlignmentCenter;
         tableViewHeaderFooterView.textLabel.backgroundColor = [UIColor greenColor];
@@ -412,7 +480,7 @@
     if (section == 2)
         return nil;
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 5)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 8)];
 
     CGRect sepFrame = CGRectMake(0, 4, tableView.frame.size.width, 1);
     UIView *seperatorView =[[UIView alloc] initWithFrame:sepFrame];
@@ -425,11 +493,19 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
+    
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"MM-dd-yyyy"];
+    
+    NSDate *endDate = [f dateFromString:type.planYear];
+
     switch (section)
     {
         case 0:
-            if (bucket == 0 || bucket == 1)
+            if (type.status == (enrollmentState)NEEDS_ATTENTION || type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
                 sectionName = @"OPEN ENROLLMENT"; //NSLocalizedString(@"mySectionName", @"mySectionName");
+            else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
+                sectionName = @"RENEWAL DEADLINES";
             else
                 sectionName = @"MONTHLY ESTIMATED COST";
             break;
@@ -438,32 +514,87 @@
             break;
         default:
             if (bucket == 0 || bucket == 1)
-                sectionName = @"MONTHLY ESTIMATED COST";
+            {
+                [f setDateFormat:@"MMM yyyy"];
+                
+                sectionName = [NSString stringWithFormat:@"%@ - %@", @"MONTHLY ESTIMATED COST", [[f stringFromDate:endDate] uppercaseString]];
+            }
             else
-                sectionName = @"NEXT OPEN ENROLLMENT";
+                sectionName = @"COVERAGE INFO";
             break;
     }
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
 
-    UILabel * label = [[UILabel alloc] init];
+    int headeFontSize = 10;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
+        headeFontSize = 12;
+    
+    UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, SECTION_HEIGHT)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.frame.size.width, 15)];
     label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0];
+    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:headeFontSize+2];
     label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor darkGrayColor];
+    label.textColor = [UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
     label.text = sectionName;
-    return label;
-}
+    [sectionView addSubview:label];
 
+    if ((section == 0 && type.status != (enrollmentState)NO_ACTION_REQUIRED) || (type.status == (enrollmentState)NO_ACTION_REQUIRED && section == 2))
+    {
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+        [dateComponents setDay:364];
+        NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+
+        UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, tableView.frame.size.width, 10)];
+        labelCoverage.backgroundColor = [UIColor clearColor];
+        labelCoverage.font = [UIFont fontWithName:@"Roboto-Regular" size:headeFontSize];
+        labelCoverage.textAlignment = NSTextAlignmentCenter;
+        labelCoverage.textColor = [UIColor darkGrayColor];
+        labelCoverage.text = [NSString stringWithFormat:@"COVERAGE YEAR  %@ - %@", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        [sectionView addSubview:labelCoverage];
+    }
+    
+    if (section == 1 && type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
+    {
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+        UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, tableView.frame.size.width, 10)];
+        labelCoverage.backgroundColor = [UIColor clearColor];
+        labelCoverage.font = [UIFont fontWithName:@"Roboto-Regular" size:headeFontSize];
+        labelCoverage.textAlignment = NSTextAlignmentCenter;
+        labelCoverage.textColor = [UIColor darkGrayColor];
+        labelCoverage.text = [NSString stringWithFormat:@"MINIMUM MET √"];
+        
+        NSMutableAttributedString *text =
+        [[NSMutableAttributedString alloc]
+         initWithString: labelCoverage.text];
+        
+        [text addAttribute:NSForegroundColorAttributeName
+                     value:[UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f]
+                     range:NSMakeRange(11, 2)];
+        
+        labelCoverage.attributedText = text;
+        [sectionView addSubview:labelCoverage];
+    }
+
+    return sectionView;
+}
+/*
 -(void)showCellDates:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.row == 0)
     {
-        cell.textLabel.text = @"Start";
-        cell.detailTextLabel.text = type.planEnrollmentStartDate;
+        cell.textLabel.text = @"Open Enrollment Begins";
+        cell.detailTextLabel.text = type.open_enrollment_begins;
     }
     if (indexPath.row == 1)
     {
-        cell.textLabel.text = @"End";
-        cell.detailTextLabel.text = type.planEnrollmentEndDate;
+        cell.textLabel.text = @"Open Enrollment Closes";
+        cell.detailTextLabel.text = type.open_enrollment_ends;
     }
     if (indexPath.row == 2)
     {
@@ -478,7 +609,7 @@
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"MM-dd-yyyy"];
         
-        NSDate *endDate = [f dateFromString:type.planEnrollmentEndDate];
+        NSDate *endDate = [f dateFromString:type.open_enrollment_ends];
         
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
@@ -493,24 +624,27 @@
     }
     
 }
-
+*/
 -(void)showCellCosts:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.row == 0)
     {
         cell.textLabel.text = @"Total Premium";
-        cell.detailTextLabel.text = @"$12,237";
+        cell.detailTextLabel.text = type.total_premium;
     }
     if (indexPath.row == 1)
     {
         cell.textLabel.text = @"Employee Contribution";
-        cell.detailTextLabel.text = @"$5,167";
+        cell.detailTextLabel.text = type.employee_contribution;
     }
     if (indexPath.row == 2)
     {
-        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:13.0];
+        cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
+        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
         cell.textLabel.text = @"Employer Contribution";
-        cell.detailTextLabel.text = @"$7,070";
+        cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+        cell.detailTextLabel.textColor = [UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
+        cell.detailTextLabel.text = type.employer_contribution;
     }
 
 }
@@ -520,7 +654,6 @@
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    float fFontsize;
     if (screenSize.height < 600)
         return 22;
     
@@ -536,90 +669,142 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
     }
-
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
-    CGSize screenSize = screenBound.size;
-    
-    float fFontsize;
-    if (screenSize.height < 600)
-        fFontsize = 12;
-    else
-        fFontsize = 13;
     
     cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:fFontsize];
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize];
     cell.textLabel.textColor = [UIColor darkGrayColor];
 
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:fFontsize];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize];
     
     if (indexPath.section == 0)
     {
-        if (bucket == 2)
+        cell.textLabel.text = [topSectionNames objectAtIndex:indexPath.row];
+        cell.detailTextLabel.text = [topSectionValues objectAtIndex:indexPath.row];
+        if (type.status == (enrollmentState)NEEDS_ATTENTION && (indexPath.row == [topSectionNames count] - 1))
+        {
+            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+            cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
+            cell.detailTextLabel.textColor = [UIColor redColor];
+        }
+ 
+        if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET && (indexPath.row == [topSectionNames count] - 2))
+        {
+            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+            cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
+            cell.detailTextLabel.textColor = [UIColor redColor];
+        }
+
+        if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET && (indexPath.row == [topSectionNames count] - 1))
+        {
+            cell.textLabel.text = @"";
+            cell.detailTextLabel.text = @"";
+            
+            if ([type.binder_payment_due length] > 0)
+            {
+                UILabel *labelBinder = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 25)];
+                labelBinder.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize-2];
+                labelBinder.textColor = [UIColor darkGrayColor];
+                labelBinder.textAlignment = NSTextAlignmentCenter;
+                labelBinder.layer.borderWidth = 1.0;
+                labelBinder.layer.borderColor = [UIColor colorWithRed:193.0f/255.0f green:205.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
+                
+                NSDateFormatter *f = [[NSDateFormatter alloc] init];
+                [f setDateFormat:@"MM-dd-yyyy"];  //DATE FORMAT IN
+                NSDate *binderDate = [f dateFromString:type.binder_payment_due];
+                [f setDateFormat:@"MMM dd, yyyy"]; //DATE FORMAT OUT
+
+                labelBinder.text = [NSString stringWithFormat:@"BINDER PAYMENT DUE %@", [[f stringFromDate:binderDate] uppercaseString]];//[topSectionNames objectAtIndex:indexPath.row];
+                [labelBinder sizeToFit];
+                labelBinder.frame = CGRectMake(tableView.frame.size.width/2-labelBinder.frame.size.width/2-5,3,labelBinder.frame.size.width+25,labelBinder.frame.size.height+5);
+                
+                [cell.contentView addSubview:labelBinder];
+            }
+        }
+        
+        if (type.status == (enrollmentState)NO_ACTION_REQUIRED && (indexPath.row == [topSectionNames count] - 1))
+        {
+            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+            cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
+            cell.detailTextLabel.textColor = [UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
+        }
+        
+        /*
+        if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
             [self showCellCosts:cell indexPath:indexPath];
         else
             [self showCellDates:cell indexPath:indexPath];
+         */
     }
 
     if (indexPath.section == 1)
     {
-        if (bucket == 2)
+        cell.textLabel.text = [midSectionNames objectAtIndex:indexPath.row];
+        cell.detailTextLabel.text = [midSectionValues objectAtIndex:indexPath.row];
+        if (type.status == (enrollmentState)NEEDS_ATTENTION && indexPath.row == 0)
         {
-            if (indexPath.row == 0)
-            {
-                cell.textLabel.text = @"Enrolled";
-                cell.detailTextLabel.text = type.employeesEnrolled;
-            }
-            if (indexPath.row == 1)
-            {
-                cell.textLabel.text = @"Not Participating";
-                cell.detailTextLabel.text = @"5"; //type.employeesWaived;
-             }
-            if (indexPath.row == 2)
-            {
-                cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:13.0];
-                cell.textLabel.text = @"Total Employees";
-                cell.detailTextLabel.text = type.employeesTotal;
-            }
+            cell.detailTextLabel.textColor = [UIColor redColor];
+            /*
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@",[midSectionNames objectAtIndex:indexPath.row], @"Enrolled or Waived"];
+            
+            NSMutableAttributedString *text =
+            [[NSMutableAttributedString alloc]
+             initWithString: cell.textLabel.text];
+            
+            [text addAttribute:NSForegroundColorAttributeName
+                         value:[UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f]
+                         range:NSMakeRange(11, 2)];
+            
+            cell.textLabel.attributedText = text;
+             */
+
         }
-        else
+        
+        if (indexPath.row == [midSectionNames count] - 1)
         {
-            if (indexPath.row == 0)
-            {
-                if (bucket == 0)
-                    cell.detailTextLabel.textColor = [UIColor redColor];
-                cell.textLabel.text = @"Target Participation";
-                cell.detailTextLabel.text = type.planMinimum;
-            }
-
-            if (indexPath.row == 1)
-            {
-                cell.textLabel.text = @"Enrolled";
-                cell.detailTextLabel.text = type.employeesEnrolled;
-            }
-            if (indexPath.row == 2)
-            {
-                cell.textLabel.text = @"Waived";
-                cell.detailTextLabel.text = @"5"; //type.employeesWaived;
-            }
-            if (indexPath.row == 3)
-            {
-                cell.textLabel.text = @"Haven't Participated";
-                cell.detailTextLabel.text = @"26";
-            }
-            if (indexPath.row == 4)
-            {
-                cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:13.0];
-                cell.textLabel.text = @"Total Employees";
-                cell.detailTextLabel.text = type.employeesTotal;
-            }
-
+            cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
+            cell.detailTextLabel.textColor = [UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
+            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
         }
     }
 
     if (indexPath.section == 2)
     {
-        if (bucket == 2)
-            [self showCellDates:cell indexPath:indexPath];
+        if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
+        {
+            NSDateFormatter *f = [[NSDateFormatter alloc] init];
+            [f setDateFormat:@"MM-dd-yyyy"];
+            
+             if (indexPath.row == 0)
+            {
+                NSDate *endDate = [f dateFromString:type.renewal_applicable_available];
+                
+                [f setDateFormat:@"MMM dd, yyyy"];
+
+                cell.textLabel.text = @"Renewal Available";
+                cell.detailTextLabel.text = [f stringFromDate:endDate];//type.renewal_applicable_available;
+            }
+            if (indexPath.row == 1)
+            {
+                NSDate *endDate = [f dateFromString:type.planYear];
+                [f setDateFormat:@"MMM dd, yyyy"];
+                
+                cell.textLabel.text = @"Next Coverage Year Begins";
+                cell.detailTextLabel.text = [f stringFromDate:endDate];
+            }
+            if (indexPath.row == 2)
+            {
+                NSDate *endDate = [f dateFromString:type.open_enrollment_ends];
+                [f setDateFormat:@"MMM dd, yyyy"];
+                
+               cell.textLabel.text = @"Next Open Enrollment Ends";
+                cell.detailTextLabel.text = [f stringFromDate:endDate];
+            }
+
+        }
         else
             [self showCellCosts:cell indexPath:indexPath];
     }

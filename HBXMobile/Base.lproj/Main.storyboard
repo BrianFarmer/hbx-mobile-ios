@@ -24,17 +24,6 @@
             <string>Roboto-Regular</string>
             <string>Roboto-Regular</string>
             <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
-            <string>Roboto-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -46,22 +35,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="30f-a9-oVN">
-                                <rect key="frame" x="210" y="253" width="24" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="checkbox.png"/>
-                                <connections>
-                                    <action selector="enableTouchIdButton:" destination="dkx-z0-nzr" eventType="touchUpInside" id="5oY-OL-TN6"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SAn-8X-zUE">
-                                <rect key="frame" x="25" y="251" width="24" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="checkbox.png"/>
-                                <connections>
-                                    <action selector="saveUserInfoButton:" destination="dkx-z0-nzr" eventType="touchUpInside" id="cAd-LC-87j"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" id="97C-m2-7XG">
                                 <rect key="frame" x="0.0" y="323" width="320" height="245"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -97,7 +70,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="s31-ED-25N">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="s31-ED-25N">
                                         <rect key="frame" x="209" y="125" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </switch>
@@ -146,73 +119,22 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="bottomView" destination="97C-m2-7XG" id="hZ3-1k-MCs"/>
-                        <outlet property="enableTouchIdButton" destination="30f-a9-oVN" id="qeH-1G-pOx"/>
                         <outlet property="lblDisclaimer" destination="rB8-L7-3lB" id="LIT-0l-SZX"/>
                         <outlet property="lblEnableTouchID" destination="4Fn-bz-oHN" id="t3V-bh-euc"/>
                         <outlet property="lblSaveUserID" destination="IxK-Mv-bPe" id="eMc-Bc-HYc"/>
                         <outlet property="lblVersion" destination="JMH-Oe-jo6" id="GZ9-6l-EHh"/>
-                        <outlet property="saveUserInfoButton" destination="SAn-8X-zUE" id="ev0-Xn-YP7"/>
                         <outlet property="submitButton" destination="FD6-vP-RUs" id="b1z-KK-s1e"/>
                         <outlet property="switchSaveMe" destination="wzA-fo-e9T" id="1xW-ZK-mVe"/>
                         <outlet property="switchTouchId" destination="s31-ED-25N" id="VAg-rg-hvl"/>
                         <outlet property="topView" destination="nIO-Bl-J6U" id="Wfe-01-bmE"/>
                         <outlet property="txtEmail" destination="2xf-WL-AwF" id="Nvh-pJ-pz5"/>
                         <outlet property="txtPassword" destination="dET-08-jMC" id="15f-Lk-llq"/>
-                        <segue destination="m89-FY-wnh" kind="push" identifier="Show My Account" id="4hg-ej-X60"/>
-                        <segue destination="XT4-Sd-mMV" kind="push" identifier="Select Plan Employee" id="btB-dW-lJ0"/>
                         <segue destination="BJO-um-fM0" kind="push" identifier="Broker View" id="M1G-1s-kR4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="420" y="514"/>
-        </scene>
-        <!--My Account View Controller-->
-        <scene sceneID="zp1-NI-hi2">
-            <objects>
-                <viewController storyboardIdentifier="My Account" title="My Account View Controller" id="m89-FY-wnh" customClass="MyAccountViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="FOs-zD-eKj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="cxE-sf-FUq">
-                                <rect key="frame" x="0.0" y="65" width="375" height="502"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="0.33725490196078434" green="0.57647058823529407" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="m89-FY-wnh" id="PrR-sx-3iz"/>
-                                    <outlet property="delegate" destination="m89-FY-wnh" id="K3C-sD-gyu"/>
-                                </connections>
-                            </tableView>
-                            <tabBar contentMode="scaleToFill" translucent="NO" id="vc0-dV-ERs">
-                                <rect key="frame" x="0.0" y="618" width="375" height="49"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <items>
-                                    <tabBarItem title="Notifications" image="bell.png" badgeValue="2" id="CtW-fy-PQS"/>
-                                    <tabBarItem tag="1" title="Contact" selectedImage="phone.png" id="qmF-f8-7dB"/>
-                                    <tabBarItem tag="2" title="Email" id="cEb-sf-vTG"/>
-                                </items>
-                                <connections>
-                                    <outlet property="delegate" destination="m89-FY-wnh" id="0wT-g0-eJF"/>
-                                </connections>
-                            </tabBar>
-                        </subviews>
-                        <color key="backgroundColor" red="0.89411764705882357" green="0.89411764705882357" blue="0.89411764705882357" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="7Wc-d5-GL9"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="myAccountTable" destination="cxE-sf-FUq" id="QCf-yJ-W6h"/>
-                        <outlet property="myTabBar" destination="vc0-dV-ERs" id="6cz-Gt-3ja"/>
-                        <segue destination="0oG-Oe-gTI" kind="push" identifier="Show Notifications" id="I4w-CN-r92"/>
-                        <segue destination="z7k-vE-8m5" kind="push" identifier="Show Plan Details" id="D2K-eH-2kW"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ygk-M4-G7G" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="866.5" y="407.5"/>
+            <point key="canvasLocation" x="262" y="-457"/>
         </scene>
         <!--Broker View-->
         <scene sceneID="d0Q-wu-EC2">
@@ -223,11 +145,11 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="1DE-7E-y1H">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="115" width="320" height="407"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" id="5Ma-6n-QRT">
-                                    <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
@@ -235,166 +157,43 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                     </connections>
                                 </searchBar>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BrokerCellIdentifier" id="3bK-ZH-pV2" customClass="brokerPlanTableViewCell">
-                                        <rect key="frame" x="0.0" y="136" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3bK-ZH-pV2" id="elZ-KZ-5oI">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employer" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nRo-Bb-iga">
-                                                    <rect key="frame" x="14" y="-6" width="134" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UHN-0U-8DQ">
-                                                    <rect key="frame" x="180" y="7" width="40" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAYS LEFT" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="BDf-Me-374">
-                                                    <rect key="frame" x="342" y="3" width="30" height="34"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EMPLOYEES NEEDED" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wTN-24-LH5">
-                                                    <rect key="frame" x="228" y="3" width="67" height="35"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EQn-10-oKP">
-                                                    <rect key="frame" x="294" y="8" width="40" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="daysleftLabel" destination="EQn-10-oKP" id="0vD-ZC-MpT"/>
-                                            <outlet property="employeesLabel" destination="UHN-0U-8DQ" id="Ygg-c8-xsY"/>
-                                            <outlet property="employerLabel" destination="nRo-Bb-iga" id="IFi-mL-WX6"/>
-                                            <outlet property="lblEmployeesNeeded" destination="wTN-24-LH5" id="Rhv-aE-fZ4"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DetailCellIdentifier" rowHeight="114" id="WBc-ly-zhP" customClass="brokerPlanDetailTableViewCell">
-                                        <rect key="frame" x="0.0" y="180" width="375" height="114"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WBc-ly-zhP" id="m01-86-Vx8">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="113.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total # of Employees: 50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lOG-qp-5yy">
-                                                    <rect key="frame" x="8" y="25" width="126" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Premium: $8,201" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Drl-yZ-ZSg">
-                                                    <rect key="frame" x="8" y="52" width="95" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enrolled: 30" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6yT-59-mcp">
-                                                    <rect key="frame" x="146" y="25" width="72" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waived: 5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nng-aH-qKX">
-                                                    <rect key="frame" x="146" y="54" width="60" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employee Cost: $142.50" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s0y-JH-cMJ">
-                                                    <rect key="frame" x="237" y="52" width="124" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="XJy-Md-dg2">
-                                                    <rect key="frame" x="20" y="79" width="46" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Call"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6kd-15-gaP">
-                                                    <rect key="frame" x="113" y="79" width="46" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Email"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ThD-AR-Loh">
-                                                    <rect key="frame" x="219" y="79" width="46" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Chat"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KbS-fx-uas">
-                                                    <rect key="frame" x="288" y="79" width="73" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Directions"/>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employer Cost: $8,201" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y7P-Yz-NNn">
-                                                    <rect key="frame" x="237" y="23" width="119" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="11"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="prototypeCell" id="WaD-cc-pb3" customClass="MGSwipeTableCell">
-                                        <rect key="frame" x="0.0" y="294" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="136" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WaD-cc-pb3" id="DYy-jW-za7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employer" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="r6m-2T-XPo">
-                                                    <rect key="frame" x="14" y="-6" width="144" height="50"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employer" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="r6m-2T-XPo">
+                                                    <rect key="frame" x="14" y="-6" width="128" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EMPLOYEES NEEDED" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FQR-I1-HbT">
-                                                    <rect key="frame" x="198" y="3" width="59" height="35"/>
+                                                    <rect key="frame" x="179" y="3" width="59" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="150" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bom-Bs-d0K">
-                                                    <rect key="frame" x="166" y="8" width="28" height="21"/>
+                                                    <rect key="frame" x="150" y="8" width="27" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mb1-xc-ew3">
-                                                    <rect key="frame" x="259" y="8" width="25" height="21"/>
+                                                    <rect key="frame" x="239" y="8" width="25" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAYS LEFT" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="4Ib-J0-UPZ">
-                                                    <rect key="frame" x="289" y="2" width="30" height="34"/>
+                                                    <rect key="frame" x="270" y="2" width="30" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -438,41 +237,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="14" y="1282"/>
-        </scene>
-        <!--Map View Controller-->
-        <scene sceneID="xfX-Fk-Z1I">
-            <objects>
-                <viewController storyboardIdentifier="Show Map View" id="8pn-27-M5m" customClass="MapViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="vTN-8n-Y80">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" id="M9O-u6-ckY">
-                                <rect key="frame" x="0.0" y="84" width="375" height="408"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </mapView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="38" sectionHeaderHeight="28" sectionFooterHeight="28" id="Cjg-pE-5nR">
-                                <rect key="frame" x="0.0" y="508" width="375" height="159"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="8pn-27-M5m" id="P7V-53-X7y"/>
-                                    <outlet property="delegate" destination="8pn-27-M5m" id="SK5-I1-hQa"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Fhs-YM-qCJ"/>
-                    <connections>
-                        <outlet property="mapView" destination="M9O-u6-ckY" id="idd-sJ-Iq0"/>
-                        <outlet property="routeTable" destination="Cjg-pE-5nR" id="BDZ-CW-NkA"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sYA-Vg-IAY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="392.5" y="1944.5"/>
+            <point key="canvasLocation" x="262" y="398"/>
         </scene>
         <!--Broker Plan Detail View Controller-->
         <scene sceneID="x8n-Xm-Tsp">
@@ -538,158 +303,11 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <outlet property="pCompany" destination="9L1-iK-bG9" id="Xtu-gj-aDC"/>
                         <outlet property="pCompanyFooter" destination="uOY-9O-sQL" id="Vva-C5-ptW"/>
                         <outlet property="vHeader" destination="Al5-rT-Yhe" id="6Jn-Ni-wmu"/>
-                        <segue destination="8pn-27-M5m" kind="push" identifier="Show Map View" id="kVe-VI-L89"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gr0-Rd-SbL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="607.5" y="1180.5"/>
-        </scene>
-        <!--SHOP Employee-->
-        <scene sceneID="e3a-OR-qnz">
-            <objects>
-                <viewController storyboardIdentifier="SHOP Employee" title="SHOP Employee" id="XT4-Sd-mMV" customClass="selectPlanViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ws5-Rd-gkd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rqk-SH-s7K">
-                                <rect key="frame" x="67" y="146" width="240" height="399"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="XT4-Sd-mMV" id="1dO-iS-Yj0"/>
-                                    <outlet property="delegate" destination="XT4-Sd-mMV" id="zQq-xO-glF"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.55248800210000004" green="0.7043914657" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="nPs-rM-KLR"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="plansTable" destination="Rqk-SH-s7K" id="oc6-Q6-f3B"/>
-                        <segue destination="1A4-gW-Del" kind="push" identifier="Show Plan PDF a" id="oVP-Ce-9Cp"/>
-                        <segue destination="ArG-0i-Wyt" kind="push" identifier="Show Shop Plan Details" id="fvN-ti-iZn"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="t0u-Ee-4IE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1289.5" y="1146.5"/>
-        </scene>
-        <!--Plan Details-->
-        <scene sceneID="kaw-kc-tHJ">
-            <objects>
-                <viewController storyboardIdentifier="Plan Detail View" title="Plan Details" id="ArG-0i-Wyt" customClass="showPlanDetailViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="l2M-Yp-hKQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="2OI-7f-q5x">
-                                <rect key="frame" x="124" y="77" width="228" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="CO-PAY"/>
-                                    <segment title="COINSURANCE"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentSwitch:" destination="ArG-0i-Wyt" eventType="valueChanged" id="BOP-2y-EC2"/>
-                                </connections>
-                            </segmentedControl>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="lOr-XQ-PrM">
-                                <rect key="frame" x="20" y="134" width="335" height="499"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="ArG-0i-Wyt" id="iaY-sR-J0h"/>
-                                    <outlet property="delegate" destination="ArG-0i-Wyt" id="0gA-yh-mjc"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="592-fa-zZj"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="planDetailTable" destination="lOr-XQ-PrM" id="vhx-DL-vgy"/>
-                        <outlet property="planType" destination="2OI-7f-q5x" id="AwV-ld-Iaz"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0dC-Uy-WVt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1788.5" y="1146.5"/>
-        </scene>
-        <!--Show Notifications-->
-        <scene sceneID="ncZ-YR-VBO">
-            <objects>
-                <tableViewController storyboardIdentifier="Show Notifications" title="Show Notifications" id="0oG-Oe-gTI" customClass="hbxNotificationsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="nrp-hu-mdx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RRU-2M-DmT">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RRU-2M-DmT" id="WBw-0E-Z7Y">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="0oG-Oe-gTI" id="oOy-at-j21"/>
-                            <outlet property="delegate" destination="0oG-Oe-gTI" id="yGf-Ul-Wno"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="nHJ-rs-gs5"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <segue destination="sYl-Ju-g9u" kind="push" id="GHZ-7A-vnm"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ac5-nJ-XMf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1188.5" y="400.5"/>
-        </scene>
-        <!--Start Upload-->
-        <scene sceneID="szU-Ga-JlI">
-            <objects>
-                <viewController storyboardIdentifier="StartUpload" title="Start Upload" id="sYl-Ju-g9u" customClass="startUploadOfDocumentViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="aAb-ep-xEE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="3id-VD-3sw">
-                                <rect key="frame" x="112" y="128" width="150" height="2"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </progressView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="N0Z-XP-Y83">
-                                <rect key="frame" x="117" y="381" width="140" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Start Upload"/>
-                                <connections>
-                                    <action selector="startUploadClick:" destination="sYl-Ju-g9u" eventType="touchUpInside" id="8uA-r8-Gbl"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Rbp-fa-hKk">
-                                <rect key="frame" x="67" y="177" width="240" height="147"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="TwE-n3-dhS"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="imageView" destination="Rbp-fa-hKk" id="6AX-72-gmf"/>
-                        <outlet property="progressView" destination="3id-VD-3sw" id="XhP-hA-WLi"/>
-                        <outlet property="startUploadButton" destination="N0Z-XP-Y83" id="pxk-5z-uYt"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fbz-9C-zla" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1627.5" y="400.5"/>
+            <point key="canvasLocation" x="679.5" y="447.5"/>
         </scene>
         <!--Slide Out Menu-->
         <scene sceneID="d0p-NW-UJy">
@@ -700,7 +318,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fww-Xf-muZ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LeftMenuCell" id="fww-Xf-muZ">
                                 <rect key="frame" x="0.0" y="49.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fww-Xf-muZ" id="B50-6N-CVP">
@@ -718,66 +336,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cmF-ht-jDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-56.5" y="-359.5"/>
-        </scene>
-        <!--My Plan Coverage Table View Controller-->
-        <scene sceneID="VfC-LR-2AV">
-            <objects>
-                <tableViewController id="z7k-vE-8m5" customClass="MyPlanCoverageTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="b3d-qz-qvc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mGC-QX-a6U">
-                                <rect key="frame" x="0.0" y="113.5" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mGC-QX-a6U" id="1kl-fx-ibx">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="z7k-vE-8m5" id="GwD-fi-Owl"/>
-                            <outlet property="delegate" destination="z7k-vE-8m5" id="wsx-6v-QYi"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="of2-7o-gaz"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <segue destination="1A4-gW-Del" kind="push" identifier="Show Plan PDF" id="6ac-h0-49q"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fSU-F3-lJg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="757.5" y="-359.5"/>
-        </scene>
-        <!--My Plan Web View-->
-        <scene sceneID="iuD-ok-kwF">
-            <objects>
-                <viewController storyboardIdentifier="HBXMobile Web View" title="My Plan Web View" id="1A4-gW-Del" customClass="MyPlanWebViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6Em-kJ-6qh">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" id="nS9-gM-FrC">
-                                <rect key="frame" x="-11" y="66" width="386" height="601"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="klY-JB-7nt"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <outlet property="webView" destination="nS9-gM-FrC" id="c2I-Bt-PrV"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nLX-EF-Hjd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1188.5" y="-359.5"/>
+            <point key="canvasLocation" x="-644.5" y="-407.5"/>
         </scene>
         <!--Slide Navigation Controller-->
         <scene sceneID="F5L-zg-Dy3">
@@ -797,15 +356,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gkl-RT-4KA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-56" y="400.44"/>
+            <point key="canvasLocation" x="-160.5" y="-407.5"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="bell.png" width="32" height="32"/>
-        <image name="checkbox.png" width="128" height="128"/>
-        <image name="phone.png" width="32" height="32"/>
-    </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="oVP-Ce-9Cp"/>
-    </inferredMetricsTieBreakers>
 </document>

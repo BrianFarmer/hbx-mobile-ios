@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <mapkit/mapkit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <CLLocationManagerDelegate>
 {
     IBOutlet UILabel *lblDisclaimer;
     IBOutlet UITextField *txtEmail;
@@ -33,8 +33,6 @@
 }
 
 @property (strong, nonatomic) IBOutlet UIButton *submitButton;
-@property (strong, nonatomic) IBOutlet UIButton *enableTouchIdButton;
-@property (strong, nonatomic) IBOutlet UIButton *saveUserInfoButton;
 //@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinningWheel;
 @property(nonatomic, retain) CLLocationManager *locationManager;
 
