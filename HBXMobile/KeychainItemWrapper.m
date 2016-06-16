@@ -130,9 +130,13 @@
         
         CFMutableDictionaryRef outDictionary = NULL;
         
-        if (!SecItemCopyMatching((__bridge CFDictionaryRef)tempQuery, (CFTypeRef *)&outDictionary) == noErr)
-        {
-            // Stick these default values into keychain item if nothing found.
+        //(DB) Fixed warning. Commented code is original instead of OSStatus
+//        if (!SecItemCopyMatching((__bridge CFDictionaryRef)tempQuery, (CFTypeRef *)&outDictionary) == noErr)
+        OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)tempQuery, (CFTypeRef *)&outDictionary);
+        
+        if (!(status == noErr))
+            {
+                // Stick these default values into keychain item if n)othing found.
             [self resetKeychainItem];
             
             // Add the generic attribute and the keychain access group.

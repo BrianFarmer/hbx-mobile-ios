@@ -11,7 +11,6 @@
 		130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 130AA2821CEE568900B43F24 /* MessageUI.framework */; };
 		130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2861CF1382100B43F24 /* brokerDataJson.txt */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
-		13344F811CE4FEFB009DDCC9 /* brokerPlanTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13344F801CE4FEFB009DDCC9 /* brokerPlanTableViewCell.m */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
 		134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */ = {isa = PBXBuildFile; fileRef = 134A09DC1CBE817000CD3229 /* SSL Certificate Creation */; };
 		134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 134DE79D1CECEF6600F8958A /* MGSwipeButton.m */; };
@@ -30,6 +29,8 @@
 		13A373071D084053008CA0E1 /* header-employer-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373061D084053008CA0E1 /* header-employer-2.png */; };
 		13A3730A1D0846E0008CA0E1 /* markerWithCircleLightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */; };
 		13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */; };
+		13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3730E1D0B1B3F008CA0E1 /* gear.png */; };
+		13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A373111D0B279F008CA0E1 /* ConfigViewController.m */; };
 		13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13A382061CDB2E3E006B5984 /* Roboto-Black.ttf */; };
 		13A382131CDB2E3E006B5984 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13A382071CDB2E3E006B5984 /* Roboto-BlackItalic.ttf */; };
 		13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13A382081CDB2E3E006B5984 /* Roboto-Bold.ttf */; };
@@ -50,7 +51,6 @@
 		13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */; };
 		13A382301CDBD01A006B5984 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */; };
 		13AB81B91CE1031900EC00A9 /* BrokerAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */; };
-		13AC2A281CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A271CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.m */; };
 		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
 		13FF470E1C8A2C5600C7C851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF470D1C8A2C5600C7C851 /* main.m */; };
 		13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47101C8A2C5600C7C851 /* AppDelegate.m */; };
@@ -86,8 +86,6 @@
 		130AA2821CEE568900B43F24 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		130AA2861CF1382100B43F24 /* brokerDataJson.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = brokerDataJson.txt; sourceTree = "<group>"; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		13344F7F1CE4FEFB009DDCC9 /* brokerPlanTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanTableViewCell.h; sourceTree = "<group>"; };
-		13344F801CE4FEFB009DDCC9 /* brokerPlanTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanTableViewCell.m; sourceTree = "<group>"; };
 		134A09D91CBE7D7F00CD3229 /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		134A09DC1CBE817000CD3229 /* SSL Certificate Creation */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SSL Certificate Creation"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.python; };
 		134DE79C1CECEF6600F8958A /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
@@ -111,6 +109,9 @@
 		13A373061D084053008CA0E1 /* header-employer-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "header-employer-2.png"; path = "images/header-employer-2.png"; sourceTree = "<group>"; };
 		13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = markerWithCircleLightBlue.png; path = images/markerWithCircleLightBlue.png; sourceTree = "<group>"; };
 		13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = phoneCirclelightBlue.png; path = images/phoneCirclelightBlue.png; sourceTree = "<group>"; };
+		13A3730E1D0B1B3F008CA0E1 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
+		13A373101D0B279F008CA0E1 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
+		13A373111D0B279F008CA0E1 /* ConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController.m; sourceTree = "<group>"; };
 		13A382061CDB2E3E006B5984 /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Black.ttf"; path = "fonts/Roboto-Black.ttf"; sourceTree = "<group>"; };
 		13A382071CDB2E3E006B5984 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-BlackItalic.ttf"; path = "fonts/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		13A382081CDB2E3E006B5984 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
@@ -132,8 +133,6 @@
 		13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sampleMyPlanJSON.txt; path = ../../sampleMyPlanJSON.txt; sourceTree = "<group>"; };
 		13AB81B71CE1031900EC00A9 /* BrokerAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountViewController.h; sourceTree = "<group>"; };
 		13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrokerAccountViewController.m; sourceTree = "<group>"; };
-		13AC2A261CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailTableViewCell.h; sourceTree = "<group>"; };
-		13AC2A271CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailTableViewCell.m; sourceTree = "<group>"; };
 		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
 		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
 		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -288,12 +287,10 @@
 				137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */,
 				13AB81B71CE1031900EC00A9 /* BrokerAccountViewController.h */,
 				13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */,
-				13344F7F1CE4FEFB009DDCC9 /* brokerPlanTableViewCell.h */,
-				13344F801CE4FEFB009DDCC9 /* brokerPlanTableViewCell.m */,
-				13AC2A261CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.h */,
-				13AC2A271CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.m */,
 				13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */,
 				13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */,
+				13A373101D0B279F008CA0E1 /* ConfigViewController.h */,
+				13A373111D0B279F008CA0E1 /* ConfigViewController.m */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -342,6 +339,7 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				13A3730E1D0B1B3F008CA0E1 /* gear.png */,
 				13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */,
 				13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */,
 				13A373061D084053008CA0E1 /* header-employer-2.png */,
@@ -492,6 +490,7 @@
 				13A373071D084053008CA0E1 /* header-employer-2.png in Resources */,
 				13A382131CDB2E3E006B5984 /* Roboto-BlackItalic.ttf in Resources */,
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
+				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
 				13A373031D084022008CA0E1 /* chatWithCircleLightBlue.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
@@ -527,12 +526,11 @@
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
-				13AC2A281CE61EE90079DFF2 /* brokerPlanDetailTableViewCell.m in Sources */,
+				13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */,
 				134DE7A11CECEF6600F8958A /* MGSwipeTableCell.m in Sources */,
 				13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */,
 				13AB81B91CE1031900EC00A9 /* BrokerAccountViewController.m in Sources */,
 				13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */,
-				13344F811CE4FEFB009DDCC9 /* brokerPlanTableViewCell.m in Sources */,
 				13FF470E1C8A2C5600C7C851 /* main.m in Sources */,
 				138119DC1C9ADBF1000A75AA /* Constants.m in Sources */,
 			);

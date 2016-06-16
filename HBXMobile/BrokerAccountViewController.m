@@ -7,8 +7,6 @@
 //
 
 #import "BrokerAccountViewController.h"
-#import "brokerPlanTableViewCell.h"
-#import "brokerPlanDetailTableViewCell.h"
 #import "brokerPlanDetailViewController.h"
 #import "MGSwipeButton.h"
 #import <MapKit/MapKit.h>
@@ -64,27 +62,48 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-
- /*
-    NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-*/    
+    NSData *data;
     
-    NSData* data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
     
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
+    {
+        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+        data = [NSData dataWithContentsOfURL:url];
+    }
+    else
+        data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", strData);
     
 //    NSString* filepath = [[NSBundle mainBundle] pathForResource:@"brokerDataJson" ofType:@"txt"];
 //    NSData *data = [NSData dataWithContentsOfFile:filepath];
 
     NSError *error = nil;
     
-    dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    subscriberPlans = [dictionary valueForKeyPath:@"broker_clients"];
-
+    if (data != nil)
+    {
+        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        subscriberPlans = [dictionary valueForKeyPath:@"broker_clients"];
+    }
+    
     brokerTable.backgroundColor = [UIColor clearColor];
     brokerTable.backgroundView = nil;
+/*
+    int uu = self.view.bounds.size.height;
+    int oo = self.navigationController.navigationBar.frame.size.height;
+    int pp = brokerTable.tableHeaderView.frame.size.height;
+    CGFloat height = brokerTable.contentSize.height;
+    CGFloat maxHeight1 = brokerTable.superview.frame.size.height - 150;
+*/
+//    CGFloat maxHeight = brokerTable.superview.frame.size.height - brokerTable.frame.origin.y;
+//     int uu = self.view.bounds.size.height;
+//     int ww = self.view.frame.size.height;
     
-    brokerTable.frame = CGRectMake(0,0,screenSize.width,screenSize.height);// - 100);
+//    brokerTable.frame = CGRectMake(0, 0, screenSize.width, screenSize.height - (self.navigationController.navigationBar.frame.size.height + 44));// - 100);
+    brokerTable.frame = CGRectMake(0, 0, screenSize.width, self.view.frame.size.height - 65);
+//    brokerTable.frame = CGRectMake(0, 0, screenSize.width, maxHeight + 50);
     
     if (!expandedSections)
     {
@@ -268,6 +287,20 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     return YES;
 }
 
+-(NSString*)getValue:(NSArray*)pk valueForKey:(NSString*)key
+{
+    if ([[pk valueForKey:key] isKindOfClass:[NSString class]]) {
+        //NSLog(@"it is a string");
+        return [pk valueForKey:key];
+    }
+    else {
+        //NSLog(@"it is number");
+        return [[pk valueForKey:key] stringValue];
+    }
+    return @"";
+    
+}
+
 -(void)processBuckets
 {
     NSArray *clientKeys;
@@ -278,8 +311,6 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
         ck = [subscriberPlans objectAtIndex:x];
         clientKeys = [[dictionary valueForKeyPath:@"broker_clients"][x] allKeys];
         
-
-  
         tabTypeItem *pCompany = [[tabTypeItem alloc] init];
         pCompany.type = 0;
 
@@ -290,10 +321,10 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
         pCompany.employer_zip = [ck valueForKeyPath:@"contact_info.zip"];
         
         pCompany.planYear = [ck valueForKey:@"plan_year_begins"];
-        pCompany.employeesEnrolled = [[ck valueForKey:@"employees_enrolled"] stringValue];
-        pCompany.employeesWaived = [[ck valueForKey:@"employees_waived"] stringValue];
-        pCompany.planMinimum = [[ck valueForKey:@"minimum_participation_required"] stringValue];;
-        pCompany.employeesTotal = [[ck valueForKey:@"employees_total"] stringValue];
+        pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
+        pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"]; //[[ck valueForKey:@"employees_waived"] stringValue];
+        pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"]; //[[ck valueForKey:@"minimum_participation_required"] stringValue];;
+        pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"]; //[[ck valueForKey:@"employees_total"] stringValue];
         pCompany.open_enrollment_begins = [ck valueForKey:@"open_enrollment_begins"];
         pCompany.open_enrollment_ends = [ck valueForKey:@"open_enrollment_ends"];
         pCompany.renewal_application_due = [ck valueForKey:@"renewal_application_due"];
@@ -303,6 +334,8 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
             pCompany.binder_payment_due = @"";
         else
             pCompany.binder_payment_due = [ck valueForKey:@"binder_payment_due"];
+        
+        pCompany.active_general_agency = [ck valueForKey:@"active_general_agency"];
         
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -1065,13 +1098,13 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
                 cell.daysleftLabel.textColor = [UIColor redColor];
             else
                 cell.daysleftLabel.textColor = [UIColor darkGrayColor];
-            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", [components day]];
+            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
         }
         
         if (ttype.status == OPEN_ENROLLMENT_MET)
         {
             cell.lblEmployeesNeeded.text = [NSString stringWithFormat:@"OF %@ ENROLLED", ttype.employeesTotal];
-            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", [components day]];
+            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
         }
 
         if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED)

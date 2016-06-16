@@ -130,11 +130,42 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <outlet property="txtEmail" destination="2xf-WL-AwF" id="Nvh-pJ-pz5"/>
                         <outlet property="txtPassword" destination="dET-08-jMC" id="15f-Lk-llq"/>
                         <segue destination="BJO-um-fM0" kind="push" identifier="Broker View" id="M1G-1s-kR4"/>
+                        <segue destination="TLe-x9-diw" kind="push" identifier="Config View" id="Bg8-mz-D2f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="262" y="-457"/>
+        </scene>
+        <!--Config View Controller-->
+        <scene sceneID="UVr-1Y-zBR">
+            <objects>
+                <viewController storyboardIdentifier="Config View" id="TLe-x9-diw" customClass="ConfigViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ksk-Tf-78m">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="50u-bg-aW8">
+                                <rect key="frame" x="40" y="391" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="TLe-x9-diw" id="7bS-WE-T62"/>
+                                    <outlet property="delegate" destination="TLe-x9-diw" id="NHj-qu-VSy"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Esl-W4-hby"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="configTable" destination="50u-bg-aW8" id="jaQ-oV-aVE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Owb-cq-jgG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="734" y="-662"/>
         </scene>
         <!--Broker View-->
         <scene sceneID="d0Q-wu-EC2">
@@ -144,7 +175,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="1DE-7E-y1H">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="1" id="1DE-7E-y1H">
                                 <rect key="frame" x="0.0" y="115" width="320" height="407"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

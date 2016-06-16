@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *employer_city;
 @property (nonatomic, retain) NSString *employer_state;
 @property (nonatomic, retain) NSString *employer_zip;
+@property (nonatomic, retain) NSString *active_general_agency;
 @end
 
 @interface BrokerAccountViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate, MFMessageComposeViewControllerDelegate>

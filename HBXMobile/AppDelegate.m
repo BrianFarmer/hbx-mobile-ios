@@ -28,9 +28,12 @@
         
         [application registerForRemoteNotifications];
     }
+    /***** NOT HANDLING < iOS 8 ****/
+    /*
     else   // iOS < 8 Notifications
         [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
-
+*/
+    
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     
     LeftMenuSlideOutTableViewController *leftMenu = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];

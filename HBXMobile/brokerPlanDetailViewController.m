@@ -73,7 +73,8 @@
                              lineBreakMode:NSLineBreakByWordWrapping].height/23;
     // '23' is font size
  */
-    NSString *notCompleted = [NSString stringWithFormat:@"%ld", [type.employeesTotal integerValue] - ([type.employeesEnrolled integerValue] + [type.employeesWaived integerValue])];
+    long lNotCompleted = [type.employeesTotal integerValue] - ([type.employeesEnrolled integerValue] + [type.employeesWaived integerValue]);
+    NSString *notCompleted = [NSString stringWithFormat:@"%ld", lNotCompleted];
 
     NSDate *today = [NSDate date];
     
@@ -101,7 +102,7 @@
         NSDate *startDate = [f dateFromString:type.open_enrollment_begins];
         [f setDateFormat:@"MMM dd, yyyy"];
         topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", nil];
-        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", [components day]], nil];
+        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], nil];
     }
     else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
     {
@@ -115,7 +116,7 @@
         else
             topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
         
-        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", [components day]], type.employeesTotal, nil];
+        topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], type.employeesTotal, nil];
     }
     else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
     {
@@ -134,12 +135,12 @@
         if ([type.binder_payment_due length] > 0)
         {
             topSectionNames = [[NSArray alloc] initWithObjects: @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
-            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", [components1 day]], [NSString stringWithFormat:@"%ld days left", [components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
+            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
         }
         else
         {
             topSectionNames = [[NSArray alloc] initWithObjects: @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
-            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", [components1 day]], [NSString stringWithFormat:@"%ld days left", [components day]], [f stringFromDate:planYearDate], nil];
+            topSectionValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], nil];
         }
         
     }
@@ -184,18 +185,18 @@
         pCompanyFooter.textColor = [UIColor redColor];
 
     }
-    else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET) //bucket == 1)
+    else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
     {
         pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS";
         pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f]; //[UIColor yellowColor];
         
     }
-    else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS) //bucket == 2)
+    else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
     {
         pCompanyFooter.text = @"RENEWAL IN PROGRESS";
         pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f];
     }   
-    else if (type.status == (enrollmentState)NO_ACTION_REQUIRED) //bucket == 3)
+    else if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
     {
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
@@ -431,6 +432,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (type.active_general_agency != (NSString *)[NSNull null] && [type.active_general_agency length] > 0)
+        return 4;
+    
     return 3;
 }
 
@@ -442,7 +446,10 @@
 
     if (section == 1)
         return [midSectionNames count];
-    
+
+    if (section == 3)
+        return 1;
+
     return 3;
 }
 
@@ -477,8 +484,16 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (section == 2)
-        return nil;
+    if (type.active_general_agency != (NSString *)[NSNull null])
+    {
+        if (section == 3)
+            return nil;
+    }
+    else
+    {
+        if (section == 2)
+            return nil;
+    }
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 8)];
 
@@ -503,14 +518,17 @@
     {
         case 0:
             if (type.status == (enrollmentState)NEEDS_ATTENTION || type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
-                sectionName = @"OPEN ENROLLMENT"; //NSLocalizedString(@"mySectionName", @"mySectionName");
+                sectionName = @"OPEN ENROLLMENT"; //NSLocalizedString(@"mySectionName", @"OPEN ENROLLMENT");
             else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
                 sectionName = @"RENEWAL DEADLINES";
             else
                 sectionName = @"MONTHLY ESTIMATED COST";
             break;
         case 1:
-            sectionName = @"PARTICIPATION"; //NSLocalizedString(@"myOtherSectionName", @"myOtherSectionName");
+            sectionName = @"PARTICIPATION"; //NSLocalizedString(@"myOtherSectionName", @"PARTICIPATION");
+            break;
+        case 3:
+            sectionName = @"GENERAL AGENCY"; //NSLocalizedString(@"myOtherSectionName", @"GENERAL AGENCY");
             break;
         default:
             if (bucket == 0 || bucket == 1)
@@ -807,6 +825,11 @@
         }
         else
             [self showCellCosts:cell indexPath:indexPath];
+    }
+    if (indexPath.section == 3)
+    {
+        cell.textLabel.text = @"General Agency";
+        cell.detailTextLabel.text = type.active_general_agency;
     }
     
     return cell;

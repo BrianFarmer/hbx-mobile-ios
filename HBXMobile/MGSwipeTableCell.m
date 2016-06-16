@@ -618,8 +618,6 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         [self initViews:YES];
         
         _employerLabel.frame = CGRectMake(_employerLabel.frame.origin.x, _employerLabel.frame.origin.y, _employerLabel.frame.size.width + 40, _employerLabel.frame.size.height);
-        CGRect rc = _employeesLabel.frame;
-        
         _employeesLabel.frame = CGRectMake(_employeesLabel.frame.origin.x + 40, _employeesLabel.frame.origin.y, _employeesLabel.frame.size.width, _employeesLabel.frame.size.height);
         _lblEmployeesNeeded.frame = CGRectMake(_lblEmployeesNeeded.frame.origin.x + 40, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
         _daysleftLabel.frame = CGRectMake(_daysleftLabel.frame.origin.x + 50, _daysleftLabel.frame.origin.y, _daysleftLabel.frame.size.width, _daysleftLabel.frame.size.height);

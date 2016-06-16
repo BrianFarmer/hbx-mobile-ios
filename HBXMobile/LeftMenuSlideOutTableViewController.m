@@ -22,8 +22,12 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIEdgeInsets inset = UIEdgeInsetsMake(20, 0, 0, 0);
+
+    
+    UIEdgeInsets inset = UIEdgeInsetsMake(20, 0, 0, -80);
     self.tableView.contentInset = inset;
+    
+
 /*
     UIView *darkView = [[UIView alloc] initWithFrame:CGRectMake(0,120, 420, 140)];
     darkView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(0/255.0) blue:(0/255.0) alpha:.4];
@@ -130,8 +134,20 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
-        
+/*
+        if (indexPath.section == 0)
+        {
+            UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectMake(cell.frame.size.width - 40 , 6, cell.frame.size.width - 40, cell.frame.size.height)];
+            [switchview addTarget: self action: @selector(flip:) forControlEvents:UIControlEventValueChanged];
+            switchview.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"useEnrollDB"];
+            
+            [cell.contentView addSubview:switchview];
+        }
+*/
     }
+    
+
+    //cell.frame = CGRectMake(0,0, self.view.frame.size.width - 250, self.view.frame.size.height);
     /*
     if ([indexPath section] == 0 && [indexPath row] == 0)
         cell.textLabel.text = @"View Coverage"; //[NSString stringWithFormat:@"View Coverage, indexPath.row];
@@ -139,6 +155,8 @@
         cell.textLabel.text = @"Notifications";
     else
         */
+
+
         cell.textLabel.text = @"Logout";
     
 //    if ([indexPath row] == 5 && !self.iLevel)

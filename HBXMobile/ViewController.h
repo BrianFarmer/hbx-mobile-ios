@@ -42,6 +42,11 @@
     
     int REQUEST_TYPE;
     BOOL reLoad;
+    
+    UILabel* lblDB;
+    
+    NSString *gzENROLL_HOST;
+    NSString *gzMOBILE_HOST;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton *submitButton;

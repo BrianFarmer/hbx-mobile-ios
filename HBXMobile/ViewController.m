@@ -29,11 +29,17 @@
 #define IS_IPHONE_6P (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
 
 //#define HOST @"10.36.27.206:3000"
-#define HOST @"localhost:3000"
+
+#define HOST @"10.36.27.236:3000"
+#define HOST_NS @"10.36.27.236:3001"
+
+//#define HOST @"localhost:3000"
+
 #define GET_BROKER_ID           1000
 #define GET_BROKER_EMPLOYERS    1001
 #define INITIAL_GET             1002
 #define POST_LOGIN_DONE         1003
+#define INITIAL_LOGIN_NS        1004
 
 @interface ViewController ()
 
@@ -70,14 +76,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+//    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
 #ifdef __IPHONE_8_0
     if(IS_OS_8_OR_LATER) {
         // Use one or the other, not both. Depending on what you put in info.plist
-//        [self.locationManager requestWhenInUseAuthorization];
-        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+//        [self.locationManager requestAlwaysAuthorization];
     }
 #endif
     [self.locationManager startUpdatingLocation];
@@ -98,12 +105,30 @@
 
 
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     spinningWheel = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    spinningWheel.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+    spinningWheel.frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
     spinningWheel.center = self.view.center;
+    spinningWheel.layer.cornerRadius = 05;
+    spinningWheel.opaque = NO;
+    spinningWheel.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self.view addSubview:spinningWheel];
-    [spinningWheel bringSubviewToFront:self.view];
+//    [spinningWheel bringSubviewToFront:self.view];
+
+/*
+    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    activityIndicator.layer.cornerRadius = 05;
+    activityIndicator.opaque = NO;
+    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    activityIndicator.center = self.view.center;
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [activityIndicator setColor:[UIColor colorWithRed:0.6 green:0.8 blue:1.0 alpha:1.0]];
+    [self.view addSubview: activityIndicator];
+*/
     
     BOOL hasTouchID = NO;
     // if the LAContext class is available
@@ -121,6 +146,10 @@
 
     }
     
+    if (screenSize.height < 600)
+        lblDisclaimer.font = [UIFont fontWithName:@"Roboto-Regular" size:12.0];
+
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
     {
         // Place iPhone/iPod specific code here...
@@ -172,6 +201,25 @@
     NSString *dateStr = [NSString stringWithUTF8String:__DATE__];
     NSString *timeStr = [NSString stringWithUTF8String:__TIME__];
 */
+/*
+    UIImageView *pGear = [[UIImageView alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
+    pGear.backgroundColor = [UIColor clearColor];
+    pGear.image = [UIImage imageNamed:@"gear.png"];
+    pGear.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:pGear];
+*/
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
+    UIImage *img = [UIImage imageNamed:@"gear.png"];
+    [btn setImage:img forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(showConfig:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    
+    lblDB = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width /2 - 100, screenSize.height - 14, 200, 10)];
+    lblDB.textAlignment = NSTextAlignmentCenter;
+    lblDB.font = [UIFont systemFontOfSize:10];
+    lblDB.textColor = [UIColor whiteColor];
+    [self.view addSubview:lblDB];
+    
     lblVersion.numberOfLines = 3;
     lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
     lblVersion.frame = CGRectMake(bottomView.frame.size.width - 50, bottomView.frame.size.height - 30, 70, 15);
@@ -232,6 +280,20 @@
         bSaveUserInfo = FALSE;
         bUseTouchID = FALSE;
     }
+    
+    /**************************************/
+    /**** USED TO REMOVE KEYBOARD *********/
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+-(void)showConfig:(id)sender
+{
+    [self performSegueWithIdentifier:@"Config View" sender:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -250,6 +312,8 @@
 
 - (IBAction)handleButtonClick:(id)sender
 {
+    [spinningWheel startAnimating];
+
 //        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
 //                [self performSegueWithIdentifier:@"Show My Account" sender:nil];
 #if !(TARGET_IPHONE_SIMULATOR)
@@ -273,8 +337,29 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
             [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
+/*
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useEnrollDB"])
+                [self login:sender];
+            else
+                [self askSecurityQuestion:FALSE];
+    */
+    ;
+    switch([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue])
+    {
+        case 1001:
+            gzENROLL_HOST = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
+            [self login:sender];
+            break;
+        case 1002:
+            gzMOBILE_HOST = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
+            [self NSlogin:sender];
+            break;
+        case 1003:
+        default:
+            [self askSecurityQuestion:FALSE];
+            break;
+    }
 
-    [self login];
 //            [self loginToServer];
  //           [self performSegueWithIdentifier:@"Show My Account" sender:nil];
  //         [self performSegueWithIdentifier:@"Broker View" sender:nil];
@@ -289,7 +374,27 @@
 //    [self loginToServer];
 
 //    [self askSecurityQuestion:FALSE];
-    [self login:sender];
+    /*
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useEnrollDB"])
+        [self NSlogin:sender];
+    else
+        [self askSecurityQuestion:FALSE];
+*/
+    switch([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue])
+    {
+        case 1001:
+            gzENROLL_HOST = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
+            [self login:sender];
+            break;
+        case 1002:
+            gzMOBILE_HOST = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
+            [self NSlogin:sender];
+            break;
+        case 1003:
+        default:
+            [self performSegueWithIdentifier:@"Broker View" sender:nil];
+            break;
+    }
     
 //       [self performSegueWithIdentifier:@"Broker View" sender:nil];
 #endif
@@ -314,6 +419,7 @@
                                    handler:^(UIAlertAction *action)
                                    {
                                        NSLog(@"Cancel action");
+                                       [spinningWheel stopAnimating];
                                    }];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -346,17 +452,54 @@
                                                                      kCFStringEncodingUTF8));
 }
 
-- (IBAction)login:(id)sender
+- (void)clearCookiesForURL {
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSArray *cookies = [cookieStorage cookiesForURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", HOST]]];
+    for (NSHTTPCookie *cookie in cookies) {
+        NSLog(@"Deleting cookie for domain: %@", [cookie domain]);
+        [cookieStorage deleteCookie:cookie];
+    }
+}
+
+- (IBAction)NSlogin:(id)sender
 {
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    [self clearCookiesForURL];
+    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     
-    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", HOST]]];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/login", gzMOBILE_HOST]]];
+    
+    [request setHTTPMethod:@"GET"];
+    
+    REQUEST_TYPE = INITIAL_LOGIN_NS;
+    
+    [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+}
+
+- (IBAction)login:(id)sender
+{
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    [self clearCookiesForURL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", gzENROLL_HOST]]];
     
     [request setHTTPMethod:@"GET"];
 
     REQUEST_TYPE = INITIAL_GET;
     
     [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
     conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     if(conn) {
@@ -380,9 +523,9 @@
     
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
     
-    NSString *postLength = [NSString stringWithFormat:@"%lu",[postData length]];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", HOST];
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", gzENROLL_HOST];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     
@@ -394,7 +537,7 @@
     //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
     
-    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+//    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
     
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -439,7 +582,7 @@
     
     NSLog(@"%@", @"\r\r\rSHOWING PROFILE \r\r\r\r");
     
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies", HOST];
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies", gzENROLL_HOST];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     
@@ -448,10 +591,10 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     
     
-    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+//    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                HOST, NSHTTPCookieDomain,
+                                gzENROLL_HOST, NSHTTPCookieDomain,
                                 @"/", NSHTTPCookiePath,  // IMPORTANT!
                                 @"_session_id", NSHTTPCookieName,
                                 customCookie_a, NSHTTPCookieValue,
@@ -483,19 +626,18 @@
     
     NSLog(@"%@", @"\r\r\rSHOWING PROFILE \r\r\r\r");
     
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", HOST, _brokerId];
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", gzENROLL_HOST, _brokerId];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     
     [request setHTTPMethod:@"GET"];
 
-    
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     
-    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+//    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                HOST, NSHTTPCookieDomain,
+                                gzENROLL_HOST, NSHTTPCookieDomain,
                                 @"/", NSHTTPCookiePath,  // IMPORTANT!
                                 @"_session_id", NSHTTPCookieName,
                                 customCookie_a, NSHTTPCookieValue,
@@ -610,8 +752,8 @@
     if (response != nil)
     {
         
-        NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
-        int code = [httpResponse statusCode];
+//        NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
+//        int code = [httpResponse statusCode];
         
         NSArray* authToken = [NSHTTPCookie
                               cookiesWithResponseHeaderFields:[response allHeaderFields]
@@ -641,7 +783,7 @@
 {
     
     NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
-    int code = [httpResponse statusCode];
+//    int code = [httpResponse statusCode];
     
     _responseData = [[NSMutableData alloc] init];
     
@@ -742,13 +884,31 @@
             }
             break;
         case GET_BROKER_EMPLOYERS:
+            [spinningWheel stopAnimating];
             [self performSegueWithIdentifier:@"Broker View" sender:nil];
             break;
         case INITIAL_GET:
             [self POSTLogin];
             break;
-        case POST_LOGIN_DONE:
+        case INITIAL_LOGIN_NS:
+        {
+            NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
             
+            NSError *error = nil;
+            
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            
+            customCookie = [dictionary valueForKey:@"session_key"];
+            //NSString *substring = [responseString substringFromIndex:startRange.location+33];
+            //    NSLog(@"substring: '%@'", substring);
+            NSRange endRange = [customCookie rangeOfString:@"_session_id="];
+            
+            customCookie_a = [customCookie substringFromIndex:endRange.location+12]; //[customCookie substringWithRange:NSMakeRange(0, endRange.location+12)];
+        
+            [self showbroker];
+        }
+            break;
+        case POST_LOGIN_DONE:
             [self showbroker];
             break;
         default:
@@ -800,9 +960,7 @@
     
     NSLog(@"%@", @"\r\r\rDOING RELOAD\r\r\r\r");
     
-    NSError *error;
-    
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/", HOST];
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/", gzENROLL_HOST];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     //    [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/"]];
@@ -813,7 +971,7 @@
     //   [request setValue:customCookie forHTTPHeaderField:@"Cookie:"];
     
     
-    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+//    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
     //    [request setValue:pCookie forHTTPHeaderField:@"Cookie:"];
     
     
@@ -845,9 +1003,20 @@
     //  customCookie = customCookie_a;
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    
+-(void)viewWillAppear:(BOOL)animated
+{
+    REQUEST_TYPE = 0;
+    reLoad = FALSE;
     self.navigationController.navigationBarHidden = YES;
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
+        lblDB.text = @"using enroll database server";
+    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1002)
+        lblDB.text = @"using mobile notification server";
+    else 
+        lblDB.text = @"using github for broker data";
+
+
 #if !(TARGET_IPHONE_SIMULATOR)
     if (bUseTouchID)
     {
@@ -880,6 +1049,7 @@
                                 }];
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
+                /*
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
                                                                     message:authError.description
                                                                    delegate:self
@@ -888,6 +1058,7 @@
                 // Commented this out if touchid is not enabled.
                 // Maybe add some code to ask or something
                 //                [alertView show];
+                 */
             });
         }
     }
@@ -906,6 +1077,10 @@
 //        vc.bucket = indexPath.section;
         vc.jsonData = responseString;
     }
+}
+
+-(void)dismissKeyboard {
+        [self.view endEditing:YES];
 }
 
 @end
