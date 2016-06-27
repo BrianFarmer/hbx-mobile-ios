@@ -20,14 +20,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
-        self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = NO;
     self.view.backgroundColor = [UIColor colorWithRed:(141/255.0) green:(180/255.0) blue:(212/255.0) alpha:1.0];
 
     configTableNames = [[NSMutableArray alloc] initWithObjects: @"Use Enroll Database Server", @"Use Notification Server", @"Use Github", nil];
     
-    configTable.frame = CGRectMake(20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height); //screenBound.origin.y + screenSize.height - 290); //  myTabBar.frame.origin.y-90);
-    
+    configTable.frame = CGRectMake(20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
     configTable.backgroundColor = [UIColor clearColor];
     configTable.backgroundView = nil;
     
@@ -77,76 +77,8 @@
         }
             break;
     }
-
-
-//    [[NSUserDefaults standardUserDefaults] setInteger:eUseWhichServer forKey:@"whichServer"];
-//    [[NSUserDefaults standardUserDefaults] setValue:textServer.text forKey:@"serverAddress"];
-
-/*
-    UILabel* lblUseEnroll = [[UILabel alloc] initWithFrame:CGRectMake(100, 100,200,40)];
-    lblUseEnroll.textAlignment = NSTextAlignmentLeft;
-    lblUseEnroll.font = [UIFont systemFontOfSize:14];
-    lblUseEnroll.text = @"Use Enroll Database?";
-    [self.view addSubview:lblUseEnroll];
-    
-    UISwitch *switchview = [[UISwitch alloc] initWithFrame:CGRectMake(280, 100, 100, 40)];
-    [switchview addTarget: self action: @selector(flip:) forControlEvents:UIControlEventValueChanged];
-    switchview.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"useEnrollDB"];
-    
-    [self.view addSubview:switchview];
-
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btn.frame = CGRectMake(100, 400, 200, 40);
-    btn.backgroundColor = [UIColor redColor];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    btn.layer.cornerRadius = 10; // this value vary as per your desire
-    btn.clipsToBounds = YES;
-
-    [btn setTitle:@"Save and Exit" forState:UIControlStateNormal];
-    
-    UILabel* lblEnrollServer = [[UILabel alloc] initWithFrame:CGRectMake(100, 145, 200, 50)];
-    lblEnrollServer.textAlignment = NSTextAlignmentLeft;
-    lblEnrollServer.font = [UIFont systemFontOfSize:14];
-    lblEnrollServer.numberOfLines = 0;
-    lblEnrollServer.lineBreakMode = NSLineBreakByWordWrapping;
-    lblEnrollServer.text = @"Enter network address and port for enroll database server";
-    [self.view addSubview:lblEnrollServer];
-
-    UITextField* txtAddress = [[UITextField alloc] initWithFrame:CGRectMake(100,200,200,40)];
-    txtAddress.borderStyle = UITextBorderStyleRoundedRect;
-    txtAddress.font = [UIFont systemFontOfSize:14];
-    txtAddress.placeholder = @"enter network address";
-    txtAddress.autocorrectionType = UITextAutocorrectionTypeNo;
-    txtAddress.keyboardType = UIKeyboardTypeDefault;
-    txtAddress.returnKeyType = UIReturnKeyDone;
-    txtAddress.clearButtonMode = UITextFieldViewModeWhileEditing;
-    txtAddress.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    txtAddress.delegate = self;
-    txtAddress.enabled = FALSE;
-    txtAddress.backgroundColor = [UIColor lightGrayColor];
-    
-    [self.view addSubview:txtAddress];
-    
-    
-    UITextField* txtPort = [[UITextField alloc] initWithFrame:CGRectMake(100,250,200,40)];
-    txtPort.borderStyle = UITextBorderStyleRoundedRect;
-    txtPort.font = [UIFont systemFontOfSize:14];
-    txtPort.placeholder = @"enter port number";
-    txtPort.autocorrectionType = UITextAutocorrectionTypeNo;
-    txtPort.keyboardType = UIKeyboardTypeDefault;
-    txtPort.returnKeyType = UIReturnKeyDone;
-    txtPort.clearButtonMode = UITextFieldViewModeWhileEditing;
-    txtPort.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    txtPort.delegate = self;
-    txtPort.enabled = FALSE;
-    txtPort.backgroundColor = [UIColor lightGrayColor];
-    
-    [self.view addSubview:txtPort];
-    
-    [btn addTarget:self action:@selector(saveAndExit:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
-*/
 }
+
 - (void)viewDidAppear:(BOOL)animated {
     
 }
@@ -165,18 +97,6 @@
         [[NSUserDefaults standardUserDefaults] setValue:textServer.text forKey:@"mobileServer"];
 }
 
--(void)saveAndExit:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)flip:(id)sender {
-    UISwitch *onoff = (UISwitch *)sender;
-    
-    [[NSUserDefaults standardUserDefaults] setBool:onoff.isOn forKey:@"useEnrollDB"];
-}
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -194,22 +114,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 1;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0)
-    {
-        /*
-        if ([expandedRow containsIndex:section])
-        {
-            return [configTableNames count]+1;
-        }
-*/
         return [configTableNames count];
-    }
     
     return 1;
 }
@@ -255,9 +167,7 @@
             txtAddress.textColor = [UIColor darkGrayColor];
             
             [cell.contentView addSubview:txtAddress];
-            
         }
-
     }
     
  //   cell.backgroundColor = [UIColor clearColor];
@@ -308,7 +218,6 @@
                          withRowAnimation:UITableViewRowAnimationBottom];
 
         [expandedCell removeAllIndexes];
-
     }
 
     if ( indexPath.section == 0 )
@@ -316,7 +225,6 @@
         indexPath = [tableView indexPathForSelectedRow];
         if (![[configTableNames objectAtIndex:indexPath.row] isEqualToString:@"Use Github"])
         {
-   //         int uu = selectedIndexPath.row;
             [expandedRow addIndex:indexPath.row];
 
             NSIndexPath *tmpIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1
@@ -348,20 +256,6 @@
         UITableViewCell* cell = [tableView cellForRowAtIndexPath:selectedIndexPath];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         checkedIndexPath = selectedIndexPath;
-    
-    }
-    
-    if ( indexPath.section == 1 )
-    {
- //       [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"useEnrollDB"];
-        [expandedCell enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop)
-         {
-             NSIndexPath *item = [NSIndexPath indexPathForRow:idx inSection: 0];
-             NSLog(@"%@", [configTableNames objectAtIndex:item.row]);
-  //           [tmpArray addObject:item];
- //            [configTableNames removeObjectAtIndex:item.row];
-         }];
-
     }
 }
 @end

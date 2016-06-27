@@ -5,12 +5,14 @@
 //  Created by David Boyd on 5/9/16.
 //  Copyright © 2016 David Boyd. All rights reserved.
 //
-
+#import "ViewController.h"
 #import "BrokerAccountViewController.h"
 #import "brokerPlanDetailViewController.h"
 #import "MGSwipeButton.h"
 #import <MapKit/MapKit.h>
 #import <MessageUI/MessageUI.h>
+
+#import "ViewController.h"
 
 @interface NumberPair : NSObject
 @property (nonatomic, assign) long section;
@@ -23,7 +25,7 @@
 
 @implementation tabTypeItem
 @synthesize companyName, planYear, employeesEnrolled, employeesWaived, planMinimum, employeesTotal, open_enrollment_begins, open_enrollment_ends;
-@synthesize renewal_applicable_available, renewal_application_due, binder_payment_due,total_premium,employee_contribution, employer_contribution;
+@synthesize renewal_application_available, renewal_application_due, binder_payment_due,total_premium,employee_contribution, employer_contribution;
 @synthesize employer_address_1, employer_city, employer_state, employer_zip;
 @end
 
@@ -43,11 +45,10 @@
 
 @implementation BrokerAccountViewController
 
-static NSString *BrokerCellIdentifier = @"BrokerCellIdentifier";
-static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
+//static NSString *BrokerCellIdentifier = @"BrokerCellIdentifier";
+//static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
 
 //@synthesize personalInfoTable;
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,78 +63,42 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    NSData *data;
+//    NSArray* sortedValues = [subscriberPlans sortedArrayUsingSelector:@selector(comparator)];
+ 
+//    NSArray* values = [subscriberPlans allValues];
     
-    NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
-    
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
-    {
-        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
-        data = [NSData dataWithContentsOfURL:url];
-    }
-    else
-        data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSString *strData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", strData);
-    
-//    NSString* filepath = [[NSBundle mainBundle] pathForResource:@"brokerDataJson" ofType:@"txt"];
-//    NSData *data = [NSData dataWithContentsOfFile:filepath];
+//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"employer_name" ascending:YES];
+//    subscriberPlans = [sortedArray sortedArrayUsingDescriptors:@[sort]];
+/*
+    NSArray *sortedKeys = [[dictionary valueForKeyPath:@"broker_clients"] keysSortedByValueUsingComparator:
+                           ^NSComparisonResult(id obj1, id obj2) {
+                               return [obj2 compare:obj1];
+                           }];
+*/
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [brokerTable addSubview:refreshControl];
 
-    NSError *error = nil;
-    
-    if (data != nil)
-    {
-        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        subscriberPlans = [dictionary valueForKeyPath:@"broker_clients"];
-    }
-    
     brokerTable.backgroundColor = [UIColor clearColor];
     brokerTable.backgroundView = nil;
-/*
-    int uu = self.view.bounds.size.height;
-    int oo = self.navigationController.navigationBar.frame.size.height;
-    int pp = brokerTable.tableHeaderView.frame.size.height;
-    CGFloat height = brokerTable.contentSize.height;
-    CGFloat maxHeight1 = brokerTable.superview.frame.size.height - 150;
-*/
-//    CGFloat maxHeight = brokerTable.superview.frame.size.height - brokerTable.frame.origin.y;
-//     int uu = self.view.bounds.size.height;
-//     int ww = self.view.frame.size.height;
     
 //    brokerTable.frame = CGRectMake(0, 0, screenSize.width, screenSize.height - (self.navigationController.navigationBar.frame.size.height + 44));// - 100);
     brokerTable.frame = CGRectMake(0, 0, screenSize.width, self.view.frame.size.height - 65);
 //    brokerTable.frame = CGRectMake(0, 0, screenSize.width, maxHeight + 50);
     
     if (!expandedSections)
-    {
         expandedSections = [[NSMutableIndexSet alloc] init];
-    }
     
     if (!expandedCompanies)
-    {
         expandedCompanies = [[NSMutableIndexSet alloc] init];
-    }
  
-    if (!ipath)
-    {
-        ipath = [[NSMutableArray alloc] init];
-    }
-
     sections = [[NSArray alloc] initWithObjects: @"OPEN ENROLLMENT IN PROGRESS", @"RENEWALS IN PROGRESS", @"ALL OTHER CLIENTS", nil];
     
     listOfCompanies = [[NSMutableArray alloc] init];
-    
     open_enrollment = [[NSMutableArray alloc] init];
     renewals = [[NSMutableArray alloc] init];
     all_others = [[NSMutableArray alloc] init];
 
-    [self processBuckets];
-
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
-        [self setIntroHeader:13];
-    else
-        [self setIntroHeader:12];
 /*
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     
@@ -169,6 +134,48 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
   
     [self.searchDisplayController.searchResultsTableView setRowHeight:brokerTable.rowHeight];
 
+    [self processData];
+}
+
+-(void)processData
+{
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    NSData *data;
+    [listOfCompanies removeAllObjects];
+    [open_enrollment removeAllObjects];
+    [renewals removeAllObjects];
+    [all_others removeAllObjects];
+
+    NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
+    
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
+    {
+        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+        data = [NSData dataWithContentsOfURL:url];
+    }
+    else
+        data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", strData);
+    
+    NSError *error = nil;
+    
+    if (data != nil)
+    {
+        subscriberPlans = nil;
+        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        subscriberPlans = [dictionary valueForKeyPath:@"broker_clients"];
+    }
+    
+    [self processBuckets];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
+        [self setIntroHeader:13];
+    else
+        [self setIntroHeader:12];
+
 }
 
 -(void)setIntroHeader:(int)iFontsize
@@ -182,7 +189,18 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     labelView.font = [UIFont fontWithName:@"Roboto-Regular" size:iFontsize];
     labelView.textColor = [UIColor darkGrayColor];
 
-    NSString *temp = [NSString stringWithFormat:@"Good Morning David\nYou have %lu clients with", (unsigned long)[subscriberPlans count]];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:[NSDate date]];
+    NSInteger hour = [components hour];
+    NSString *sPrefix;
+    
+    if(hour >= 0 && hour < 12)
+        sPrefix = @"Good morning";
+    else if(hour >= 12 && hour < 17)
+                sPrefix = @"Good afternoon";
+    else if(hour >= 17)
+                sPrefix = @"Good evening";
+    
+    NSString *temp = [NSString stringWithFormat:@"%@ David\nYou have %lu clients with", sPrefix, (unsigned long)[subscriberPlans count]];
     NSString *temp1 = [NSString stringWithFormat:@" %d requiring immediate attention", clients_needing_immediate_attention];
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:temp];
@@ -262,14 +280,14 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
         
         [self registerForPreviewingWithDelegate:(id)self sourceView:self.view];
-        NSLog(@"3D Touch is available! Hurra!");
+        NSLog(@"3D Touch is available!");
         
         // no need for our alternative anymore
 /////        self.longPress.enabled = NO;
         
     } else {
         
-        NSLog(@"3D Touch is not available on this device. Sniff!");
+        NSLog(@"3D Touch is not available on this device!");
         
         // handle a 3D Touch alternative (long gesture recognizer)
  /////       self.longPress.enabled = YES;
@@ -301,6 +319,51 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     
 }
 
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    NSLog(@"Pull to refresh");
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kReloadJSON object:nil];
+//    [self makeWebRequest:gzENROLL_HOST type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", gzENROLL_HOST, _brokerId]];
+
+    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", self.enrollHost, self._brokerId]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pUrl];
+//    [request setURL:[NSURL URLWithString:pUrl]];
+    [request setURL:pUrl];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                self.enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                self.customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response,
+                                                   NSData *data, NSError *connectionError)
+    {
+        if (data.length > 0 && connectionError == nil)
+        {
+            NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSLog(@"%@", responseString);
+            _jsonData = responseString;
+            [self processData];
+            [brokerTable reloadData];
+        }
+    }];
+    
+    // Do your job, when done:
+    [refreshControl endRefreshing];
+}
+
 -(void)processBuckets
 {
     NSArray *clientKeys;
@@ -320,15 +383,17 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
         pCompany.employer_state = [ck valueForKeyPath:@"contact_info.state"];
         pCompany.employer_zip = [ck valueForKeyPath:@"contact_info.zip"];
         
+        pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];        
+        
         pCompany.planYear = [ck valueForKey:@"plan_year_begins"];
         pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
-        pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"]; //[[ck valueForKey:@"employees_waived"] stringValue];
-        pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"]; //[[ck valueForKey:@"minimum_participation_required"] stringValue];;
-        pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"]; //[[ck valueForKey:@"employees_total"] stringValue];
+        pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
+        pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
+        pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
         pCompany.open_enrollment_begins = [ck valueForKey:@"open_enrollment_begins"];
         pCompany.open_enrollment_ends = [ck valueForKey:@"open_enrollment_ends"];
         pCompany.renewal_application_due = [ck valueForKey:@"renewal_application_due"];
-        pCompany.renewal_applicable_available = [ck valueForKey:@"renewal_applicable_available"];
+        pCompany.renewal_application_available = [ck valueForKey:@"renewal_application_available"];
         
         if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
             pCompany.binder_payment_due = @"";
@@ -406,7 +471,8 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
                                                                       toDate:endEnrollmentDate
                                                                      options:NSCalendarWrapComponents];
                 
-                if ([components day] <= 60)
+//                long xx = [components day];
+                if ([components day] <= 60 && [components day] >= 0)
                 {
                     pCompany.status = RENEWAL_IN_PROGRESS;
                     [renewals addObject:pCompany];
@@ -414,7 +480,7 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
                 else
                 {
                     pCompany.status = NO_ACTION_REQUIRED;
-//                    [ao addObject:pCompany];
+                    [all_others addObject:pCompany];
                 }
                 
             }
@@ -422,9 +488,12 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
 
     }
     
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:YES];
+//    subscriberPlans = [all_others sortedArrayUsingDescriptors:@[sort]];
+
     [listOfCompanies addObject:open_enrollment];
     [listOfCompanies addObject:renewals];
-    [listOfCompanies addObject:all_others];
+    [listOfCompanies addObject:[all_others sortedArrayUsingDescriptors:@[sort]]]; //all_others];
     
     [expandedSections addIndex:0];
     [expandedSections addIndex:1];
@@ -564,38 +633,25 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
         if ([expandedSections containsIndex:section])
         {
             long iCnt = [[listOfCompanies objectAtIndex:section] count];
-//            if ([expandedCompanies containsIndex:section])
+/*
             NSIndexPath *item;
             for (item in ipath)
             {
 //                if (item.section == section)
 //                    iCnt = iCnt + 1;    // return rows when expanded
             }
-
+*/
             return iCnt;
         }
         
         return 0; // only top row showing
     }
-/*
-    // Return the number of rows in the section.
-    if (section == 0)
-        return 3;
-    
-    return 4;
- */
+
     return [[listOfCompanies objectAtIndex:section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //    if (indexPath.section == 3)
-    //        return 80;
-//    if ([indexPath section] == 4)
-//        return 60;
-    
-//    return 44;
-//    tabTypeItem *ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     tabTypeItem *ttype;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -660,10 +716,7 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
 - (BOOL)tableView:(UITableView *)tableView canCollapseSection:(NSInteger)section
 {
     return YES;
-    
-    return NO;
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -673,19 +726,13 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     else
         ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
-//    tabTypeItem *ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    
     if (ttype.type == 1)
     {
-//     cell.contentView.backgroundColor = [UIColor grayColor];
      UIView *cardView = [[UIView alloc] initWithFrame:CGRectMake(10,0,self.view.frame.size.width-20,20)];
      cardView.backgroundColor = [UIColor lightGrayColor];
-//        cardView.layer.borderWidth = 1;
+
      cardView.layer.masksToBounds = NO;
-//     cardView.layer.cornerRadius = 3.0;
- //    cardView.layer.shadowOffset = CGSizeMake(1, -1);
-//     cardView.layer.shadowOpacity = 0.3;
-        
+
     UILabel *lbl = [[UILabel alloc] init];
         lbl.frame = cardView.frame;
         lbl.textAlignment = NSTextAlignmentCenter;
@@ -846,35 +893,76 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     [self presentViewController:picker animated:YES completion:nil];
 }
 
-- (IBAction)emailEmployer:(id)sender {
+- (IBAction)emailEmployer:(id)sender
+{
+/*
+    // For example, ViewController is subclass of UIViewController
+    ViewController *vc = [[ViewController alloc] init];
     
+    // if there is a navigationController
+    self.navigationController.definesPresentationContext = YES;
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:vc animated:YES completion:nil];
+    
+    return;
+ */
+    NSIndexPath *indexPath = [brokerTable indexPathForCell:sender];
+    tabTypeItem *pTab = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:@"Please select an email"
+                                 message:pTab.companyName
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (int ii=0;ii<[pTab.emails count];ii++)
+    {
+        UIAlertAction* ok = [UIAlertAction
+                             actionWithTitle:[pTab.emails objectAtIndex:ii]
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 //Do some thing here
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                             }];
+        [view addAction:ok];
+    }
+    /*
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:@"OK"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             //Do some thing here
+                             [view dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+     */
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+ //   [view addAction:ok];
+    [view addAction:cancel];
+    
+    [self presentViewController:view animated:YES completion:nil];
+    /*
     //    NSString *recipients = @"mailto:first@example.com?cc=second@example.com,third@example.com&subject=Hello from HBX!";
     NSString *recipients = @"mailto:hbx@mobile.com&subject=Hello from HBX!";
     
-    NSString *body = @"&body=It is raining in sunny DC!";
+    NSString *body = @"&body=It is sunny in DC!";
     
     NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
     
     email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
-    
-    /*
-     // Email Subject
-     NSString *emailTitle = @"Test Email";
-     // Email Content
-     NSString *messageBody = @"<h1>Message Body</h1>"; // Change the message body to HTML
-     // To address
-     NSArray *toRecipents = [NSArray arrayWithObject:@"dboyd.papermoon@gmail.com"];
-     
-     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-     mc.mailComposeDelegate = self;
-     [mc setSubject:emailTitle];
-     [mc setMessageBody:messageBody isHTML:YES];
-     [mc setToRecipients:toRecipents];
-     
-     // Present mail view controller on screen
-     [self presentViewController:mc animated:YES completion:NULL];
      */
 }
 
@@ -995,7 +1083,13 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
     static NSString *CellIdentifier2 = @"prototypeCell";
     
     MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
-    
+ 
+    tabTypeItem *ttype;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    else
+        ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+
     if ( cell == nil )
     {
         cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
@@ -1024,6 +1118,13 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
         secondaryOffset = 15;
     }
 
+    if (cell.alertButton.currentBackgroundImage == nil)
+    {
+        cell.alertButton.backgroundColor = [UIColor whiteColor];
+        UIImage *image = [UIImage imageNamed:@"alert2.png"];
+        [cell.alertButton setBackgroundImage:image forState:UIControlStateNormal];
+    }
+    cell.alertButton.frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16);
     cell.lblDaysLeftText.frame = CGRectMake(tableView.frame.size.width - cell.lblDaysLeftText.frame.size.width - 25, cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
     cell.daysleftLabel.frame = CGRectMake(cell.lblDaysLeftText.frame.origin.x - cell.daysleftLabel.frame.size.width - 4, cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
     cell.lblEmployeesNeeded.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
@@ -1049,35 +1150,53 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
 
     cell.allowsMultipleSwipe = NO;
     cell.delegate = self;
+    cell.daysleftLabel.textColor = [UIColor darkGrayColor];
+    cell.lblDaysLeftText.text = @"DAYS LEFT";
     
-    tabTypeItem *ttype;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    else
-        ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+/*
+    UIButton *pAlert = [cell.contentView viewWithTag:1234];
+    if (pAlert && ttype.status != NEEDS_ATTENTION)
+    {
+        [[cell.contentView viewWithTag:1234] setHidden:TRUE];
+    }
+*/
+   /*
+    UIView *left = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, cell.frame.size.height)];
+    left.backgroundColor = [UIColor redColor];
+    left.hidden = TRUE;
+    [cell.contentView addSubview:left];
     
+    UIImage *image = [UIImage imageNamed:@"alert2.png"];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGRect frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16); //image.size.width, image.size.height);
+    button.frame = frame;
+    button.tag = 1234;
+    button.hidden = TRUE;
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    
+    //           [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
+    button.backgroundColor = [UIColor clearColor];
+    [cell.contentView addSubview:button];
+
     if (ttype.status == NEEDS_ATTENTION)
     {
-            UIView *right = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, cell.frame.size.height)];
-            right.backgroundColor = [UIColor redColor];
-            
-            [cell.contentView addSubview:right];
-            
-            UIImage *image = [UIImage imageNamed:@"alert2.png"];
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            CGRect frame = CGRectMake(cell.frame.size.width - 22, cell.frame.size.height/2-8, 16, 16); //image.size.width, image.size.height);
-            button.frame = frame;
-            [button setBackgroundImage:image forState:UIControlStateNormal];
-            
- //           [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
-            button.backgroundColor = [UIColor clearColor];
-            [cell.contentView addSubview:button];
+        button.hidden = FALSE;
+        left.hidden = FALSE;
+        //cell.accessoryView = button;
     }
-    
+    else
+    {
+        button.hidden = TRUE;
+        left.hidden = TRUE;
+    }
+    */
         cell.employerLabel.text = ttype.companyName;
         cell.employeesLabel.text = ttype.employeesEnrolled;
-        
+        cell.alertButton.hidden = TRUE;
+    
+    
         NSDate *today = [NSDate date];
         
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
@@ -1099,6 +1218,7 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
             else
                 cell.daysleftLabel.textColor = [UIColor darkGrayColor];
             cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
+            cell.alertButton.hidden = FALSE;
         }
         
         if (ttype.status == OPEN_ENROLLMENT_MET)
@@ -1139,8 +1259,11 @@ static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
             cell.lblEmployeesNeeded.frame = CGRectMake(cell.employeesLabel.frame.origin.x + width + 2, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
             
             cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
+            
+  //          cell.lblDaysLeftText.text = @"";
+            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
         }
-        
+    
         if (ttype.status == NO_ACTION_REQUIRED)
         {
             cell.lblDaysLeftText.text = @"";

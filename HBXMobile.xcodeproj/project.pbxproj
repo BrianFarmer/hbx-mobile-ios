@@ -11,6 +11,7 @@
 		130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 130AA2821CEE568900B43F24 /* MessageUI.framework */; };
 		130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2861CF1382100B43F24 /* brokerDataJson.txt */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
+		13316B141D21B0D9001A450C /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 13316B131D21B0D9001A450C /* Settings.m */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
 		134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */ = {isa = PBXBuildFile; fileRef = 134A09DC1CBE817000CD3229 /* SSL Certificate Creation */; };
 		134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 134DE79D1CECEF6600F8958A /* MGSwipeButton.m */; };
@@ -86,6 +87,8 @@
 		130AA2821CEE568900B43F24 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		130AA2861CF1382100B43F24 /* brokerDataJson.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = brokerDataJson.txt; sourceTree = "<group>"; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		13316B121D21B0D9001A450C /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		13316B131D21B0D9001A450C /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		134A09D91CBE7D7F00CD3229 /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		134A09DC1CBE817000CD3229 /* SSL Certificate Creation */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SSL Certificate Creation"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.python; };
 		134DE79C1CECEF6600F8958A /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
@@ -265,6 +268,8 @@
 		13FF470B1C8A2C5600C7C851 /* HBXMobile */ = {
 			isa = PBXGroup;
 			children = (
+				13316B121D21B0D9001A450C /* Settings.h */,
+				13316B131D21B0D9001A450C /* Settings.m */,
 				134DE79B1CECEF4F00F8958A /* MGSwipe */,
 				138119DD1C9ADDD3000A75AA /* AWSCore.framework */,
 				138119DE1C9ADDD3000A75AA /* AWSS3.framework */,
@@ -526,6 +531,7 @@
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
+				13316B141D21B0D9001A450C /* Settings.m in Sources */,
 				13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */,
 				134DE7A11CECEF6600F8958A /* MGSwipeTableCell.m in Sources */,
 				13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */,

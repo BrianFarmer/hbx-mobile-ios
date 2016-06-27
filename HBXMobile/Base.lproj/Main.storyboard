@@ -230,9 +230,16 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="S15-FW-GDB">
+                                                    <rect key="frame" x="301" y="10" width="16" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" red="0.18288326029999999" green="0.51144777990000001" blue="0.83045647909999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <state key="normal" title="Button"/>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="alertButton" destination="S15-FW-GDB" id="uTR-TS-0MZ"/>
                                             <outlet property="daysleftLabel" destination="mb1-xc-ew3" id="b0Q-8R-3lj"/>
                                             <outlet property="employeesLabel" destination="Bom-Bs-d0K" id="kmR-dL-dvo"/>
                                             <outlet property="employerLabel" destination="r6m-2T-XPo" id="jRa-b6-uEq"/>

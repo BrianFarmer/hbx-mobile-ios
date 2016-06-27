@@ -216,7 +216,9 @@
     myTable.backgroundColor = [UIColor clearColor];
     myTable.backgroundView = nil;
     
-//    myTable.layer.borderWidth = 2.0;
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [myTable addSubview:refreshControl];
     
     int iBtn = myTable.frame.size.width / 4;
     
@@ -272,6 +274,11 @@
       forControlEvents:UIControlEventTouchUpInside];
     [vHeader addSubview:button3];
 
+}
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    // Do your job, when done:
+    [refreshControl endRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -798,7 +805,7 @@
             
              if (indexPath.row == 0)
             {
-                NSDate *endDate = [f dateFromString:type.renewal_applicable_available];
+                NSDate *endDate = [f dateFromString:type.renewal_application_available];
                 
                 [f setDateFormat:@"MMM dd, yyyy"];
 

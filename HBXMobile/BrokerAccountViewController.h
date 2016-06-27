@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *employeesTotal;
 @property (nonatomic, retain) NSString *open_enrollment_begins;
 @property (nonatomic, retain) NSString *open_enrollment_ends;
-@property (nonatomic, retain) NSString *renewal_applicable_available;
+@property (nonatomic, retain) NSString *renewal_application_available;
 @property (nonatomic, retain) NSString *renewal_application_due;
 @property (nonatomic, retain) NSString *binder_payment_due;
 @property (nonatomic, retain) NSString *total_premium;
@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *employer_city;
 @property (nonatomic, retain) NSString *employer_state;
 @property (nonatomic, retain) NSString *employer_zip;
+@property (nonatomic, retain) NSArray  *emails;
 @property (nonatomic, retain) NSString *active_general_agency;
 @end
 
@@ -73,25 +74,27 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
     NSArray *sections;
     int clients_needing_immediate_attention;
     
-    
     NSMutableArray *listOfCompanies;
     NSMutableArray *open_enrollment;
     NSMutableArray *renewals;
     NSMutableArray *all_others;
-
-
-    
-    NSMutableArray *ipath;
     
     NSDictionary *dictionary;
     NSArray *subscriberPlans;
+
+    NSString *customCookie_a;
+    NSString *_brokerId;
+    
+    NSString *enrollHost;
 }
 
 //@property (strong, nonatomic) UISearchController *searchController;
 
 //@property (nonatomic, strong) UIButton *searchButton;
 //@property (nonatomic, strong) UIBarButtonItem *searchItem;
-@property (nonatomic, strong) NSString *jsonData;;
-
+@property (nonatomic, strong) NSString *jsonData;
+@property (nonatomic, strong) NSString *customCookie_a;
+@property (nonatomic, strong) NSString *_brokerId;
+@property (nonatomic, strong) NSString *enrollHost;
 
 @end

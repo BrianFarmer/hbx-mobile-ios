@@ -601,12 +601,32 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         _lblDaysLeftText.lineBreakMode = NSLineBreakByWordWrapping;
         _lblDaysLeftText.numberOfLines = 2;
         
+        
+        _leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, self.frame.size.height)];
+        _leftColor.backgroundColor = [UIColor redColor];
+        _leftColor.hidden = FALSE;
+        [self.contentView addSubview:_leftColor];
+        
+        UIImage *image = [UIImage imageNamed:@"alert2.png"];
+        
+        _alertButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGRect frame = CGRectMake(self.frame.size.width - 20, self.frame.size.height/2-8, 16, 16); //image.size.width, image.size.height);
+        _alertButton.frame = frame;
+        _alertButton.tag = 1234;
+        _alertButton.hidden = FALSE;
+        _alertButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [_alertButton setBackgroundImage:image forState:UIControlStateNormal];
+        _alertButton.backgroundColor = [UIColor clearColor];
+        
+        [self.contentView addSubview:_leftColor];
+
         [self.contentView addSubview:_employerLabel];
         [self.contentView addSubview:_employeesLabel];
         [self.contentView addSubview:_lblEmployeesNeeded];
         [self.contentView addSubview:_daysleftLabel];
         [self.contentView addSubview:_lblDaysLeftText];
 
+        [self.contentView addSubview:_alertButton];
     }
     return self;
 }
@@ -617,11 +637,13 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     if(self = [super initWithCoder:aDecoder]) {
         [self initViews:YES];
         
+        _leftColor.frame = CGRectMake(0, 0, 3, self.frame.size.height);
         _employerLabel.frame = CGRectMake(_employerLabel.frame.origin.x, _employerLabel.frame.origin.y, _employerLabel.frame.size.width + 40, _employerLabel.frame.size.height);
         _employeesLabel.frame = CGRectMake(_employeesLabel.frame.origin.x + 40, _employeesLabel.frame.origin.y, _employeesLabel.frame.size.width, _employeesLabel.frame.size.height);
         _lblEmployeesNeeded.frame = CGRectMake(_lblEmployeesNeeded.frame.origin.x + 40, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
         _daysleftLabel.frame = CGRectMake(_daysleftLabel.frame.origin.x + 50, _daysleftLabel.frame.origin.y, _daysleftLabel.frame.size.width, _daysleftLabel.frame.size.height);
         _lblDaysLeftText.frame = CGRectMake(_lblDaysLeftText.frame.origin.x + 50, _lblDaysLeftText.frame.origin.y, _lblDaysLeftText.frame.size.width, _lblDaysLeftText.frame.size.height);
+        _alertButton.frame = CGRectMake(_alertButton.frame.origin.x + 50, _alertButton.frame.origin.y, 16, 16);
 
     }
     return self;
