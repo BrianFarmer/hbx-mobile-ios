@@ -681,7 +681,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     _triggerStateChanges = YES;
     _allowsSwipeWhenTappingButtons = YES;
     _preservesSelectionStatus = NO;
-    _allowsOppositeSwipe = YES;
+    _allowsOppositeSwipe = NO;
     _firstSwipeState = MGSwipeStateNone;
     
 }

@@ -53,10 +53,11 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *employer_state;
 @property (nonatomic, retain) NSString *employer_zip;
 @property (nonatomic, retain) NSArray  *emails;
+@property (nonatomic, retain) NSArray  *phones;
 @property (nonatomic, retain) NSString *active_general_agency;
 @end
 
-@interface BrokerAccountViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate, MFMessageComposeViewControllerDelegate>
+@interface BrokerAccountViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate, MFMessageComposeViewControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 {
     IBOutlet UITableView *brokerTable;
     
@@ -64,8 +65,8 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
     NSArray *searchResults;
     NSMutableArray *searchData;
     
-    IBOutlet UISearchBar *searchBar;
-    UISearchController *searchController;
+//    IBOutlet UISearchBar *searchBar;
+//    UISearchController *searchController;
 //    UISearchDisplayController *searchDisplayController;
 
     NSMutableIndexSet *expandedSections;
@@ -86,9 +87,11 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
     NSString *_brokerId;
     
     NSString *enrollHost;
+    
+    UIBarButtonItem *searchButton;
 }
 
-//@property (strong, nonatomic) UISearchController *searchController;
+@property (strong, nonatomic) UISearchController *searchController;
 
 //@property (nonatomic, strong) UIButton *searchButton;
 //@property (nonatomic, strong) UIBarButtonItem *searchItem;
@@ -96,5 +99,6 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, strong) NSString *customCookie_a;
 @property (nonatomic, strong) NSString *_brokerId;
 @property (nonatomic, strong) NSString *enrollHost;
+@property (nonatomic, weak) NSArray * displayedItems;
 
 @end

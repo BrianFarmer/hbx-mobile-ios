@@ -11,17 +11,9 @@
 #import "MGSwipeButton.h"
 #import <MapKit/MapKit.h>
 #import <MessageUI/MessageUI.h>
-
+#import "Settings.h"
 #import "ViewController.h"
-
-@interface NumberPair : NSObject
-@property (nonatomic, assign) long section;
-@property (nonatomic, assign) long row;
-@end
-
-@implementation NumberPair
-@synthesize section, row;
-@end
+#import "brokerSearchResultTableViewController.h"
 
 @implementation tabTypeItem
 @synthesize companyName, planYear, employeesEnrolled, employeesWaived, planMinimum, employeesTotal, open_enrollment_begins, open_enrollment_ends;
@@ -45,10 +37,7 @@
 
 @implementation BrokerAccountViewController
 
-//static NSString *BrokerCellIdentifier = @"BrokerCellIdentifier";
-//static NSString *DetailCellIdentifier = @"DetailCellIdentifier";
-
-//@synthesize personalInfoTable;
+@synthesize displayedItems;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -63,18 +52,6 @@
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-//    NSArray* sortedValues = [subscriberPlans sortedArrayUsingSelector:@selector(comparator)];
- 
-//    NSArray* values = [subscriberPlans allValues];
-    
-//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"employer_name" ascending:YES];
-//    subscriberPlans = [sortedArray sortedArrayUsingDescriptors:@[sort]];
-/*
-    NSArray *sortedKeys = [[dictionary valueForKeyPath:@"broker_clients"] keysSortedByValueUsingComparator:
-                           ^NSComparisonResult(id obj1, id obj2) {
-                               return [obj2 compare:obj1];
-                           }];
-*/
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [brokerTable addSubview:refreshControl];
@@ -86,33 +63,41 @@
     brokerTable.frame = CGRectMake(0, 0, screenSize.width, self.view.frame.size.height - 65);
 //    brokerTable.frame = CGRectMake(0, 0, screenSize.width, maxHeight + 50);
     
+    brokerTable.scrollIndicatorInsets = UIEdgeInsetsMake(64, 0, 0, 0);
+    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
     if (!expandedCompanies)
         expandedCompanies = [[NSMutableIndexSet alloc] init];
  
-    sections = [[NSArray alloc] initWithObjects: @"OPEN ENROLLMENT IN PROGRESS", @"RENEWALS IN PROGRESS", @"ALL OTHER CLIENTS", nil];
-    
+//    sections = [[NSArray alloc] initWithObjects: @"OPEN ENROLLMENT IN PROGRESS", @"RENEWALS IN PROGRESS", @"ALL OTHER CLIENTS", nil];
+    sections = [[NSArray alloc] initWithObjects: NSLocalizedString(@"table-section-open-enrollment", @"OPEN ENROLLMENT IN PROGRESS"), NSLocalizedString(@"table-section-renewals-in-progress", @"RENEWALS IN PROGRESS"), NSLocalizedString(@"table-section-all-others", @"ALL OTHER CLIENTS"), nil];
+
     listOfCompanies = [[NSMutableArray alloc] init];
     open_enrollment = [[NSMutableArray alloc] init];
     renewals = [[NSMutableArray alloc] init];
     all_others = [[NSMutableArray alloc] init];
 
-/*
-    searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    
-    searchController.searchResultsUpdater = self;
-    
-    searchController.dimsBackgroundDuringPresentation = NO;
-    
-    searchController.hidesNavigationBarDuringPresentation = NO;
-    
-    searchController.searchBar.frame = CGRectMake(searchController.searchBar.frame.origin.x, searchController.searchBar.frame.origin.y, searchController.searchBar.frame.size.width, 44.0);
-    
-    brokerTable.tableHeaderView = searchController.searchBar;
-*/    
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonTapped:)];
+    brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
+ //   UINavigationController *searchResultsController = [[self storyboard] instantiateViewControllerWithIdentifier:@"resultsTable"]; //TableSearchResultsNavController
+
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
+    self.searchController.delegate = self;
+    self.searchController.searchResultsUpdater = self;
+    [self.searchController.searchBar sizeToFit];
+    self.searchController.dimsBackgroundDuringPresentation = YES;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.searchBar.showsCancelButton = TRUE;
+//    self.searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
+    self.searchController.searchBar.delegate = self;
+
+//    self.extendedLayoutIncludesOpaqueBars = YES;
+    self.definesPresentationContext = YES;
+
+ //   brokerTable.tableHeaderView = self.searchController.searchBar;
+ 
+    searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonTapped:)];
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
 /*
     self.searchButton = [[UIButton alloc] init];
@@ -132,9 +117,36 @@
 //    self.searchDisplayController.searchBar.tintColor = [UIColor blueColor];
 //    self.searchDisplayController.searchBar.hidden = TRUE;
   
-    [self.searchDisplayController.searchResultsTableView setRowHeight:brokerTable.rowHeight];
+//(SB)    [self.searchDisplayController.searchResultsTableView setRowHeight:brokerTable.rowHeight];
 
     [self processData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if([brokerTable respondsToSelector:@selector(edgesForExtendedLayout)])
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.automaticallyAdjustsScrollViewInsets = YES;
+    }
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    
+    CGRect rc = brokerTable.frame;
+//    brokerTable.frame = CGRectMake(0, 65, screenSize.width, self.view.frame.size.height - 65);
+
+    static BOOL firstTime = YES;
+    if (!firstTime)
+    {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
+
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
+            [self processData];
+        else
+            [self requestWebData];
+    }
+    firstTime = NO;
 }
 
 -(void)processData
@@ -146,12 +158,14 @@
     [open_enrollment removeAllObjects];
     [renewals removeAllObjects];
     [all_others removeAllObjects];
-
+    clients_needing_immediate_attention = 0;
+    
     NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
     
     if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
     {
-        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/feature/multiple-contacts/enroll/broker/employers_list/response/example.json"];
+     //   NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
         data = [NSData dataWithContentsOfURL:url];
     }
     else
@@ -175,11 +189,15 @@
         [self setIntroHeader:13];
     else
         [self setIntroHeader:12];
-
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
 }
 
 -(void)setIntroHeader:(int)iFontsize
 {
+//    self.searchController.searchResultsController.hea
+//    brokerTable.tableHeaderView = nil;
+//    return;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, brokerTable.frame.size.width, 40)];
     headerView.backgroundColor = [UIColor whiteColor];
     UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, brokerTable.frame.size.width, 40)];
@@ -194,14 +212,20 @@
     NSString *sPrefix;
     
     if(hour >= 0 && hour < 12)
-        sPrefix = @"Good morning";
+        sPrefix = NSLocalizedString(@"GOOD_MORNING", @"Good morning");
     else if(hour >= 12 && hour < 17)
-                sPrefix = @"Good afternoon";
+                sPrefix = NSLocalizedString(@"GOOD_AFTERNOON", @"Good afternoon"); //@"Good afternoon";
     else if(hour >= 17)
-                sPrefix = @"Good evening";
+                sPrefix = NSLocalizedString(@"GOOD_EVENING", @"Good evening"); //@"Good evening";
     
-    NSString *temp = [NSString stringWithFormat:@"%@ David\nYou have %lu clients with", sPrefix, (unsigned long)[subscriberPlans count]];
-    NSString *temp1 = [NSString stringWithFormat:@" %d requiring immediate attention", clients_needing_immediate_attention];
+    Settings *obj=[Settings getInstance];
+    
+    NSString *temp2 = [NSString stringWithFormat:NSLocalizedString(@"GREETING_1", nil), (unsigned long)[subscriberPlans count]];
+    NSString *temp = [NSString stringWithFormat:@"%@ %@\n%@", sPrefix, obj.sUser, temp2];
+    NSString *temp1 = [NSString stringWithFormat:@" %d %@", clients_needing_immediate_attention, NSLocalizedString(@"GREETING_2", nil)];
+    
+//    NSString *temp = [NSString stringWithFormat:@"%@ %@\nYou have %lu clients with", sPrefix, obj.sUser, (unsigned long)[subscriberPlans count]];
+//    NSString *temp1 = [NSString stringWithFormat:@" %d requiring immediate attention", clients_needing_immediate_attention];
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:temp];
     
@@ -220,34 +244,44 @@
 }
 
 - (void)searchButtonTapped:(id)sender {
-    brokerTable.tableHeaderView = self.searchDisplayController.searchBar;
-    self.searchDisplayController.searchBar.hidden = FALSE;
-    [self.searchDisplayController.searchBar becomeFirstResponder];
-    /*
+    self.navigationItem.titleView = self.searchController.searchBar;
+    self.searchController.searchBar.hidden = FALSE;
+    self.navigationItem.rightBarButtonItem = nil;
+//        self.searchController.searchBar.alpha = 0.0;
+//    brokerTable.tableHeaderView = self.searchController.searchBar;//self.searchDisplayController.searchBar;
+    [self.searchController.searchBar becomeFirstResponder];
+
+    
+//    self.searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
+/*
     [UIView animateWithDuration:0.5 animations:^{
-        _searchButton.alpha = 0.0f;
         
     } completion:^(BOOL finished) {
-        
+   
         // remove the search button
         self.navigationItem.rightBarButtonItem = nil;
         // add the search bar (which will start out hidden).
-        self.navigationItem.titleView = self.searchDisplayController.searchBar; //_searchBar;
-        self.searchDisplayController.searchBar.alpha = 0.0;
-        
+        self.navigationItem.titleView = self.searchController.searchBar; //_searchBar;
+        self.searchController.searchBar.alpha = 0.0;
+    
         [UIView animateWithDuration:0.1
                          animations:^{
-                             self.searchDisplayController.searchBar.alpha = 1.0;
+                             self.searchController.searchBar.alpha = 1.0;
                          } completion:^(BOOL finished) {
-                             [self.searchDisplayController.searchBar becomeFirstResponder];
+                             [self.searchController.searchBar becomeFirstResponder];
                          }];
-        
+    
+    //     self.searchController.searchBar.alpha = 1.0;
+      //  [self.searchController.searchBar becomeFirstResponder];
     }];
-     */
+*/
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+//    self.navigationItem.titleView = self.searchController.searchBar;
+    self.searchController.searchBar.hidden = TRUE;
+    self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
     /*
     // called when cancel button pressed
     [UIView animateWithDuration:0.5f animations:^{
@@ -307,6 +341,10 @@
 
 -(NSString*)getValue:(NSArray*)pk valueForKey:(NSString*)key
 {
+    if ([pk valueForKey:key] == (NSString *)[NSNull null])
+    {
+        return @"";
+    }
     if ([[pk valueForKey:key] isKindOfClass:[NSString class]]) {
         //NSLog(@"it is a string");
         return [pk valueForKey:key];
@@ -319,15 +357,12 @@
     
 }
 
-- (void)refresh:(UIRefreshControl *)refreshControl {
-    NSLog(@"Pull to refresh");
-//    [[NSNotificationCenter defaultCenter] postNotificationName:kReloadJSON object:nil];
-//    [self makeWebRequest:gzENROLL_HOST type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", gzENROLL_HOST, _brokerId]];
-
+-(void)requestWebData
+{
     NSURL *pUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", self.enrollHost, self._brokerId]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pUrl];
-//    [request setURL:[NSURL URLWithString:pUrl]];
+    //    [request setURL:[NSURL URLWithString:pUrl]];
     [request setURL:pUrl];
     [request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
@@ -346,21 +381,27 @@
     [request setAllHTTPHeaderFields:headers];
     
     [NSURLConnection sendAsynchronousRequest:request
-                                           queue:[NSOperationQueue mainQueue]
-                               completionHandler:^(NSURLResponse *response,
-                                                   NSData *data, NSError *connectionError)
-    {
-        if (data.length > 0 && connectionError == nil)
-        {
-            NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"%@", responseString);
-            _jsonData = responseString;
-            [self processData];
-            [brokerTable reloadData];
-        }
-    }];
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data, NSError *connectionError)
+     {
+         if (data.length > 0 && connectionError == nil)
+         {
+             NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@", responseString);
+             _jsonData = responseString;
+             [self processData];
+             [brokerTable reloadData];
+             [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
+         }
+     }];
+}
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    NSLog(@"Pull to refresh");
     
-    // Do your job, when done:
+    [self requestWebData];
+   
     [refreshControl endRefreshing];
 }
 
@@ -383,17 +424,19 @@
         pCompany.employer_state = [ck valueForKeyPath:@"contact_info.state"];
         pCompany.employer_zip = [ck valueForKeyPath:@"contact_info.zip"];
         
-        pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];        
+        pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
+//        pCompany.emails = [ck valueForKeyPath:@"contact_info"];
+        pCompany.phones = [ck valueForKeyPath:@"contact_info"];
         
-        pCompany.planYear = [ck valueForKey:@"plan_year_begins"];
+        pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"]; //[ck valueForKey:@"plan_year_begins"];
         pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
         pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
         pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
         pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
-        pCompany.open_enrollment_begins = [ck valueForKey:@"open_enrollment_begins"];
-        pCompany.open_enrollment_ends = [ck valueForKey:@"open_enrollment_ends"];
-        pCompany.renewal_application_due = [ck valueForKey:@"renewal_application_due"];
-        pCompany.renewal_application_available = [ck valueForKey:@"renewal_application_available"];
+        pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];//[ck valueForKey:@"open_enrollment_begins"];
+        pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];//[ck valueForKey:@"open_enrollment_ends"];
+        pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];//[ck valueForKey:@"renewal_application_due"];
+        pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];//[ck valueForKey:@"renewal_application_available"];
         
         if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
             pCompany.binder_payment_due = @"";
@@ -412,10 +455,17 @@
         float total_premium = [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue] + [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue];
         
         pCompany.total_premium = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: total_premium]];
-        
-        if (pCompany.open_enrollment_begins == (NSString *)[NSNull null])
+ 
+//        if (pCompany.open_enrollment_begins == (NSString *)[NSNull null])
+        if ([pCompany.open_enrollment_begins isEqualToString:@""])
         {
-            BOOL bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
+            BOOL bRenewal = FALSE;
+            if ([ck valueForKey:@"renewal_in_progress"] == (NSString *)[NSNull null])
+                bRenewal = FALSE;
+            else
+                bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
+            
+//            BOOL bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
             pCompany.open_enrollment_begins = @"";
 
             if (bRenewal)
@@ -432,7 +482,7 @@
         else
         {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            // this is imporant - we set our input date format to match our input string
+            // this is important - we set our input date format to match our input string
             // if format doesn't match you'll get nil from your string, so be careful
             [dateFormatter setDateFormat:@"MM-dd-yyyy"];
             NSDate *dateFromString = [[NSDate alloc] init];
@@ -442,12 +492,10 @@
             
             NSDate *today = [NSDate date];
 
-            if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending)
+            if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
             {
-             //   NSLog(@"myDate is EARLIER than today");
                 if ([pCompany.employeesEnrolled intValue] < [pCompany.planMinimum intValue])
                 {
-             //       [ia addObject:pCompany];
                     pCompany.status = NEEDS_ATTENTION;
                     [open_enrollment addObject:pCompany];
                     clients_needing_immediate_attention += 1;
@@ -460,18 +508,12 @@
             }
             else
             {
-                NSDate *today = [NSDate date];
-                
-                NSDateFormatter *f = [[NSDateFormatter alloc] init];
-                [f setDateFormat:@"MM-dd-yyyy"];
-                
                 NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
                 NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
                                                                     fromDate:today
                                                                       toDate:endEnrollmentDate
                                                                      options:NSCalendarWrapComponents];
                 
-//                long xx = [components day];
                 if ([components day] <= 60 && [components day] >= 0)
                 {
                     pCompany.status = RENEWAL_IN_PROGRESS;
@@ -498,8 +540,9 @@
     [expandedSections addIndex:0];
     [expandedSections addIndex:1];
     [expandedSections addIndex:2];
+    
+    self.displayedItems = listOfCompanies;
 }
-
 
 /*
 #pragma mark - Navigation
@@ -511,154 +554,101 @@
 }
 */
 
-- (void)filterContentForSearchText:(NSString*)searchText //scope:(NSString*)scope
-{
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[c] %@", searchText];
-    searchResults = [pCompanies filteredArrayUsingPredicate:resultPredicate];
-    
-    NSLog(@"%@", searchResults);
-}
-
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
-    //    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText];
-    NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"SELF beginswith[c] %@", searchText];
-    
-    //    searchResults = [self.arrCharacters filteredArrayUsingPredicate:resultPredicate];
-    //searchResults = [ia filteredArrayUsingPredicate:resultPredicate];
+    [searchData removeAllObjects];
+
     NSMutableArray *group;
 
-    if (searchData == nil)
-        searchData = [[NSMutableArray alloc] init];
-
-    for(group in listOfCompanies) //take the n group (eg. group1, group2, group3)
-        //in the original data
+    if (![searchText isEqualToString:@""])
     {
-        NSMutableArray *newGroup = [[NSMutableArray alloc] init];
-     //   NSString *element;
-        tabTypeItem *element;
-        
-        for(element in group)
+    
+        if (searchData == nil)
+            searchData = [[NSMutableArray alloc] init];
+
+        for(group in listOfCompanies) //take the n group (eg. group1, group2, group3)
+            //in the original data
         {
-            NSRange range = [element.companyName rangeOfString:searchText
-                                           options:NSCaseInsensitiveSearch];
+            NSMutableArray *newGroup = [[NSMutableArray alloc] init];
+         //   NSString *element;
+            tabTypeItem *element;
             
-            if (range.length > 0) { //if the substring match
-                [newGroup addObject:element]; //add the element to group
+            for(element in group)
+            {
+                NSRange range = [element.companyName rangeOfString:searchText
+                                               options:NSCaseInsensitiveSearch];
+                
+                if (range.length > 0) { //if the substring match
+                    [newGroup addObject:element]; //add the element to group
+                }
             }
-        }
-        
-        if ([newGroup count] > 0)
-        {
-            if (searchData == nil)
-                searchData = [[NSMutableArray alloc] init];
             
-            [searchData addObject:newGroup];
+            if ([newGroup count] > 0)
+            {
+                if (searchData == nil)
+                    searchData = [[NSMutableArray alloc] init];
+                
+                [searchData addObject:newGroup];
+            }
+
         }
+ //       self.displayedItems = searchData;
+        
+        // hand over the filtered results to our search results table
+        brokerSearchResultTableViewController *tableController = (brokerSearchResultTableViewController *)self.searchController.searchResultsController;
+        tableController.filteredProducts = searchData;
+        [tableController.tableView reloadData];
 
     }
-}
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [searchData removeAllObjects];
-    /*before starting the search is necessary to remove all elements from the
-     array that will contain found items */
+    else
+        self.displayedItems = listOfCompanies;
     
-//    NSArray *group;
-    
-    [self filterContentForSearchText:searchString
-                               scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
-                                      objectAtIndex:[self.searchDisplayController.searchBar
-                                                     selectedScopeButtonIndex]]];
-    
-    /* in this loop I search through every element (group) (see the code on top) in
-     the "originalData" array, if the string match, the element will be added in a
-     new array called newGroup. Then, if newGroup has 1 or more elements, it will be
-     added in the "searchData" array. shortly, I recreated the structure of the
-     original array "originalData". */
-    /*
-     for(group in originalData) //take the n group (eg. group1, group2, group3)
-     //in the original data
-     {
-     NSMutableArray *newGroup = [[NSMutableArray alloc] init];
-     NSString *element;
-     
-     for(element in group) //take the n element in the group
-     {                    //(eg. @"Napoli, @"Milan" etc.)
-     NSRange range = [element rangeOfString:searchString
-     options:NSCaseInsensitiveSearch];
-     
-     if (range.length > 0) { //if the substring match
-     [newGroup addObject:element]; //add the element to group
-     }
-     }
-     
-     if ([newGroup count] > 0) {
-     [searchData addObject:newGroup];
-     }
-     
-     //        [newGroup release];
-     }
-     */
-    return YES;
+    [brokerTable reloadData];
 }
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     NSString *searchString = searchController.searchBar.text;
-    [self filterContentForSearchText:searchString];//]scope:searchController.searchBar.selectedScopeButtonIndex];
+//    [self filterContentForSearchText:searchString];//]scope:searchController.searchBar.selectedScopeButtonIndex];
+
+    [self filterContentForSearchText:searchString scope:@""];
+    
     [brokerTable reloadData];
+}
+
+- (void)willPresentSearchController:(UISearchController *)searchController {
+    // do something before the search controller is presented
+
+}
+
+- (void)didPresentSearchController:(UISearchController *)searchController {
+    // do something after the search controller is presented
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        return [searchData count];
-    else
-        return [listOfCompanies count]; //Must include create button row
+    return [self.displayedItems count]; //[listOfCompanies count]; //Must include create button row
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
-        long iCnt = [[searchData objectAtIndex:section] count];
-        return iCnt;//[searchData count];
-    }
-
     if ([self tableView:tableView canCollapseSection:section])
     {
         if ([expandedSections containsIndex:section])
-        {
-            long iCnt = [[listOfCompanies objectAtIndex:section] count];
-/*
-            NSIndexPath *item;
-            for (item in ipath)
-            {
-//                if (item.section == section)
-//                    iCnt = iCnt + 1;    // return rows when expanded
-            }
-*/
-            return iCnt;
-        }
+            return [[self.displayedItems objectAtIndex:section] count]; //[[listOfCompanies objectAtIndex:section] count];
         
         return 0; // only top row showing
     }
 
-    return [[listOfCompanies objectAtIndex:section] count];
+    return [[self.displayedItems objectAtIndex:section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     tabTypeItem *ttype;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    else
-        ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
-    
+    ttype = [[self.displayedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (ttype.type == 0)
         return 44;
     else
@@ -672,22 +662,17 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    // 1. The view for the header
+    // The view for the header
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
     
- //   UIView* progressIndicatorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, 44)];
- //   progressIndicatorView.backgroundColor = [UIColor colorWithRed:255.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
-    
-    // 2. Set a custom background color and a border
+    // Set a custom background color and a border
     headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
     headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
     headerView.layer.borderWidth = 1.0;
     
     headerView.tag = section;
     
-    //    [headerView addSubview:progressIndicatorView];
-    
-    // 3. Add a label
+    // Add a label
     UILabel* headerLabel = [[UILabel alloc] init];
     headerLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - 5, 34);
     headerLabel.backgroundColor = [UIColor clearColor];
@@ -696,12 +681,12 @@
     headerLabel.text = [sections objectAtIndex:section];///  @"This is the custom header view";
     headerLabel.textAlignment = NSTextAlignmentLeft;
     
-    // 4. Add the label to the header view
+    // Add the label to the header view
     [headerView addSubview:headerLabel];
     
     UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [headerView addGestureRecognizer:recognizer];
-    // 5. Finally return
+
     return headerView;
 }
 
@@ -718,33 +703,6 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    tabTypeItem *ttype;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    else
-        ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    
-    if (ttype.type == 1)
-    {
-     UIView *cardView = [[UIView alloc] initWithFrame:CGRectMake(10,0,self.view.frame.size.width-20,20)];
-     cardView.backgroundColor = [UIColor lightGrayColor];
-
-     cardView.layer.masksToBounds = NO;
-
-    UILabel *lbl = [[UILabel alloc] init];
-        lbl.frame = cardView.frame;
-        lbl.textAlignment = NSTextAlignmentCenter;
-        lbl.textColor = [UIColor whiteColor];
-        lbl.font = [UIFont fontWithName:@"Roboto-Regular" size:12.0];
-    lbl.text = @"OPEN ENROLLMENT IS MAY 1, 2016 - MAY 31, 2016";
-    [cardView addSubview:lbl];
-     [cell.contentView addSubview:cardView];
-     [cell.contentView sendSubviewToBack:cardView];
-    }
-    
-}
 /*
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -779,9 +737,6 @@
 -(NSArray *) createLeftButtons: (int) number
 {
     NSMutableArray * result = [NSMutableArray array];
-//    UIColor * colors[3] = {[UIColor greenColor],
-//        [UIColor colorWithRed:0 green:0x99/255.0 blue:0xcc/255.0 alpha:1.0],
-//        [UIColor colorWithRed:0.59 green:0.29 blue:0.08 alpha:1.0]};
     UIColor * colors[4] = {[UIColor clearColor],
         [UIColor clearColor],
         [UIColor clearColor],[UIColor clearColor]};
@@ -850,9 +805,8 @@
 //    else {
      
     expansionSettings.buttonIndex = 1;//data.rightExpandableIndex;
-        expansionSettings.fillOnTrigger = NO;
-   return [self createLeftButtons:4];//data.rightButtonsCount];
-//    }
+    expansionSettings.fillOnTrigger = NO;
+    return [self createLeftButtons:4];//data.rightButtonsCount];
 }
 
 - (IBAction)phoneEmployer:(id)sender {
@@ -895,18 +849,6 @@
 
 - (IBAction)emailEmployer:(id)sender
 {
-/*
-    // For example, ViewController is subclass of UIViewController
-    ViewController *vc = [[ViewController alloc] init];
-    
-    // if there is a navigationController
-    self.navigationController.definesPresentationContext = YES;
-    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [self presentViewController:vc animated:YES completion:nil];
-    
-    return;
- */
     NSIndexPath *indexPath = [brokerTable indexPathForCell:sender];
     tabTypeItem *pTab = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
@@ -918,26 +860,27 @@
     for (int ii=0;ii<[pTab.emails count];ii++)
     {
         UIAlertAction* ok = [UIAlertAction
-                             actionWithTitle:[pTab.emails objectAtIndex:ii]
+                             actionWithTitle:[pTab.emails objectAtIndex:ii][0]
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
                                  //Do some thing here
+                                 //    NSString *recipients = @"mailto:first@example.com?cc=second@example.com,third@example.com&subject=Hello from HBX!";
+                                 NSString *recipients = [NSString stringWithFormat:@"mailto:%@&subject=Hello from HBX!", [pTab.emails objectAtIndex:ii][0]];
+                                 
+                                 NSString *body = @"&body=It is sunny in DC!";
+                                 
+                                 NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+                                 
+                                 email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                                 
+                                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+                                 
                                  [view dismissViewControllerAnimated:YES completion:nil];
                              }];
         [view addAction:ok];
     }
-    /*
-    UIAlertAction* ok = [UIAlertAction
-                         actionWithTitle:@"OK"
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                             //Do some thing here
-                             [view dismissViewControllerAnimated:YES completion:nil];
-                             
-                         }];
-     */
+
     UIAlertAction* cancel = [UIAlertAction
                              actionWithTitle:@"Cancel"
                              style:UIAlertActionStyleCancel
@@ -947,23 +890,9 @@
                                  
                              }];
     
-    
- //   [view addAction:ok];
     [view addAction:cancel];
     
     [self presentViewController:view animated:YES completion:nil];
-    /*
-    //    NSString *recipients = @"mailto:first@example.com?cc=second@example.com,third@example.com&subject=Hello from HBX!";
-    NSString *recipients = @"mailto:hbx@mobile.com&subject=Hello from HBX!";
-    
-    NSString *body = @"&body=It is sunny in DC!";
-    
-    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
-    
-    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
-     */
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller
@@ -1036,39 +965,31 @@
                  completionHandler:^(NSArray *placemarks, NSError *error)
     {
                      
-                     // Convert the CLPlacemark to an MKPlacemark
-                     // Note: There's no error checking for a failed geocode
-                     CLPlacemark *geocodedPlacemark = [placemarks objectAtIndex:0];
-                     MKPlacemark *placemark = [[MKPlacemark alloc]
-                                               initWithCoordinate:geocodedPlacemark.location.coordinate
-                                               addressDictionary:geocodedPlacemark.addressDictionary];
-                     
-                     // Create a map item for the geocoded address to pass to Maps app
-                     MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-                     [mapItem setName:geocodedPlacemark.name];
-                     
-                     // Set the directions mode to "Driving"
-                     // Can use MKLaunchOptionsDirectionsModeWalking instead
-                     NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
-                     
-                     // Get the "Current User Location" MKMapItem
-                     MKMapItem *currentLocationMapItem = [MKMapItem mapItemForCurrentLocation];
-                     
-                     // Pass the current location and destination map items to the Maps app
-                     // Set the direction mode in the launchOptions dictionary
-                     [MKMapItem openMapsWithItems:@[currentLocationMapItem, mapItem] launchOptions:launchOptions];
-                     
-                 }];    
+         // Convert the CLPlacemark to an MKPlacemark
+         // Note: There's no error checking for a failed geocode
+         CLPlacemark *geocodedPlacemark = [placemarks objectAtIndex:0];
+         MKPlacemark *placemark = [[MKPlacemark alloc]
+                                   initWithCoordinate:geocodedPlacemark.location.coordinate
+                                   addressDictionary:geocodedPlacemark.addressDictionary];
+         
+         // Create a map item for the geocoded address to pass to Maps app
+         MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+         [mapItem setName:geocodedPlacemark.name];
+         
+         // Set the directions mode to "Driving"
+         // Can use MKLaunchOptionsDirectionsModeWalking instead
+         NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+         
+         // Get the "Current User Location" MKMapItem
+         MKMapItem *currentLocationMapItem = [MKMapItem mapItemForCurrentLocation];
+         
+         // Pass the current location and destination map items to the Maps app
+         // Set the direction mode in the launchOptions dictionary
+         [MKMapItem openMapsWithItems:@[currentLocationMapItem, mapItem] launchOptions:launchOptions];
+         
+     }];    
 }
 
-/*
-- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView
-{
-    static NSString *CellIdentifier1 = @"CellIdentifier1";
-    [self.searchDisplayController.searchResultsTableView registerClass:[brokerPlanTableViewCell class] forCellReuseIdentifier:CellIdentifier1];
-//    [brokerTable registerClass:[brokerPlanTableViewCell class] forCellReuseIdentifier:CellIdentifier1];
-}
-*/
 -(BOOL)iPhone6PlusDevice{
     if (!IS_PHONE) return NO;
     if ([UIScreen mainScreen].scale > 2.9) return YES;   // Scale is only 3 when not in scaled mode for iPhone 6 Plus
@@ -1076,181 +997,72 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-
 {
-//    static NSString *CellIdentifier1 = @"CellIdentifier1";
-//    static NSString *CellIdentifier = @"BrokerCellIdentifier";
-    static NSString *CellIdentifier2 = @"prototypeCell";
-    
-    MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
- 
-    tabTypeItem *ttype;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        ttype = [[searchData objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    else
-        ttype = [[listOfCompanies objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        static NSString *CellIdentifier2 = @"prototypeCell";
+        
+        MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+     
+        tabTypeItem *ttype = [[self.displayedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
-    if ( cell == nil )
-    {
-        cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
-//        cell = [[brokerPlanTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-//    CGRect screenBound = [[UIScreen mainScreen] bounds];
-//    CGSize screenSize = screenBound.size;
-    
-//    int yy = cell.frame.size.width;
-//    int uu = tableView.frame.size.width;
-    
-    cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
-//    yy = cell.employerLabel.frame.size.width;
-    
-    int iOffset = 0;
-    int secondaryOffset = 0;
-    
-    if (IS_IPHONE_6_PLUS)
-        iOffset = 60;
-    else if (IS_IPHONE_6)
-        iOffset = 20;
-    else
-    {
-        iOffset = 0;
-        secondaryOffset = 15;
-    }
+        if ( cell == nil )
+            cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
 
-    if (cell.alertButton.currentBackgroundImage == nil)
-    {
-        cell.alertButton.backgroundColor = [UIColor whiteColor];
-        UIImage *image = [UIImage imageNamed:@"alert2.png"];
-        [cell.alertButton setBackgroundImage:image forState:UIControlStateNormal];
-    }
-    cell.alertButton.frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16);
-    cell.lblDaysLeftText.frame = CGRectMake(tableView.frame.size.width - cell.lblDaysLeftText.frame.size.width - 25, cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
-    cell.daysleftLabel.frame = CGRectMake(cell.lblDaysLeftText.frame.origin.x - cell.daysleftLabel.frame.size.width - 4, cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
-    cell.lblEmployeesNeeded.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
-    cell.employeesLabel.frame = CGRectMake(cell.lblEmployeesNeeded.frame.origin.x - cell.employeesLabel.frame.size.width - 5, cell.employeesLabel.frame.origin.y, cell.employeesLabel.frame.size.width, cell.employeesLabel.frame.size.height);
-    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, cell.employerLabel.frame.origin.y, cell.employeesLabel.frame.origin.x - 10, cell.employerLabel.frame.size.height);
+        cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
 
-    if (iOffset > 0)
-    {
-//        cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, cell.employerLabel.frame.origin.y, 180, cell.employerLabel.frame.size.height);
-//        cell.employeesLabel.frame = CGRectMake(166 + iOffset + secondaryOffset, cell.employeesLabel.frame.origin.y, cell.employeesLabel.frame.size.width, cell.employeesLabel.frame.size.height);
-//        cell.lblEmployeesNeeded.frame = CGRectMake(198 + iOffset + secondaryOffset, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
-//        cell.daysleftLabel.frame = CGRectMake(259 + (iOffset + 10), cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
-//        cell.lblDaysLeftText.frame = CGRectMake(289 + (iOffset + 10), cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
-    }
-//    cell.employerLabel.backgroundColor = [UIColor blueColor];
-//    cell.employeesLabel.backgroundColor = [UIColor greenColor];
-//    cell.lblEmployeesNeeded.backgroundColor = [UIColor redColor];
-//    cell.daysleftLabel.backgroundColor = [UIColor grayColor];
-//    cell.lblDaysLeftText.backgroundColor = [UIColor blueColor];
+        if (cell.alertButton.currentBackgroundImage == nil)
+        {
+            cell.alertButton.backgroundColor = [UIColor whiteColor];
+            UIImage *image = [UIImage imageNamed:@"alert2.png"];
+            [cell.alertButton setBackgroundImage:image forState:UIControlStateNormal];
+        }
     
-    
-    //        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.alertButton.frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16);
+        cell.lblDaysLeftText.frame = CGRectMake(tableView.frame.size.width - cell.lblDaysLeftText.frame.size.width - 25, cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
+        cell.daysleftLabel.frame = CGRectMake(cell.lblDaysLeftText.frame.origin.x - cell.daysleftLabel.frame.size.width - 4, cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
+        cell.lblEmployeesNeeded.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
+        cell.employeesLabel.frame = CGRectMake(cell.lblEmployeesNeeded.frame.origin.x - cell.employeesLabel.frame.size.width - 5, cell.employeesLabel.frame.origin.y, cell.employeesLabel.frame.size.width, cell.employeesLabel.frame.size.height);
+        cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, cell.employerLabel.frame.origin.y, cell.employeesLabel.frame.origin.x - 10, cell.employerLabel.frame.size.height);
 
-    cell.allowsMultipleSwipe = NO;
-    cell.delegate = self;
-    cell.daysleftLabel.textColor = [UIColor darkGrayColor];
-    cell.lblDaysLeftText.text = @"DAYS LEFT";
+//    cell.leftColor.hidden = FALSE;
     
-/*
-    UIButton *pAlert = [cell.contentView viewWithTag:1234];
-    if (pAlert && ttype.status != NEEDS_ATTENTION)
-    {
-        [[cell.contentView viewWithTag:1234] setHidden:TRUE];
-    }
-*/
-   /*
-    UIView *left = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, cell.frame.size.height)];
-    left.backgroundColor = [UIColor redColor];
-    left.hidden = TRUE;
-    [cell.contentView addSubview:left];
-    
-    UIImage *image = [UIImage imageNamed:@"alert2.png"];
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGRect frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16); //image.size.width, image.size.height);
-    button.frame = frame;
-    button.tag = 1234;
-    button.hidden = TRUE;
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    
-    //           [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
-    button.backgroundColor = [UIColor clearColor];
-    [cell.contentView addSubview:button];
-
-    if (ttype.status == NEEDS_ATTENTION)
-    {
-        button.hidden = FALSE;
-        left.hidden = FALSE;
-        //cell.accessoryView = button;
-    }
-    else
-    {
-        button.hidden = TRUE;
-        left.hidden = TRUE;
-    }
-    */
+        cell.allowsMultipleSwipe = NO;
+        cell.delegate = self;
+        cell.daysleftLabel.textColor = [UIColor darkGrayColor];
+        cell.lblDaysLeftText.text = @"DAYS LEFT";
+        
         cell.employerLabel.text = ttype.companyName;
         cell.employeesLabel.text = ttype.employeesEnrolled;
         cell.alertButton.hidden = TRUE;
-    
-    
+        
         NSDate *today = [NSDate date];
         
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"MM-dd-yyyy"];
-        
-        NSDate *endDate = [f dateFromString:ttype.open_enrollment_ends];
-        
-        NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                            fromDate:today
-                                                              toDate:endDate
-                                                             options:NSCalendarWrapComponents];
-        
+    
+    
         if (ttype.status == NEEDS_ATTENTION)
         {
             cell.lblEmployeesNeeded.text = @"EMPLOYEES NEEDED";
-            if (ttype.status == NEEDS_ATTENTION)
-                cell.daysleftLabel.textColor = [UIColor redColor];
-            else
-                cell.daysleftLabel.textColor = [UIColor darkGrayColor];
-            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
+            cell.daysleftLabel.textColor = [UIColor redColor];
             cell.alertButton.hidden = FALSE;
+            
+            UIView *right = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, cell.frame.size.height)];
+            right.backgroundColor = [UIColor redColor];
+            
+            [cell.contentView addSubview:right];
+
         }
-        
+    
         if (ttype.status == OPEN_ENROLLMENT_MET)
-        {
             cell.lblEmployeesNeeded.text = [NSString stringWithFormat:@"OF %@ ENROLLED", ttype.employeesTotal];
-            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
-        }
 
         if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED)
         {
             cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
             
-/*
-            CGSize expectedLabelSize = [cell.lblEmployeesNeeded.text sizeWithFont:cell.lblEmployeesNeeded.font
-                                              constrainedToSize:maximumLabelSize
-                                                  lineBreakMode:cell.lblEmployeesNeeded.lineBreakMode];
-            
-            CGRect labelRect = [cell.lblEmployeesNeeded.text
-                                boundingRectWithSize:labelSize
-                                options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:@{
-                                             NSFontAttributeName : [UIFont systemFontOfSize:14]
-                                             }
-                                context:nil];
-*/
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"MM-dd-yyyy"];
-            NSDate *dateFromString = [[NSDate alloc] init];
-            
-            dateFromString = [dateFormatter dateFromString:ttype.planYear];
-            [dateFormatter setDateFormat:@"MMM dd"];
-            NSString *stringFromDate = [dateFormatter stringFromDate:dateFromString];
+            NSDate *dateFromString = [f dateFromString:ttype.planYear];
+            [f setDateFormat:@"MMM dd"];
+            NSString *stringFromDate = [f stringFromDate:dateFromString];
             cell.employeesLabel.text = stringFromDate;
             
             int width = ceil([cell.employeesLabel.text sizeWithAttributes:@{NSFontAttributeName: cell.employeesLabel.font}].width);
@@ -1259,9 +1071,6 @@
             cell.lblEmployeesNeeded.frame = CGRectMake(cell.employeesLabel.frame.origin.x + width + 2, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
             
             cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
-            
-  //          cell.lblDaysLeftText.text = @"";
-            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
         }
     
         if (ttype.status == NO_ACTION_REQUIRED)
@@ -1269,7 +1078,19 @@
             cell.lblDaysLeftText.text = @"";
             cell.daysleftLabel.text = @"";
         }
-                
+        else
+        {
+            [f setDateFormat:@"MM-dd-yyyy"];
+            NSDate *endDate = [f dateFromString:ttype.open_enrollment_ends];
+            
+            NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
+                                                                fromDate:today
+                                                                  toDate:endDate
+                                                                 options:NSCalendarWrapComponents];
+            cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
+        }
+            
     return cell;
 }
 

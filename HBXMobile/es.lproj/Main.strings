@@ -1,0 +1,51 @@
+
+/* Class = "UITextField"; placeholder = "Email address"; ObjectID = "2xf-WL-AwF"; */
+"2xf-WL-AwF.placeholder" = "Dirección de correo electrónico";
+
+/* Class = "UILabel"; text = "ENABLE TOUCH ID"; ObjectID = "4Fn-bz-oHN"; */
+"4Fn-bz-oHN.text" = "ENABLE TOUCH ID";
+
+/* Class = "UILabel"; text = "DAYS LEFT"; ObjectID = "4Ib-J0-UPZ"; */
+"4Ib-J0-UPZ.text" = "DAYS LEFT";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "9L1-iK-bG9"; */
+"9L1-iK-bG9.text" = "Label";
+
+/* Class = "UIViewController"; title = "Broker View"; ObjectID = "BJO-um-fM0"; */
+"BJO-um-fM0.title" = "Broker View";
+
+/* Class = "UILabel"; text = "150"; ObjectID = "Bom-Bs-d0K"; */
+"Bom-Bs-d0K.text" = "150";
+
+/* Class = "UIButton"; normalTitle = "LOGIN"; ObjectID = "FD6-vP-RUs"; */
+"FD6-vP-RUs.normalTitle" = "INICIAR SESIÓN";
+
+/* Class = "UILabel"; text = "EMPLOYEES NEEDED"; ObjectID = "FQR-I1-HbT"; */
+"FQR-I1-HbT.text" = "EMPLOYEES NEEDED";
+
+/* Class = "UILabel"; text = "REMEMBER ME"; ObjectID = "IxK-Mv-bPe"; */
+"IxK-Mv-bPe.text" = "Recuérdame";
+
+/* Class = "UILabel"; text = "Version"; ObjectID = "JMH-Oe-jo6"; */
+"JMH-Oe-jo6.text" = "Version";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "S15-FW-GDB"; */
+"S15-FW-GDB.normalTitle" = "Button";
+
+/* Class = "UITableViewController"; title = "Slide Out Menu"; ObjectID = "Vug-XW-hew"; */
+"Vug-XW-hew.title" = "Slide Out Menu";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "dET-08-jMC"; */
+"dET-08-jMC.placeholder" = "Contraseña";
+
+/* Class = "UILabel"; text = "25"; ObjectID = "mb1-xc-ew3"; */
+"mb1-xc-ew3.text" = "25";
+
+/* Class = "UILabel"; text = "Employer"; ObjectID = "r6m-2T-XPo"; */
+"r6m-2T-XPo.text" = "Employer";
+
+/* Class = "UILabel"; text = "DC Health Link Mobile is for existing Health Link customers.\n\nIf you are not an exisiting customer please sign up on your home computer."; ObjectID = "rB8-L7-3lB"; */
+"rB8-L7-3lB.text" = "DC Health Link móvil es para los clientes de la Salud vínculo existente. \ N \ nSi no es cliente de exisiting favor inscribirse en su ordenador personal .";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "uOY-9O-sQL"; */
+"uOY-9O-sQL.text" = "Label";

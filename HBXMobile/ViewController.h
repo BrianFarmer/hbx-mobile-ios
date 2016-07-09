@@ -49,6 +49,7 @@
     NSURLConnection *conn;
     
     NSString *_brokerId;
+    NSString *sFirstName;
     
     int REQUEST_TYPE;
     BOOL reLoad;

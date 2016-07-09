@@ -1,0 +1,43 @@
+/* 
+  Localizable.strings
+  HBXMobile
+
+  Created by David Boyd on 7/6/16.
+  Copyright © 2016 David Boyd. All rights reserved.
+*/
+
+/* Navigation Title: Hey */
+"nav-title-hey" = "Hola";
+
+"table-section-open-enrollment" = "INSCRIPCIÓN ABIERTA EN CURSO";
+"table-section-renewals-in-progress" = "RENOVACIONES EN CURSO";
+"table-section-all-others" = "TODOS LOS DEMÁS CLIENTES";
+
+//Detail Page
+
+"TITLE_NOTE" = "INSCRIPCIÓN ABIERTA EN CURSO - MÍNIMO NO MET";
+
+"OPEN_ENROLLMENT" = "INSCRIPCIÓN ABIERTA";
+"PARTICIPATION" = "PARTICIPACIÓN";
+"MONTHLY_ESTIMATED_COST" = "COSTO ESTIMADO MENSUAL";
+
+"OPEN_ENROLLMENT_BEGAN" = "Inscripción Abierta comenzó";
+"OPEN_ENROLLMENT_CLOSES" = "Cierra de inscripción abierta";
+"DAYS_LEFT" = "izquierda días";
+
+"MINOMUM_MET" = "MÍNIMO MET";
+"ENROLLED" = "inscrito";
+"WAIVED" = "renunciado";
+"NOT_COMPLETED" = "Sin completar";
+"TOTAL_EMPLOYEES" = "Los empleados totales";
+
+"TOTAL_PREMIUM" = "Prima total";
+"EMPLOYEE_CONTRIBUTION" = "Contribución del empleado";
+"EMPLOYER_CONTRIBUTION" = "Controbution empleador";
+
+"GOOD_MORNING" = "Buenos días";
+"GOOD_AFTERNOON" = "Buenas tardes";
+"GOOD_EVENING" = "Buena noches";
+
+"GREETING_1" = "Tiene clientes con %lu";
+"GREETING_2" = "que requiere atención inmediata";

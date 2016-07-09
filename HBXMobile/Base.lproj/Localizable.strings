@@ -1,0 +1,41 @@
+/* 
+  Localizable.strings
+  HBXMobile
+
+  Created by David Boyd on 7/6/16.
+  Copyright © 2016 David Boyd. All rights reserved.
+*/
+
+
+"table-section-open-enrollment" = "OPEN ENROLLMENT IN PROGRESS";
+"table-section-renewals-in-progress" = "RENEWALS IN PROGRESS";
+"table-section-all-others" = "ALL OTHER CLIENTS";
+
+//Detail Page
+
+"TITLE_NOTE" = "OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET";
+
+"OPEN_ENROLLMENT" = "OPEN ENROLLMENT";
+"PARTICIPATION" = "PARTICIPATION";
+"MONTHLY_ESTIMATED_COST" = "MONTHLY ESTIMATED COST";
+
+"OPEN_ENROLLMENT_BEGAN" = "Open Enrollment Began";
+"OPEN_ENROLLMENT_CLOSES" = "Open Enrollment Closes";
+"DAYS_LEFT" = "Days Left";
+
+"MINOMUM_MET" = "MINIMUM MET";
+"ENROLLED" = "Enrolled";
+"WAIVED" = "Waived";
+"NOT_COMPLETED" = "Not Completed";
+"TOTAL_EMPLOYEES" = "Total Employees";
+
+"TOTAL_PREMIUM" = "Total Premium";
+"EMPLOYEE_CONTRIBUTION" = "Employee Contribution";
+"EMPLOYER_CONTRIBUTION" = "Employer Controbution";
+
+"GOOD_MORNING" = "Good morning";
+"GOOD_AFTERNOON" = "Good afternoon";
+"GOOD_EVENING" = "Good evening";
+
+"GREETING_1" = "You have %lu clients with";
+"GREETING_2" = "requiring immediate attention";

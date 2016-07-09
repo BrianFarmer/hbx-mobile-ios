@@ -74,7 +74,7 @@
     
     // Do any additional setup after loading the view, typically from a nib.
 //    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showbrokeremployers) name:kReloadJSON object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showbrokeremployers) name:kReloadJSON object:nil];
 
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -94,7 +94,6 @@
     pView1.backgroundColor = [UIColor clearColor];
     pView1.image = [UIImage imageNamed:@"dchllogo_withouttag-2.png"];
     pView1.contentMode = UIViewContentModeScaleAspectFit;
-//    self.navigationItem.titleView = pView1;
     
     [self.navigationController.navigationBar addSubview:pView1];
     
@@ -114,21 +113,6 @@
     spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self.view addSubview:spinningWheel];
-//    [spinningWheel bringSubviewToFront:self.view];
-
-    
-     //           hbxNetwork *pnet = [[hbxNetwork alloc] init];
-/*
-    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
-    activityIndicator.layer.cornerRadius = 05;
-    activityIndicator.opaque = NO;
-    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
-    activityIndicator.center = self.view.center;
-    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    [activityIndicator setColor:[UIColor colorWithRed:0.6 green:0.8 blue:1.0 alpha:1.0]];
-    [self.view addSubview: activityIndicator];
-*/
     
     BOOL hasTouchID = NO;
     // if the LAContext class is available
@@ -303,9 +287,33 @@
 
 - (IBAction)enableTouchIdSwitch:(id)sender {
     if (switchTouchId.on)
+    {
         NSLog(@"On");
+        switchSaveMe.on = TRUE;
+        switchSaveMe.enabled = FALSE;
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"Enable Touch ID"
+                                              message:@"Touch ID will be enabled after you log in."
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                   style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"OK action");
+                                   }];
+        
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+
+    }
     else
+    {
         NSLog(@"Off");
+        bUseTouchID = FALSE;
+        switchSaveMe.enabled = TRUE;
+    }
     
     [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 }
@@ -350,11 +358,11 @@
     {
         case 1001:
             enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
-            [self login:enrollHost type:INITIAL_GET];
+            [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]];
             break;
         case 1002:
             mobileHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
-            [self login:mobileHost type:INITIAL_LOGIN_NS];
+            [self login:mobileHost type:INITIAL_LOGIN_NS url:[NSString stringWithFormat:@"http://%@/login", mobileHost]];
             break;
         case 1003:
         default:
@@ -454,13 +462,13 @@
                                {
                                    NSLog(@"OK action");
                                    UITextField *login = alertController.textFields.firstObject;
-                                   /*
+                                   
                                    if ([login.text caseInsensitiveCompare:@"Blue"] == NSOrderedSame)
                                        [self performSegueWithIdentifier:@"Broker View" sender:nil];
                                    else
                                        [self askSecurityQuestionFromMobileServer:TRUE];
-                                    */
-                                   [self sendSecurityAnswer];
+                                    
+               //                    [self sendSecurityAnswer];
                                }];
     
     [alertController addAction:cancelAction];
@@ -493,13 +501,13 @@
 {
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
         
-        NSString *at = [self percentEscapeURLParameter:csrfToken];
+//        NSString *at = [self percentEscapeURLParameter:csrfToken];
         //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         
         //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
         NSString *post = [NSString stringWithFormat:@"security=%@", @"blue"];
         
-        NSLog(@"%@", @"\r\r\POST SECURITY\r\r\r\r");
+        NSLog(@"%@", @"\r\r POST SECURITY \r\r\r\r");
         
         NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
         
@@ -537,7 +545,7 @@
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     [self clearCookiesForURL];
-    
+
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 
     [request setURL:[NSURL URLWithString:pUrl]];
@@ -555,6 +563,157 @@
     } else {
         NSLog(@"Connection could not be made");
     }
+ 
+/*
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
+
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data, NSError *connectionError)
+     {
+         if (data.length > 0 && connectionError == nil)
+         {
+             NSString *rString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"%@", rString);
+             
+             _responseData = [[NSMutableData alloc] init];
+             
+            NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
+             
+             NSDictionary *headerFields = [httpResponse allHeaderFields];
+             if ([[headerFields valueForKey:@"Set-Cookie"] length] > 0)
+             {
+                 customCookie = [headerFields valueForKey:@"Set-Cookie"];
+                 
+                 //EXTRACT COOKIE SESSION_ID
+                 //
+                 NSRange startRange = [customCookie rangeOfString:@"="];
+                 customCookie = [customCookie substringWithRange:NSMakeRange(startRange.location+1, customCookie.length - (startRange.location+1))];
+                 
+                 NSRange startRange1 = [customCookie rangeOfString:@";"];
+                 customCookie = [customCookie substringWithRange:NSMakeRange(0, startRange1.location)];
+                 //////////////////////////////
+                 //////////////////////////////
+                 
+             }
+
+             //EXTRACT CSRF TOKEN
+             //
+             NSRange startRange = [rString rangeOfString:@"<meta name=\"csrf-token\" content=\""];
+             if (startRange.length > 0)
+             {
+                 NSString *substring = [rString substringFromIndex:startRange.location+33];
+                 NSRange endRange = [substring rangeOfString:@"==\""];
+                 
+                 csrfToken = [substring substringWithRange:NSMakeRange(0, endRange.location+2)];
+                 
+                 NSLog(@"%@\n", csrfToken);
+                 
+                 if ([csrfToken length] > 0 && [customCookie length] > 0)
+                     [self POSTLogin1];
+             }
+
+         }
+     }];
+*/
+}
+
+-(void)POSTLogin1
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    NSString *at = [self percentEscapeURLParameter:csrfToken];
+    //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
+    //    NSString *post = [NSString stringWithFormat:@"user[email]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
+    NSString *post = [NSString stringWithFormat:@"user[email]=%@&user[password]=Test123!&authenticity_token=%@", txtEmail.text, at];
+    
+    NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
+    
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    
+    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    //    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    [request setHTTPBody:postData];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    customCookie_a = customCookie;
+    
+    REQUEST_TYPE = POST_LOGIN_DONE;
+/*
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+ */
+    reLoad = TRUE;
+ 
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response,
+                                               NSData *data, NSError *connectionError)
+     {
+//         [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
+        NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
+         NSArray* authToken = [NSHTTPCookie
+                               cookiesWithResponseHeaderFields:[httpResponse allHeaderFields]
+                               forURL:[NSURL URLWithString:@""]];
+         
+         if ([authToken count] > 0)
+         {
+             NSLog(@"cookies from the http POST %@", authToken);
+             for (int i = 0; i < [authToken count]; i++)
+             {
+                 NSHTTPCookie *cookie = [authToken objectAtIndex:i];
+                 NSLog(@"%@ for %@:%@",[cookie name], [cookie domain], [cookie value]);
+                 if ([[cookie name] isEqualToString:@"_session_id"])
+                     customCookie_a = [cookie value];
+             }
+             //[self doReload];
+             reLoad = TRUE;
+         }
+     
+     NSLog(@"%@", [request allHTTPHeaderFields]);
+
+                     [self doReload];
+     }];
 }
 
 -(void)POSTLogin
@@ -818,7 +977,9 @@
                 NSError *error = nil;
                 NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                 
+                Settings *obj=[Settings getInstance];
                 _brokerId = [dictionary valueForKey:@"id"];
+                obj.sUser = [dictionary valueForKey:@"first"];
                 
                 [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
             }
@@ -830,7 +991,6 @@
             Settings *obj=[Settings getInstance];
             obj.sEnrollServer = enrollHost;
             obj.sMobileServer = mobileHost;
-            obj.sUser = txtEmail.text;
             
             [self performSegueWithIdentifier:@"Broker View" sender:nil];
         }
@@ -933,6 +1093,8 @@
     customCookie = @"";
     csrfToken = @"";
     
+    [spinningWheel stopAnimating];
+    
     self.navigationController.navigationBarHidden = YES;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
@@ -995,12 +1157,14 @@
 {
     if ([[segue identifier] isEqualToString:@"Broker View"])
     {
+        /*
         // Get destination view
         BrokerAccountViewController *vc = [segue destinationViewController];
         vc.jsonData = responseString;
         vc.customCookie_a = customCookie_a;
         vc.enrollHost = enrollHost;
         vc._brokerId = _brokerId;
+         */
     }
 }
 

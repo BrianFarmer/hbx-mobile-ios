@@ -101,7 +101,7 @@
     {
         NSDate *startDate = [f dateFromString:type.open_enrollment_begins];
         [f setDateFormat:@"MMM dd, yyyy"];
-        topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", nil];
+        topSectionNames = [[NSArray alloc] initWithObjects: NSLocalizedString(@"OPEN_ENROLLMENT_BEGAN", @"Open Enrollment Began"), NSLocalizedString(@"OPEN_ENROLLMENT_CLOSES", @"Open Enrollment Closes"), NSLocalizedString(@"DAYS_LEFT",@"Days Left"), nil];
         topSectionValues = [[NSArray alloc] initWithObjects: [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], nil];
     }
     else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
@@ -112,7 +112,7 @@
         NSDate *today = [NSDate date];
         
         if ([startDate compare:today] == NSOrderedAscending)
-            topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+            topSectionNames = [[NSArray alloc] initWithObjects: NSLocalizedString(@"OPEN_ENROLLMENT_BEGAN", @"Open Enrollment Began"), NSLocalizedString(@"OPEN_ENROLLMENT_CLOSES", @"Open Enrollment Closes"), NSLocalizedString(@"DAYS_LEFT",@"Days Left"), @"BINDER PAYMENT DUE", nil];
         else
             topSectionNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
         
@@ -181,7 +181,7 @@
     
     if (type.status == (enrollmentState)NEEDS_ATTENTION)
     {
-        pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET";
+        pCompanyFooter.text = NSLocalizedString(@"TITLE_NOTE", @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET");
         pCompanyFooter.textColor = [UIColor redColor];
 
     }
@@ -525,14 +525,14 @@
     {
         case 0:
             if (type.status == (enrollmentState)NEEDS_ATTENTION || type.status == (enrollmentState)OPEN_ENROLLMENT_MET)
-                sectionName = @"OPEN ENROLLMENT"; //NSLocalizedString(@"mySectionName", @"OPEN ENROLLMENT");
+                sectionName = NSLocalizedString(@"OPEN_ENROLLMENT", @"OPEN ENROLLMENT");
             else if (type.status == (enrollmentState)RENEWAL_IN_PROGRESS)
                 sectionName = @"RENEWAL DEADLINES";
             else
-                sectionName = @"MONTHLY ESTIMATED COST";
+                sectionName = NSLocalizedString(@"MONTHLY_ESTIMATED_COST", @"MONTHLY ESTIMATED COST");
             break;
         case 1:
-            sectionName = @"PARTICIPATION"; //NSLocalizedString(@"myOtherSectionName", @"PARTICIPATION");
+            sectionName = NSLocalizedString(@"PARTICIPATION", @"PARTICIPATION"); //NSLocalizedString(@"myOtherSectionName", @"PARTICIPATION");
             break;
         case 3:
             sectionName = @"GENERAL AGENCY"; //NSLocalizedString(@"myOtherSectionName", @"GENERAL AGENCY");
@@ -542,7 +542,7 @@
             {
                 [f setDateFormat:@"MMM yyyy"];
                 
-                sectionName = [NSString stringWithFormat:@"%@ - %@", @"MONTHLY ESTIMATED COST", [[f stringFromDate:endDate] uppercaseString]];
+                sectionName = [NSString stringWithFormat:@"%@ - %@", NSLocalizedString(@"MONTHLY_ESTIMATED_COST", @"MONTHLY ESTIMATED COST"), [[f stringFromDate:endDate] uppercaseString]];
             }
             else
                 sectionName = @"COVERAGE INFO";

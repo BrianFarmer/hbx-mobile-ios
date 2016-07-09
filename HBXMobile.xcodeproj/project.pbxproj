@@ -53,6 +53,10 @@
 		13A382301CDBD01A006B5984 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */; };
 		13AB81B91CE1031900EC00A9 /* BrokerAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */; };
 		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
+		13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */; };
+		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
+		13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13F169A01D2D3E70004DF9B9 /* Localizable.strings */; };
+		13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */; };
 		13FF470E1C8A2C5600C7C851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF470D1C8A2C5600C7C851 /* main.m */; };
 		13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47101C8A2C5600C7C851 /* AppDelegate.m */; };
 		13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47131C8A2C5600C7C851 /* ViewController.m */; };
@@ -138,6 +142,14 @@
 		13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrokerAccountViewController.m; sourceTree = "<group>"; };
 		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
 		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
+		13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountTableViewController.h; sourceTree = "<group>"; };
+		13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrokerAccountTableViewController.m; sourceTree = "<group>"; };
+		13B829921D2D30F600F1A571 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		13B829931D2D30F600F1A571 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		13B829951D2D32FA00F1A571 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		13F169A11D2D3E70004DF9B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerSearchResultTableViewController.h; sourceTree = "<group>"; };
+		13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerSearchResultTableViewController.m; sourceTree = "<group>"; };
 		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13FF470D1C8A2C5600C7C851 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		13FF470F1C8A2C5600C7C851 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -239,6 +251,14 @@
 			name = carriers;
 			sourceTree = "<group>";
 		};
+		13F1699F1D2D3E58004DF9B9 /* en */ = {
+			isa = PBXGroup;
+			children = (
+				13F169A01D2D3E70004DF9B9 /* Localizable.strings */,
+			);
+			name = en;
+			sourceTree = "<group>";
+		};
 		13FF47001C8A2C5600C7C851 = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +316,10 @@
 				13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */,
 				13A373101D0B279F008CA0E1 /* ConfigViewController.h */,
 				13A373111D0B279F008CA0E1 /* ConfigViewController.m */,
+				13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */,
+				13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */,
+				13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */,
+				13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -303,6 +327,7 @@
 		13FF470C1C8A2C5600C7C851 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13F1699F1D2D3E58004DF9B9 /* en */,
 				130AA2861CF1382100B43F24 /* brokerDataJson.txt */,
 				13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */,
 				1316CEAA1CC50A4C0075B214 /* Fonts */,
@@ -310,6 +335,7 @@
 				134A09D91CBE7D7F00CD3229 /* server.der */,
 				13FF47461C8A2D2900C7C851 /* Images */,
 				13FF470D1C8A2C5600C7C851 /* main.m */,
+				13B829941D2D32FA00F1A571 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -422,6 +448,7 @@
 		13FF47011C8A2C5600C7C851 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "David Boyd";
 				TargetAttributes = {
@@ -451,6 +478,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 13FF47001C8A2C5600C7C851;
 			productRefGroup = 13FF470A1C8A2C5600C7C851 /* Products */;
@@ -482,9 +510,11 @@
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
 				13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */,
 				13A3821C1CDB2E3E006B5984 /* Roboto-Thin.ttf in Resources */,
+				13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */,
 				13FF471C1C8A2C5600C7C851 /* Assets.xcassets in Resources */,
 				130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */,
 				13A3821B1CDB2E3E006B5984 /* Roboto-Regular.ttf in Resources */,
+				13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */,
 				13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
 				13A3821D1CDB2E3E006B5984 /* Roboto-ThinItalic.ttf in Resources */,
@@ -528,6 +558,7 @@
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
+				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
@@ -539,6 +570,7 @@
 				13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */,
 				13FF470E1C8A2C5600C7C851 /* main.m in Sources */,
 				138119DC1C9ADBF1000A75AA /* Constants.m in Sources */,
+				13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,10 +606,27 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		13B829941D2D32FA00F1A571 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				13B829951D2D32FA00F1A571 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		13F169A01D2D3E70004DF9B9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				13F169A11D2D3E70004DF9B9 /* Base */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		13FF47151C8A2C5600C7C851 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				13FF47161C8A2C5600C7C851 /* Base */,
+				13B829921D2D30F600F1A571 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -586,6 +635,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13FF471E1C8A2C5600C7C851 /* Base */,
+				13B829931D2D30F600F1A571 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -679,6 +729,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -695,6 +746,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = gov.dc.HBXMobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -702,6 +754,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
