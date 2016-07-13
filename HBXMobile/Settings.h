@@ -10,9 +10,9 @@
 
 @interface Settings : NSObject
 {
-    NSString *sMobileServer;
-    NSString *sEnrollServer;
-    NSString *sUser;
+//    NSString *sMobileServer;
+//    NSString *sEnrollServer;
+//    NSString *sUser;
 }
 
 @property(nonatomic,retain)NSString *sMobileServer;

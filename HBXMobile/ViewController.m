@@ -10,7 +10,7 @@
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "KeychainItemWrapper.h"
 #import "LeftMenuSlideOutTableViewController.h"
-#import "BrokerAccountViewController.h"
+#import "BrokerAccountTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Settings.h"
 
@@ -46,20 +46,8 @@
 - (UIImage *)resizeImage:(UIImage *)original
 {
     // Calculate new size given scale factor.
-    /*
-    CGSize originalSize = original.size;
-    CGSize newSize = CGSizeMake(originalSize.width * scale, originalSize.height * scale);
-    
-    // Scale the original image to match the new size.
-    UIGraphicsBeginImageContext(newSize);
-    [original drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage* compressedImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    */
-    // Calculate new size given scale factor.
     CGSize newSize = CGSizeMake(24.0f, 24.0f);
 
-    
     UIGraphicsBeginImageContext(newSize);
     [original drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -82,7 +70,6 @@
     if(IS_OS_8_OR_LATER) {
         // Use one or the other, not both. Depending on what you put in info.plist
         [self.locationManager requestWhenInUseAuthorization];
-//        [self.locationManager requestAlwaysAuthorization];
     }
 #endif
     [self.locationManager startUpdatingLocation];
@@ -99,7 +86,6 @@
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     self.navigationController.navigationBar.translucent = NO;
-
 
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
@@ -140,58 +126,21 @@
         topView.frame = CGRectMake(25, 135, screenSize.width - 45, 330);
         
         self.submitButton.frame = CGRectMake(20, 265, screenSize.width - 80, 44);
-        txtEmail.frame = CGRectMake(20, txtEmail.frame.origin.y, topView.frame.size.width - 40, 40); //txtEmail.frame.size.height);
-        txtPassword.frame = CGRectMake(20, txtEmail.frame.origin.y + txtEmail.frame.size.height + 20, topView.frame.size.width - 40, 40); //txtPassword.frame.size.height);
-//        self.enableTouchIdButton.frame = CGRectMake(screenSize.width - 160, self.enableTouchIdButton.frame.origin.y, 24, self.enableTouchIdButton.frame.size.height);
-//        lblEnableTouchID.frame = CGRectMake(self.enableTouchIdButton.frame.origin.x + 29, lblEnableTouchID.frame.origin.y, screenSize.width - 40, lblEnableTouchID.frame.size.height);
-        
-        lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40); //lblEnableTouchID.frame.size.height);
+        txtEmail.frame = CGRectMake(20, txtEmail.frame.origin.y, topView.frame.size.width - 40, 40);
+        txtPassword.frame = CGRectMake(20, txtEmail.frame.origin.y + txtEmail.frame.size.height + 20, topView.frame.size.width - 40, 40);
+        lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
         switchTouchId.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchTouchId.frame.size.width - 40, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
-        
-        lblSaveUserID.frame = CGRectMake(20, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40); //lblSaveUserID.frame.size.height);
+        lblSaveUserID.frame = CGRectMake(20, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40);
         switchSaveMe.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchSaveMe.frame.size.width - 40, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
-
         bottomView.frame = CGRectMake(bottomView.frame.origin.x, bottomView.frame.origin.y + 60, screenSize.width, screenSize.height - (bottomView.frame.origin.y + 60));
-        
-        lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);//lblDisclaimer.frame.size.height);
-        
- /*
-        UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator];
-        
-        UIView * separator1 = [[UIView alloc] initWithFrame:CGRectMake(22, txtPassword.frame.origin.y + txtPassword.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator1];
-        
-        UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, screenSize.width - 80, 1)];
-        separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
-        [topView addSubview:separator2];
-*/
+        lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);
     }
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         topView.center = CGPointMake(CGRectGetMidX(self.view.bounds), topView.center.y);
         bottomView.center = CGPointMake(CGRectGetMidX(self.view.bounds), bottomView.center.y);
-        
+    }
 
-    }
-    else
-    {
-        // Place iPad-specific code here...
-  //      self.submitButton.frame = CGRectMake(screenSize.width /2 - 100, self.submitButton.frame.origin.y, 200, 45);
-    }
-/*
-    NSString *dateStr = [NSString stringWithUTF8String:__DATE__];
-    NSString *timeStr = [NSString stringWithUTF8String:__TIME__];
-*/
-/*
-    UIImageView *pGear = [[UIImageView alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
-    pGear.backgroundColor = [UIColor clearColor];
-    pGear.image = [UIImage imageNamed:@"gear.png"];
-    pGear.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:pGear];
-*/
     UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
     UIImage *img = [UIImage imageNamed:@"gear.png"];
     [btn setImage:img forState:UIControlStateNormal];
@@ -267,6 +216,8 @@
     
     /**************************************/
     /**** USED TO REMOVE KEYBOARD *********/
+    /**** BY SELECTING SOMEWHERE  *********/
+    /**** ON SCREEN               *********/
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
@@ -274,10 +225,59 @@
     [self.view addGestureRecognizer:tap];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    REQUEST_TYPE = 0;
+    reLoad = FALSE;
+    customCookie_a = @"";
+    customCookie = @"";
+    csrfToken = @"";
+    
+    [spinningWheel stopAnimating];
+    
+    self.navigationController.navigationBarHidden = YES;
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
+        lblDB.text = @"using enroll database server";
+    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1002)
+        lblDB.text = @"using mobile notification server";
+    else
+        lblDB.text = @"using github for broker data";
+    
+#if !(TARGET_IPHONE_SIMULATOR)
+    if (bUseTouchID)
+    {
+        LAContext *myContext = [[LAContext alloc] init];
+        NSError *authError = nil;
+        NSString *myLocalizedReasonString = @"Touch ID Test to show Touch ID working in a custom app";
+        
+        if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
+            [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+                      localizedReason:myLocalizedReasonString
+                                reply:^(BOOL success, NSError *error) {
+                                    if (success) {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self performSegueWithIdentifier:@"Broker View 1" sender:nil];
+                                        });
+                                    } else {
+                                        
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                         NSLog(@"Switch to fall back authentication - ie, display a keypad or password entry box");
+                                         });
+                                    }
+                                }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"TouchID not enabled");
+            });
+        }
+    }
+#endif
+}
+
 -(void)showConfig:(id)sender
 {
     [self performSegueWithIdentifier:@"Config View" sender:nil];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -323,37 +323,22 @@
     [spinningWheel startAnimating];
 
     txtEmail.text = @"bill.murray@example.com";
+
+    if (switchSaveMe.isOn)
+    {
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
+        [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
+        [keychainItem setObject:txtEmail.text forKey:(__bridge id)kSecAttrLabel];
+        //   [keychainItem setObject:@"" forKey:(__bridge id)kSecAttrDescription];
+    }
+    else
+    {
+        //delete information
+    }
     
-//        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
-//                [self performSegueWithIdentifier:@"Show My Account" sender:nil];
-#if !(TARGET_IPHONE_SIMULATOR)
-    //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    if( [txtEmail.text caseInsensitiveCompare:@"john@dc.gov"] == NSOrderedSame )        //For DEMO Only
-//    {
-        // strings are equal except for possibly case
-//        if( [txtPassword.text isEqualToString:@"password"] ) {
-            if (switchSaveMe.isOn)
-            {
-                KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
-                [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
-                [keychainItem setObject:txtEmail.text forKey:(__bridge id)kSecAttrLabel];
-                //   [keychainItem setObject:@"" forKey:(__bridge id)kSecAttrDescription];
-                
-            }
-            else
-            {
-                //delete information
-            }
-            
-            [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
-            [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
-/*
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useEnrollDB"])
-                [self login:sender];
-            else
-                [self askSecurityQuestion:FALSE];
-    */
-    ;
+    [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
+    [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
+
     switch([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue])
     {
         case 1001:
@@ -369,25 +354,9 @@
             [self askSecurityQuestion:FALSE];
             break;
     }
-#else
-    switch([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue])
-    {
-        case 1001:
-        {
-            enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
-            [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]];
-        }
-            break;
-        case 1002:
-            mobileHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
-            [self login:mobileHost type:INITIAL_LOGIN_NS url:[NSString stringWithFormat:@"http://%@/login", mobileHost]];
-            break;
-        case 1003:
-        default:
-            [self performSegueWithIdentifier:@"Broker View" sender:nil];
-            break;
-    }
-#endif
+//#if !(TARGET_IPHONE_SIMULATOR)
+//#else
+//#endif
 }
 
 -(void)askSecurityQuestion:(BOOL)bIncorrect
@@ -420,55 +389,9 @@
                                    NSLog(@"OK action");
                                    UITextField *login = alertController.textFields.firstObject;
                                    if ([login.text caseInsensitiveCompare:@"Blue"] == NSOrderedSame)
-                                       [self performSegueWithIdentifier:@"Broker View" sender:nil];
+                                       [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
                                    else
                                        [self askSecurityQuestion:TRUE];
-                               }];
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    
-    [alertController.view setNeedsLayout];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(void)askSecurityQuestionFromMobileServer:(BOOL)bIncorrect
-{
-    UIAlertController *alertController = nil;
-    
-    alertController = [UIAlertController  alertControllerWithTitle:@"Security Question"
-                                                           message:securityQuestion
-                                                    preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
-     {
-         textField.placeholder = NSLocalizedString(@"Enter you answer here", @"Login");
-     }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction
-                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
-                                   style:UIAlertActionStyleCancel
-                                   handler:^(UIAlertAction *action)
-                                   {
-                                       NSLog(@"Cancel action");
-                                       [spinningWheel stopAnimating];
-                                   }];
-    
-    UIAlertAction *okAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction *action)
-                               {
-                                   NSLog(@"OK action");
-                                   UITextField *login = alertController.textFields.firstObject;
-                                   
-                                   if ([login.text caseInsensitiveCompare:@"Blue"] == NSOrderedSame)
-                                       [self performSegueWithIdentifier:@"Broker View" sender:nil];
-                                   else
-                                       [self askSecurityQuestionFromMobileServer:TRUE];
-                                    
-               //                    [self sendSecurityAnswer];
                                }];
     
     [alertController addAction:cancelAction];
@@ -497,50 +420,6 @@
     }
 }
 
--(void)sendSecurityAnswer
-{
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-        
-//        NSString *at = [self percentEscapeURLParameter:csrfToken];
-        //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        
-        //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
-        NSString *post = [NSString stringWithFormat:@"security=%@", @"blue"];
-        
-        NSLog(@"%@", @"\r\r POST SECURITY \r\r\r\r");
-        
-        NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
-        
-        NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-        
-        NSString *pUrl = [NSString stringWithFormat:@"http://%@/login?get_security_answer", enrollHost];
-        
-        [request setURL:[NSURL URLWithString:pUrl]];
-        
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        
-        [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
-
-    [request setHTTPBody:postData];
-    
-    NSLog(@"%@", [request allHTTPHeaderFields]);
-    
-    customCookie_a = customCookie;
-    
-    REQUEST_TYPE = IS_SECURITY_VALID;
-    
-    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    if(conn) {
-        NSLog(@"Connection Successful");
-    } else {
-        NSLog(@"Connection could not be made");
-    }
-
-}
-
 - (IBAction)login:(NSString *)host type:(int)requestType url:(NSString*)pUrl
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
@@ -563,157 +442,6 @@
     } else {
         NSLog(@"Connection could not be made");
     }
- 
-/*
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
-
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response,
-                                               NSData *data, NSError *connectionError)
-     {
-         if (data.length > 0 && connectionError == nil)
-         {
-             NSString *rString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-             NSLog(@"%@", rString);
-             
-             _responseData = [[NSMutableData alloc] init];
-             
-            NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
-             
-             NSDictionary *headerFields = [httpResponse allHeaderFields];
-             if ([[headerFields valueForKey:@"Set-Cookie"] length] > 0)
-             {
-                 customCookie = [headerFields valueForKey:@"Set-Cookie"];
-                 
-                 //EXTRACT COOKIE SESSION_ID
-                 //
-                 NSRange startRange = [customCookie rangeOfString:@"="];
-                 customCookie = [customCookie substringWithRange:NSMakeRange(startRange.location+1, customCookie.length - (startRange.location+1))];
-                 
-                 NSRange startRange1 = [customCookie rangeOfString:@";"];
-                 customCookie = [customCookie substringWithRange:NSMakeRange(0, startRange1.location)];
-                 //////////////////////////////
-                 //////////////////////////////
-                 
-             }
-
-             //EXTRACT CSRF TOKEN
-             //
-             NSRange startRange = [rString rangeOfString:@"<meta name=\"csrf-token\" content=\""];
-             if (startRange.length > 0)
-             {
-                 NSString *substring = [rString substringFromIndex:startRange.location+33];
-                 NSRange endRange = [substring rangeOfString:@"==\""];
-                 
-                 csrfToken = [substring substringWithRange:NSMakeRange(0, endRange.location+2)];
-                 
-                 NSLog(@"%@\n", csrfToken);
-                 
-                 if ([csrfToken length] > 0 && [customCookie length] > 0)
-                     [self POSTLogin1];
-             }
-
-         }
-     }];
-*/
-}
-
--(void)POSTLogin1
-{
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    
-    NSString *at = [self percentEscapeURLParameter:csrfToken];
-    //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
-    //    NSString *post = [NSString stringWithFormat:@"user[email]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
-    NSString *post = [NSString stringWithFormat:@"user[email]=%@&user[password]=Test123!&authenticity_token=%@", txtEmail.text, at];
-    
-    NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
-    
-    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
-    
-    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-    
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost];
-    
-    [request setURL:[NSURL URLWithString:pUrl]];
-    
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    
-    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
-    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    
-    //    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
-    
-    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                enrollHost, NSHTTPCookieDomain,
-                                @"/", NSHTTPCookiePath,  // IMPORTANT!
-                                @"_session_id", NSHTTPCookieName,
-                                customCookie, NSHTTPCookieValue,
-                                nil];
-    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
-    
-    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
-    
-    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
-    
-    [request setAllHTTPHeaderFields:headers];
-    [request setHTTPBody:postData];
-    
-    NSLog(@"%@", [request allHTTPHeaderFields]);
-    
-    customCookie_a = customCookie;
-    
-    REQUEST_TYPE = POST_LOGIN_DONE;
-/*
-    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    if(conn) {
-        NSLog(@"Connection Successful");
-    } else {
-        NSLog(@"Connection could not be made");
-    }
- */
-    reLoad = TRUE;
- 
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response,
-                                               NSData *data, NSError *connectionError)
-     {
-//         [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
-        NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
-         NSArray* authToken = [NSHTTPCookie
-                               cookiesWithResponseHeaderFields:[httpResponse allHeaderFields]
-                               forURL:[NSURL URLWithString:@""]];
-         
-         if ([authToken count] > 0)
-         {
-             NSLog(@"cookies from the http POST %@", authToken);
-             for (int i = 0; i < [authToken count]; i++)
-             {
-                 NSHTTPCookie *cookie = [authToken objectAtIndex:i];
-                 NSLog(@"%@ for %@:%@",[cookie name], [cookie domain], [cookie value]);
-                 if ([[cookie name] isEqualToString:@"_session_id"])
-                     customCookie_a = [cookie value];
-             }
-             //[self doReload];
-             reLoad = TRUE;
-         }
-     
-     NSLog(@"%@", [request allHTTPHeaderFields]);
-
-                     [self doReload];
-     }];
 }
 
 -(void)POSTLogin
@@ -740,7 +468,6 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    
     [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
     //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
@@ -969,7 +696,6 @@
             NSLog(@"%@\n", csrfToken);
         }
     
-    
     switch (REQUEST_TYPE) {
         case GET_BROKER_ID:
             {
@@ -992,7 +718,7 @@
             obj.sEnrollServer = enrollHost;
             obj.sMobileServer = mobileHost;
             
-            [self performSegueWithIdentifier:@"Broker View" sender:nil];
+            [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
         }
             break;
         case INITIAL_LOGIN_NS:
@@ -1082,94 +808,23 @@
     } else {
         NSLog(@"Connection could not be made");
     }
-    //  customCookie = customCookie_a;
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    REQUEST_TYPE = 0;
-    reLoad = FALSE;
-    customCookie_a = @"";
-    customCookie = @"";
-    csrfToken = @"";
-    
-    [spinningWheel stopAnimating];
-    
-    self.navigationController.navigationBarHidden = YES;
-    
-    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
-        lblDB.text = @"using enroll database server";
-    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1002)
-        lblDB.text = @"using mobile notification server";
-    else 
-        lblDB.text = @"using github for broker data";
-
-
-#if !(TARGET_IPHONE_SIMULATOR)
-    if (bUseTouchID)
-    {
-        LAContext *myContext = [[LAContext alloc] init];
-        NSError *authError = nil;
-        NSString *myLocalizedReasonString = @"Touch ID Test to show Touch ID working in a custom app";
-        
-        if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
-            [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
-                      localizedReason:myLocalizedReasonString
-                                reply:^(BOOL success, NSError *error) {
-                                    if (success) {
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                            [self performSegueWithIdentifier:@"Broker View" sender:nil];
-                                            //  lblStatus.text = @"You have logged in with Touch ID";
-                                        });
-                                    } else {
-                                        /*
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                         message:error.description
-                                         delegate:self
-                                         cancelButtonTitle:@"OK"
-                                         otherButtonTitles:nil, nil];
-                                         [alertView show];
-                                         NSLog(@"Switch to fall back authentication - ie, display a keypad or password entry box");
-                                         });
-                                         */
-                                    }
-                                }];
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                /*
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                    message:authError.description
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"OK"
-                                                          otherButtonTitles:nil, nil];
-                // Commented this out if touchid is not enabled.
-                // Maybe add some code to ask or something
-                //                [alertView show];
-                 */
-            });
-        }
-    }
-#endif
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"Broker View"])
+    if ([[segue identifier] isEqualToString:@"BrokerTable"])
     {
-        /*
         // Get destination view
-        BrokerAccountViewController *vc = [segue destinationViewController];
+        BrokerAccountTableViewController *vc = [segue destinationViewController];
         vc.jsonData = responseString;
         vc.customCookie_a = customCookie_a;
         vc.enrollHost = enrollHost;
         vc._brokerId = _brokerId;
-         */
     }
 }
 
 -(void)dismissKeyboard {
-        [self.view endEditing:YES];
+    [self.view endEditing:YES];
 }
 
 @end

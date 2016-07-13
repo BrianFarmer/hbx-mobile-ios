@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
 #import <MessageUI/MessageUI.h>
+#import "brokerSearchResultTableViewController.h"
 
 typedef NS_ENUM(NSInteger, enrollmentState) {
     NEEDS_ATTENTION,
@@ -18,19 +19,6 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 };
 
 @interface tabTypeItem : NSObject
-{
-/*
-    int         type;           //Used to show if detail page was expanded. Not used not becuase we are no longer showing detail drop down table row
-    enrollmentState status;     //Used to differentiate between Need immediate action rows and open enrollment met.
-    NSString    *companyName;
-    NSString    *employeesSignedup;
-    NSString    *employeesWaived;
-    NSString    *planMinimum;
-    NSString    *employeesTotal;
-    NSString    *planEnrollmentStartDate;
-    NSString    *planEnrollmentEndDate;
-*/
- }
 
 @property (nonatomic, assign) int type;
 @property (nonatomic, assign) enrollmentState status;
@@ -57,7 +45,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *active_general_agency;
 @end
 
-@interface BrokerAccountViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate, MFMessageComposeViewControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface BrokerAccountViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, MGSwipeTableCellDelegate, MFMessageComposeViewControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, searchDelegate>
 {
     IBOutlet UITableView *brokerTable;
     
@@ -89,6 +77,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
     NSString *enrollHost;
     
     UIBarButtonItem *searchButton;
+    BOOL firstTime;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

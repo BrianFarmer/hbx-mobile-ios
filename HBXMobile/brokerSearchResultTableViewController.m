@@ -7,7 +7,7 @@
 //
 
 #import "brokerSearchResultTableViewController.h"
-#import "BrokerAccountViewController.h"
+
 #import "brokerPlanDetailViewController.h"
 
 @interface brokerSearchResultTableViewController ()
@@ -26,6 +26,12 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     sections = [[NSArray alloc] initWithObjects: NSLocalizedString(@"table-section-open-enrollment", @"OPEN ENROLLMENT IN PROGRESS"), NSLocalizedString(@"table-section-renewals-in-progress", @"RENEWALS IN PROGRESS"), NSLocalizedString(@"table-section-all-others", @"ALL OTHER CLIENTS"), nil];
 
+    if (!expandedSections)
+        expandedSections = [[NSMutableIndexSet alloc] init];
+
+    [expandedSections addIndex:0];
+    [expandedSections addIndex:1];
+    [expandedSections addIndex:2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,15 +46,18 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self.filteredProducts objectAtIndex:section] count];
+    if ([expandedSections containsIndex:section])
+        return [[self.filteredProducts objectAtIndex:section] count];
+    
+    return 0; // only top row showing
 }
 
 -(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings;
 {
-    expansionSettings.buttonIndex = 1;//data.rightExpandableIndex;
+    expansionSettings.buttonIndex = 1;
     expansionSettings.fillOnTrigger = NO;
-    return [self createLeftButtons:4];//data.rightButtonsCount];
+    return [self createLeftButtons:4];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -124,13 +133,21 @@
     return result;
 }
 
+- (void)handleTap:(UITapGestureRecognizer *)sender {
+    UIView *pHeaderView = (UIView*)sender.view;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [self tableView:self.tableView didSelectHeader:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier2 = @"prototypeCell";
     
     MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
     
-    tabTypeItem *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
     if ( cell == nil )
         cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
@@ -222,6 +239,51 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView didSelectHeader:(NSIndexPath *)indexPath
+{
+    if (!indexPath.row)
+    {
+        // only first row toggles exapand/collapse
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        NSInteger section = indexPath.section;
+        BOOL currentlyExpanded = [expandedSections containsIndex:section];
+        NSInteger rows;
+        
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        
+        if (currentlyExpanded)
+        {
+            rows = [self tableView:tableView numberOfRowsInSection:section];
+            [expandedSections removeIndex:section];
+        }
+        else
+        {
+            [expandedSections addIndex:section];
+            rows = [self tableView:tableView numberOfRowsInSection:section];
+        }
+        
+        for (int i=0; i<rows; i++) ///(DB) modified this from i=1 to i=0 to account for viewHeader being clicked and not first row.
+        {
+            NSIndexPath *tmpIndexPath = [NSIndexPath indexPathForRow:i
+                                                           inSection:section];
+            [tmpArray addObject:tmpIndexPath];
+        }
+        
+        if (currentlyExpanded)
+        {
+            [tableView deleteRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationTop];
+            
+            //              cell.accessoryView = [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeDown];
+        }
+        else
+        {
+            [tableView insertRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationTop];
+            //            cell.accessoryView =  [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeUp];
+        }
+    }
+}
+
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
@@ -276,22 +338,9 @@
 }
 */
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"Broker Detail Page"])
-    {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        // Get destination view
-        brokerPlanDetailViewController *vc = [segue destinationViewController];
-        tabTypeItem *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        vc.bucket = indexPath.section;
-        vc.type = ttype;
-     }
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"Broker Detail Page" sender:self];
+    [_delegate didSelectSearchItem:[[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     return;
 }

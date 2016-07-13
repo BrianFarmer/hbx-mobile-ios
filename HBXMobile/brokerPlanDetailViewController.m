@@ -7,10 +7,11 @@
 //
 
 #import "brokerPlanDetailViewController.h"
-#include "BrokerAccountViewController.h"
-#import  "QuartzCore/QuartzCore.h"
+#import "brokerEmployersData.h"
+#import "QuartzCore/QuartzCore.h"
 #import <MapKit/MapKit.h>
 #import <MessageUI/MessageUI.h>
+#import "popupMessageBox.h"
 
 @interface brokerPlanDetailViewController ()
 
@@ -41,10 +42,8 @@
     }
 
     myTabBar.hidden = TRUE;
-//    int xx = myTabBar.frame.size.height;
-//    int yy = self.navigationController.navigationBar.frame.size.height;
-    
     myTabBar.frame = CGRectMake(0,screenSize.height - self.navigationController.navigationBar.frame.size.height - 49 - sSize.size.height, screenSize.width, 49);
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600 && [UIScreen mainScreen].nativeScale < 2.8f)
     {
         vHeader.frame = CGRectMake(0,0,screenSize.width,135);
@@ -59,20 +58,6 @@
     pCompany.textAlignment = NSTextAlignmentCenter;
     pCompany.text = type.companyName;
     
-//    pCompany.backgroundColor = [UIColor blueColor];
-/*
-    CGSize labelSize = [pCompany.text sizeWithFont:pCompany.font
-                                constrainedToSize:pCompany.frame.size
-                                    lineBreakMode:NSLineBreakByWordWrapping];
-    
-    CGFloat labelHeight = labelSize.height;
-    
-    
-    int lines = [pCompany.text sizeWithFont:pCompany.font
-                         constrainedToSize:pCompany.frame.size
-                             lineBreakMode:NSLineBreakByWordWrapping].height/23;
-    // '23' is font size
- */
     long lNotCompleted = [type.employeesTotal integerValue] - ([type.employeesEnrolled integerValue] + [type.employeesWaived integerValue]);
     NSString *notCompleted = [NSString stringWithFormat:@"%ld", lNotCompleted];
 
@@ -273,6 +258,8 @@
                 action:@selector(emailEmployer:)
       forControlEvents:UIControlEventTouchUpInside];
     [vHeader addSubview:button3];
+    
+    bPhoneSectionShowing = FALSE;
 
 }
 
@@ -287,7 +274,33 @@
 }
 
 - (IBAction)phoneEmployer:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",@"12024686571"]]];
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",@"12024686571"]]];
+//    return;
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext; //UIModalPresentationPopover; //UIModalPresentationFullScreen;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = type.companyName;
+    sub.messageArray = type.phones;
+    [self presentViewController:sub animated:YES completion: nil];
+
+   /*
+    [myTable beginUpdates];
+    
+    if (!bPhoneSectionShowing)
+    {
+        bPhoneSectionShowing = TRUE;
+        
+        [myTable insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
+    }
+    else
+    {
+        bPhoneSectionShowing = FALSE;
+        
+        [myTable deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
+
+    }
+    [myTable endUpdates];
+    */
 }
 
 - (IBAction)smsEmployer:(id)sender {
@@ -300,7 +313,6 @@
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
     picker.messageComposeDelegate = self;
     picker.recipients = [NSArray arrayWithObjects:@"12024686571", nil];
- //   picker.body = yourTextField.text;
 
     [self presentViewController:picker animated:YES completion:nil];
 }
@@ -440,21 +452,22 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (type.active_general_agency != (NSString *)[NSNull null] && [type.active_general_agency length] > 0)
-        return 4;
+        return 4 + bPhoneSectionShowing;
     
-    return 3;
+    int uu = 3 + bPhoneSectionShowing;
+    return uu;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 0 + bPhoneSectionShowing)
         return [topSectionNames count];
 
-    if (section == 1)
+    if (section == 1 + bPhoneSectionShowing)
         return [midSectionNames count];
 
-    if (section == 3)
+    if (section == 3 + bPhoneSectionShowing)
         return 1;
 
     return 3;
@@ -549,6 +562,7 @@
             break;
     }
     
+    
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
 
@@ -559,6 +573,12 @@
     UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, SECTION_HEIGHT)];
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.frame.size.width, 15)];
     label.backgroundColor = [UIColor clearColor];
+    if (bPhoneSectionShowing && section == 0)
+    {
+        sectionName = @"PHONE NUMBERS";
+        sectionView.backgroundColor = [UIColor whiteColor];
+    }
+    
     label.font = [UIFont fontWithName:@"Roboto-BOLD" size:headeFontSize+2];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
@@ -700,8 +720,15 @@
     cell.textLabel.textColor = [UIColor darkGrayColor];
 
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize];
+
+    if (bPhoneSectionShowing && indexPath.section == 0)
+    {
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.textLabel.text = @"Bill Murray";
+        cell.detailTextLabel.text = @"1-202-456-7890";
+    }
     
-    if (indexPath.section == 0)
+    if (indexPath.section == 0 + bPhoneSectionShowing)
     {
         cell.textLabel.text = [topSectionNames objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [topSectionValues objectAtIndex:indexPath.row];
@@ -762,7 +789,7 @@
          */
     }
 
-    if (indexPath.section == 1)
+    if (indexPath.section == 1 + bPhoneSectionShowing)
     {
         cell.textLabel.text = [midSectionNames objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [midSectionValues objectAtIndex:indexPath.row];
@@ -796,7 +823,7 @@
         }
     }
 
-    if (indexPath.section == 2)
+    if (indexPath.section == 2 + bPhoneSectionShowing)
     {
         if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
         {
@@ -833,7 +860,7 @@
         else
             [self showCellCosts:cell indexPath:indexPath];
     }
-    if (indexPath.section == 3)
+    if (indexPath.section == 3 + bPhoneSectionShowing)
     {
         cell.textLabel.text = @"General Agency";
         cell.detailTextLabel.text = type.active_general_agency;

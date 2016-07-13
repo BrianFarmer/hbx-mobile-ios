@@ -132,6 +132,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <segue destination="BJO-um-fM0" kind="push" identifier="Broker View" id="M1G-1s-kR4"/>
                         <segue destination="TLe-x9-diw" kind="push" identifier="Config View" id="Bg8-mz-D2f"/>
                         <segue destination="6eE-vy-OqQ" kind="push" identifier="Broker View 1" id="Jwg-Ju-xw4"/>
+                        <segue destination="KKs-7c-HiG" kind="push" identifier="BrokerTable" id="7e4-Ge-fDl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -193,12 +194,12 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     </tableView>
                     <navigationItem key="navigationItem" id="vu9-45-t3k"/>
                     <connections>
-                        <segue destination="7Ew-gz-wuR" kind="push" identifier="Broker Detail Page" id="jsv-1g-VSj"/>
+                        <segue destination="7Ew-gz-wuR" kind="push" identifier="Broker Detail Page1" id="jsv-1g-VSj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EoO-lR-plp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-102" y="392"/>
+            <point key="canvasLocation" x="246" y="1052"/>
         </scene>
         <!--Broker View-->
         <scene sceneID="d0Q-wu-EC2">
@@ -300,7 +301,40 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="262" y="398"/>
+            <point key="canvasLocation" x="-154" y="410"/>
+        </scene>
+        <!--Broker Account Table View Controller-->
+        <scene sceneID="tQ7-uk-R9C">
+            <objects>
+                <tableViewController storyboardIdentifier="BrokerTable" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="currentContext" id="KKs-7c-HiG" customClass="BrokerAccountTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="OKd-dc-J0W">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="kf2-MS-2uN">
+                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kf2-MS-2uN" id="Ex9-Jh-qSC">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="KKs-7c-HiG" id="UiF-ke-NTG"/>
+                            <outlet property="delegate" destination="KKs-7c-HiG" id="fo6-FQ-ajY"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" id="X0P-2M-xEO"/>
+                    <connections>
+                        <segue destination="7Ew-gz-wuR" kind="push" identifier="Broker Detail Page" id="wL3-OG-3Hu"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wmp-38-KAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="683" y="58"/>
         </scene>
         <!--Broker Plan Detail View Controller-->
         <scene sceneID="x8n-Xm-Tsp">
@@ -370,7 +404,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gr0-Rd-SbL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="679.5" y="447.5"/>
+            <point key="canvasLocation" x="1177.5" y="443.5"/>
         </scene>
         <!--Slide Out Menu-->
         <scene sceneID="d0p-NW-UJy">
@@ -414,7 +448,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="WYQ-EH-Yab"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Lex-N8-dcl"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gkl-RT-4KA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -423,6 +457,6 @@ If you are not an exisiting customer please sign up on your home computer.</stri
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jsv-1g-VSj"/>
+        <segue reference="wL3-OG-3Hu"/>
     </inferredMetricsTieBreakers>
 </document>

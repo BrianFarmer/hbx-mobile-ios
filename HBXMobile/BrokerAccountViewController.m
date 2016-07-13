@@ -13,7 +13,8 @@
 #import <MessageUI/MessageUI.h>
 #import "Settings.h"
 #import "ViewController.h"
-#import "brokerSearchResultTableViewController.h"
+#import "SlideNavigationController.h"
+
 
 @implementation tabTypeItem
 @synthesize companyName, planYear, employeesEnrolled, employeesWaived, planMinimum, employeesTotal, open_enrollment_begins, open_enrollment_ends;
@@ -44,7 +45,12 @@
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.leftBarButtonItem = nil;
+    self.navigationController.navigationBar.translucent = NO;
 
+    self.automaticallyAdjustsScrollViewInsets = YES;
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        self.edgesForExtendedLayout = UIRectEdgeNone;   // iOS 7 specific
+    
 //    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 //    [[UINavigationBar appearance] setTintColor:[UIColor redColor]];
     clients_needing_immediate_attention = 0;
@@ -82,6 +88,8 @@
     brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
  //   UINavigationController *searchResultsController = [[self storyboard] instantiateViewControllerWithIdentifier:@"resultsTable"]; //TableSearchResultsNavController
 
+    _resultsTableController.delegate = self;
+    
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
     self.searchController.delegate = self;
     self.searchController.searchResultsUpdater = self;
@@ -119,24 +127,34 @@
   
 //(SB)    [self.searchDisplayController.searchResultsTableView setRowHeight:brokerTable.rowHeight];
 
+    firstTime = YES;
     [self processData];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGRect rect = self.navigationController.navigationBar.frame;
+    float y = rect.size.height + rect.origin.y;
+    brokerTable.contentInset = UIEdgeInsetsMake(y, 0, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    /*
     if([brokerTable respondsToSelector:@selector(edgesForExtendedLayout)])
     {
         self.edgesForExtendedLayout = UIRectEdgeNone;
         self.automaticallyAdjustsScrollViewInsets = YES;
     }
-    
+    */
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     
-    CGRect rc = brokerTable.frame;
-//    brokerTable.frame = CGRectMake(0, 65, screenSize.width, self.view.frame.size.height - 65);
-
-    static BOOL firstTime = YES;
+    SlideNavigationController *pc = [SlideNavigationController sharedInstance];
+    brokerTable.frame = CGRectMake(0, 0, screenSize.width, self.view.frame.size.height - 65);
+    CGRect rc =  brokerTable.frame; //pc.view.frame;//popToRootViewControllerAnimated:FALSE]; //brokerTable.frame;
+    
     if (!firstTime)
     {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
@@ -195,12 +213,9 @@
 
 -(void)setIntroHeader:(int)iFontsize
 {
-//    self.searchController.searchResultsController.hea
-//    brokerTable.tableHeaderView = nil;
-//    return;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, brokerTable.frame.size.width, 40)];
     headerView.backgroundColor = [UIColor whiteColor];
-    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, brokerTable.frame.size.width, 40)];
+    UILabel *labelView = [[UILabel alloc] initWithFrame:headerView.bounds];
     labelView.numberOfLines = 2;
     labelView.lineBreakMode = NSLineBreakByWordWrapping;
     labelView.textAlignment = NSTextAlignmentCenter;
@@ -1183,5 +1198,12 @@
         [tableView deselectRowAtIndexPath:indexPath animated:YES];        
         return;
     }
+}
+
+- (void)didSelectSearchItem
+{
+    firstTime = TRUE;
+    [self performSegueWithIdentifier:@"Broker Detail Page" sender:self];
+    return;
 }
 @end

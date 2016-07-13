@@ -20,7 +20,4 @@
     
     int eUseWhichServer;
 }
-
-//@property (nonatomic, retain) NSIndexPath* checkedIndexPath;
-
 @end

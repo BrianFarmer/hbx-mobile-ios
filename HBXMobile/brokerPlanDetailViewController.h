@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BrokerAccountViewController.h"
+#import <MessageUI/MessageUI.h>
+#import "brokerEmployersData.h"
 
 @interface brokerPlanDetailViewController : UIViewController <MFMessageComposeViewControllerDelegate>
 {
-    tabTypeItem *type;
+    brokerEmployersData *type;
     
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
@@ -28,10 +29,11 @@
     NSArray *midSectionNames;
     
     int     globalFontSize;
+    BOOL    bPhoneSectionShowing;
     
 }
 
-@property (strong, nonatomic) tabTypeItem *type;
+@property (strong, nonatomic) brokerEmployersData *type;
 @property(nonatomic, assign) long bucket;
 
 

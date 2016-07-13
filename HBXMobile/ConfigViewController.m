@@ -79,11 +79,6 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     NSIndexPath *item = [NSIndexPath indexPathForRow:checkedIndexPath.row+1 inSection: 0];
     UITableViewCell* cell = [configTable cellForRowAtIndexPath:item];
@@ -128,9 +123,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
-//    if (theTextField == self.playerNameField) {
-        [theTextField resignFirstResponder];
-//    }
+    [theTextField resignFirstResponder];
     [self.navigationController popViewControllerAnimated:YES];
     return YES;
 }

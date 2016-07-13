@@ -26,16 +26,16 @@ static Settings *instance =nil;
 
 -(NSString *)getMobileServer
 {
-    return sMobileServer;
+    return _sMobileServer;
 }
 
 -(NSString *)getEnrollServer
 {
-    return sEnrollServer;
+    return _sEnrollServer;
 }
 
 -(NSString *)getUser
 {
-    return sUser;
+    return _sUser;
 }
 @end

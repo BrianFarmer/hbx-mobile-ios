@@ -11,6 +11,9 @@
 		130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 130AA2821CEE568900B43F24 /* MessageUI.framework */; };
 		130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2861CF1382100B43F24 /* brokerDataJson.txt */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
+		13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AF51D352D520097D245 /* brokerEmployersData.m */; };
+		13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AFB1D366FE60097D245 /* popupMessageBox.m */; };
+		13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13273AFC1D366FE60097D245 /* popupMessageBox.xib */; };
 		13316B141D21B0D9001A450C /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 13316B131D21B0D9001A450C /* Settings.m */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
 		134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */ = {isa = PBXBuildFile; fileRef = 134A09DC1CBE817000CD3229 /* SSL Certificate Creation */; };
@@ -51,7 +54,6 @@
 		13A3822A1CDB303E006B5984 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382291CDB303E006B5984 /* bell.png */; };
 		13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */; };
 		13A382301CDBD01A006B5984 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */; };
-		13AB81B91CE1031900EC00A9 /* BrokerAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */; };
 		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
 		13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */; };
 		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
@@ -91,6 +93,11 @@
 		130AA2821CEE568900B43F24 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		130AA2861CF1382100B43F24 /* brokerDataJson.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = brokerDataJson.txt; sourceTree = "<group>"; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		13273AF41D352D520097D245 /* brokerEmployersData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerEmployersData.h; sourceTree = "<group>"; };
+		13273AF51D352D520097D245 /* brokerEmployersData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerEmployersData.m; sourceTree = "<group>"; };
+		13273AFA1D366FE60097D245 /* popupMessageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = popupMessageBox.h; sourceTree = "<group>"; };
+		13273AFB1D366FE60097D245 /* popupMessageBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = popupMessageBox.m; sourceTree = "<group>"; };
+		13273AFC1D366FE60097D245 /* popupMessageBox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = popupMessageBox.xib; sourceTree = "<group>"; };
 		13316B121D21B0D9001A450C /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		13316B131D21B0D9001A450C /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		134A09D91CBE7D7F00CD3229 /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
@@ -138,8 +145,6 @@
 		13A382291CDB303E006B5984 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bell.png; path = images/bell.png; sourceTree = "<group>"; };
 		13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dchllogo_withouttag-2.png"; path = "images/dchllogo_withouttag-2.png"; sourceTree = "<group>"; };
 		13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sampleMyPlanJSON.txt; path = ../../sampleMyPlanJSON.txt; sourceTree = "<group>"; };
-		13AB81B71CE1031900EC00A9 /* BrokerAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountViewController.h; sourceTree = "<group>"; };
-		13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrokerAccountViewController.m; sourceTree = "<group>"; };
 		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
 		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
 		13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountTableViewController.h; sourceTree = "<group>"; };
@@ -310,8 +315,6 @@
 				137327551C8DECA800B0F6E1 /* SlideNavigationController.m */,
 				137327571C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.h */,
 				137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */,
-				13AB81B71CE1031900EC00A9 /* BrokerAccountViewController.h */,
-				13AB81B81CE1031900EC00A9 /* BrokerAccountViewController.m */,
 				13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */,
 				13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */,
 				13A373101D0B279F008CA0E1 /* ConfigViewController.h */,
@@ -320,6 +323,11 @@
 				13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */,
 				13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */,
 				13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */,
+				13273AF41D352D520097D245 /* brokerEmployersData.h */,
+				13273AF51D352D520097D245 /* brokerEmployersData.m */,
+				13273AFA1D366FE60097D245 /* popupMessageBox.h */,
+				13273AFB1D366FE60097D245 /* popupMessageBox.m */,
+				13273AFC1D366FE60097D245 /* popupMessageBox.xib */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -503,6 +511,7 @@
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				13FF471F1C8A2C5600C7C851 /* LaunchScreen.storyboard in Resources */,
 				130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */,
+				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
 				13A3822A1CDB303E006B5984 /* bell.png in Resources */,
@@ -561,12 +570,13 @@
 				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
+				13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
 				13316B141D21B0D9001A450C /* Settings.m in Sources */,
 				13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */,
 				134DE7A11CECEF6600F8958A /* MGSwipeTableCell.m in Sources */,
+				13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */,
 				13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */,
-				13AB81B91CE1031900EC00A9 /* BrokerAccountViewController.m in Sources */,
 				13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */,
 				13FF470E1C8A2C5600C7C851 /* main.m in Sources */,
 				138119DC1C9ADBF1000A75AA /* Constants.m in Sources */,

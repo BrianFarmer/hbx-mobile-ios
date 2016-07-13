@@ -9,11 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
 
+@protocol searchDelegate
+
+-(void)didSelectSearchItem:(id)tt;
+
+@end
+
 @interface brokerSearchResultTableViewController : UITableViewController <MGSwipeTableCellDelegate>
 {
     NSArray *sections;
+    
+    NSMutableIndexSet *expandedSections;
 }
 
 @property (nonatomic, strong) NSArray *filteredProducts;
+@property (nonatomic, weak)id<searchDelegate> delegate;
 
 @end
