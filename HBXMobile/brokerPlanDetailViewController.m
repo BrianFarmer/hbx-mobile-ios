@@ -11,7 +11,6 @@
 #import "QuartzCore/QuartzCore.h"
 #import <MapKit/MapKit.h>
 #import <MessageUI/MessageUI.h>
-#import "popupMessageBox.h"
 
 @interface brokerPlanDetailViewController ()
 
@@ -21,10 +20,64 @@
 
 #define SECTION_HEIGHT  50
 
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:1.0]
+
 @synthesize type, bucket;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
+    //    UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 160, 42)];
+    pView1.backgroundColor = [UIColor clearColor];
+    //    pView1.image = [UIImage imageNamed:@"BrokerMVP_AppHeader200x40WHT.png"];
+    pView1.image = [UIImage imageNamed:@"navHeader"];//[UIImage imageNamed:@"BrokerMVP_AppHeader200x40_144ppi_WHT.png"];
+    pView1.contentMode = UIViewContentModeCenter;// UIViewContentModeScaleAspectFill;
+    
+    self.navigationItem.titleView = pView1;
+
+    // Send a synchronous request
+//    NSString *pUrl = [NSString stringWithFormat:@"http://%@%@", _enrollHost, type.detail_url];
+    NSString *pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, type.detail_url];
+    
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    
+    [urlRequest setURL:[NSURL URLWithString:pUrl]];
+    [urlRequest setHTTPMethod:@"GET"];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    
+    
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        
+        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    }
+    
     // Do any additional setup after loading the view.
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
@@ -36,35 +89,39 @@
     else
     {
         if ([UIScreen mainScreen].nativeScale > 2.8f)
-            globalFontSize = 14;
+            globalFontSize = 16;
         else
-            globalFontSize = 15;
+            globalFontSize = 16;
     }
 
-    myTabBar.hidden = TRUE;
+    myTabBar.hidden = FALSE;
     myTabBar.frame = CGRectMake(0,screenSize.height - self.navigationController.navigationBar.frame.size.height - 49 - sSize.size.height, screenSize.width, 49);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600 && [UIScreen mainScreen].nativeScale < 2.8f)
     {
-        vHeader.frame = CGRectMake(0,0,screenSize.width,135);
-        pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:23.0];
+        vHeader.frame = CGRectMake(0,0,screenSize.width,115);
+        pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24.0];
         pCompany.frame = CGRectMake(0, 0, screenSize.width, 65);//pCompany.frame.size.height);
     }
-    else{
+    else
+    {
         vHeader.frame = CGRectMake(0,0,screenSize.width,115);
-        pCompany.font =        [UIFont fontWithName:@"Roboto-Bold" size:19.0];
-        pCompany.frame = CGRectMake(0, 0, screenSize.width, 45);//pCompany.frame.size.height);
+        pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
+        pCompany.frame = CGRectMake(0, 0, screenSize.width, 65);//pCompany.frame.size.height);
     }
+    
     pCompany.textAlignment = NSTextAlignmentCenter;
     pCompany.text = type.companyName;
     
-    long lNotCompleted = [type.employeesTotal integerValue] - ([type.employeesEnrolled integerValue] + [type.employeesWaived integerValue]);
+
+    long lNotCompleted = [[dictionary valueForKeyPath:@"employees_total"] integerValue] - ([[dictionary valueForKeyPath:@"employees_enrolled"] integerValue] + [[dictionary valueForKeyPath:@"employees_waived"] integerValue]);
+    
     NSString *notCompleted = [NSString stringWithFormat:@"%ld", lNotCompleted];
 
     NSDate *today = [NSDate date];
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
-    [f setDateFormat:@"MM-dd-yyyy"];
+    [f setDateFormat:@"yyyy-MM-dd"];
     
     NSDate *endDate = [f dateFromString:type.open_enrollment_ends];
     
@@ -131,8 +188,16 @@
     }
     else
     {
-        topSectionNames = [[NSArray alloc] initWithObjects: @"Total Premium", @"Employee Contribution", @"Employer Contribution", nil];
-        topSectionValues = [[NSArray alloc] initWithObjects: type.total_premium, type.employee_contribution, type.employer_contribution, nil];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        [numberFormatter setMaximumFractionDigits:2];
+
+        ;
+        
+        topSectionNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
+        topSectionValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
+        //        topSectionValues = [[NSArray alloc] initWithObjects: type.employee_contribution, type.employer_contribution, type.total_premium, nil];
+        
     }
 
     /////////////////////////////////////////////////
@@ -144,17 +209,20 @@
     
     if (type.status == (enrollmentState)NEEDS_ATTENTION)
     {
-        midSectionNames = [[NSArray alloc] initWithObjects: @"Must Participate to Meet Minimum", @"Enrolled", @"Waived", @"Not Completed", @"Total Employees", nil];
-        midSectionValues = [[NSArray alloc] initWithObjects: type.planMinimum, type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Must Participate to Meet Minimum", @"Enrolled", @"Waived", @"Not Completed", @"TOTAL EMPLOYEES", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: [[dictionary valueForKeyPath:@"minimum_participation_required"] stringValue], [[dictionary valueForKeyPath:@"employees_enrolled"] stringValue], [[dictionary valueForKeyPath:@"employees_waived"] stringValue], notCompleted, [[dictionary valueForKeyPath:@"employees_total"] stringValue], nil];
+//        midSectionValues = [[NSArray alloc] initWithObjects: type.planMinimum, type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
     }
     else if (type.status == (enrollmentState)OPEN_ENROLLMENT_MET)    {
-        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Completed", @"Total Employees", nil];
-        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Completed", @"TOTAL EMPLOYEES", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: [[dictionary valueForKeyPath:@"employees_enrolled"] stringValue], [[dictionary valueForKeyPath:@"employees_waived"] stringValue], notCompleted, [[dictionary valueForKeyPath:@"employees_total"] stringValue], nil];
+//        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
     }
     else
     {
-        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Enrolled", @"Total Employees", nil];
-        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];        
+        midSectionNames = [[NSArray alloc] initWithObjects: @"Enrolled", @"Waived", @"Not Enrolled", @"TOTAL EMPLOYEES", nil];
+        midSectionValues = [[NSArray alloc] initWithObjects: [[dictionary valueForKeyPath:@"employees_enrolled"] stringValue], [[dictionary valueForKeyPath:@"employees_waived"] stringValue], notCompleted, [[dictionary valueForKeyPath:@"employees_total"] stringValue], nil];
+//        midSectionValues = [[NSArray alloc] initWithObjects: type.employeesEnrolled, type.employeesWaived, notCompleted, type.employeesTotal, nil];
     }
 
     /////////////////////////////////////////////////
@@ -192,75 +260,94 @@
     //if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)])
     //    [self.navigationController.view removeGestureRecognizer:self.navigationController.interactivePopGestureRecognizer];
     
-//    int yy = myTabBar.frame.origin.y;
-    int myTabBarY = myTabBar.frame.origin.y - 5;// - 65;
-    int vHeaderHt = vHeader.frame.origin.y + vHeader.frame.size.height;
-    
-    myTable.frame = CGRectMake(30, vHeader.frame.origin.y + vHeader.frame.size.height, screenSize.width-65, myTabBarY - vHeaderHt); //screenBound.origin.y + screenSize.height - 290); //  myTabBar.frame.origin.y-90);
-
-    myTable.backgroundColor = [UIColor clearColor];
-    myTable.backgroundView = nil;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [myTable addSubview:refreshControl];
-    
-    int iBtn = myTable.frame.size.width / 4;
-    
-    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.tag=30;
-    [button setFrame:CGRectMake(vHeader.frame.origin.x + 65, vHeader.frame.origin.y + vHeader.frame.size.height - 40, 32, 32)];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setBackgroundColor:[UIColor clearColor]];
-    UIImage *btnImage = [UIImage imageNamed:@"phoneCirclelightBlue.png"];
-    [button setImage:btnImage forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [button addTarget:self
-                action:@selector(phoneEmployer:)
-      forControlEvents:UIControlEventTouchUpInside];
-    [vHeader addSubview:button];
-    
-    UIButton* button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    button1.tag=30;
-    [button1 setFrame:CGRectMake(vHeader.frame.origin.x + 65 + iBtn, vHeader.frame.origin.y + vHeader.frame.size.height - 40, 32, 32)];
-    [button1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button1 setBackgroundColor:[UIColor clearColor]];
-    UIImage *btnImage1 = [UIImage imageNamed:@"chatWithCircleLightBlue.png"];
-    [button1 setImage:btnImage1 forState:UIControlStateNormal];
-    button1.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [button1 addTarget:self
-                action:@selector(smsEmployer:)
-      forControlEvents:UIControlEventTouchUpInside];
-    [vHeader addSubview:button1];
 
-    UIButton* button2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    button2.tag=30;
-    [button2 setFrame:CGRectMake(vHeader.frame.origin.x + 65 + (iBtn*2), vHeader.frame.origin.y + vHeader.frame.size.height - 40, 32, 32)];
-    [button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button2 setBackgroundColor:[UIColor clearColor]];
-    UIImage *btnImage2 = [UIImage imageNamed:@"markerWithCircleLightBlue.png"];
-    [button2 setImage:btnImage2 forState:UIControlStateNormal];
-    button2.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [button2 addTarget:self
-               action:@selector(showDirections:)
-     forControlEvents:UIControlEventTouchUpInside];
-    [vHeader addSubview:button2];
-    
-    UIButton* button3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    button3.tag=30;
-    [button3 setFrame:CGRectMake(vHeader.frame.origin.x + 65 + (iBtn*3), vHeader.frame.origin.y + vHeader.frame.size.height - 40, 32, 32)];
-    [button3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button3 setBackgroundColor:[UIColor clearColor]];
-    UIImage *btnImage3 = [UIImage imageNamed:@"emailWithCirclelightBlue.png"];
-    [button3 setImage:btnImage3 forState:UIControlStateNormal];
-    button3.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [button3 addTarget:self
-                action:@selector(emailEmployer:)
-      forControlEvents:UIControlEventTouchUpInside];
-    [vHeader addSubview:button3];
-    
-    bPhoneSectionShowing = FALSE;
+    for (int btnCount=0;btnCount<4;btnCount++)
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag=30+btnCount;
+        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+        [button setBackgroundColor:[UIColor clearColor]];
+        UIImage *btnImage;
+        switch(btnCount)
+        {
+            case 0:
+                btnImage = [UIImage imageNamed:@"phone.png"];
+                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 1:
+                btnImage = [UIImage imageNamed:@"message.png"];
+                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 2:
+                btnImage = [UIImage imageNamed:@"location.png"];
+                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 3:
+                btnImage = [UIImage imageNamed:@"email.png"];
+                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+        }
 
+        button.contentMode = UIViewContentModeScaleToFill;
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        [button setImage:btnImage forState:UIControlStateNormal];
+
+        [vHeader addSubview:button];
+    }
+    
+//    [self evenlySpaceTheseButtonsInThisView:@[button, button1, button2, button3] :self.view];
+    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
+    
+    UIButton *button = (UIButton*) [self.view viewWithTag:30];
+    
+    vHeader.frame = CGRectMake(0,0,screenSize.width, button.frame.origin.y + button.frame.size.height + 10);
+    
+    int myTabBarY = myTabBar.frame.origin.y - 5;// - 65;
+    int vHeaderHt = vHeader.frame.origin.y + vHeader.frame.size.height;
+
+    myTable.frame = CGRectMake(10, button.frame.origin.y + button.frame.size.height + 10, screenSize.width-25, myTabBarY - vHeaderHt);
+    
+    
+    myTable.backgroundColor = [UIColor clearColor];
+    myTable.backgroundView = nil;
+}
+
+- (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
+    int widthOfAllButtons = 0;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+    //    [thisButton setCenter:CGPointMake(0, thisView.frame.size.height / 2.0)];
+        widthOfAllButtons = widthOfAllButtons + thisButton.frame.size.width;
+    }
+
+    int spaceBetweenButtons = (thisView.frame.size.width - widthOfAllButtons) / (buttonArray.count + 1);
+    
+    UIButton *lastButton = nil;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+        if (lastButton == nil) {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        } else {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons + lastButton.frame.origin.x + lastButton.frame.size.width, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        }
+        
+        lastButton = thisButton;
+    }
+ 
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    myTable.frame = CGRectMake(10, 165, self.view.frame.size.width-25, self.view.frame.size.height - 10); //myTabBarY - vHeaderHt);
+    
+    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
+
+    [myTable reloadData];
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
@@ -273,85 +360,64 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)phoneEmployer:(id)sender {
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",@"12024686571"]]];
-//    return;
+- (void)phoneEmployer:(id)sender
+{
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
-    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext; //UIModalPresentationPopover; //UIModalPresentationFullScreen;
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     sub.messageTitle = type.companyName;
-    sub.messageArray = type.phones;
+    sub.messageArray = type.contact_info;
+    sub.messageType = typePopupPhone;
     [self presentViewController:sub animated:YES completion: nil];
+}
 
-   /*
-    [myTable beginUpdates];
+- (void)emailEmployer:(id)sender
+{
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = type.companyName;
+    sub.messageArray = type.contact_info;
+    sub.messageType = typePopupEmail;
     
-    if (!bPhoneSectionShowing)
-    {
-        bPhoneSectionShowing = TRUE;
-        
-        [myTable insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
-    }
-    else
-    {
-        bPhoneSectionShowing = FALSE;
-        
-        [myTable deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
-
-    }
-    [myTable endUpdates];
-    */
+//    NSArray *pp =[type.emails objectAtIndex:0];
+//    if ([pp isKindOfClass:[NSNull class]])
+//        return;
+    [self presentViewController:sub animated:YES completion: nil];
 }
 
 - (IBAction)smsEmployer:(id)sender {
+    
     if(![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
     
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = type.companyName;
+    sub.messageArray = type.contact_info;
+    sub.messageType = typePopupSMS;
+    sub.delegate = self;
+    
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+- (void)SMSThesePeople:(id)ttype
+{
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
     picker.messageComposeDelegate = self;
     picker.recipients = [NSArray arrayWithObjects:@"12024686571", nil];
-
+    
     [self presentViewController:picker animated:YES completion:nil];
 }
 
-- (IBAction)emailEmployer:(id)sender {
-    
-//    NSString *recipients = @"mailto:first@example.com?cc=second@example.com,third@example.com&subject=Hello from HBX!";
-    NSString *recipients = @"mailto:hbx@mobile.com?subject=Hello from HBX!";
-   
-    NSString *body = @"&body=Enroll! Enroll! Enroll!";
-    
-    NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
-    
-    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
-    
-    /*
-    // Email Subject
-    NSString *emailTitle = @"Test Email";
-    // Email Content
-    NSString *messageBody = @"<h1>Message Body</h1>"; // Change the message body to HTML
-    // To address
-    NSArray *toRecipents = [NSArray arrayWithObject:@"healthcare@gmail.com"];
-    
-    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-    mc.mailComposeDelegate = self;
-    [mc setSubject:emailTitle];
-    [mc setMessageBody:messageBody isHTML:YES];
-    [mc setToRecipients:toRecipents];
-    
-    // Present mail view controller on screen
-    [self presentViewController:mc animated:YES completion:NULL];
-    */
-}
-
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller
-                 didFinishWithResult:(MessageComposeResult)result {
-    switch(result) {
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    switch(result)
+    {
         case MessageComposeResultCancelled:
             // user canceled sms
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -368,65 +434,59 @@
             break;
     }
     [self dismissViewControllerAnimated:YES completion:NULL];
-
-}
-
-- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    switch (result)
-    {
-        case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
-            break;
-        case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
-            break;
-        case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
-            break;
-        case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
-            break;
-        default:
-            break;
-    }
-    
-    // Close the Mail Interface
-    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 -(void)showDirections:(id)sender
 {
-//    [self performSegueWithIdentifier:@"Show Map View" sender:self];
-//    return;
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(38.8979,-77.0058);
-    //create MKMapItem out of coordinates
-    MKPlacemark* placeMark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
-    MKMapItem* destination =  [[MKMapItem alloc] initWithPlacemark:placeMark];
-    if([destination respondsToSelector:@selector(openInMapsWithLaunchOptions:)])
-    {
-        [destination setName:@"Union Station"];
-        [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
-        /*
-         //using iOS6 native maps app
-         if(_mode == 1)
-         {
-         [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeWalking}];
-         
-         }
-         if(_mode == 2)
-         {
-         [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving}];
-         
-         }
-         if(_mode == 3)
-         {
-         [destination openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeTransit}];
-         
-         }
-         */
-    }
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = type.companyName;
+    sub.messageArray = type.contact_info;
+    sub.messageType = typePopupMAP;
+    sub.delegate = self;
     
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+-(void)MAPTheseDirections:(id)sender
+{
+    NSArray *ck = [sender objectAtIndex:0];
+    NSDictionary *pk = [ck objectAtIndex:0];
+    
+    //(DB) NEW API CHANGE
+    NSString *destinationAddress= [NSString stringWithFormat:@"%@, %@, %@, %@", [pk valueForKey:@"address_1"], [pk valueForKey:@"city"], [pk valueForKey:@"state"], [pk valueForKey:@"zip"]]; //@"130 M Street NE, Washington, DC, 20002";
+    //(DB) NEW API CHANGE
+//    NSString *destinationAddress; // = [NSString stringWithFormat:@"%@, %@, %@, %@", type.employer_address_1, type.employer_city, type.employer_state, type.employer_zip]; //@"130 M Street NE, Washington, DC, 20002";
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:destinationAddress
+                 completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         
+         // Convert the CLPlacemark to an MKPlacemark
+         // Note: There's no error checking for a failed geocode
+         CLPlacemark *geocodedPlacemark = [placemarks objectAtIndex:0];
+         MKPlacemark *placemark = [[MKPlacemark alloc]
+                                   initWithCoordinate:geocodedPlacemark.location.coordinate
+                                   addressDictionary:geocodedPlacemark.addressDictionary];
+         
+         // Create a map item for the geocoded address to pass to Maps app
+         MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+         [mapItem setName:geocodedPlacemark.name];
+         
+         // Set the directions mode to "Driving"
+         // Can use MKLaunchOptionsDirectionsModeWalking instead
+         NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+         
+         // Get the "Current User Location" MKMapItem
+         MKMapItem *currentLocationMapItem = [MKMapItem mapItemForCurrentLocation];
+         
+         // Pass the current location and destination map items to the Maps app
+         // Set the direction mode in the launchOptions dictionary
+         [MKMapItem openMapsWithItems:@[currentLocationMapItem, mapItem] launchOptions:launchOptions];
+         
+     }];
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
@@ -452,22 +512,22 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (type.active_general_agency != (NSString *)[NSNull null] && [type.active_general_agency length] > 0)
-        return 4 + bPhoneSectionShowing;
+        return 4;
     
-    int uu = 3 + bPhoneSectionShowing;
+    int uu = 3;
     return uu;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0 + bPhoneSectionShowing)
+    if (section == 0)
         return [topSectionNames count];
 
-    if (section == 1 + bPhoneSectionShowing)
+    if (section == 1)
         return [midSectionNames count];
 
-    if (section == 3 + bPhoneSectionShowing)
+    if (section == 3)
         return 1;
 
     return 3;
@@ -530,9 +590,10 @@
     NSString *sectionName;
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
-    [f setDateFormat:@"MM-dd-yyyy"];
+    [f setDateFormat:@"yyyy-MM-dd"];
+//    [f setDateFormat:@"MM-dd-yyyy"];
     
-    NSDate *endDate = [f dateFromString:type.planYear];
+    NSDate *endDate = [f dateFromString:[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
 
     switch (section)
     {
@@ -566,22 +627,17 @@
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
 
-    int headeFontSize = 10;
+    int headeFontSize = 12;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
-        headeFontSize = 12;
+        headeFontSize = 14;
     
     UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, SECTION_HEIGHT)];
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, tableView.frame.size.width, 15)];
     label.backgroundColor = [UIColor clearColor];
-    if (bPhoneSectionShowing && section == 0)
-    {
-        sectionName = @"PHONE NUMBERS";
-        sectionView.backgroundColor = [UIColor whiteColor];
-    }
-    
-    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:headeFontSize+2];
+
+    label.font = [UIFont fontWithName:@"Roboto-Bold" size:headeFontSize+2];
     label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    label.textColor = UIColorFromRGB(0x00a99e); //UIColorFromRGB(0x555555); //UIColorFromRGB(0x007bc4); //[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];  007bc4
     label.text = sectionName;
     [sectionView addSubview:label];
 
@@ -594,7 +650,7 @@
         [dateComponents setDay:364];
         NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
 
-        UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 27, tableView.frame.size.width, 10)];
+        UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 29, tableView.frame.size.width, 12)];
         labelCoverage.backgroundColor = [UIColor clearColor];
         labelCoverage.font = [UIFont fontWithName:@"Roboto-Regular" size:headeFontSize];
         labelCoverage.textAlignment = NSTextAlignmentCenter;
@@ -628,68 +684,44 @@
 
     return sectionView;
 }
-/*
--(void)showCellDates:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath
-{
-    if (indexPath.row == 0)
-    {
-        cell.textLabel.text = @"Open Enrollment Begins";
-        cell.detailTextLabel.text = type.open_enrollment_begins;
-    }
-    if (indexPath.row == 1)
-    {
-        cell.textLabel.text = @"Open Enrollment Closes";
-        cell.detailTextLabel.text = type.open_enrollment_ends;
-    }
-    if (indexPath.row == 2)
-    {
-        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:13.0];
-        if (bucket == 2)
-            cell.textLabel.text = @"Days Until";
-        else
-            cell.textLabel.text = @"Days Left";
-        
-        NSDate *today = [NSDate date];
-        
-        NSDateFormatter *f = [[NSDateFormatter alloc] init];
-        [f setDateFormat:@"MM-dd-yyyy"];
-        
-        NSDate *endDate = [f dateFromString:type.open_enrollment_ends];
-        
-        NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                            fromDate:today
-                                                              toDate:endDate
-                                                             options:NSCalendarWrapComponents];
-        
-        if (bucket == 0)
-            cell.detailTextLabel.textColor = [UIColor redColor];
-        
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld", [components day]];
-    }
-    
-}
-*/
+
 -(void)showCellCosts:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath
 {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+    
+    //        pCompany.employee_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue]]];
+    //        pCompany.employer_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue]]];
+    
+    // Removed this becuase we now include total in json
+    //        float total_premium = [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue] + [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue];
+    //        float total_premium = [[ck valueForKeyPath:@"estimated_premium.total_premium"] floatValue];
+    
+    //        pCompany.total_premium = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: total_premium]];
+
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
     if (indexPath.row == 0)
-    {
-        cell.textLabel.text = @"Total Premium";
-        cell.detailTextLabel.text = type.total_premium;
-    }
-    if (indexPath.row == 1)
-    {
-        cell.textLabel.text = @"Employee Contribution";
-        cell.detailTextLabel.text = type.employee_contribution;
-    }
-    if (indexPath.row == 2)
     {
         cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
         cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
         cell.textLabel.text = @"Employer Contribution";
         cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
-        cell.detailTextLabel.textColor = [UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
-        cell.detailTextLabel.text = type.employer_contribution;
+        cell.detailTextLabel.text = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]];
+ //       [[dictionary valueForKey:@"employer_contribution"] stringValue];//type.employer_contribution;
+    }
+    if (indexPath.row == 1)
+    {
+        cell.textLabel.text = @"Employee Contribution";
+        cell.detailTextLabel.text = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]];
+
+        
+//        [[dictionary valueForKey:@"employee_contribution"] stringValue]; //type.employee_contribution;
+    }
+    if (indexPath.row == 2)
+    {
+        cell.textLabel.text = @"TOTAL";
+        cell.detailTextLabel.text = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]];//[[dictionary valueForKey:@"total_premium"] stringValue];//type.total_premium;
     }
 
 }
@@ -702,7 +734,7 @@
     if (screenSize.height < 600)
         return 22;
     
-    return 24;
+    return 30;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -716,19 +748,14 @@
     }
     
     cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize];
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
     cell.textLabel.textColor = [UIColor darkGrayColor];
 
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:globalFontSize];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:globalFontSize];
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
 
-    if (bPhoneSectionShowing && indexPath.section == 0)
-    {
-        cell.backgroundColor = [UIColor whiteColor];
-        cell.textLabel.text = @"Bill Murray";
-        cell.detailTextLabel.text = @"1-202-456-7890";
-    }
     
-    if (indexPath.section == 0 + bPhoneSectionShowing)
+    if (indexPath.section == 0)
     {
         cell.textLabel.text = [topSectionNames objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [topSectionValues objectAtIndex:indexPath.row];
@@ -761,7 +788,8 @@
                 labelBinder.layer.borderColor = [UIColor colorWithRed:193.0f/255.0f green:205.0f/255.0f blue:205.0f/255.0f alpha:1.0f].CGColor;
                 
                 NSDateFormatter *f = [[NSDateFormatter alloc] init];
-                [f setDateFormat:@"MM-dd-yyyy"];  //DATE FORMAT IN
+                [f setDateFormat:@"yyyy-MM-dd"];  //DATE FORMAT IN
+                
                 NSDate *binderDate = [f dateFromString:type.binder_payment_due];
                 [f setDateFormat:@"MMM dd, yyyy"]; //DATE FORMAT OUT
 
@@ -780,38 +808,16 @@
             cell.textLabel.textColor = [UIColor colorWithRed:61.0f/255.0f green:61.0f/255.0f blue:61.0f/255.0f alpha:1.0f];
             cell.detailTextLabel.textColor = [UIColor colorWithRed:84.0f/255.0f green:84.0f/255.0f blue:84.0f/255.0f alpha:1.0f];
         }
-        
-        /*
-        if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
-            [self showCellCosts:cell indexPath:indexPath];
-        else
-            [self showCellDates:cell indexPath:indexPath];
-         */
     }
 
-    if (indexPath.section == 1 + bPhoneSectionShowing)
+    if (indexPath.section == 1)
     {
         cell.textLabel.text = [midSectionNames objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [midSectionValues objectAtIndex:indexPath.row];
         if (type.status == (enrollmentState)NEEDS_ATTENTION && indexPath.row == 0)
         {
+            cell.textLabel.textColor = [UIColor redColor];
             cell.detailTextLabel.textColor = [UIColor redColor];
-            /*
-            cell.textLabel.numberOfLines = 0;
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@",[midSectionNames objectAtIndex:indexPath.row], @"Enrolled or Waived"];
-            
-            NSMutableAttributedString *text =
-            [[NSMutableAttributedString alloc]
-             initWithString: cell.textLabel.text];
-            
-            [text addAttribute:NSForegroundColorAttributeName
-                         value:[UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f]
-                         range:NSMakeRange(11, 2)];
-            
-            cell.textLabel.attributedText = text;
-             */
-
         }
         
         if (indexPath.row == [midSectionNames count] - 1)
@@ -823,12 +829,13 @@
         }
     }
 
-    if (indexPath.section == 2 + bPhoneSectionShowing)
+    if (indexPath.section == 2)
     {
         if (type.status == (enrollmentState)NO_ACTION_REQUIRED)
         {
             NSDateFormatter *f = [[NSDateFormatter alloc] init];
-            [f setDateFormat:@"MM-dd-yyyy"];
+            [f setDateFormat:@"yyyy-MM-dd"];
+//            [f setDateFormat:@"MM-dd-yyyy"];
             
              if (indexPath.row == 0)
             {
@@ -860,7 +867,7 @@
         else
             [self showCellCosts:cell indexPath:indexPath];
     }
-    if (indexPath.section == 3 + bPhoneSectionShowing)
+    if (indexPath.section == 3)
     {
         cell.textLabel.text = @"General Agency";
         cell.detailTextLabel.text = type.active_general_agency;
@@ -868,4 +875,6 @@
     
     return cell;
 }
+
+
 @end

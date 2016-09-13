@@ -11,26 +11,27 @@
       "scale" : "3x"
     },
     {
-      "idiom" : "iphone",
       "size" : "40x40",
+      "idiom" : "iphone",
+      "filename" : "BrokerMVP_AppIcon_80x80.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "logoBlueBG.png",
+      "filename" : "BrokerMVP_AppIcon_120x120-1.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "logoBlueBG-1.png",
+      "filename" : "BrokerMVP_AppIcon_120x120.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "logoBlueBG-180.png",
+      "filename" : "BrokerMVP_AppIcon_180x180.png",
       "scale" : "3x"
     },
     {

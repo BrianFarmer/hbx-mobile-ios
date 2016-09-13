@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2801CEE4C0400B43F24 /* emailWithCirclelightBlue.png */; };
 		130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 130AA2821CEE568900B43F24 /* MessageUI.framework */; };
-		130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2861CF1382100B43F24 /* brokerDataJson.txt */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
 		13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AF51D352D520097D245 /* brokerEmployersData.m */; };
 		13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AFB1D366FE60097D245 /* popupMessageBox.m */; };
@@ -24,8 +23,6 @@
 		137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137327551C8DECA800B0F6E1 /* SlideNavigationController.m */; };
 		137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */; };
 		138119DC1C9ADBF1000A75AA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 138119DB1C9ADBF1000A75AA /* Constants.m */; };
-		138119DF1C9ADDD3000A75AA /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119DD1C9ADDD3000A75AA /* AWSCore.framework */; };
-		138119E01C9ADDD3000A75AA /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119DE1C9ADDD3000A75AA /* AWSS3.framework */; };
 		138119E21C9ADF7F000A75AA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E11C9ADF7F000A75AA /* libz.tbd */; };
 		138119E41C9ADF93000A75AA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E31C9ADF93000A75AA /* SystemConfiguration.framework */; };
 		13A373011D084004008CA0E1 /* alert2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373001D084004008CA0E1 /* alert2.png */; };
@@ -53,7 +50,6 @@
 		13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 13A382241CDB2FE8006B5984 /* kaiser.jpg */; };
 		13A3822A1CDB303E006B5984 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382291CDB303E006B5984 /* bell.png */; };
 		13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */; };
-		13A382301CDBD01A006B5984 /* sampleMyPlanJSON.txt in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */; };
 		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
 		13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */; };
 		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
@@ -69,6 +65,38 @@
 		13FF472A1C8A2C5600C7C851 /* HBXMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47291C8A2C5600C7C851 /* HBXMobileTests.m */; };
 		13FF47351C8A2C5600C7C851 /* HBXMobileUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47341C8A2C5600C7C851 /* HBXMobileUITests.m */; };
 		13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47441C8A2D1B00C7C851 /* KeychainItemWrapper.m */; };
+		40003F261D4FC51900CD059B /* uparrowWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F251D4FC51900CD059B /* uparrowWHT.png */; };
+		40003F2D1D4FE45800CD059B /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F271D4FE45800CD059B /* phone.png */; };
+		40003F2E1D4FE45800CD059B /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F281D4FE45800CD059B /* message.png */; };
+		40003F2F1D4FE45800CD059B /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F291D4FE45800CD059B /* location.png */; };
+		40003F301D4FE45800CD059B /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2A1D4FE45800CD059B /* email.png */; };
+		40003F311D4FE45800CD059B /* phoneWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2B1D4FE45800CD059B /* phoneWHT.png */; };
+		40003F321D4FE45800CD059B /* emailWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2C1D4FE45800CD059B /* emailWHT.png */; };
+		40003F351D4FF67400CD059B /* emailus80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F331D4FF67400CD059B /* emailus80x80.png */; };
+		40003F361D4FF67400CD059B /* callus80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F341D4FF67400CD059B /* callus80x80.png */; };
+		40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */; };
+		4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */; };
+		4036BEEF1D5E616B000F6182 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4036BEEE1D5E616B000F6182 /* refresh.png */; };
+		404CC1881D3FA10C00A9B31D /* light_blue_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */; };
+		404CC18C1D3FAA4B00A9B31D /* logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC18B1D3FAA4B00A9B31D /* logout.png */; };
+		404CC18E1D3FAAEF00A9B31D /* logout-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC18D1D3FAAEF00A9B31D /* logout-512.png */; };
+		404CC1921D3FAD4A00A9B31D /* icon_list_bullets_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */; };
+		404CC1941D3FE39900A9B31D /* menu_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1931D3FE39900A9B31D /* menu_phone.png */; };
+		404CC1961D3FE65D00A9B31D /* list_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1951D3FE65D00A9B31D /* list_icon.png */; };
+		40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */; };
+		40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */; };
+		40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */; };
+		40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */; };
+		40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8511D5104CB0071FFD5 /* callus54x54.png */; };
+		40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8521D5104CB0071FFD5 /* emailus54x54.png */; };
+		40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */; };
+		40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */; };
+		40EEC85F1D512B690071FFD5 /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC85E1D512B690071FFD5 /* chevron.png */; };
+		40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */; };
+		40F1511B1D5260A10041C132 /* chevron_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511A1D5260A10041C132 /* chevron_right.png */; };
+		40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */; };
+		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
+		40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,7 +119,6 @@
 /* Begin PBXFileReference section */
 		130AA2801CEE4C0400B43F24 /* emailWithCirclelightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailWithCirclelightBlue.png; sourceTree = "<group>"; };
 		130AA2821CEE568900B43F24 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		130AA2861CF1382100B43F24 /* brokerDataJson.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = brokerDataJson.txt; sourceTree = "<group>"; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		13273AF41D352D520097D245 /* brokerEmployersData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerEmployersData.h; sourceTree = "<group>"; };
 		13273AF51D352D520097D245 /* brokerEmployersData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerEmployersData.m; sourceTree = "<group>"; };
@@ -114,8 +141,6 @@
 		137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuSlideOutTableViewController.m; sourceTree = "<group>"; };
 		138119DA1C9ADBF1000A75AA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		138119DB1C9ADBF1000A75AA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		138119DD1C9ADDD3000A75AA /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = frameworks/AWSCore.framework; sourceTree = "<group>"; };
-		138119DE1C9ADDD3000A75AA /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = frameworks/AWSS3.framework; sourceTree = "<group>"; };
 		138119E11C9ADF7F000A75AA /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		138119E31C9ADF93000A75AA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		13A373001D084004008CA0E1 /* alert2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alert2.png; path = images/alert2.png; sourceTree = "<group>"; };
@@ -144,7 +169,6 @@
 		13A382241CDB2FE8006B5984 /* kaiser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = kaiser.jpg; path = images/carriers/kaiser.jpg; sourceTree = "<group>"; };
 		13A382291CDB303E006B5984 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bell.png; path = images/bell.png; sourceTree = "<group>"; };
 		13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dchllogo_withouttag-2.png"; path = "images/dchllogo_withouttag-2.png"; sourceTree = "<group>"; };
-		13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sampleMyPlanJSON.txt; path = ../../sampleMyPlanJSON.txt; sourceTree = "<group>"; };
 		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
 		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
 		13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountTableViewController.h; sourceTree = "<group>"; };
@@ -174,6 +198,41 @@
 		13FF47361C8A2C5600C7C851 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13FF47431C8A2D1B00C7C851 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		13FF47441C8A2D1B00C7C851 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		40003F251D4FC51900CD059B /* uparrowWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uparrowWHT.png; sourceTree = "<group>"; };
+		40003F271D4FE45800CD059B /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
+		40003F281D4FE45800CD059B /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
+		40003F291D4FE45800CD059B /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location.png; sourceTree = "<group>"; };
+		40003F2A1D4FE45800CD059B /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
+		40003F2B1D4FE45800CD059B /* phoneWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT.png; sourceTree = "<group>"; };
+		40003F2C1D4FE45800CD059B /* emailWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailWHT.png; sourceTree = "<group>"; };
+		40003F331D4FF67400CD059B /* emailus80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailus80x80.png; sourceTree = "<group>"; };
+		40003F341D4FF67400CD059B /* callus80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = callus80x80.png; sourceTree = "<group>"; };
+		40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DCHealthLink_LogoWHT1.png; sourceTree = "<group>"; };
+		4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardiPad.storyboard; sourceTree = "<group>"; };
+		4036BEEE1D5E616B000F6182 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light_blue_gradient.png; sourceTree = "<group>"; };
+		404CC18B1D3FAA4B00A9B31D /* logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logout.png; sourceTree = "<group>"; };
+		404CC18D1D3FAAEF00A9B31D /* logout-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logout-512.png"; sourceTree = "<group>"; };
+		404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_list_bullets_1.png; sourceTree = "<group>"; };
+		404CC1931D3FE39900A9B31D /* menu_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_phone.png; sourceTree = "<group>"; };
+		404CC1951D3FE65D00A9B31D /* list_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_icon.png; sourceTree = "<group>"; };
+		40D466AD1D3EC24200ADC1FC /* CarrierListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListViewController.h; sourceTree = "<group>"; };
+		40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListViewController.m; sourceTree = "<group>"; };
+		40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40WHT.png; sourceTree = "<group>"; };
+		40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40_144ppi_WHT.png; sourceTree = "<group>"; };
+		40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT1.png; sourceTree = "<group>"; };
+		40EEC8511D5104CB0071FFD5 /* callus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = callus54x54.png; sourceTree = "<group>"; };
+		40EEC8521D5104CB0071FFD5 /* emailus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailus54x54.png; sourceTree = "<group>"; };
+		40EEC8571D5112EE0071FFD5 /* tutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tutorialViewController.h; sourceTree = "<group>"; };
+		40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tutorialViewController.m; sourceTree = "<group>"; };
+		40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = tutorialViewController.xib; sourceTree = "<group>"; };
+		40EEC85E1D512B690071FFD5 /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
+		40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader512x147.png; sourceTree = "<group>"; };
+		40F1511A1D5260A10041C132 /* chevron_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_right.png; sourceTree = "<group>"; };
+		40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader_navbar.png; sourceTree = "<group>"; };
+		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
+		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
+		40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader300x40WHT.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,8 +246,6 @@
 				1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */,
 				138119E41C9ADF93000A75AA /* SystemConfiguration.framework in Frameworks */,
 				138119E21C9ADF7F000A75AA /* libz.tbd in Frameworks */,
-				138119E01C9ADDD3000A75AA /* AWSS3.framework in Frameworks */,
-				138119DF1C9ADDD3000A75AA /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,8 +353,6 @@
 				13316B121D21B0D9001A450C /* Settings.h */,
 				13316B131D21B0D9001A450C /* Settings.m */,
 				134DE79B1CECEF4F00F8958A /* MGSwipe */,
-				138119DD1C9ADDD3000A75AA /* AWSCore.framework */,
-				138119DE1C9ADDD3000A75AA /* AWSS3.framework */,
 				138119DA1C9ADBF1000A75AA /* Constants.h */,
 				138119DB1C9ADBF1000A75AA /* Constants.m */,
 				13FF47421C8A2D0100C7C851 /* Keychain */,
@@ -328,6 +383,14 @@
 				13273AFA1D366FE60097D245 /* popupMessageBox.h */,
 				13273AFB1D366FE60097D245 /* popupMessageBox.m */,
 				13273AFC1D366FE60097D245 /* popupMessageBox.xib */,
+				40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */,
+				40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */,
+				40D466AD1D3EC24200ADC1FC /* CarrierListViewController.h */,
+				40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */,
+				40EEC8571D5112EE0071FFD5 /* tutorialViewController.h */,
+				40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */,
+				40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */,
+				4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -336,8 +399,6 @@
 			isa = PBXGroup;
 			children = (
 				13F1699F1D2D3E58004DF9B9 /* en */,
-				130AA2861CF1382100B43F24 /* brokerDataJson.txt */,
-				13A3822F1CDBD01A006B5984 /* sampleMyPlanJSON.txt */,
 				1316CEAA1CC50A4C0075B214 /* Fonts */,
 				134A09DB1CBE814D00CD3229 /* Notes */,
 				134A09D91CBE7D7F00CD3229 /* server.der */,
@@ -378,6 +439,33 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4036BEEE1D5E616B000F6182 /* refresh.png */,
+				40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */,
+				40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */,
+				40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */,
+				40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */,
+				40F1511A1D5260A10041C132 /* chevron_right.png */,
+				40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */,
+				40EEC85E1D512B690071FFD5 /* chevron.png */,
+				40EEC8511D5104CB0071FFD5 /* callus54x54.png */,
+				40EEC8521D5104CB0071FFD5 /* emailus54x54.png */,
+				40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */,
+				40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */,
+				40003F331D4FF67400CD059B /* emailus80x80.png */,
+				40003F341D4FF67400CD059B /* callus80x80.png */,
+				40003F271D4FE45800CD059B /* phone.png */,
+				40003F281D4FE45800CD059B /* message.png */,
+				40003F291D4FE45800CD059B /* location.png */,
+				40003F2A1D4FE45800CD059B /* email.png */,
+				40003F2B1D4FE45800CD059B /* phoneWHT.png */,
+				40003F2C1D4FE45800CD059B /* emailWHT.png */,
+				40003F251D4FC51900CD059B /* uparrowWHT.png */,
+				404CC1951D3FE65D00A9B31D /* list_icon.png */,
+				404CC1931D3FE39900A9B31D /* menu_phone.png */,
+				404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */,
+				404CC18D1D3FAAEF00A9B31D /* logout-512.png */,
+				404CC18B1D3FAA4B00A9B31D /* logout.png */,
+				404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */,
 				13A3730E1D0B1B3F008CA0E1 /* gear.png */,
 				13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */,
 				13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */,
@@ -505,27 +593,49 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				404CC1941D3FE39900A9B31D /* menu_phone.png in Resources */,
+				40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */,
+				404CC18E1D3FAAEF00A9B31D /* logout-512.png in Resources */,
 				13A373011D084004008CA0E1 /* alert2.png in Resources */,
+				40003F2E1D4FE45800CD059B /* message.png in Resources */,
+				40003F311D4FE45800CD059B /* phoneWHT.png in Resources */,
 				13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */,
 				13A3730A1D0846E0008CA0E1 /* markerWithCircleLightBlue.png in Resources */,
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
+				40003F361D4FF67400CD059B /* callus80x80.png in Resources */,
 				13FF471F1C8A2C5600C7C851 /* LaunchScreen.storyboard in Resources */,
+				40EEC85F1D512B690071FFD5 /* chevron.png in Resources */,
+				40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */,
+				40003F2F1D4FE45800CD059B /* location.png in Resources */,
 				130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */,
+				40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
 				13A3822A1CDB303E006B5984 /* bell.png in Resources */,
+				40F1511B1D5260A10041C132 /* chevron_right.png in Resources */,
 				13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */,
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
 				13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */,
 				13A3821C1CDB2E3E006B5984 /* Roboto-Thin.ttf in Resources */,
 				13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */,
 				13FF471C1C8A2C5600C7C851 /* Assets.xcassets in Resources */,
-				130AA2871CF1382100B43F24 /* brokerDataJson.txt in Resources */,
 				13A3821B1CDB2E3E006B5984 /* Roboto-Regular.ttf in Resources */,
 				13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */,
+				404CC1961D3FE65D00A9B31D /* list_icon.png in Resources */,
+				40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */,
+				40003F301D4FE45800CD059B /* email.png in Resources */,
 				13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */,
+				40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */,
+				40003F321D4FE45800CD059B /* emailWHT.png in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
+				40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */,
+				40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */,
+				40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */,
+				40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */,
+				40003F261D4FC51900CD059B /* uparrowWHT.png in Resources */,
+				404CC18C1D3FAA4B00A9B31D /* logout.png in Resources */,
+				404CC1921D3FAD4A00A9B31D /* icon_list_bullets_1.png in Resources */,
 				13A3821D1CDB2E3E006B5984 /* Roboto-ThinItalic.ttf in Resources */,
 				13A382201CDB2F4D006B5984 /* menu-icon.png in Resources */,
 				13A382171CDB2E3E006B5984 /* Roboto-Light.ttf in Resources */,
@@ -534,12 +644,17 @@
 				13A373071D084053008CA0E1 /* header-employer-2.png in Resources */,
 				13A382131CDB2E3E006B5984 /* Roboto-BlackItalic.ttf in Resources */,
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
+				4036BEEF1D5E616B000F6182 /* refresh.png in Resources */,
 				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
+				404CC1881D3FA10C00A9B31D /* light_blue_gradient.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
+				4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */,
+				40003F351D4FF67400CD059B /* emailus80x80.png in Resources */,
+				40003F2D1D4FE45800CD059B /* phone.png in Resources */,
+				40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */,
 				13A373031D084022008CA0E1 /* chatWithCircleLightBlue.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
 				13A382151CDB2E3E006B5984 /* Roboto-BoldItalic.ttf in Resources */,
-				13A382301CDBD01A006B5984 /* sampleMyPlanJSON.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,16 +681,19 @@
 			files = (
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
+				40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
 				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
+				40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */,
 				13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
 				13316B141D21B0D9001A450C /* Settings.m in Sources */,
 				13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */,
 				134DE7A11CECEF6600F8958A /* MGSwipeTableCell.m in Sources */,
 				13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */,
+				40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */,
 				13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */,
 				13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */,
 				13FF470E1C8A2C5600C7C851 /* main.m in Sources */,

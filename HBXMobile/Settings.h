@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define PRODUCTION_BUILD    1
+
 @interface Settings : NSObject
 {
 //    NSString *sMobileServer;

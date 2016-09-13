@@ -11,7 +11,17 @@
 #import "MGSwipeButton.h"
 #import "brokerEmployersData.h"
 #import "brokerPlanDetailViewController.h"
-#import "popupMessagebox.h"
+#import "tutorialViewcontroller.h"
+
+
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:1.0]
+
+
+static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 @interface BrokerAccountTableViewController ()
 
@@ -25,6 +35,49 @@
     self.navigationController.navigationBarHidden = NO;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
+    pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
+    //    UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 160, 42)];
+    pView1.backgroundColor = [UIColor clearColor];
+//    pView1.image = [UIImage imageNamed:@"BrokerMVP_AppHeader200x40WHT.png"];
+    pView1.image = [UIImage imageNamed:@"navHeader"];//[UIImage imageNamed:@"BrokerMVP_AppHeader200x40_144ppi_WHT.png"];
+    pView1.contentMode = UIViewContentModeCenter;// UIViewContentModeScaleAspectFill;
+    
+    self.navigationItem.titleView = pView1;
+
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.backgroundColor = [UIColor lightGrayColor];
+    refreshControl.tintColor = [UIColor blackColor];
+    [refreshControl layoutIfNeeded];
+//    NSDictionary *attrs = @{ NSForegroundColorAttributeName : [UIColor blackColor] };
+    
+//    NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:@"Update Employer List" attributes:attrs];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat:@"MMM d, h:mm a"];
+//    NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+//    NSString *title = @"Pull to refresh";
+//    NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrs];
+//    refreshControl.attributedTitle = attributedTitle; //[[NSAttributedString alloc] initWithString:@"Update Employer List"];
+
+/*
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    attachment.image = [UIImage imageNamed:@"refresh.png"];
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    
+    NSMutableAttributedString *myString= [[NSMutableAttributedString alloc] initWithString:@"My label text"];
+    [myString appendAttributedString:attachmentString];
+    
+    refreshControl.attributedTitle = myString;
+ */   
+    
+    [self.tableView addSubview:refreshControl];
+    
+    self.view.autoresizesSubviews = YES;
+    
+    bAlreadyShownTutorial = FALSE;
+    
     brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
     self.searchController.delegate = self;
@@ -33,7 +86,7 @@
     [self.searchController.searchBar sizeToFit];
     self.searchController.dimsBackgroundDuringPresentation = YES;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.showsCancelButton = FALSE;
+    self.searchController.searchBar.showsCancelButton = TRUE;
     _resultsTableController.delegate = self;
     
     // Uncomment the following line to preserve selection between presentations.
@@ -57,16 +110,79 @@
     [self processData];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    if (!bAlreadyShownTutorial)
+    {
+        tutorialViewController *sub = [[tutorialViewController alloc] initWithNibName:@"tutorialViewController" bundle:nil];
+        sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:sub animated:YES completion: nil];
+        bAlreadyShownTutorial = TRUE;
+    }
+    
+//    [self.tableView setNeedsLayout];
+//    [self.tableView setNeedsDisplay];
+//    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y+10, self.tableView.frame.size.width, self.tableView.frame.size.height-20)];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [self.searchController.searchBar resignFirstResponder];
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self.tableView reloadData];
+    
+    [self setIntroHeader:12];
+}
+
+
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
     return YES;
 }
 
-- (void)willDismissSearchController:(UISearchController *)searchController {
-        self.tableView.frame = CGRectMake(0, 64, self.tableView.frame.size.width, self.tableView.frame.size.height);
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    
+    if (refreshControl) {
+/*
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+        NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+//        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+//                                                                    forKey:NSForegroundColorAttributeName];
+        NSDictionary *attrs = @{ NSForegroundColorAttributeName : [UIColor blackColor] };
+        
+
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrs];
+        refreshControl.attributedTitle = attributedTitle;
+        
+        [refreshControl endRefreshing];
+ */
+    }
+    // Do your job, when done:
+    [refreshControl endRefreshing];
 }
 
-- (void)searchButtonTapped:(id)sender {
+- (void)willDismissSearchController:(UISearchController *)searchController {
+        self.tableView.frame = CGRectMake(0, 64, self.tableView.frame.size.width, self.tableView.frame.size.height);
+//    [self.searchController.searchBar resignFirstResponder];
+}
+
+-(void)willPresentSearchController:(UISearchController *)searchController
+{
+//    [self.searchController setActive:TRUE];
+}
+
+- (void)didPresentSearchController:(UISearchController *)searchController
+{
+    [searchController.searchBar becomeFirstResponder];
+}
+
+- (void)searchButtonTapped:(id)sender
+{
     self.navigationItem.titleView = self.searchController.searchBar;
     self.searchController.searchBar.hidden = FALSE;
     self.navigationItem.rightBarButtonItem = nil;
@@ -76,8 +192,10 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    [self.searchController.searchBar resignFirstResponder];
     self.searchController.searchBar.hidden = TRUE;
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
+        self.navigationItem.titleView = pView1;
 }
 
 -(void)processData
@@ -91,16 +209,21 @@
     [all_others removeAllObjects];
     clients_needing_immediate_attention = 0;
     
-    NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
-    
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
-    {
-        NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/feature/multiple-contacts/enroll/broker/employers_list/response/example.json"];
-        //   NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
-        data = [NSData dataWithContentsOfURL:url];
-    }
-    else
+    if (PRODUCTION_BUILD)
         data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    else
+    {
+        NSLog(@"%li", (long)[[NSUserDefaults standardUserDefaults] integerForKey:@"whichServer"] );
+        
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
+        {
+            // NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/feature/multiple-contacts/enroll/broker/employers_list/response/example.json"];
+            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+            data = [NSData dataWithContentsOfURL:url];
+        }
+        else
+            data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
+    }
     
     NSString *strData = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"%@", strData);
@@ -126,45 +249,85 @@
 
 -(void)setIntroHeader:(int)iFontsize
 {
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, self.tableView.frame.size.width, 40)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 40, self.tableView.frame.size.width, 140)];
     headerView.backgroundColor = [UIColor whiteColor];
-    UILabel *labelView = [[UILabel alloc] initWithFrame:headerView.bounds];
-    labelView.numberOfLines = 2;
+    
+    UILabel *labelWelcome = [[UILabel alloc] initWithFrame:CGRectMake(0,20,headerView.frame.size.width, 40)];
+    labelWelcome.numberOfLines = 1;
+    labelWelcome.lineBreakMode = NSLineBreakByWordWrapping;
+    labelWelcome.textAlignment = NSTextAlignmentCenter;
+    labelWelcome.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
+    labelWelcome.textColor = UIColorFromRGB(0x555555);
+
+    UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(0,labelWelcome.frame.origin.y + labelWelcome.frame.size.height, headerView.frame.size.width, 80)];//headerView.bounds];
+    labelView.numberOfLines = 3;
     labelView.lineBreakMode = NSLineBreakByWordWrapping;
     labelView.textAlignment = NSTextAlignmentCenter;
-    labelView.font = [UIFont fontWithName:@"Roboto-Regular" size:iFontsize];
-    labelView.textColor = [UIColor darkGrayColor];
-    
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour fromDate:[NSDate date]];
-    NSInteger hour = [components hour];
-    NSString *sPrefix;
-    
-    if(hour >= 0 && hour < 12)
-        sPrefix = NSLocalizedString(@"GOOD_MORNING", @"Good morning");
-    else if(hour >= 12 && hour < 17)
-        sPrefix = NSLocalizedString(@"GOOD_AFTERNOON", @"Good afternoon"); //@"Good afternoon";
-    else if(hour >= 17)
-        sPrefix = NSLocalizedString(@"GOOD_EVENING", @"Good evening"); //@"Good evening";
+    labelView.font = [UIFont fontWithName:@"Roboto-Regular" size:18];
+    labelView.textColor = UIColorFromRGB(0x555555);
     
     Settings *obj=[Settings getInstance];
+    NSString *temp;
     
-    NSString *temp2 = [NSString stringWithFormat:NSLocalizedString(@"GREETING_1", nil), (unsigned long)[subscriberPlans count]];
-    NSString *temp = [NSString stringWithFormat:@"%@ %@\n%@", sPrefix, obj.sUser, temp2];
-    NSString *temp1 = [NSString stringWithFormat:@" %d %@", clients_needing_immediate_attention, NSLocalizedString(@"GREETING_2", nil)];
-        
+    if ([obj.sUser length] > 0)
+        temp = [NSString stringWithFormat:@"Welcome back, %@\n", obj.sUser];//(unsigned long)[subscriberPlans count]];
+    else
+        temp = [NSString stringWithFormat:@"Welcome back, %@\n", @"GitHub"];
+
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:temp];
+//    [string addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x007bc4) range:NSMakeRange(14, temp.length - 14)];
+    [string addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x0555555) range:NSMakeRange(14, temp.length - 14)];
+//    [string addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:NSMakeRange(14, temp.length - 14)]
+
+//    [string addAttribute:NSUnderlineColorAttributeName value:[UIColor redColor] range:NSMakeRange(13, temp.length - 13)];
     
-    NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp1];
+    [labelWelcome setAttributedText: string];
+
+    NSString *sNumberOfClients = [NSString stringWithFormat:@"%lu", (unsigned long)total_active_clients];//[subscriberPlans count]];
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x007bc4) };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:sNumberOfClients attributes:attrs];
     
-    [string1 addAttribute:NSForegroundColorAttributeName
-                    value:[UIColor redColor]
-                    range:NSMakeRange(0, 3)];
+    [attributedTitle beginEditing];
     
-    [string appendAttributedString:string1];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18.0] range:NSMakeRange(0, attributedTitle.length)];
+
+    [attributedTitle endEditing];
     
-    [labelView setAttributedText: string];
+    NSString *temp_a = @"You currently have ";
+    NSString *temp_b;
+    if (total_active_clients != 1)
+        temp_b = @" active clients.\n";
+    else
+        temp_b = @" active client.\n";
     
+    NSString *temp2 = [NSString stringWithFormat:@" %@ not met minimum participation.", (clients_needing_immediate_attention > 1) ? @"have" : @"has"];
+    NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a];
+    NSMutableAttributedString *string1_b = [[NSMutableAttributedString alloc] initWithString:temp_b];
+    
+    [string1 appendAttributedString:attributedTitle];
+    [string1 appendAttributedString:string1_b];
+    
+    NSString *sNumberOfClientsMinimumParticipation = [NSString stringWithFormat:@"%d", clients_needing_immediate_attention];
+    NSDictionary *attrsRed = @{ NSForegroundColorAttributeName : [UIColor redColor] };
+    NSMutableAttributedString *attributedMinuimumPartication = [[NSMutableAttributedString alloc] initWithString:sNumberOfClientsMinimumParticipation attributes:attrsRed];
+
+    NSMutableAttributedString *string2 = [[NSMutableAttributedString alloc] initWithString:temp2];
+
+    if (clients_needing_immediate_attention > 0)
+    {
+        [string1 appendAttributedString:attributedMinuimumPartication];
+        [string1 appendAttributedString:string2];
+    }
+
+
+    [labelView setAttributedText: string1];
+
+    [labelView sizeToFit];
+    labelView.frame = CGRectMake(headerView.frame.size.width / 2 - labelView.frame.size.width / 2, labelView.frame.origin.y, labelView.frame.size.width, labelView.frame.size.height);
+    
+    [headerView addSubview:labelWelcome];
     [headerView addSubview:labelView];
+    
     self.tableView.tableHeaderView = headerView;
 }
 
@@ -184,116 +347,61 @@
     return @"";
     
 }
+
 -(void)processBuckets
 {
-    NSArray *clientKeys;
     NSArray *ck;
+    BOOL bAddedDivider = FALSE;
+    total_active_clients = 0;
     
     for (int x=0;x<[subscriberPlans count];x++)
     {
         ck = [subscriberPlans objectAtIndex:x];
-        clientKeys = [[dictionary valueForKeyPath:@"broker_clients"][x] allKeys];
-        
-        brokerEmployersData *pCompany = [[brokerEmployersData alloc] init];
-        pCompany.type = 0;
-        
-        pCompany.companyName = [ck valueForKey:@"employer_name"];
-        pCompany.employer_address_1 = [ck valueForKeyPath:@"contact_info.address_1"];
-        pCompany.employer_city = [ck valueForKeyPath:@"contact_info.city"];
-        pCompany.employer_state = [ck valueForKeyPath:@"contact_info.state"];
-        pCompany.employer_zip = [ck valueForKeyPath:@"contact_info.zip"];
-        
-        pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
-        //        pCompany.emails = [ck valueForKeyPath:@"contact_info"];
-        pCompany.phones = [ck valueForKeyPath:@"contact_info"];
-        
-        pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
-        pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
-        pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
-        pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
-        pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
-        pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
-        pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
-        pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];
-        pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
-        
-        if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
-            pCompany.binder_payment_due = @"";
-        else
-            pCompany.binder_payment_due = [ck valueForKey:@"binder_payment_due"];
-        
-        pCompany.active_general_agency = [ck valueForKey:@"active_general_agency"];
-        
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
-        [numberFormatter setMaximumFractionDigits:0];
-        
-        pCompany.employee_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue]]];
-        pCompany.employer_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue]]];
-        
-        float total_premium = [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue] + [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue];
-        
-        pCompany.total_premium = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: total_premium]];
-        
-        //        if (pCompany.open_enrollment_begins == (NSString *)[NSNull null])
-        if ([pCompany.open_enrollment_begins isEqualToString:@""])
+
+        if ([ck valueForKey:@"plan_year_begins"] != [NSNull null])
         {
-            BOOL bRenewal = FALSE;
-            if ([ck valueForKey:@"renewal_in_progress"] == (NSString *)[NSNull null])
-                bRenewal = FALSE;
+            total_active_clients += 1;
+            brokerEmployersData *pCompany = [[brokerEmployersData alloc] init];
+            pCompany.type = 0;
+            
+            pCompany.companyName = [ck valueForKey:@"employer_name"];
+            
+            pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
+            pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
+            pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
+
+            pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
+            pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
+            pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
+
+            pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];
+            pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
+
+            pCompany.detail_url = [ck valueForKeyPath:@"employer_details_url"];
+            
+            pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
+            pCompany.contact_info = [ck valueForKeyPath:@"contact_info"];
+            
+            pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
+
+            if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
+                pCompany.binder_payment_due = @"";
             else
-                bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
+                pCompany.binder_payment_due = [ck valueForKey:@"binder_payment_due"];
             
-            //            BOOL bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
-            pCompany.open_enrollment_begins = @"";
+            pCompany.active_general_agency = [ck valueForKey:@"active_general_agency"];
             
-            if (bRenewal)
+            if ([pCompany.open_enrollment_begins isEqualToString:@""])
             {
-                pCompany.status = RENEWAL_IN_PROGRESS;
-                [renewals addObject:pCompany];
-            }
-            else
-            {
-                pCompany.status = NO_ACTION_REQUIRED;
-                [all_others addObject:pCompany];
-            }
-        }
-        else
-        {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            // this is important - we set our input date format to match our input string
-            // if format doesn't match you'll get nil from your string, so be careful
-            [dateFormatter setDateFormat:@"MM-dd-yyyy"];
-            NSDate *dateFromString = [[NSDate alloc] init];
-            
-            dateFromString = [dateFormatter dateFromString:pCompany.open_enrollment_begins];
-            NSDate *endEnrollmentDate = [dateFormatter dateFromString:pCompany.open_enrollment_ends];
-            
-            NSDate *today = [NSDate date];
-            
-            if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
-            {
-                if ([pCompany.employeesEnrolled intValue] < [pCompany.planMinimum intValue])
-                {
-                    pCompany.status = NEEDS_ATTENTION;
-                    [open_enrollment addObject:pCompany];
-                    clients_needing_immediate_attention += 1;
-                }
-                else if ( [pCompany.employeesEnrolled intValue] >= [pCompany.planMinimum intValue] )
-                {
-                    pCompany.status = OPEN_ENROLLMENT_MET;
-                    [open_enrollment addObject:pCompany];
-                }
-            }
-            else
-            {
-                NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-                NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                                    fromDate:today
-                                                                      toDate:endEnrollmentDate
-                                                                     options:NSCalendarWrapComponents];
+                BOOL bRenewal = FALSE;
+                if ([ck valueForKey:@"renewal_in_progress"] == (NSString *)[NSNull null])
+                    bRenewal = FALSE;
+                else
+                    bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
                 
-                if ([components day] <= 60 && [components day] >= 0)
+                pCompany.open_enrollment_begins = @"";
+                
+                if (bRenewal)
                 {
                     pCompany.status = RENEWAL_IN_PROGRESS;
                     [renewals addObject:pCompany];
@@ -303,10 +411,67 @@
                     pCompany.status = NO_ACTION_REQUIRED;
                     [all_others addObject:pCompany];
                 }
-                
             }
+            else
+            {
+                /*
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                // this is important - we set our input date format to match our input string
+                // if format doesn't match you'll get nil from your string, so be careful
+                [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+                NSDate *dateFromString = [[NSDate alloc] init];
+                */
+                NSDate *dateFromString = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_begins];
+                
+               // dateFromString = [dateFormatter dateFromString:pCompany.open_enrollment_begins];
+                NSDate *endEnrollmentDate = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_ends]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+                
+                NSDate *today = [NSDate date];
+                
+                if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
+                {
+                    if (([pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
+                    {
+                        pCompany.status = NEEDS_ATTENTION;
+                      //  [open_enrollment addObject:pCompany];
+                        [open_enrollment insertObject:pCompany atIndex:0];
+                        clients_needing_immediate_attention += 1;
+                    }
+                    else if ( [pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue] >= [pCompany.planMinimum intValue] )
+                    {
+                        if (!bAddedDivider)
+                        {
+                            brokerEmployersData *pCompanyDivider = [[brokerEmployersData alloc] init];
+                            pCompanyDivider.type = 1;
+                            [open_enrollment addObject:pCompanyDivider];
+                            bAddedDivider = TRUE;
+                        }
+                        pCompany.status = OPEN_ENROLLMENT_MET;
+                        [open_enrollment addObject:pCompany];
+                    }
+                }
+                else
+                {
+                    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+                    NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
+                                                                        fromDate:today
+                                                                          toDate:endEnrollmentDate
+                                                                         options:NSCalendarWrapComponents];
+                    
+                    if ([components day] <= 60 && [components day] >= 0)
+                    {
+                        pCompany.status = RENEWAL_IN_PROGRESS;
+                        [renewals addObject:pCompany];
+                    }
+                    else
+                    {
+                        pCompany.status = NO_ACTION_REQUIRED;
+                        [all_others addObject:pCompany];
+                    }
+                    
+                }
+            }            
         }
-        
     }
     
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:YES];
@@ -315,12 +480,17 @@
     [listOfCompanies addObject:open_enrollment];
     [listOfCompanies addObject:renewals];
     [listOfCompanies addObject:[all_others sortedArrayUsingDescriptors:@[sort]]]; //all_others];
-    
-    [expandedSections addIndex:0];
-    [expandedSections addIndex:1];
-    [expandedSections addIndex:2];
-    
-//    self.displayedItems = listOfCompanies;
+
+    if ([open_enrollment count] > 0)
+        [expandedSections addIndex:0];
+    else
+    {
+        if ([renewals count] > 0)
+            [expandedSections addIndex:1];
+        else
+            [expandedSections addIndex:2];
+    }
+    //    self.displayedItems = listOfCompanies;
     self.filteredProducts = listOfCompanies;
 }
 
@@ -400,9 +570,21 @@
 
 }
 
+-(void) swipeTableCellWillBeginSwiping:(MGSwipeTableCell *) cell;
+{
+    UIButton *button = [cell.contentView viewWithTag:55];
+    button.hidden = TRUE;
+}
+
+-(void) swipeTableCellWillEndSwiping:(MGSwipeTableCell *) cell;
+{
+    UIButton *button = [cell.contentView viewWithTag:55];
+    button.hidden = FALSE;    
+}
+
 -(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings;
-{
+{    
     expansionSettings.buttonIndex = 1;
     expansionSettings.fillOnTrigger = NO;
     return [self createLeftButtons:4];
@@ -414,7 +596,7 @@
     UIColor * colors[4] = {[UIColor clearColor],
         [UIColor clearColor],
         [UIColor clearColor],[UIColor clearColor]};
-    UIImage * icons[4] = {[UIImage imageNamed:@"phoneCirclelightBlue.png"], [UIImage imageNamed:@"chatWithCircleLightBlue.png"], [UIImage imageNamed:@"markerWithCircleLightBlue.png"], [UIImage imageNamed:@"emailWithCirclelightBlue.png"]};
+    UIImage * icons[4] = {[UIImage imageNamed:@"phone.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"email.png"]};
     for (int i = 0; i < number; ++i)
     {
         MGSwipeButton * button = [MGSwipeButton buttonWithTitle:@"" icon:icons[i] backgroundColor:colors[i] padding:10 callback:^BOOL(MGSwipeTableCell * sender){
@@ -429,24 +611,19 @@
                 sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 sub.messageTitle = pTab.companyName;
-                sub.messageArray = pTab.phones;
+                sub.messageArray = pTab.contact_info;
+                sub.messageType = typePopupPhone;
                 [self presentViewController:sub animated:YES completion: nil];
             }
             
             if (i == 1)
-            {
-//                [self smsEmployer:sender];
-            }
+                [self smsEmployer:sender];
             
             if (i == 2)
-            {
-//                [self showDirections:sender];
-            }
+                [self showDirections:sender];
             
             if (i == 3)
-            {
- //               [self emailEmployer:sender];
-            }
+                [self emailEmployer:sender];
             
             return YES;
         }];
@@ -457,32 +634,135 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 34.0;
+    if ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0)
+        return 80.0;
+    
+    return 60;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (ttype.type == 1)
+        return 20;
+    
+    return 88;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:80)];
     
     // Set a custom background color and a border
-    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
-    headerView.layer.borderWidth = 1.0;
+//    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+//    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+//    headerView.layer.borderWidth = 1.0;
     
     headerView.tag = section;
     
     // Add a label
     UILabel* headerLabel = [[UILabel alloc] init];
-    headerLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - 5, 34);
-    headerLabel.backgroundColor = [UIColor clearColor];
-    headerLabel.textColor = [UIColor darkGrayColor];
+    
+    switch (section) {
+        case 0:
+            headerView.backgroundColor = UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+//            headerLabel.backgroundColor = UIColorFromRGB(0x00a99e);
+            break;
+        case 1:
+            headerView.backgroundColor = UIColorFromRGB(0x00a3e2);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+ //           headerLabel.backgroundColor = UIColorFromRGB(0x00a3e2);
+            break;
+        case 2:
+            headerView.backgroundColor = UIColorFromRGB(0x625ba8);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+   //         headerLabel.backgroundColor = UIColorFromRGB(0x625ba8);
+            break;
+            
+        default:
+            break;
+    }
+
+    headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 60);
+    headerLabel.textColor = [UIColor whiteColor];
     headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
     headerLabel.text = [sections objectAtIndex:section];///  @"This is the custom header view";
     headerLabel.textAlignment = NSTextAlignmentLeft;
-    
     // Add the label to the header view
     [headerView addSubview:headerLabel];
+    
+
+    if ([expandedSections containsIndex:section])
+    {
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        imgVew.backgroundColor = [UIColor clearColor];
+        imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"];
+        imgVew.contentMode = UIViewContentModeScaleAspectFit;
+        // Add the image to the header view
+        [headerView addSubview:imgVew];
+
+        if ((section == 0 && clients_needing_immediate_attention > 0) || section > 0)
+        {
+            UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, 20)];
+            subHeaderView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+            
+            UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
+            headerTitle.text = @"CLIENT";
+            headerTitle.textColor = [UIColor darkGrayColor];
+            headerTitle.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+            // Add the header title to the header view
+            [subHeaderView addSubview:headerTitle];
+
+            UILabel* headerTitle1 = [[UILabel alloc] init];
+            if (section == 0)
+            {
+                [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 195, 0, 135, 20)];
+                headerTitle1.text = @"EMPLOYEES NEEDED";
+            }
+            else
+            {
+                [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 180, 0, 135, 20)];
+                headerTitle1.text = @"PLAN YEAR";
+            }
+            
+            headerTitle1.textAlignment = NSTextAlignmentCenter;
+            headerTitle1.textColor = [UIColor darkGrayColor];
+            headerTitle1.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+            // Add the header title to the header view
+            [subHeaderView addSubview:headerTitle1];
+
+            if (section < 2)
+            {
+                UILabel* headerTitle2 = [[UILabel alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 70, 0, 135, 20)];
+                headerTitle2.text = @"DAYS LEFT";
+                headerTitle2.textColor = [UIColor darkGrayColor];
+                headerTitle2.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+                // Add the header title to the header view
+                [subHeaderView addSubview:headerTitle2];
+            }
+
+            [headerView addSubview:subHeaderView];
+        }
+    }
+    else
+    {
+        if (section == 0 && clients_needing_immediate_attention > 0)
+        {
+            UIView *_leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, headerView.frame.size.height)];
+            _leftColor.backgroundColor = [UIColor redColor];
+            [headerView addSubview:_leftColor];
+        }
+
+        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        button.layer.cornerRadius = 16;
+        button.layer.borderWidth = 2;
+        button.layer.borderColor = [UIColor whiteColor].CGColor;
+        button.clipsToBounds = YES;
+        button.tag = section;
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
+        [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]] forState:UIControlStateNormal];
+        [headerView addSubview:button];
+    }
     
     UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [headerView addGestureRecognizer:recognizer];
@@ -490,41 +770,108 @@
     return headerView;
 }
 
+- (void)handleButtonTap:(id)sender {
+    UIView *pHeaderView = (UIView*)sender;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:self.tableView didSelectHeader:indexPath];
+    
+    [self.tableView endUpdates];
+    //    [self.tableView reloadData];
+}
+
 - (void)handleTap:(UITapGestureRecognizer *)sender {
     UIView *pHeaderView = (UIView*)sender.view;
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
     
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
     [self tableView:self.tableView didSelectHeader:indexPath];
+    
+    [self.tableView endUpdates];
+//    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier2 = @"prototypeCell";
-    
-    MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
-    
+
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+
+ //   int yy = tableView.frame.size.width;
     
-    if ( cell == nil )
-        cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
+    MGSwipeTableCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+    if (!cell) {
+        cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier2];
+        
+        UIImage *image = [UIImage imageNamed:@"chevron_right.png"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+//        CGRect frame = CGRectMake(tableView.frame.size.width - 20.0, 88/2-8, 16, 16);
+//        button.frame = frame;   // match the button's size with the image size
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        button.tag = 55;
+        button.hidden = FALSE;
+        
+        [cell.contentView addSubview:button];
+    }
+
+    UIButton *b1 = [cell.contentView viewWithTag:55];
+    b1.frame = CGRectMake(tableView.frame.size.width - 20.0, 88/2-8, 16, 16);
+/*
+    UILabel *h1 = [cell.contentView viewWithTag:120];
+    UILabel *h2 = [cell.contentView viewWithTag:121];
+    UILabel *h3 = [cell.contentView viewWithTag:122];
+
+    h1.hidden = TRUE;
+    h2.hidden = TRUE;
+    h3.hidden = TRUE;
+
+    b1.hidden = FALSE;    //shows chevron
+*/
+    cell.headerTitle.hidden = TRUE;
+    cell.headerTitle1.hidden = TRUE;
+    cell.headerTitle2.hidden = TRUE;
+    
+
+    if (ttype.type == 1)
+    {
+        cell.backgroundColor = UIColorFromRGB(0xD0D0D0);
+
+        cell.employerLabel.text = @"";
+        cell.employeesLabel.text = @"";
+        cell.daysleftLabel.text = @"";
+        cell.leftColor.hidden = TRUE;
+        
+        cell.headerTitle.hidden = FALSE;
+        cell.headerTitle1.hidden = FALSE;
+        cell.headerTitle2.hidden = FALSE;
+        
+        [cell.headerTitle1 sizeToFit];
+        
+        cell.headerTitle2.frame = CGRectMake(tableView.frame.size.width - 70, 0, 75, 20);
+        cell.headerTitle1.frame = CGRectMake(cell.headerTitle2.frame.origin.x - cell.headerTitle1.frame.size.width - 20, 0, cell.headerTitle1.frame.size.width, 20);
+//        h1.hidden = FALSE;
+//        h2.hidden = FALSE;
+//        h3.hidden = FALSE;
+        b1.hidden = TRUE;    //hides chevron
+        
+//        NSString *pp = h3.text;
+//        h3.text = @"DAYS LEFT";
+
+        return cell;
+    }
+    else
+        cell.backgroundColor = [UIColor clearColor];
     
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
-    
-    if (cell.alertButton.currentBackgroundImage == nil)
-    {
-        cell.alertButton.backgroundColor = [UIColor whiteColor];
-        UIImage *image = [UIImage imageNamed:@"alert2.png"];
-        [cell.alertButton setBackgroundImage:image forState:UIControlStateNormal];
-    }
-    
-    cell.alertButton.frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16);
-    cell.lblDaysLeftText.frame = CGRectMake(tableView.frame.size.width - cell.lblDaysLeftText.frame.size.width - 25, cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
-    cell.daysleftLabel.frame = CGRectMake(cell.lblDaysLeftText.frame.origin.x - cell.daysleftLabel.frame.size.width - 4, cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
-    cell.lblEmployeesNeeded.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
-    cell.employeesLabel.frame = CGRectMake(cell.lblEmployeesNeeded.frame.origin.x - cell.employeesLabel.frame.size.width - 5, cell.employeesLabel.frame.origin.y, cell.employeesLabel.frame.size.width, cell.employeesLabel.frame.size.height);
-    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, cell.employerLabel.frame.origin.y, cell.employeesLabel.frame.origin.x - 10, cell.employerLabel.frame.size.height);
+
+    cell.leftColor.frame = CGRectMake(0,0, 4, 88);
     
     cell.delegate = self;
     cell.leftSwipeSettings.transition = MGSwipeTransition3D;
@@ -533,46 +880,46 @@
     cell.allowsMultipleSwipe = NO;
     cell.delegate = self;
     cell.daysleftLabel.textColor = [UIColor darkGrayColor];
-    cell.lblDaysLeftText.text = @"DAYS LEFT";
+    
+    cell.lblDaysLeftText.text = @"";//@"DAYS LEFT";
     
     cell.employerLabel.text = ttype.companyName;
-    cell.employeesLabel.text = ttype.employeesEnrolled;
+    cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue]];
     cell.alertButton.hidden = TRUE;
     
-    NSDate *today = [NSDate date];
+    cell.employerLabel.textColor = UIColorFromRGB(0x555555);
+    cell.employeesLabel.textColor = UIColorFromRGB(0x555555);
     
-    NSDateFormatter *f = [[NSDateFormatter alloc] init];
-    [f setDateFormat:@"MM-dd-yyyy"];
+    cell.employerLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     
     cell.leftColor.hidden = TRUE;
     
+    int iOffset = 0;
+    
+    cell.lblEmployeesNeeded.text = @"";
     
     if (ttype.status == NEEDS_ATTENTION)
     {
-        cell.lblEmployeesNeeded.text = @"EMPLOYEES NEEDED";
+//        cell.lblEmployeesNeeded.text = @"";     //@"EMPLOYEES NEEDED";
         cell.daysleftLabel.textColor = [UIColor redColor];
         cell.alertButton.hidden = FALSE;
         cell.leftColor.hidden = FALSE;
     }
     
-    if (ttype.status == OPEN_ENROLLMENT_MET)
-        cell.lblEmployeesNeeded.text = [NSString stringWithFormat:@"OF %@ ENROLLED", ttype.employeesTotal];
+//    if (ttype.status == OPEN_ENROLLMENT_MET)
+//        cell.lblEmployeesNeeded.text = @"";
     
     if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED)
     {
-        cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
-        
-        NSDate *dateFromString = [f dateFromString:ttype.planYear];
-        [f setDateFormat:@"MMM dd"];
-        NSString *stringFromDate = [f stringFromDate:dateFromString];
-        cell.employeesLabel.text = stringFromDate;
+//        cell.lblEmployeesNeeded.text = @""; //@"PLAN\nYEAR";
+
+        cell.employeesLabel.text = [self userVisibleDateTime:ttype.planYear];;
         
         int width = ceil([cell.employeesLabel.text sizeWithAttributes:@{NSFontAttributeName: cell.employeesLabel.font}].width);
         
         cell.employeesLabel.frame = CGRectMake(cell.employeesLabel.frame.origin.x, cell.employeesLabel.frame.origin.y, width, 20);
-        cell.lblEmployeesNeeded.frame = CGRectMake(cell.employeesLabel.frame.origin.x + width + 2, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
-        
-        cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
+
+        iOffset = 15;
     }
     
     if (ttype.status == NO_ACTION_REQUIRED)
@@ -582,17 +929,21 @@
     }
     else
     {
-        [f setDateFormat:@"MM-dd-yyyy"];
-        NSDate *endDate = [f dateFromString:ttype.open_enrollment_ends];
-        
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                            fromDate:today
-                                                              toDate:endDate
+                                                            fromDate:[NSDate date]
+                                                              toDate:[self userVisibleDateTimeForRFC3339Date:ttype.open_enrollment_ends]
                                                              options:NSCalendarWrapComponents];
         cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
     }
     
+    [cell.employeesLabel sizeToFit];
+    [cell.daysleftLabel sizeToFit];
+    
+    cell.daysleftLabel.frame = CGRectMake(tableView.frame.size.width - 82/2 - cell.daysleftLabel.frame.size.width/2, 0, cell.daysleftLabel.frame.size.width, 88);
+    cell.employeesLabel.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - 80 - iOffset, 0, cell.employeesLabel.frame.size.width, 88);
+    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, 1, cell.employeesLabel.frame.origin.x - 25, 88);
+
     return cell;
     
 }
@@ -636,7 +987,7 @@
         
         if (currentlyExpanded)
         {
-            [tableView deleteRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationTop];
+            [tableView deleteRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationBottom];
             
             //              cell.accessoryView = [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeDown];
         }
@@ -692,13 +1043,18 @@
         // Get destination view
         brokerPlanDetailViewController *vc = [segue destinationViewController];
         vc.bucket = indexPath.section;
-        vc.type = (brokerEmployersData*)sender; //ttype;
+        vc.type = (brokerEmployersData*)sender;
+        vc.enrollHost = _enrollHost;
+        vc.customCookie_a = _customCookie_a;
+        
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (ttype.type == 1)
+        return;
     [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     return;
@@ -707,8 +1063,197 @@
 - (void)didSelectSearchItem:(id)ttype
 {
     firstTime = TRUE;
+    if (((brokerEmployersData *)ttype).type == 1)
+        return;
     [self performSegueWithIdentifier:@"Broker Detail Page" sender:(brokerEmployersData *)ttype];
     return;
 }
+
+
+- (void)emailEmployer:(id)sender
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupEmail;
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+- (IBAction)smsEmployer:(id)sender {
+    
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupSMS;
+    sub.delegate = self;
+    
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+- (void)SMSThesePeople:(id)ttype
+{
+    MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+    picker.messageComposeDelegate = self;
+    picker.recipients = [NSArray arrayWithObjects:@"12024686571", nil];
+    
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    switch(result)
+    {
+        case MessageComposeResultCancelled:
+            // user canceled sms
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MessageComposeResultSent:
+            // user sent sms
+            //perhaps put an alert here and dismiss the view on one of the alerts buttons
+            break;
+        case MessageComposeResultFailed:
+            // sms send failed
+            //perhaps put an alert here and dismiss the view when the alert is canceled
+            break;
+        default:
+            break;
+    }
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void)showDirections:(id)sender
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupMAP;
+    sub.delegate = self;
+    
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+-(void)MAPTheseDirections:(id)sender
+{
+//    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+//    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSArray *ck = [sender objectAtIndex:0];
+    NSDictionary *pk = [ck objectAtIndex:0];
+    
+    //(DB) NEW API CHANGE
+    NSString *destinationAddress= [NSString stringWithFormat:@"%@, %@, %@, %@", [pk valueForKey:@"address_1"], [pk valueForKey:@"city"], [pk valueForKey:@"state"], [pk valueForKey:@"zip"]]; //@"130 M Street NE, Washington, DC, 20002";
+
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:destinationAddress
+                 completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         
+         // Convert the CLPlacemark to an MKPlacemark
+         // Note: There's no error checking for a failed geocode
+         CLPlacemark *geocodedPlacemark = [placemarks objectAtIndex:0];
+         MKPlacemark *placemark = [[MKPlacemark alloc]
+                                   initWithCoordinate:geocodedPlacemark.location.coordinate
+                                   addressDictionary:geocodedPlacemark.addressDictionary];
+         
+         // Create a map item for the geocoded address to pass to Maps app
+         MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+         [mapItem setName:geocodedPlacemark.name];
+         
+         // Set the directions mode to "Driving"
+         // Can use MKLaunchOptionsDirectionsModeWalking instead
+         NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+         
+         // Get the "Current User Location" MKMapItem
+         MKMapItem *currentLocationMapItem = [MKMapItem mapItemForCurrentLocation];
+         
+         // Pass the current location and destination map items to the Maps app
+         // Set the direction mode in the launchOptions dictionary
+         [MKMapItem openMapsWithItems:@[currentLocationMapItem, mapItem] launchOptions:launchOptions];
+         
+     }];
+}
+
+- (NSDate *)userVisibleDateTimeForRFC3339Date:(NSString *)rfc3339DateTimeString {
+    /*
+     Returns a user-visible date time string that corresponds to the specified
+     RFC 3339 date time string. Note that this does not handle all possible
+     RFC 3339 date time strings, just one of the most common styles.
+     */
+    
+    // If the date formatters aren't already set up, create them and cache them for reuse.
+    static NSDateFormatter *sRFC3339DateFormatter = nil;
+    if (sRFC3339DateFormatter == nil) {
+        sRFC3339DateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        
+        [sRFC3339DateFormatter setLocale:enUSPOSIXLocale];
+        //[sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+        [sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+        [sRFC3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
+    
+    // Convert the RFC 3339 date time string to an NSDate.
+    NSDate *date = [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
+
+    return date;
+}
+
+- (NSString *)userVisibleDateTime:(NSString *)rfc3339DateTimeString {
+    /*
+     Returns a user-visible date time string that corresponds to the specified
+     RFC 3339 date time string. Note that this does not handle all possible
+     RFC 3339 date time strings, just one of the most common styles.
+     */
+    
+    // If the date formatters aren't already set up, create them and cache them for reuse.
+    static NSDateFormatter *sRFC3339DateFormatter = nil;
+    if (sRFC3339DateFormatter == nil) {
+        sRFC3339DateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        
+        [sRFC3339DateFormatter setLocale:enUSPOSIXLocale];
+        //[sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+        [sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+        [sRFC3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
+    
+    // Convert the RFC 3339 date time string to an NSDate.
+    NSDate *date = [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
+    
+    NSString *userVisibleDateTimeString;
+    if (date != nil) {
+        if (sUserVisibleDateFormatter == nil) {
+            sUserVisibleDateFormatter = [[NSDateFormatter alloc] init];
+            [sUserVisibleDateFormatter setDateFormat:@"MMM dd"];
+           // [sUserVisibleDateFormatter setDateStyle:NSDateFormatterShortStyle];
+           // [sUserVisibleDateFormatter setTimeStyle:NSDateFormatterShortStyle];
+        }
+        // Convert the date object to a user-visible date string.
+        userVisibleDateTimeString = [sUserVisibleDateFormatter stringFromDate:date];
+    }
+    return userVisibleDateTimeString;
+
+}
+
 
 @end

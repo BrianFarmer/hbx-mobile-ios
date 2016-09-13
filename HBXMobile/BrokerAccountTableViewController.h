@@ -7,16 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <MapKit/MapKit.h>
 #import "MGSwipeTableCell.h"
 #import "brokerSearchResultTableViewController.h"
+#import "popupMessagebox.h"
 
-@interface BrokerAccountTableViewController : UITableViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, MGSwipeTableCellDelegate, searchDelegate>
+@interface BrokerAccountTableViewController : UITableViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, MFMessageComposeViewControllerDelegate, MGSwipeTableCellDelegate, searchDelegate, popupMessageBoxDelegate>
 {
     NSMutableArray *searchData;
     
     NSMutableIndexSet *expandedSections;
     
     NSArray *sections;
+    int total_active_clients;
     int clients_needing_immediate_attention;
     
     NSMutableArray *listOfCompanies;
@@ -29,6 +33,9 @@
     
     UIBarButtonItem *searchButton;
     BOOL firstTime;
+    BOOL bAlreadyShownTutorial;
+    
+    UIImageView *pView1;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

@@ -13,7 +13,7 @@
 
 //Detail Page
 
-"TITLE_NOTE" = "OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET";
+"TITLE_NOTE" = "Open enrollment in progress • Minimum not met";
 
 "OPEN_ENROLLMENT" = "OPEN ENROLLMENT";
 "PARTICIPATION" = "PARTICIPATION";
@@ -21,17 +21,17 @@
 
 "OPEN_ENROLLMENT_BEGAN" = "Open Enrollment Began";
 "OPEN_ENROLLMENT_CLOSES" = "Open Enrollment Closes";
-"DAYS_LEFT" = "Days Left";
+"DAYS_LEFT" = "DAYS LEFT";
 
 "MINOMUM_MET" = "MINIMUM MET";
 "ENROLLED" = "Enrolled";
 "WAIVED" = "Waived";
 "NOT_COMPLETED" = "Not Completed";
-"TOTAL_EMPLOYEES" = "Total Employees";
+"TOTAL_EMPLOYEES" = "TOTAL EMPLOYEES";
 
 "TOTAL_PREMIUM" = "Total Premium";
 "EMPLOYEE_CONTRIBUTION" = "Employee Contribution";
-"EMPLOYER_CONTRIBUTION" = "Employer Controbution";
+"EMPLOYER_CONTRIBUTION" = "Employer Contribution";
 
 "GOOD_MORNING" = "Good morning";
 "GOOD_AFTERNOON" = "Good afternoon";

@@ -16,6 +16,7 @@
 #define POST_LOGIN_DONE         1003
 #define INITIAL_LOGIN_NS        1004
 #define IS_SECURITY_VALID       1005
+#define MOBILE_POST_LOGIN_DONE  1006
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate>
 {
@@ -30,6 +31,8 @@
     IBOutlet UISwitch               *switchSaveMe;
     IBOutlet UILabel                *lblVersion;
     
+    IBOutlet UIButton *submitButton;
+    
     UIActivityIndicatorView *spinningWheel;
 
     BOOL bSaveUserInfo;
@@ -41,6 +44,10 @@
     NSString *mobileHost;
     
     NSString *securityQuestion;
+    NSString *sSecurityQuestionLocationHost;
+    NSString *sSecurityQuestionLocationUrl;
+    NSString *szPassword;
+    
     NSString *csrfToken;
     NSString *customCookie;
     NSString *customCookie_a;
@@ -55,9 +62,19 @@
     BOOL reLoad;
     
     UILabel* lblDB;
+    
+    UIView *loading;
+    UILabel *loadLabel;
+    
+    int iServerType;
+    
+    NSDate *methodStart;
+    UIImageView *pLogoOnTop;
+//            UIButton *secondButton;
+//          IBOutlet     UIButton *thirdButton;
 }
 
-@property (strong, nonatomic) IBOutlet UIButton *submitButton;
+//@property (strong, nonatomic) IBOutlet UIButton *submitButton;
 @property(nonatomic, retain) CLLocationManager *locationManager;
 
 @end

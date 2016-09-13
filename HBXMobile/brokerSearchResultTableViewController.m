@@ -7,8 +7,13 @@
 //
 
 #import "brokerSearchResultTableViewController.h"
-
 #import "brokerPlanDetailViewController.h"
+
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:1.0]
 
 @interface brokerSearchResultTableViewController ()
 
@@ -52,6 +57,18 @@
     return 0; // only top row showing
 }
 
+-(void) swipeTableCellWillBeginSwiping:(MGSwipeTableCell *) cell;
+{
+    UIButton *button = [cell.contentView viewWithTag:55];
+    button.hidden = TRUE;
+}
+
+-(void) swipeTableCellWillEndSwiping:(MGSwipeTableCell *) cell;
+{
+    UIButton *button = [cell.contentView viewWithTag:55];
+    button.hidden = FALSE;
+}
+
 -(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings;
 {
@@ -62,32 +79,137 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 34.0;
+    if ([expandedSections containsIndex:section])
+        return 80.0;
+    
+    return 60;
+    
+//    return 34.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    if (ttype.type == 1)
+        return 20;
+    
+    return 88;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, [expandedSections containsIndex:section] ? 60:80)];
     
     // Set a custom background color and a border
-    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
-    headerView.layer.borderWidth = 1.0;
+    //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+    //    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+    //    headerView.layer.borderWidth = 1.0;
     
     headerView.tag = section;
     
     // Add a label
     UILabel* headerLabel = [[UILabel alloc] init];
-    headerLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - 5, 34);
-    headerLabel.backgroundColor = [UIColor clearColor];
-    headerLabel.textColor = [UIColor darkGrayColor];
-    headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
-    headerLabel.text = [sections objectAtIndex:section];///  @"This is the custom header view";
-    headerLabel.textAlignment = NSTextAlignmentLeft;
+    int mySection = [[[self.filteredProducts objectAtIndex:section] objectAtIndex:0] status];
+    if (mySection > 1)
+        mySection -= 1;
     
+    switch (mySection) {
+        case 0:
+            headerView.backgroundColor = UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            //            headerLabel.backgroundColor = UIColorFromRGB(0x00a99e);
+            break;
+        case 1:
+            headerView.backgroundColor = UIColorFromRGB(0x00a3e2);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            //           headerLabel.backgroundColor = UIColorFromRGB(0x00a3e2);
+            break;
+        case 2:
+            headerView.backgroundColor = UIColorFromRGB(0x625ba8);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            //         headerLabel.backgroundColor = UIColorFromRGB(0x625ba8);
+            break;
+            
+        default:
+            break;
+    }
+    
+    headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 60);
+    headerLabel.textColor = [UIColor whiteColor];
+    headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
+    headerLabel.text = [sections objectAtIndex:mySection];///  @"This is the custom header view";
+    headerLabel.textAlignment = NSTextAlignmentLeft;
     // Add the label to the header view
     [headerView addSubview:headerLabel];
+    
+    
+    if ([expandedSections containsIndex:section])
+    {
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        imgVew.backgroundColor = [UIColor clearColor];
+        imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"];
+        imgVew.contentMode = UIViewContentModeScaleAspectFit;
+        // Add the image to the header view
+        [headerView addSubview:imgVew];
+        
+        UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, 20)];
+        subHeaderView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+        
+        UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
+        headerTitle.text = @"CLIENT";
+        headerTitle.textColor = [UIColor darkGrayColor];
+        headerTitle.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+        // Add the header title to the header view
+        [subHeaderView addSubview:headerTitle];
+        
+        UILabel* headerTitle1 = [[UILabel alloc] init];
+        if (mySection == 0)
+        {
+            [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 195, 0, 135, 20)];
+            headerTitle1.text = @"EMPLOYEES NEEDED";
+        }
+        else
+        {
+            [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 180, 0, 135, 20)];
+            headerTitle1.text = @"PLAN YEAR";
+        }
+        
+        headerTitle1.textAlignment = NSTextAlignmentCenter;
+        headerTitle1.textColor = [UIColor darkGrayColor];
+        headerTitle1.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+        // Add the header title to the header view
+        [subHeaderView addSubview:headerTitle1];
+        
+        if (mySection < 2)
+        {
+            UILabel* headerTitle2 = [[UILabel alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 70, 0, 135, 20)];
+            headerTitle2.text = @"DAYS LEFT";
+            headerTitle2.textColor = [UIColor darkGrayColor];
+            headerTitle2.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+            // Add the header title to the header view
+            [subHeaderView addSubview:headerTitle2];
+        }
+        
+        [headerView addSubview:subHeaderView];
+    }
+    else
+    {
+        if (mySection == 0)// && clients_needing_immediate_attention > 0)
+        {
+            UIView *_leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, headerView.frame.size.height)];
+            _leftColor.backgroundColor = [UIColor redColor];
+            [headerView addSubview:_leftColor];
+        }
+        
+        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        button.layer.cornerRadius = 16;
+        button.layer.borderWidth = 2;
+        button.layer.borderColor = [UIColor whiteColor].CGColor;
+        button.clipsToBounds = YES;
+        button.tag = section;
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
+        [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]] forState:UIControlStateNormal];
+        [headerView addSubview:button];
+    }
     
     UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [headerView addGestureRecognizer:recognizer];
@@ -101,30 +223,35 @@
     UIColor * colors[4] = {[UIColor clearColor],
         [UIColor clearColor],
         [UIColor clearColor],[UIColor clearColor]};
-    UIImage * icons[4] = {[UIImage imageNamed:@"phoneCirclelightBlue.png"], [UIImage imageNamed:@"chatWithCircleLightBlue.png"], [UIImage imageNamed:@"markerWithCircleLightBlue.png"], [UIImage imageNamed:@"emailWithCirclelightBlue.png"]};
+    UIImage * icons[4] = {[UIImage imageNamed:@"phone.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"email.png"]};
+
+//    UIImage * icons[4] = {[UIImage imageNamed:@"phoneCirclelightBlue.png"], [UIImage imageNamed:@"chatWithCircleLightBlue.png"], [UIImage imageNamed:@"markerWithCircleLightBlue.png"], [UIImage imageNamed:@"emailWithCirclelightBlue.png"]};
     for (int i = 0; i < number; ++i)
     {
         MGSwipeButton * button = [MGSwipeButton buttonWithTitle:@"" icon:icons[i] backgroundColor:colors[i] padding:10 callback:^BOOL(MGSwipeTableCell * sender){
-            NSLog(@"Convenience callback received (left).");
             if (i == 0)
             {
                 //                [self phoneEmployer:sender];
+                NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+                brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+                
+                popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+                sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                sub.messageTitle = pTab.companyName;
+                sub.messageArray = pTab.contact_info;
+                sub.messageType = typePopupPhone;
+                [self presentViewController:sub animated:YES completion: nil];
             }
             
             if (i == 1)
-            {
-                //                [self smsEmployer:sender];
-            }
+                [self smsEmployer:sender];
             
             if (i == 2)
-            {
-                //                [self showDirections:sender];
-            }
+                [self showDirections:sender];
             
             if (i == 3)
-            {
-                //               [self emailEmployer:sender];
-            }
+                [self emailEmployer:sender];
             
             return YES;
         }];
@@ -133,12 +260,78 @@
     return result;
 }
 
+-(void)showDirections:(id)sender
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupMAP;
+    sub.delegate = self;
+    
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+- (void)handleButtonTap:(id)sender {
+    UIView *pHeaderView = (UIView*)sender;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:self.tableView didSelectHeader:indexPath];
+    [self.tableView endUpdates];
+}
+
 - (void)handleTap:(UITapGestureRecognizer *)sender {
     UIView *pHeaderView = (UIView*)sender.view;
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
     
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
     [self tableView:self.tableView didSelectHeader:indexPath];
+    [self.tableView endUpdates];
+}
+
+- (void)emailEmployer:(id)sender
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupEmail;
+    [self presentViewController:sub animated:YES completion: nil];
+}
+
+- (IBAction)smsEmployer:(id)sender {
+    
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle = pTab.companyName;
+    sub.messageArray = pTab.contact_info;
+    sub.messageType = typePopupSMS;
+    sub.delegate = self;
+    
+    [self presentViewController:sub animated:YES completion: nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -150,24 +343,26 @@
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
     if ( cell == nil )
-        cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
-
-    cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
-
-    if (cell.alertButton.currentBackgroundImage == nil)
     {
-        cell.alertButton.backgroundColor = [UIColor whiteColor];
-        UIImage *image = [UIImage imageNamed:@"alert2.png"];
-        [cell.alertButton setBackgroundImage:image forState:UIControlStateNormal];
+        cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier2];
+        
+        UIImage *image = [UIImage imageNamed:@"chevron_right.png"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        CGRect frame = CGRectMake(tableView.frame.size.width - 20.0, 88/2-8, 16, 16);
+        button.frame = frame;   // match the button's size with the image size
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        button.tag = 55;
+        button.hidden = FALSE;
+        
+        [cell.contentView addSubview:button];
+
     }
 
-    cell.alertButton.frame = CGRectMake(cell.frame.size.width - 20, cell.frame.size.height/2-8, 16, 16);
-    cell.lblDaysLeftText.frame = CGRectMake(tableView.frame.size.width - cell.lblDaysLeftText.frame.size.width - 25, cell.lblDaysLeftText.frame.origin.y, cell.lblDaysLeftText.frame.size.width, cell.lblDaysLeftText.frame.size.height);
-    cell.daysleftLabel.frame = CGRectMake(cell.lblDaysLeftText.frame.origin.x - cell.daysleftLabel.frame.size.width - 4, cell.daysleftLabel.frame.origin.y, cell.daysleftLabel.frame.size.width, cell.daysleftLabel.frame.size.height);
-    cell.lblEmployeesNeeded.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
-    cell.employeesLabel.frame = CGRectMake(cell.lblEmployeesNeeded.frame.origin.x - cell.employeesLabel.frame.size.width - 5, cell.employeesLabel.frame.origin.y, cell.employeesLabel.frame.size.width, cell.employeesLabel.frame.size.height);
-    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, cell.employerLabel.frame.origin.y, cell.employeesLabel.frame.origin.x - 10, cell.employerLabel.frame.size.height);
-
+    cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
+    
+    cell.leftColor.frame = CGRectMake(0,0, 4, 88);
+    
     cell.delegate = self;
     cell.leftSwipeSettings.transition = MGSwipeTransition3D;
     cell.rightSwipeSettings.transition = MGSwipeTransition3D;
@@ -184,10 +379,11 @@
     NSDate *today = [NSDate date];
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
-    [f setDateFormat:@"MM-dd-yyyy"];
+    [f setDateFormat:@"yyyy-MM-dd"];
     
     cell.leftColor.hidden = TRUE;
 
+    int iOffset = 0;
     
     if (ttype.status == NEEDS_ATTENTION)
     {
@@ -215,6 +411,8 @@
         cell.lblEmployeesNeeded.frame = CGRectMake(cell.employeesLabel.frame.origin.x + width + 2, cell.lblEmployeesNeeded.frame.origin.y, cell.lblEmployeesNeeded.frame.size.width, cell.lblEmployeesNeeded.frame.size.height);
         
         cell.lblEmployeesNeeded.text = @"PLAN\nYEAR";
+        
+        iOffset = 15;
     }
     
     if (ttype.status == NO_ACTION_REQUIRED)
@@ -224,7 +422,7 @@
     }
     else
     {
-        [f setDateFormat:@"MM-dd-yyyy"];
+        [f setDateFormat:@"yyyy-MM-dd"];
         NSDate *endDate = [f dateFromString:ttype.open_enrollment_ends];
         
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -234,6 +432,13 @@
                                                              options:NSCalendarWrapComponents];
         cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
     }
+
+    [cell.employeesLabel sizeToFit];
+    [cell.daysleftLabel sizeToFit];
+    
+    cell.daysleftLabel.frame = CGRectMake(tableView.frame.size.width - 82/2 - cell.daysleftLabel.frame.size.width/2, 0, cell.daysleftLabel.frame.size.width, 88);//cell.daysleftLabel.frame.size.height);
+    cell.employeesLabel.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - 80 - iOffset, 0, cell.employeesLabel.frame.size.width, 88);//cell.employeesLabel.frame.size.height);
+    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, 1, cell.employeesLabel.frame.origin.x - 25, 88);//cell.employerLabel.frame.size.height);
 
     return cell;
     
@@ -344,4 +549,77 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     return;
 }
+
+- (void)SMSThesePeople:(id)ttype
+{
+    MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+    picker.messageComposeDelegate = self;
+    picker.recipients = [NSArray arrayWithObjects:@"12024686571", nil];
+    
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    switch(result)
+    {
+        case MessageComposeResultCancelled:
+            // user canceled sms
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        case MessageComposeResultSent:
+            // user sent sms
+            //perhaps put an alert here and dismiss the view on one of the alerts buttons
+            break;
+        case MessageComposeResultFailed:
+            // sms send failed
+            //perhaps put an alert here and dismiss the view when the alert is canceled
+            break;
+        default:
+            break;
+    }
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void)MAPTheseDirections:(id)sender
+{
+//    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+//    brokerEmployersData *pTab = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+
+    NSArray *ck = [sender objectAtIndex:0];
+    NSDictionary *pk = [ck objectAtIndex:0];
+    
+    //(DB) NEW API CHANGE
+    NSString *destinationAddress= [NSString stringWithFormat:@"%@, %@, %@, %@", [pk valueForKey:@"address_1"], [pk valueForKey:@"city"], [pk valueForKey:@"state"], [pk valueForKey:@"zip"]]; //@"130 M Street NE, Washington, DC, 20002";
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:destinationAddress
+                 completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         
+         // Convert the CLPlacemark to an MKPlacemark
+         // Note: There's no error checking for a failed geocode
+         CLPlacemark *geocodedPlacemark = [placemarks objectAtIndex:0];
+         MKPlacemark *placemark = [[MKPlacemark alloc]
+                                   initWithCoordinate:geocodedPlacemark.location.coordinate
+                                   addressDictionary:geocodedPlacemark.addressDictionary];
+         
+         // Create a map item for the geocoded address to pass to Maps app
+         MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
+         [mapItem setName:geocodedPlacemark.name];
+         
+         // Set the directions mode to "Driving"
+         // Can use MKLaunchOptionsDirectionsModeWalking instead
+         NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving};
+         
+         // Get the "Current User Location" MKMapItem
+         MKMapItem *currentLocationMapItem = [MKMapItem mapItemForCurrentLocation];
+         
+         // Pass the current location and destination map items to the Maps app
+         // Set the direction mode in the launchOptions dictionary
+         [MKMapItem openMapsWithItems:@[currentLocationMapItem, mapItem] launchOptions:launchOptions];
+         
+     }];
+}
+
 @end

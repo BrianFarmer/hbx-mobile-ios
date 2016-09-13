@@ -16,7 +16,6 @@
 
 #define FS_ERROR_KEY(code)                    [NSString stringWithFormat:@"%d", code]
 #define FS_ERROR_LOCALIZED_DESCRIPTION(code)  NSLocalizedStringFromTable(FS_ERROR_KEY(code), @"FSError", nil)
-#define METERS_PER_MILE 1609.344
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 #define SCREEN_WIDTH ([[UIScreen mainScreen] bounds].size.width)
@@ -31,10 +30,14 @@
 
 //#define HOST @"10.36.27.206:3000"
 
-#define HOST @"10.36.27.236:3000"
-#define HOST_NS @"10.36.27.236:3001"
+//#define HOST @"10.36.27.236:3000"
+//#define HOST_NS @"10.36.27.236:3001"
+
 
 //#define HOST @"localhost:3000"
+@interface NSURLRequest(Private)
++(void)setAllowsAnyHTTPSCertificate:(BOOL)inAllow forHost:(NSString *)inHost;
+@end
 
 
 @interface ViewController ()
@@ -56,6 +59,133 @@
     return newImage;
 }
 
+-(void)viewWillLayoutSubviews
+{
+//    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
+    {
+        
+    }
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        UIColor *color = [UIColor whiteColor];
+        txtEmail.attributedPlaceholder =
+        [[NSAttributedString alloc]
+         initWithString:@"Email Address"
+         attributes:@{NSForegroundColorAttributeName:color}];
+        
+        txtPassword.attributedPlaceholder =
+        [[NSAttributedString alloc]
+         initWithString:@"Password"
+         attributes:@{NSForegroundColorAttributeName:color}];
+        
+        int iLeftPos = self.view.frame.size.width/2 - 150;
+        
+        submitButton.frame = CGRectMake(iLeftPos, 465, 300, 44);
+        txtEmail.frame = CGRectMake(iLeftPos, 200, 300, 40);
+        txtPassword.frame = CGRectMake(iLeftPos, 260, 300, 40);
+        lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
+        switchTouchId.frame = CGRectMake(iLeftPos + 300 - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
+        lblSaveUserID.frame = CGRectMake(iLeftPos, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40);
+        switchSaveMe.frame = CGRectMake(iLeftPos + 300 - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
+
+        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
+        lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
+
+        pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 25, 300, 300 * .333);
+        
+        CALayer *border = [CALayer layer];
+        CGFloat borderWidth = 2;
+        border.borderColor = [UIColor whiteColor].CGColor;
+        border.frame = CGRectMake(0, txtEmail.frame.size.height - borderWidth, txtEmail.frame.size.width, txtEmail.frame.size.height);
+        border.borderWidth = borderWidth;
+        [txtEmail.layer addSublayer:border];
+        txtEmail.layer.masksToBounds = YES;
+        
+        CALayer *border1 = [CALayer layer];
+        border1.borderColor = [UIColor whiteColor].CGColor;
+        border1.frame = CGRectMake(0, txtPassword.frame.size.height - borderWidth, txtPassword.frame.size.width, txtPassword.frame.size.height);
+        border1.borderWidth = borderWidth;
+        [txtPassword.layer addSublayer:border1];
+        txtPassword.layer.masksToBounds = YES;
+        /*
+         //       in ViewDidload add the follwoing section to add the second button to the view
+         secondButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+         [secondButton setTitle:@"Second" forState:UIControlStateNormal];
+         secondButton.frame = CGRectMake(100,100,200,50);
+         secondButton.backgroundColor = [UIColor redColor];
+         //     [secondButton sizeToFit];
+         secondButton.translatesAutoresizingMaskIntoConstraints = NO;
+         
+         [self.view addSubview:secondButton];
+         
+         NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:secondButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-40.f];
+         
+         [self.view addConstraint:constraint];
+         
+         constraint = [NSLayoutConstraint constraintWithItem:secondButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f];
+         
+         [self.view addConstraint:constraint];
+         
+         
+         constraint = [NSLayoutConstraint constraintWithItem:thirdButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem: nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:300.0f];
+         
+         [self.view addConstraint:constraint];
+         
+         */
+        
+        //        _submitButton.translatesAutoresizingMaskIntoConstraints = NO;
+        //        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:_submitButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.f];
+        /*
+         NSLayoutConstraint *centreHorizontallyConstraint = [NSLayoutConstraint
+         constraintWithItem:secondButton
+         attribute:NSLayoutAttributeCenterX
+         relatedBy:NSLayoutRelationEqual
+         toItem:self.view
+         attribute:NSLayoutAttributeCenterX
+         multiplier:1.0
+         constant:-40];
+         */
+        //        [self.view addConstraint:centreHorizontallyConstraint];
+        /*
+         NSLayoutConstraint *centreHorizontallyConstraint = [NSLayoutConstraint
+         constraintWithItem:self.submitButton
+         attribute:NSLayoutAttributeCenterX
+         relatedBy:NSLayoutRelationEqual
+         toItem:self.view
+         attribute:NSLayoutAttributeCenterX
+         multiplier:1.0
+         constant:0];
+         
+         [self.view addConstraint:centreHorizontallyConstraint];
+         */
+        /*
+         [self.view addConstraint:
+         [NSLayoutConstraint constraintWithItem:self.submitButton //self.view
+         attribute:NSLayoutAttributeCenterX
+         relatedBy:0
+         toItem:self.view
+         attribute:NSLayoutAttributeCenterX
+         multiplier:1
+         constant:0]];
+         */
+        /*
+         [self.view addConstraint:
+         [NSLayoutConstraint constraintWithItem:_submitButton //self
+         attribute:NSLayoutAttributeCenterY
+         relatedBy:0
+         toItem:self
+         attribute:NSLayoutAttributeCenterY
+         multiplier:1
+         constant:0]];
+         */
+        lblVersion.numberOfLines = 3;
+        lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
+        lblVersion.frame = CGRectMake(self.view.frame.size.width - 50, self.view.frame.size.height - 30, 70, 15);
+        lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -76,28 +206,20 @@
     
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
-    
-    UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-50, 0, 100, 45)];
-    pView1.backgroundColor = [UIColor clearColor];
-    pView1.image = [UIImage imageNamed:@"dchllogo_withouttag-2.png"];
-    pView1.contentMode = UIViewContentModeScaleAspectFit;
-    
-    [self.navigationController.navigationBar addSubview:pView1];
-    
+
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     self.navigationController.navigationBar.translucent = NO;
 
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    spinningWheel = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinningWheel = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     spinningWheel.frame = CGRectMake(0.0, 0.0, 100.0, 100.0);
     spinningWheel.center = self.view.center;
     spinningWheel.layer.cornerRadius = 05;
     spinningWheel.opaque = NO;
     spinningWheel.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
-    spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    spinningWheel.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+
     [self.view addSubview:spinningWheel];
     
     BOOL hasTouchID = NO;
@@ -125,7 +247,7 @@
         // Place iPhone/iPod specific code here...
         topView.frame = CGRectMake(25, 135, screenSize.width - 45, 330);
         
-        self.submitButton.frame = CGRectMake(20, 265, screenSize.width - 80, 44);
+        submitButton.frame = CGRectMake(20, 265, screenSize.width - 80, 44);
         txtEmail.frame = CGRectMake(20, txtEmail.frame.origin.y, topView.frame.size.width - 40, 40);
         txtPassword.frame = CGRectMake(20, txtEmail.frame.origin.y + txtEmail.frame.size.height + 20, topView.frame.size.width - 40, 40);
         lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
@@ -134,18 +256,26 @@
         switchSaveMe.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchSaveMe.frame.size.width - 40, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
         bottomView.frame = CGRectMake(bottomView.frame.origin.x, bottomView.frame.origin.y + 60, screenSize.width, screenSize.height - (bottomView.frame.origin.y + 60));
         lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);
+        
     }
-    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    else
     {
-        topView.center = CGPointMake(CGRectGetMidX(self.view.bounds), topView.center.y);
-        bottomView.center = CGPointMake(CGRectGetMidX(self.view.bounds), bottomView.center.y);
+        
     }
-
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
-    UIImage *img = [UIImage imageNamed:@"gear.png"];
-    [btn setImage:img forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(showConfig:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+    
+    lblVersion.numberOfLines = 3;
+    lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
+    lblVersion.frame = CGRectMake(bottomView.frame.size.width - 50, bottomView.frame.size.height - 30, 70, 15);
+    lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    
+    if (!PRODUCTION_BUILD)
+    {
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(10, screenSize.height - 36, 32, 32)];
+        UIImage *img = [UIImage imageNamed:@"gear.png"];
+        [btn setImage:img forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(showConfig:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+    }
     
     lblDB = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width /2 - 100, screenSize.height - 14, 200, 10)];
     lblDB.textAlignment = NSTextAlignmentCenter;
@@ -153,10 +283,6 @@
     lblDB.textColor = [UIColor whiteColor];
     [self.view addSubview:lblDB];
     
-    lblVersion.numberOfLines = 3;
-    lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
-    lblVersion.frame = CGRectMake(bottomView.frame.size.width - 50, bottomView.frame.size.height - 30, 70, 15);
-    lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
 
     UIView * separator = [[UIView alloc] initWithFrame:CGRectMake(22, txtEmail.frame.origin.y + txtEmail.frame.size.height + 10, topView.frame.size.width - 22, 1)];
     separator.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
@@ -170,8 +296,8 @@
     separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [topView addSubview:separator2];
 
-    self.submitButton.layer.cornerRadius = 10; // this value vary as per your desire
-    self.submitButton.clipsToBounds = YES;
+    submitButton.layer.cornerRadius = 10;
+    submitButton.clipsToBounds = YES;
     
     KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
     
@@ -179,31 +305,32 @@
     NSString *username = [keychainItem objectForKey:(__bridge id)kSecAttrLabel];
     //  [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
     //  [keychainItem setObject:@"dboyd5@@hotmail.com" forKey:(__bridge id)kSecAttrLabel];
-    //  Get the stored data before the view loads
-    //  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    int logoWidth;
     
-    //  NSString *sSaveUser = [defaults objectForKey:@"saveUser"];
-    //  NSString *sEnableTouchID = [defaults objectForKey:@"enableTouchID"];
-    UIImageView *pView = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-100, 50, 200, 45)];
-    pView.backgroundColor = [UIColor clearColor];
-    pView.image = [UIImage imageNamed:@"dchllogo_withouttag-2.png"];
-    pView.contentMode = UIViewContentModeScaleAspectFit;
+    if (screenSize.height < 600)
+        logoWidth = 200;
+    else
+        logoWidth = 300;
     
-    [self.view addSubview:pView];
+    pLogoOnTop = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-logoWidth/2, 25, logoWidth, logoWidth * .333)];
+//    UIImageView *pView = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-100, 50, 200, 45)];
+    pLogoOnTop.backgroundColor = [UIColor clearColor];
+    pLogoOnTop.image = [UIImage imageNamed:@"BrokerMVP_AppHeader512x147.png"];
+    pLogoOnTop.contentMode =  UIViewContentModeScaleAspectFill;
+    
+    [self.view addSubview:pLogoOnTop];
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveUserInfo"])
     {
         txtEmail.text = username;
-//      txtPassword.text = password;
         
         switchSaveMe.on = TRUE;
         bSaveUserInfo = TRUE;
         
         bUseTouchID = [[NSUserDefaults standardUserDefaults] boolForKey:@"useTouchID"];
         if (bUseTouchID)
-        {
             switchTouchId.on = TRUE;
-        }
     }
     else
     {
@@ -236,20 +363,27 @@
     [spinningWheel stopAnimating];
     
     self.navigationController.navigationBarHidden = YES;
-    
+#if (!PRODUCTION_BUILD)
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
         lblDB.text = @"using enroll database server";
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1002)
         lblDB.text = @"using mobile notification server";
     else
         lblDB.text = @"using github for broker data";
+#endif
     
 #if !(TARGET_IPHONE_SIMULATOR)
     if (bUseTouchID)
     {
         LAContext *myContext = [[LAContext alloc] init];
         NSError *authError = nil;
-        NSString *myLocalizedReasonString = @"Touch ID Test to show Touch ID working in a custom app";
+        
+        NSString *stemp = txtEmail.text;
+        
+        stemp = [stemp stringByReplacingCharactersInRange:NSMakeRange(4, [stemp length]-4) withString:@"****"];
+        NSLog(@"%@",stemp);
+
+        NSString *myLocalizedReasonString = [NSString stringWithFormat:@"Sign in as %@", stemp];
         
         if ([myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]) {
             [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
@@ -257,7 +391,8 @@
                                 reply:^(BOOL success, NSError *error) {
                                     if (success) {
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            [self performSegueWithIdentifier:@"Broker View 1" sender:nil];
+                                      //      [self performSegueWithIdentifier:@"Broker View 1" sender:nil];
+                                            [self handleButtonClick:nil];
                                         });
                                     } else {
                                         
@@ -320,14 +455,16 @@
 
 - (IBAction)handleButtonClick:(id)sender
 {
-    [spinningWheel startAnimating];
+//    [spinningWheel startAnimating];
 
-    txtEmail.text = @"bill.murray@example.com";
-
+    [self customActivityView];
+    [loading setHidden:FALSE];
+    loadLabel.text = @"Loading";
+    
     if (switchSaveMe.isOn)
     {
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
-        [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
+//        [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
         [keychainItem setObject:txtEmail.text forKey:(__bridge id)kSecAttrLabel];
         //   [keychainItem setObject:@"" forKey:(__bridge id)kSecAttrDescription];
     }
@@ -339,24 +476,45 @@
     [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
     [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 
-    switch([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue])
+    iServerType = [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue];
+    if (PRODUCTION_BUILD)
+    {
+        iServerType = 1002;
+    }
+    
+    switch(iServerType)
     {
         case 1001:
             enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
             [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]];
             break;
         case 1002:
+    //        txtEmail.text = @"bobby.heenan@yopmail.com";
+#if (PRODUCTION_BUILD)
+            mobileHost = @"hbx-mobile.dchbx.org";
+#else
             mobileHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
-            [self login:mobileHost type:INITIAL_LOGIN_NS url:[NSString stringWithFormat:@"http://%@/login", mobileHost]];
+            if ([txtEmail.text length] == 0)
+            {
+                txtEmail.text = @"seth.rollins@yopmail.com";
+                txtPassword.text = @"$RFde3#1!87";
+            }
+
+#endif
+
+            [self MOBILE_SERVER_Login:[NSString stringWithFormat:@"https://%@/login", mobileHost] host:mobileHost];
             break;
         case 1003:
         default:
-            [self askSecurityQuestion:FALSE];
+            {
+                #if (TARGET_IPHONE_SIMULATOR)
+                    [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
+                #else
+                    [self askSecurityQuestion:FALSE];
+                #endif
+            }
             break;
     }
-//#if !(TARGET_IPHONE_SIMULATOR)
-//#else
-//#endif
 }
 
 -(void)askSecurityQuestion:(BOOL)bIncorrect
@@ -378,7 +536,8 @@
                                    handler:^(UIAlertAction *action)
                                    {
                                        NSLog(@"Cancel action");
-                                       [spinningWheel stopAnimating];
+                                       //[spinningWheel stopAnimating];
+                                           [loading setHidden:TRUE];
                                    }];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -411,12 +570,74 @@
                                                                      kCFStringEncodingUTF8));
 }
 
+//ONLY NEEDED FOR ENROLL LOGIN DIRECTLY
 - (void)clearCookiesForURL {
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     NSArray *cookies = [cookieStorage cookiesForURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]]];
     for (NSHTTPCookie *cookie in cookies) {
         NSLog(@"Deleting cookie for domain: %@", [cookie domain]);
         [cookieStorage deleteCookie:cookie];
+    }
+}
+
+-(void)MOBILE_SERVER_Login:(NSString*)pUrl host:(NSString*)host
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    NSString *post;
+    
+//    NSString *post = [NSString stringWithFormat:@"userid=%@&pass=$RFde3#1!87", @"bobby.heenan@yopmail.com"]; //seth.rollins@yopmail.com
+    if (bUseTouchID && [txtPassword.text length] == 0)
+    {
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
+        szPassword = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+    }
+    else
+        szPassword = txtPassword.text;
+
+    post = [NSString stringWithFormat:@"userid=%@&pass=%@", txtEmail.text, szPassword]; //seth.rollins@yopmail.com
+
+    NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
+    
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    NSURL *candidateURL = [NSURL URLWithString:pUrl];
+    // WARNING > "test" is an URL according to RFCs, being just a path
+    // so you still should check scheme and all other NSURL attributes you need
+    NSLog(@"%@", candidateURL.host);
+    NSLog(@"%@", candidateURL.scheme);
+    
+    if (candidateURL && candidateURL.scheme && candidateURL.host) {
+        // candidate is a well-formed url with:
+        //  - a scheme (like http://)
+        //  - a host (like stackoverflow.com)
+        sSecurityQuestionLocationHost = [NSString stringWithFormat:@"%@://%@", candidateURL.scheme, candidateURL.host];
+    }
+
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    
+    [request setHTTPBody:postData];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    //    customCookie_a = customCookie;
+    
+    REQUEST_TYPE = MOBILE_POST_LOGIN_DONE;
+    
+    [NSMutableURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
+    
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
     }
 }
 
@@ -432,6 +653,7 @@
     [request setHTTPMethod:@"GET"];
 
     REQUEST_TYPE = requestType;
+    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
     
     [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
@@ -452,8 +674,8 @@
     //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
-//    NSString *post = [NSString stringWithFormat:@"user[email]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
-    NSString *post = [NSString stringWithFormat:@"user[email]=%@&user[password]=Test123!&authenticity_token=%@", txtEmail.text, at];
+    NSString *post = [NSString stringWithFormat:@"user[login]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
+//    NSString *post = [NSString stringWithFormat:@"user[login]=%@&user[password]=$RFde3#1!87&authenticity_token=%@", txtEmail.text, at];
     
     NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
     
@@ -573,13 +795,27 @@
     return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler{
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        if([challenge.protectionSpace.host isEqualToString:@"mydomain.com"]){
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+            completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+        }
+    }
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
+//    if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
+//        [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+//    } else {
+//(DB)        [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
+//    }
+
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-    } else {
-        [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];
-    }
+    
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)response
@@ -618,9 +854,18 @@
 {
     
     NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
-//    int code = [httpResponse statusCode];
+    NSInteger code = [httpResponse statusCode];
+    
+    if (code == 502)
+        REQUEST_TYPE = 502;
     
     _responseData = [[NSMutableData alloc] init];
+
+    if (REQUEST_TYPE == MOBILE_POST_LOGIN_DONE)
+    {
+        NSDictionary *headerFields = [httpResponse allHeaderFields];
+        sSecurityQuestionLocationUrl = [headerFields valueForKeyPath:@"Location"];
+    }
     
     NSDictionary *headerFields = [httpResponse allHeaderFields];
     if ([[headerFields valueForKey:@"Set-Cookie"] length] > 0)
@@ -648,7 +893,7 @@
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data
 {
     responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", responseString);
+    NSLog(@"\n\n\n\n\n%@\n\n\n\n\n\n", responseString);
     [_responseData appendData:data];
 }
 
@@ -656,7 +901,8 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
-    [spinningWheel stopAnimating];
+    //[spinningWheel stopAnimating];
+    [loading setHidden:TRUE];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                     message:[error localizedDescription]
                                                    delegate:nil
@@ -707,16 +953,27 @@
                 _brokerId = [dictionary valueForKey:@"id"];
                 obj.sUser = [dictionary valueForKey:@"first"];
                 
-                [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                methodStart = [NSDate date];
+                
+                loadLabel.text = @"Loading employer data";
+                if (iServerType == 1001)
+                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                else
+                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
             }
             break;
         case GET_BROKER_EMPLOYERS:
         {
-            [spinningWheel stopAnimating];
-            
+            //[spinningWheel stopAnimating];
+            [loading setHidden:TRUE];
             Settings *obj=[Settings getInstance];
             obj.sEnrollServer = enrollHost;
             obj.sMobileServer = mobileHost;
+            
+            NSDate *methodFinish = [NSDate date];
+            NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+            NSLog(@"executionTime = %f\n\n\n", executionTime);
+
             
             [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
         }
@@ -736,12 +993,35 @@
                 
                 customCookie_a = [customCookie substringFromIndex:endRange.location+12];
             
-            //    [self askSecurityQuestionFromMobileServer:TRUE];
-                [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
+                [self askSecurityQuestionFromMobileServer:TRUE];
+            //    [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
             }
             break;
         case IS_SECURITY_VALID:
-            
+            {
+                NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+                NSError *error = nil;
+                NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+
+                enrollHost = [dictionary valueForKey:@"enroll_server"];
+//                customCookie = [dictionary valueForKey:@"session_key"];
+                customCookie = [dictionary valueForKey:@"session_id"];
+                
+//                NSRange endRange = [customCookie rangeOfString:@"_session_id="];
+                
+                customCookie_a = customCookie; //[customCookie substringFromIndex:endRange.location+12];
+                
+                if (bUseTouchID)
+                {
+                    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
+                    [keychainItem setObject:szPassword forKey:(__bridge id)kSecAttrAccount];
+                }
+                
+                szPassword = @"";
+                
+                loadLabel.text = @"Getting broker id";
+                [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"%@/broker_agencies", enrollHost]]; //remove http:// new server sends http with it
+            }
             break;
         case INITIAL_GET:       //Only used for Enroll Server Login
             [self POSTLogin];
@@ -750,6 +1030,28 @@
             [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
 
             break;
+        case 502:   //Only used for Enroll Server Login
+            {
+                [spinningWheel stopAnimating];
+                [self showAccountLocked];
+            }
+            break;
+
+        case MOBILE_POST_LOGIN_DONE:   //Only used for Enroll Server Login
+        {
+            //            [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
+            NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error = nil;
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            
+            loadLabel.text = @"Retrieving security question";
+            
+            securityQuestion = [dictionary valueForKey:@"security_question"];
+            
+            [self askSecurityQuestionFromMobileServer:TRUE];
+        }
+            break;
+
         default:
             break;
     }
@@ -825,6 +1127,183 @@
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+}
+
+-(void)showAccountLocked
+{
+    UIAlertController *alertController = nil;
+
+    [loading setHidden:TRUE];
+    
+    alertController = [UIAlertController  alertControllerWithTitle:@"Login Error"
+                                                           message:@"Account has been locked"
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+
+                               }];
+    
+    [alertController addAction:okAction];
+    
+    [alertController.view setNeedsLayout];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
+
+-(void)askSecurityQuestionFromMobileServer:(BOOL)bIncorrect
+{
+    UIAlertController *alertController = nil;
+    
+    alertController = [UIAlertController  alertControllerWithTitle:@"Security Question"
+                                                           message:securityQuestion
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
+     {
+         textField.placeholder = NSLocalizedString(@"Enter you answer here", @"Login");
+     }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"Cancel action");
+                                    //   [spinningWheel stopAnimating];
+                                           [loading setHidden:TRUE];
+                                   }];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                                   UITextField *login = alertController.textFields.firstObject;
+                            //       if ([login.text caseInsensitiveCompare:@"Blue"] == NSOrderedSame)
+                                       [self postSecurityAnswer:login.text];
+                                       //[self performSegueWithIdentifier:@"BrokerTable" sender:nil];
+                           //        else
+                           //            [self askSecurityQuestion:TRUE];
+                               }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    
+    [alertController.view setNeedsLayout];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)postSecurityAnswer:(NSString *)answer
+{
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    
+    loadLabel.text = @"Submitting credentials";
+//    NSString *at = [self percentEscapeURLParameter:csrfToken];
+    //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
+    //    NSString *post = [NSString stringWithFormat:@"user[email]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
+//    NSString *post = [NSString stringWithFormat:@"user[email]=%@&user[password]=Test123!&authenticity_token=%@", txtEmail.text, at];
+    NSString *post = [NSString stringWithFormat:@"security_answer=%@", answer];
+    
+    NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
+    
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]; //NSASCIIStringEncoding
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    
+    NSString *pUrl = sSecurityQuestionLocationUrl; //@"http://ec2-54-234-22-53.compute-1.amazonaws.com:3001/login/1"; //[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost];
+    
+    NSURL *candidateURL = [NSURL URLWithString:pUrl];
+    // WARNING > "test" is an URL according to RFCs, being just a path
+    // so you still should check scheme and all other NSURL attributes you need
+    if (candidateURL && candidateURL.scheme && candidateURL.host) {
+        // candidate is a well-formed url with:
+        //  - a scheme (like http://)
+        //  - a host (like stackoverflow.com)
+    }
+    else
+        pUrl = [NSString stringWithFormat:@"%@%@", sSecurityQuestionLocationHost, sSecurityQuestionLocationUrl];
+    
+    [request setURL:[NSURL URLWithString:pUrl]];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];
+    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    //    NSString *pCookie = [NSString stringWithFormat:@"_session_id=%@", customCookie];
+    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"http://ec2-54-234-22-53.compute-1.amazonaws.com:3001/login/1", NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie, NSHTTPCookieValue,
+                                nil];
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [request setAllHTTPHeaderFields:headers];
+    [request setHTTPBody:postData];
+    
+    NSLog(@"%@", [request allHTTPHeaderFields]);
+    
+    customCookie_a = customCookie;
+    
+    REQUEST_TYPE = IS_SECURITY_VALID;
+    
+    conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    if(conn) {
+        NSLog(@"Connection Successful");
+    } else {
+        NSLog(@"Connection could not be made");
+    }
+    
+//    reLoad = TRUE;
+}
+
+-(void)customActivityView
+{
+    loading = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-110, 200, 220, 140)];
+    
+    loading.layer.cornerRadius = 15;
+    loading.opaque = NO;
+    loading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    
+    loadLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, 200, 22)];
+    
+    loadLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    loadLabel.textAlignment = NSTextAlignmentCenter;
+    loadLabel.textColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
+    loadLabel.backgroundColor = [UIColor clearColor];
+    
+    [loading addSubview:loadLabel];
+    
+    UIActivityIndicatorView *spinning = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    spinning.frame = CGRectMake(220/2-18, 140/2-18, 37, 37);
+    [spinning startAnimating];
+    
+    [loading addSubview:spinning];
+    
+//    loading.frame = CGRectMake(100, 200, 200, 200);
+    [loading setHidden:TRUE];
+    
+    [self.view addSubview:loading];
 }
 
 @end

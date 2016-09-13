@@ -25,7 +25,7 @@
     self.navigationController.navigationBarHidden = NO;
     self.view.backgroundColor = [UIColor colorWithRed:(141/255.0) green:(180/255.0) blue:(212/255.0) alpha:1.0];
 
-    configTableNames = [[NSMutableArray alloc] initWithObjects: @"Use Enroll Database Server", @"Use Notification Server", @"Use Github", nil];
+    configTableNames = [[NSMutableArray alloc] initWithObjects: @"Use Enroll Database Server", @"Use HBX Mobile Server", @"Use Github", nil];
     
     configTable.frame = CGRectMake(20, self.view.frame.origin.y, self.view.frame.size.width - 40, self.view.frame.size.height);
     configTable.backgroundColor = [UIColor clearColor];

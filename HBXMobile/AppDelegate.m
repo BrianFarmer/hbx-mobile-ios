@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <AWSCore/AWSCore.h>
+//#import <AWSCore/AWSCore.h>
 #import "Constants.h"
 
 @interface AppDelegate ()
@@ -38,17 +38,21 @@
     
     LeftMenuSlideOutTableViewController *leftMenu = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
 
+    UINavigationController *passcodeNavigationController = [[UINavigationController alloc] initWithRootViewController:leftMenu];
+
 //    LeftMenuSlideOutTableViewController *leftMenu1 = (LeftMenuSlideOutTableViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"LeftMenuViewController"];
     
-    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    [SlideNavigationController sharedInstance].leftMenu = passcodeNavigationController;
     [SlideNavigationController sharedInstance].menuRevealAnimationDuration = .18;
-    
+/*
     AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:CognitoRegionType
                                                                                                     identityPoolId:CognitoIdentityPoolId];
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:DefaultServiceRegionType
                                                                          credentialsProvider:credentialsProvider];
     AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = configuration;
-
+*/
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     return YES;
 }
 

@@ -570,43 +570,73 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
+        _headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
+        _headerTitle.text = @"CLIENT";
+        _headerTitle.tag = 120;
+        _headerTitle.hidden = TRUE;
+        _headerTitle.textColor = [UIColor darkGrayColor];
+        _headerTitle.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+        // Add the header title to the header view
+        [self.contentView addSubview:_headerTitle];
+        
+        _headerTitle1 = [[UILabel alloc] initWithFrame:CGRectMake(220, 0, 135, 20)];
+        _headerTitle1.text = @"ENROLLED";
+        _headerTitle1.tag = 121;
+        _headerTitle1.hidden = TRUE;
+        _headerTitle1.textAlignment = NSTextAlignmentCenter;
+        _headerTitle1.textColor = [UIColor darkGrayColor];
+        _headerTitle1.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+        // Add the header title to the header view
+        [self.contentView addSubview:_headerTitle1];
+        
+        
+        _headerTitle2 = [[UILabel alloc] initWithFrame:CGRectMake(340, 0, 75, 20)];
+        _headerTitle2.text = @"DAYS LEFT";
+        _headerTitle2.tag = 122;
+        _headerTitle2.hidden = TRUE;
+        _headerTitle2.textColor = [UIColor darkGrayColor];
+        _headerTitle2.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+        // Add the header title to the header view
+        [self.contentView addSubview:_headerTitle2];
+
+        
         _employerLabel = [[UILabel alloc] initWithFrame:(CGRectMake(14, -6, 144, 49))];
-        _employerLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0];
+        _employerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:18];
         _employerLabel.numberOfLines = 2;
         _employerLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _employerLabel.textColor = [UIColor darkGrayColor];
         _employerLabel.textAlignment = NSTextAlignmentLeft;
         
         _employeesLabel = [[UILabel alloc] initWithFrame:(CGRectMake(166, 8, 28, 21))];
-        _employeesLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0];
+        _employeesLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:18];
         _employeesLabel.textAlignment = NSTextAlignmentRight;
         _employeesLabel.textColor = [UIColor darkGrayColor];
-        
+/*
         _lblEmployeesNeeded = [[UILabel alloc] initWithFrame:(CGRectMake(198, 3, 59, 35))];
         _lblEmployeesNeeded.font = [UIFont fontWithName:@"Roboto-Regular" size:10.0];
         _lblEmployeesNeeded.textAlignment = NSTextAlignmentLeft;
         _lblEmployeesNeeded.textColor = [UIColor darkGrayColor];
         _lblEmployeesNeeded.lineBreakMode = NSLineBreakByWordWrapping;
         _lblEmployeesNeeded.numberOfLines = 2;
-        
+*/        
         _daysleftLabel = [[UILabel alloc] initWithFrame:(CGRectMake(259, 8, 25, 21))];
-        _daysleftLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0];
+        _daysleftLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:18];
         _daysleftLabel.textAlignment = NSTextAlignmentRight;
         _daysleftLabel.textColor = [UIColor darkGrayColor];
-        
+/*
         _lblDaysLeftText = [[UILabel alloc] initWithFrame:(CGRectMake(289, 3, 30, 34))];
         _lblDaysLeftText.font = [UIFont fontWithName:@"Roboto-Regular" size:10.0];
         _lblDaysLeftText.textAlignment = NSTextAlignmentLeft;
         _lblDaysLeftText.textColor = [UIColor darkGrayColor];
         _lblDaysLeftText.lineBreakMode = NSLineBreakByWordWrapping;
         _lblDaysLeftText.numberOfLines = 2;
+*/
         
-        
-        _leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, self.frame.size.height)];
+        _leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, self.frame.size.height)];
         _leftColor.backgroundColor = [UIColor redColor];
         _leftColor.hidden = FALSE;
         [self.contentView addSubview:_leftColor];
-        
+/*
         UIImage *image = [UIImage imageNamed:@"alert2.png"];
         
         _alertButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -617,16 +647,16 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         _alertButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [_alertButton setBackgroundImage:image forState:UIControlStateNormal];
         _alertButton.backgroundColor = [UIColor clearColor];
-        
+  */
         [self.contentView addSubview:_leftColor];
 
         [self.contentView addSubview:_employerLabel];
         [self.contentView addSubview:_employeesLabel];
-        [self.contentView addSubview:_lblEmployeesNeeded];
+//        [self.contentView addSubview:_lblEmployeesNeeded];
         [self.contentView addSubview:_daysleftLabel];
-        [self.contentView addSubview:_lblDaysLeftText];
+//        [self.contentView addSubview:_lblDaysLeftText];
 
-        [self.contentView addSubview:_alertButton];
+//        [self.contentView addSubview:_alertButton];
     }
     return self;
 }
@@ -637,13 +667,16 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     if(self = [super initWithCoder:aDecoder]) {
         [self initViews:YES];
         
-        _leftColor.frame = CGRectMake(0, 0, 3, self.frame.size.height);
+        _headerTitle2.frame = CGRectMake(self.frame.size.width - 55, 0, 75, self.frame.size.height);
+        _leftColor.frame = CGRectMake(0, 0, 4, self.frame.size.height);
         _employerLabel.frame = CGRectMake(_employerLabel.frame.origin.x, _employerLabel.frame.origin.y, _employerLabel.frame.size.width + 40, _employerLabel.frame.size.height);
         _employeesLabel.frame = CGRectMake(_employeesLabel.frame.origin.x + 40, _employeesLabel.frame.origin.y, _employeesLabel.frame.size.width, _employeesLabel.frame.size.height);
-        _lblEmployeesNeeded.frame = CGRectMake(_lblEmployeesNeeded.frame.origin.x + 40, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
-        _daysleftLabel.frame = CGRectMake(_daysleftLabel.frame.origin.x + 50, _daysleftLabel.frame.origin.y, _daysleftLabel.frame.size.width, _daysleftLabel.frame.size.height);
-        _lblDaysLeftText.frame = CGRectMake(_lblDaysLeftText.frame.origin.x + 50, _lblDaysLeftText.frame.origin.y, _lblDaysLeftText.frame.size.width, _lblDaysLeftText.frame.size.height);
-        _alertButton.frame = CGRectMake(_alertButton.frame.origin.x + 50, _alertButton.frame.origin.y, 16, 16);
+//        _lblEmployeesNeeded.frame = CGRectMake(_lblEmployeesNeeded.frame.origin.x + 40, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
+//        _daysleftLabel.frame = CGRectMake(_daysleftLabel.frame.origin.x + 50, _daysleftLabel.frame.origin.y, _daysleftLabel.frame.size.width, _daysleftLabel.frame.size.height);
+        _daysleftLabel.frame = CGRectMake(self.frame.size.width - 55, _daysleftLabel.frame.origin.y, _daysleftLabel.frame.size.width, _daysleftLabel.frame.size.height);
+//        _lblEmployeesNeeded.frame = CGRectMake(_daysleftLabel.frame.origin.x - _lblEmployeesNeeded.frame.size.width - 75, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
+        //        _lblDaysLeftText.frame = CGRectMake(_lblDaysLeftText.frame.origin.x + 50, _lblDaysLeftText.frame.origin.y, _lblDaysLeftText.frame.size.width, _lblDaysLeftText.frame.size.height);
+ //       _alertButton.frame = CGRectMake(_alertButton.frame.origin.x + 50, _alertButton.frame.origin.y, 16, 16);
 
     }
     return self;

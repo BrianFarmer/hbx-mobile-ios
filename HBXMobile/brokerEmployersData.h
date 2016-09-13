@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, assign) enrollmentState status;
 @property (nonatomic, retain) NSString *companyName;
 @property (nonatomic, retain) NSString *planYear;
+@property (nonatomic, retain) NSString *billing_report_date;
 @property (nonatomic, retain) NSString *employeesEnrolled;
 @property (nonatomic, retain) NSString *employeesWaived;
 @property (nonatomic, retain) NSString *planMinimum;
@@ -30,15 +31,16 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *renewal_application_available;
 @property (nonatomic, retain) NSString *renewal_application_due;
 @property (nonatomic, retain) NSString *binder_payment_due;
-@property (nonatomic, retain) NSString *total_premium;
-@property (nonatomic, retain) NSString *employee_contribution;
-@property (nonatomic, retain) NSString *employer_contribution;
-@property (nonatomic, retain) NSString *employer_address_1;
-@property (nonatomic, retain) NSString *employer_city;
-@property (nonatomic, retain) NSString *employer_state;
-@property (nonatomic, retain) NSString *employer_zip;
+//@property (nonatomic, retain) NSString *total_premium;
+//@property (nonatomic, retain) NSString *employee_contribution;
+//@property (nonatomic, retain) NSString *employer_contribution;
+//@property (nonatomic, retain) NSString *employer_address_1;
+//@property (nonatomic, retain) NSString *employer_city;
+//@property (nonatomic, retain) NSString *employer_state;
+//@property (nonatomic, retain) NSString *employer_zip;
 @property (nonatomic, retain) NSArray  *emails;
-@property (nonatomic, retain) NSArray  *phones;
+//@property (nonatomic, retain) NSArray  *phones;
 @property (nonatomic, retain) NSString *active_general_agency;
-
+@property (nonatomic, retain) NSArray  *contact_info;
+@property (nonatomic, retain) NSString *detail_url;
 @end

@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import "brokerEmployersData.h"
+#import "popupMessageBox.h"
 
-@interface brokerPlanDetailViewController : UIViewController <MFMessageComposeViewControllerDelegate>
+@interface brokerPlanDetailViewController : UIViewController <MFMessageComposeViewControllerDelegate, popupMessageBoxDelegate>
 {
     brokerEmployersData *type;
     
@@ -29,12 +30,17 @@
     NSArray *midSectionNames;
     
     int     globalFontSize;
-    BOOL    bPhoneSectionShowing;
+//    BOOL    bPhoneSectionShowing;
+    
+    NSDictionary *dictionary;
+    
+    UIImageView *pView1;
     
 }
 
 @property (strong, nonatomic) brokerEmployersData *type;
 @property(nonatomic, assign) long bucket;
-
+@property(nonatomic, assign) NSString *enrollHost;
+@property(nonatomic, assign) NSString *customCookie_a;
 
 @end

@@ -259,6 +259,9 @@ typedef NS_ENUM(NSInteger, MGSwipeEasingFunction) {
 @property (strong, nonatomic) IBOutlet UILabel *lblDaysLeftText;
 @property (strong, nonatomic) IBOutlet UIView  *leftColor;
 @property (strong, nonatomic) IBOutlet UIButton *alertButton;
+@property (strong, nonatomic) IBOutlet UILabel *headerTitle;
+@property (strong, nonatomic) IBOutlet UILabel *headerTitle1;
+@property (strong, nonatomic) IBOutlet UILabel *headerTitle2;
 
 ////
 /** Utility methods to show or hide swipe buttons programmatically */

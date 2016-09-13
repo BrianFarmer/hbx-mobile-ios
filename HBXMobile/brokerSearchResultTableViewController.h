@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <MapKit/MapKit.h>
 #import "MGSwipeTableCell.h"
+#import "popupMessagebox.h"
 
 @protocol searchDelegate
 
@@ -15,7 +18,7 @@
 
 @end
 
-@interface brokerSearchResultTableViewController : UITableViewController <MGSwipeTableCellDelegate>
+@interface brokerSearchResultTableViewController : UITableViewController <MGSwipeTableCellDelegate, popupMessageBoxDelegate, MFMessageComposeViewControllerDelegate>
 {
     NSArray *sections;
     

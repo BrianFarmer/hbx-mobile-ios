@@ -11,4 +11,7 @@
 
 @interface LeftMenuSlideOutTableViewController : UITableViewController
 
+@property(nonatomic, assign) int level;
+
 @end
+

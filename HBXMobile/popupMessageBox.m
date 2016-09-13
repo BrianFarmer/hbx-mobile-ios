@@ -24,7 +24,30 @@
     self.providesPresentationContextTransitionStyle = YES;
     self.definesPresentationContext = YES;
     
-    [self processPhoneFromArray];
+    UIImageView *pImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,34,54)];
+    pImageView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor whiteColor];
+
+    pImageView.contentMode = UIViewContentModeCenter;
+    
+    switch (_messageType)
+    {
+        case typePopupEmail:
+            [self processEmailFromArray];
+            pImageView.image = [UIImage imageNamed:@"email.png"]; //@"emailWithCirclelightBlue.png"];
+            break;
+        case typePopupPhone:
+            [self processPhoneFromArray];
+            pImageView.image = [UIImage imageNamed:@"phone.png"]; //@"phoneCirclelightBlue.png"];
+            break;
+        case typePopupSMS:
+            [self processPhoneFromArray];
+            pImageView.image = [UIImage imageNamed:@"message.png"];//@"chatWithCircleLightBlue.png"];
+            break;
+        case typePopupMAP:
+            [self processMapFromArray];
+            pImageView.image = [UIImage imageNamed:@"location.png"]; //@"markerWithCircleLightBlue.png"];
+            break;
+    }
     
     UIView* transparentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     transparentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25];
@@ -43,31 +66,55 @@
     [messageTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
     [self.view addSubview:messageTable];
     
-    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y + messageTable.frame.size.height + 2, messageTable.frame.size.width, 40)];
+    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y + messageTable.frame.size.height + 2, messageTable.frame.size.width, 44)];
     cancelButton.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     cancelButton.layer.cornerRadius = 10;
-    cancelButton.titleLabel.font = [UIFont fontWithName:@"Roboto-BOLD" size:16];
+    cancelButton.titleLabel.font = [UIFont fontWithName:@"Roboto-BOLD" size:18];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancelButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
     
-    CGFloat headerHeight = 74.0f;
+    CGFloat headerHeight = 54.0f;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, headerHeight)];
     UIView *headerContentView = [[UIView alloc] initWithFrame:headerView.bounds];
     headerContentView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     headerContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, messageTable.frame.size.width - 5, headerHeight)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, messageTable.frame.size.width - 35 -35, headerHeight)];
     label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:16];
+    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.numberOfLines = 2;
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor whiteColor];//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
     label.text = _messageTitle;
     [headerContentView addSubview:label];
+    
+    [headerContentView addSubview:pImageView];
+    
     [headerView addSubview:headerContentView];
     messageTable.tableHeaderView = headerView;
+    
+/*
+    CALayer *sublayer = [CALayer layer];
+    sublayer.backgroundColor = [UIColor blueColor].CGColor; // If you dont give this, shadow will not come, dont know why
+    sublayer.shadowOffset = CGSizeMake(0, 2);
+    sublayer.shadowRadius = 3.0;
+    sublayer.shadowColor = [UIColor blackColor].CGColor;
+    sublayer.shadowOpacity = 1.0;
+    sublayer.cornerRadius = 10.0;
+    messageTable.clipsToBounds = NO;
+    messageTable.layer.masksToBounds = NO;
+    
+    sublayer.frame = CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y, messageTable.frame.size.width, messageTable.frame.size.height);
+    [self.view.layer addSublayer:sublayer];
+    [self.view.layer addSublayer:messageTable.layer];
+    
+    cancelButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    cancelButton.layer.shadowOpacity = 1.0;
+    cancelButton.layer.shadowRadius = 3.0;
+    cancelButton.layer.shadowOffset = CGSizeMake(0.0f, 2.0f);
+ */
 }
 
 -(void)cancelButton:(id)sender
@@ -87,15 +134,18 @@
     for (int ii=0;ii<[_messageArray count];ii++)
     {
         NSMutableArray *pArray = [[NSMutableArray alloc] init];
-        if ([[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] length] > 0)
+        if (_messageType == typePopupPhone)
         {
-            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
-            [pDict setObject:@"office" forKey:@"type"];
-            [pArray addObject:pDict];
+            if ([[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] length] > 0)
+            {
+                NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+                [pDict setObject:@"office" forKey:@"type"];
+                [pArray addObject:pDict];
 
+            }
         }
         if ([[[_messageArray objectAtIndex:ii] valueForKey:@"mobile"] length] > 0)
         {
@@ -112,6 +162,78 @@
     
     _messageArray = rootArray;
 }
+
+-(void)processEmailFromArray
+{
+    NSMutableArray *rootArray = [[NSMutableArray alloc] init];
+    
+    for (int ii=0;ii<[_messageArray count];ii++)
+    {
+        NSMutableArray *pArray = [[NSMutableArray alloc] init];
+        if ([[[_messageArray objectAtIndex:ii] valueForKey:@"emails"] count] > 0)
+        {
+            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+            [pDict setObject:@"office" forKey:@"type"];
+            
+            BOOL bValidEmail = FALSE;
+            NSArray *emails = [[_messageArray objectAtIndex:ii] valueForKey:@"emails"];
+            for (long yy=0;yy<[emails count];yy++)
+            {
+                NSArray *pp =[emails objectAtIndex:yy];
+                if (![pp isKindOfClass:[NSNull class]])
+                {
+                    if ([[emails objectAtIndex:yy] length] > 0)
+                    {
+                        [pDict setObject:[emails objectAtIndex:yy] forKey:@"email"];
+                        bValidEmail = TRUE;
+                    }
+                    else
+                        bValidEmail = FALSE;
+                }
+            }
+            if (bValidEmail)
+                [pArray addObject:pDict];
+            
+        }
+
+        if ([pArray count] > 0)
+            [rootArray addObject:pArray];
+    }
+    
+    _messageArray = rootArray;
+}
+
+-(void)processMapFromArray
+{
+    NSMutableArray *rootArray = [[NSMutableArray alloc] init];
+    
+    for (int ii=0;ii<[_messageArray count];ii++)
+    {
+        NSMutableArray *pArray = [[NSMutableArray alloc] init];
+        if ([[[_messageArray objectAtIndex:ii] valueForKey:@"address_1"] length] > 0)
+        {
+            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"address_1"] forKey:@"address_1"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"city"] forKey:@"city"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"state"] forKey:@"state"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"zip"] forKey:@"zip"];
+            [pDict setObject:@"office" forKey:@"type"];
+            [pArray addObject:pDict];
+        }
+        
+        if ([pArray count] > 0)
+            [rootArray addObject:pArray];
+    }
+    
+    _messageArray = rootArray;
+}
+
 /*
 #pragma mark - Navigation
 
@@ -124,11 +246,24 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if ([_messageArray count] == 0)
+    {
+        _messageType = typePopupEmpty;
+        return 1;
+    }
+    
     return [_messageArray count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+    if ([_messageArray count] == 0)
+    {
+        _messageType = typePopupEmpty;
+        return 1;
+    }
+    
     return [[_messageArray objectAtIndex:section] count];
 }
 
@@ -163,7 +298,10 @@
     headerLabel.backgroundColor = [UIColor clearColor];
     headerLabel.textColor = [UIColor darkGrayColor];
     headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
-    headerLabel.text = [NSString stringWithFormat:@"%@, %@", [[[_messageArray objectAtIndex:section] objectAtIndex:0] valueForKey:@"last"], [[[_messageArray objectAtIndex:section] objectAtIndex:0] valueForKey:@"first"]];
+    if (_messageType == typePopupEmpty)
+        headerLabel.text = @"No data available";
+    else
+        headerLabel.text = [NSString stringWithFormat:@"%@, %@", [[[_messageArray objectAtIndex:section] objectAtIndex:0] valueForKey:@"last"], [[[_messageArray objectAtIndex:section] objectAtIndex:0] valueForKey:@"first"]];
     headerLabel.textAlignment = NSTextAlignmentLeft;
     
     // Add the label to the header view
@@ -172,6 +310,17 @@
     return headerView;
 }
 
+/* /////Kinda Cool effect
+  //////
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    cell.transform = CGAffineTransformMakeScale(0.8, 0.8);
+    [UIView animateWithDuration:0.5 animations:^{
+        cell.transform = CGAffineTransformIdentity;
+    }];
+}
+*/
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -179,21 +328,92 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        if (_messageType == typePopupMAP)
+        {
+            UILabel* detailLabel_1 = [[UILabel alloc] init];
+            detailLabel_1.frame = CGRectMake(10, 17, tableView.frame.size.width, 10);
+            detailLabel_1.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
+            detailLabel_1.tag = 33;
+            detailLabel_1.hidden = FALSE;
+            [cell.contentView addSubview:detailLabel_1];
+        }
     }
     
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
     
-    cell.textLabel.textColor = [UIColor redColor];
-    cell.textLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"type"];
-    cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"];
+    cell.textLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]; //[UIColor redColor];
+    cell.detailTextLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     
+    switch (_messageType)
+    {
+        case typePopupEmail:
+            cell.textLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"type"];
+            cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"email"];
+            break;
+        case typePopupPhone:
+        case typePopupSMS:
+            cell.textLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"type"];
+            cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"];
+            break;
+        case typePopupMAP:
+            {
+                UILabel *pDetail_1 = [cell viewWithTag:33];
+                NSString *sDetail_1 = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"address_1"];
+                NSString *sDetail_2 = [NSString stringWithFormat:@"%@, %@  %@", [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"city"], [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"state"],[[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"zip"]];
+ 
+                pDetail_1.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"type"];
+                pDetail_1.textColor = cell.textLabel.textColor;
+                
+                cell.detailTextLabel.numberOfLines = 2;
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@", sDetail_1, sDetail_2];
+            }
+            break;
+        case typePopupEmpty:
+ //           cell.textLabel.text = @"No data available";
+            //cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"];
+            break;
+            
+    }
+ 
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",[[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"]]]];
+    switch (_messageType)
+    {
+        case typePopupEmail:
+            {
+                NSString *recipients = [NSString stringWithFormat:@"mailto:%@?subject=Hello from HBX!", [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"email"]];
+                NSString *body = @"&body=It is sunny in DC!";
+                NSString *email = [NSString stringWithFormat:@"%@%@", recipients, body];
+                
+                email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+            }
+            break;
+        case typePopupPhone:
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",[[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"]]]];
+            break;
+        case typePopupSMS:
+            {
+                [self dismissViewControllerAnimated:YES completion:^{
+                    NSLog(@"Dismiss completed");
+                    [_delegate SMSThesePeople:_messageArray];
+                }];
+            }
+            break;
+        case typePopupMAP:
+        {
+            [self dismissViewControllerAnimated:YES completion:^{
+                NSLog(@"Dismiss completed");
+                [_delegate MAPTheseDirections:_messageArray];
+            }];
+        }
+            break;
+
+    }
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }

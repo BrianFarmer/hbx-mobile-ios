@@ -359,6 +359,21 @@ static SlideNavigationController *singletonInstance;
     return nil;
 }
 
+- (void)pushViewControllerEx:(UIViewController *)viewController animated:(BOOL)animated
+{/*
+    if ([self isMenuOpen])
+    {
+        [self closeMenuWithCompletion:^{
+            [super pushViewController:viewController animated:animated];
+        }];
+    }
+    else
+    {
+  */
+        [super.navigationController pushViewController:viewController animated:animated];
+   // }
+}
+
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if ([self isMenuOpen])
