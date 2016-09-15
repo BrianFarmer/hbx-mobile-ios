@@ -8,7 +8,7 @@
 
 
 "table-section-open-enrollment" = "OPEN ENROLLMENT IN PROGRESS";
-"table-section-renewals-in-progress" = "RENEWALS IN PROGRESS";
+"table-section-renewals-in-progress" = "PENDING RENEWALS";
 "table-section-all-others" = "ALL OTHER CLIENTS";
 
 //Detail Page

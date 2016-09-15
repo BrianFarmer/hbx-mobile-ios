@@ -94,8 +94,8 @@ alpha:1.0]
             globalFontSize = 16;
     }
 
-    myTabBar.hidden = FALSE;
-    myTabBar.frame = CGRectMake(0,screenSize.height - self.navigationController.navigationBar.frame.size.height - 49 - sSize.size.height, screenSize.width, 49);
+//    myTabBar.hidden = FALSE;
+//    myTabBar.frame = CGRectMake(0,screenSize.height - self.navigationController.navigationBar.frame.size.height - 49 - sSize.size.height, screenSize.width, 49);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600 && [UIScreen mainScreen].nativeScale < 2.8f)
     {
@@ -307,7 +307,7 @@ alpha:1.0]
     
     vHeader.frame = CGRectMake(0,0,screenSize.width, button.frame.origin.y + button.frame.size.height + 10);
     
-    int myTabBarY = myTabBar.frame.origin.y - 5;// - 65;
+    int myTabBarY = self.view.frame.size.height - 65; //myTabBar.frame.origin.y - 5;// - 65;
     int vHeaderHt = vHeader.frame.origin.y + vHeader.frame.size.height;
 
     myTable.frame = CGRectMake(10, button.frame.origin.y + button.frame.size.height + 10, screenSize.width-25, myTabBarY - vHeaderHt);

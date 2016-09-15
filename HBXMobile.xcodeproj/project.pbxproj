@@ -86,16 +86,36 @@
 		40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */; };
 		40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */; };
 		40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */; };
+		40EE697B1D8A095100BCB351 /* employerTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EE697A1D8A095100BCB351 /* employerTabController.m */; };
 		40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */; };
 		40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8511D5104CB0071FFD5 /* callus54x54.png */; };
 		40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8521D5104CB0071FFD5 /* emailus54x54.png */; };
 		40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */; };
 		40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */; };
 		40EEC85F1D512B690071FFD5 /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC85E1D512B690071FFD5 /* chevron.png */; };
+		40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */; };
 		40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */; };
 		40F1511B1D5260A10041C132 /* chevron_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511A1D5260A10041C132 /* chevron_right.png */; };
 		40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */; };
+		40F1FB921D84DB6F005EF01F /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F1FB911D84DB6F005EF01F /* XYPieChart.m */; };
+		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
+		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
+		40F6DDA11D8987020095519C /* open_plus32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9F1D8987020095519C /* open_plus32x32.png */; };
+		40F6DDA31D899F340095519C /* infonormal40_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDA21D899F340095519C /* infonormal40_text.png */; };
+		40F6DDA51D89A3E50095519C /* infoactive32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDA41D89A3E40095519C /* infoactive32.png */; };
+		40F6DDA71D89ABEA0095519C /* home_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDA61D89ABEA0095519C /* home_selected.png */; };
+		40F6DDA91D89ABF70095519C /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDA81D89ABF70095519C /* home.png */; };
+		40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDAA1D89AC180095519C /* tabbar_selected.png */; };
+		40F6DDAD1D89AE590095519C /* tabBG.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDAC1D89AE590095519C /* tabBG.png */; };
+		40F6DDB01D89B9E50095519C /* rosterBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F6DDAF1D89B9E50095519C /* rosterBrokerEmployerViewController.m */; };
+		40F6DDB21D89BB280095519C /* rosteractive32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDB11D89BB280095519C /* rosteractive32.png */; };
+		40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8B31D8861A0003279DD /* infonormal48.png */; };
+		40F6F8BA1D886413003279DD /* infonormal40.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8B91D886413003279DD /* infonormal40.png */; };
+		40F6F8BC1D8864E6003279DD /* infonormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8BB1D8864E6003279DD /* infonormal32.png */; };
+		40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C11D88727D003279DD /* rosternormal32.png */; };
+		40F6F8C41D88727D003279DD /* costsnormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C21D88727D003279DD /* costsnormal32.png */; };
+		40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C51D887BE9003279DD /* plansnormal32.png */; };
 		40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */; };
 /* End PBXBuildFile section */
 
@@ -220,6 +240,8 @@
 		40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListViewController.m; sourceTree = "<group>"; };
 		40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40WHT.png; sourceTree = "<group>"; };
 		40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40_144ppi_WHT.png; sourceTree = "<group>"; };
+		40EE69791D8A095100BCB351 /* employerTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = employerTabController.h; sourceTree = "<group>"; };
+		40EE697A1D8A095100BCB351 /* employerTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = employerTabController.m; sourceTree = "<group>"; };
 		40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT1.png; sourceTree = "<group>"; };
 		40EEC8511D5104CB0071FFD5 /* callus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = callus54x54.png; sourceTree = "<group>"; };
 		40EEC8521D5104CB0071FFD5 /* emailus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailus54x54.png; sourceTree = "<group>"; };
@@ -227,11 +249,33 @@
 		40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tutorialViewController.m; sourceTree = "<group>"; };
 		40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = tutorialViewController.xib; sourceTree = "<group>"; };
 		40EEC85E1D512B690071FFD5 /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
+		40F07D3D1D84360400BD3B7C /* detailBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailBrokerEmployerViewController.h; sourceTree = "<group>"; };
+		40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailBrokerEmployerViewController.m; sourceTree = "<group>"; };
 		40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader512x147.png; sourceTree = "<group>"; };
 		40F1511A1D5260A10041C132 /* chevron_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_right.png; sourceTree = "<group>"; };
 		40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader_navbar.png; sourceTree = "<group>"; };
+		40F1FB901D84DB6F005EF01F /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		40F1FB911D84DB6F005EF01F /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
+		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
+		40F6DD9E1D8987020095519C /* close_arrow32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_arrow32x32.png; sourceTree = "<group>"; };
+		40F6DD9F1D8987020095519C /* open_plus32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_plus32x32.png; sourceTree = "<group>"; };
+		40F6DDA21D899F340095519C /* infonormal40_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infonormal40_text.png; sourceTree = "<group>"; };
+		40F6DDA41D89A3E40095519C /* infoactive32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infoactive32.png; sourceTree = "<group>"; };
+		40F6DDA61D89ABEA0095519C /* home_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_selected.png; sourceTree = "<group>"; };
+		40F6DDA81D89ABF70095519C /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		40F6DDAA1D89AC180095519C /* tabbar_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_selected.png; sourceTree = "<group>"; };
+		40F6DDAC1D89AE590095519C /* tabBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabBG.png; sourceTree = "<group>"; };
+		40F6DDAE1D89B9E50095519C /* rosterBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rosterBrokerEmployerViewController.h; sourceTree = "<group>"; };
+		40F6DDAF1D89B9E50095519C /* rosterBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rosterBrokerEmployerViewController.m; sourceTree = "<group>"; };
+		40F6DDB11D89BB280095519C /* rosteractive32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosteractive32.png; sourceTree = "<group>"; };
+		40F6F8B31D8861A0003279DD /* infonormal48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infonormal48.png; sourceTree = "<group>"; };
+		40F6F8B91D886413003279DD /* infonormal40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infonormal40.png; sourceTree = "<group>"; };
+		40F6F8BB1D8864E6003279DD /* infonormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infonormal32.png; sourceTree = "<group>"; };
+		40F6F8C11D88727D003279DD /* rosternormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosternormal32.png; sourceTree = "<group>"; };
+		40F6F8C21D88727D003279DD /* costsnormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = costsnormal32.png; sourceTree = "<group>"; };
+		40F6F8C51D887BE9003279DD /* plansnormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plansnormal32.png; sourceTree = "<group>"; };
 		40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader300x40WHT.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,6 +284,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */,
 				130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */,
 				134DE7A61CED442E00F8958A /* MapKit.framework in Frameworks */,
 				136C32401CECA2EF00E95860 /* CoreLocation.framework in Frameworks */,
@@ -324,6 +369,7 @@
 		13FF47001C8A2C5600C7C851 = {
 			isa = PBXGroup;
 			children = (
+				40F1FB931D84DD75005EF01F /* CoreGraphics.framework */,
 				130AA2821CEE568900B43F24 /* MessageUI.framework */,
 				134DE7A51CED442E00F8958A /* MapKit.framework */,
 				136C323F1CECA2EF00E95860 /* CoreLocation.framework */,
@@ -350,6 +396,8 @@
 		13FF470B1C8A2C5600C7C851 /* HBXMobile */ = {
 			isa = PBXGroup;
 			children = (
+				40F1FB901D84DB6F005EF01F /* XYPieChart.h */,
+				40F1FB911D84DB6F005EF01F /* XYPieChart.m */,
 				13316B121D21B0D9001A450C /* Settings.h */,
 				13316B131D21B0D9001A450C /* Settings.m */,
 				134DE79B1CECEF4F00F8958A /* MGSwipe */,
@@ -391,6 +439,12 @@
 				40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */,
 				40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */,
 				4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */,
+				40F07D3D1D84360400BD3B7C /* detailBrokerEmployerViewController.h */,
+				40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */,
+				40F6DDAE1D89B9E50095519C /* rosterBrokerEmployerViewController.h */,
+				40F6DDAF1D89B9E50095519C /* rosterBrokerEmployerViewController.m */,
+				40EE69791D8A095100BCB351 /* employerTabController.h */,
+				40EE697A1D8A095100BCB351 /* employerTabController.m */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -439,6 +493,21 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				40F6DDB11D89BB280095519C /* rosteractive32.png */,
+				40F6DDAC1D89AE590095519C /* tabBG.png */,
+				40F6DDAA1D89AC180095519C /* tabbar_selected.png */,
+				40F6DDA81D89ABF70095519C /* home.png */,
+				40F6DDA61D89ABEA0095519C /* home_selected.png */,
+				40F6DDA41D89A3E40095519C /* infoactive32.png */,
+				40F6DDA21D899F340095519C /* infonormal40_text.png */,
+				40F6DD9E1D8987020095519C /* close_arrow32x32.png */,
+				40F6DD9F1D8987020095519C /* open_plus32x32.png */,
+				40F6F8C51D887BE9003279DD /* plansnormal32.png */,
+				40F6F8C11D88727D003279DD /* rosternormal32.png */,
+				40F6F8C21D88727D003279DD /* costsnormal32.png */,
+				40F6F8BB1D8864E6003279DD /* infonormal32.png */,
+				40F6F8B91D886413003279DD /* infonormal40.png */,
+				40F6F8B31D8861A0003279DD /* infonormal48.png */,
 				4036BEEE1D5E616B000F6182 /* refresh.png */,
 				40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */,
 				40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */,
@@ -593,6 +662,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40F6DDA91D89ABF70095519C /* home.png in Resources */,
 				404CC1941D3FE39900A9B31D /* menu_phone.png in Resources */,
 				40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */,
 				404CC18E1D3FAAEF00A9B31D /* logout-512.png in Resources */,
@@ -605,6 +675,7 @@
 				40003F361D4FF67400CD059B /* callus80x80.png in Resources */,
 				13FF471F1C8A2C5600C7C851 /* LaunchScreen.storyboard in Resources */,
 				40EEC85F1D512B690071FFD5 /* chevron.png in Resources */,
+				40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */,
 				40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
 				130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */,
@@ -612,20 +683,27 @@
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
+				40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */,
 				13A3822A1CDB303E006B5984 /* bell.png in Resources */,
 				40F1511B1D5260A10041C132 /* chevron_right.png in Resources */,
 				13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */,
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
 				13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */,
+				40F6DDB21D89BB280095519C /* rosteractive32.png in Resources */,
 				13A3821C1CDB2E3E006B5984 /* Roboto-Thin.ttf in Resources */,
 				13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */,
 				13FF471C1C8A2C5600C7C851 /* Assets.xcassets in Resources */,
+				40F6F8BC1D8864E6003279DD /* infonormal32.png in Resources */,
 				13A3821B1CDB2E3E006B5984 /* Roboto-Regular.ttf in Resources */,
+				40F6F8BA1D886413003279DD /* infonormal40.png in Resources */,
+				40F6DDA31D899F340095519C /* infonormal40_text.png in Resources */,
 				13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */,
 				404CC1961D3FE65D00A9B31D /* list_icon.png in Resources */,
 				40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */,
+				40F6DDA71D89ABEA0095519C /* home_selected.png in Resources */,
 				40003F301D4FE45800CD059B /* email.png in Resources */,
 				13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */,
+				40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */,
 				40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */,
 				40003F321D4FE45800CD059B /* emailWHT.png in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
@@ -636,17 +714,23 @@
 				40003F261D4FC51900CD059B /* uparrowWHT.png in Resources */,
 				404CC18C1D3FAA4B00A9B31D /* logout.png in Resources */,
 				404CC1921D3FAD4A00A9B31D /* icon_list_bullets_1.png in Resources */,
+				40F6DDA11D8987020095519C /* open_plus32x32.png in Resources */,
 				13A3821D1CDB2E3E006B5984 /* Roboto-ThinItalic.ttf in Resources */,
 				13A382201CDB2F4D006B5984 /* menu-icon.png in Resources */,
 				13A382171CDB2E3E006B5984 /* Roboto-Light.ttf in Resources */,
 				13A382191CDB2E3E006B5984 /* Roboto-Medium.ttf in Resources */,
 				13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */,
 				13A373071D084053008CA0E1 /* header-employer-2.png in Resources */,
+				40F6DDA51D89A3E50095519C /* infoactive32.png in Resources */,
 				13A382131CDB2E3E006B5984 /* Roboto-BlackItalic.ttf in Resources */,
+				40F6DDAD1D89AE590095519C /* tabBG.png in Resources */,
+				40F6F8C41D88727D003279DD /* costsnormal32.png in Resources */,
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
 				4036BEEF1D5E616B000F6182 /* refresh.png in Resources */,
 				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
 				404CC1881D3FA10C00A9B31D /* light_blue_gradient.png in Resources */,
+				40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */,
+				40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
 				4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */,
 				40003F351D4FF67400CD059B /* emailus80x80.png in Resources */,
@@ -681,6 +765,7 @@
 			files = (
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
+				40F1FB921D84DB6F005EF01F /* XYPieChart.m in Sources */,
 				40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
 				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
@@ -688,9 +773,12 @@
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
 				40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */,
 				13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */,
+				40EE697B1D8A095100BCB351 /* employerTabController.m in Sources */,
 				13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */,
+				40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */,
 				13316B141D21B0D9001A450C /* Settings.m in Sources */,
 				13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */,
+				40F6DDB01D89B9E50095519C /* rosterBrokerEmployerViewController.m in Sources */,
 				134DE7A11CECEF6600F8958A /* MGSwipeTableCell.m in Sources */,
 				13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */,
 				40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */,

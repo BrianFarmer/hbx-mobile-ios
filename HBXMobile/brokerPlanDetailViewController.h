@@ -21,7 +21,7 @@
     IBOutlet UIView *vHeader;
     
     IBOutlet UITableView *myTable;
-    IBOutlet UITabBar *myTabBar;
+//    IBOutlet UITabBar *myTabBar;
     
     NSArray *topSectionValues;
     NSArray *topSectionNames;

@@ -35,9 +35,9 @@
 
 
 //#define HOST @"localhost:3000"
-@interface NSURLRequest(Private)
-+(void)setAllowsAnyHTTPSCertificate:(BOOL)inAllow forHost:(NSString *)inHost;
-@end
+//@interface NSURLRequest(Private)
+//+(void)setAllowsAnyHTTPSCertificate:(BOOL)inAllow forHost:(NSString *)inHost;
+//@end
 
 
 @interface ViewController ()
@@ -455,8 +455,6 @@
 
 - (IBAction)handleButtonClick:(id)sender
 {
-//    [spinningWheel startAnimating];
-
     [self customActivityView];
     [loading setHidden:FALSE];
     loadLabel.text = @"Loading";
@@ -630,7 +628,7 @@
     
     REQUEST_TYPE = MOBILE_POST_LOGIN_DONE;
     
-    [NSMutableURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
+//    [NSMutableURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
     
     conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
@@ -653,7 +651,7 @@
     [request setHTTPMethod:@"GET"];
 
     REQUEST_TYPE = requestType;
-    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
+//    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:host];
     
     [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"text/html" forHTTPHeaderField:@"Accept"];

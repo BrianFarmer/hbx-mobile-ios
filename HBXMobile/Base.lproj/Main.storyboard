@@ -8,8 +8,10 @@
         <mutableArray key="Roboto-Bold.ttf">
             <string>Roboto-Bold</string>
             <string>Roboto-Bold</string>
+            <string>Roboto-Bold</string>
         </mutableArray>
         <mutableArray key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
         </mutableArray>
         <mutableArray key="Roboto-Regular.ttf">
@@ -201,6 +203,120 @@ If you are not an exisiting customer please sign up on your home computer.</stri
             </objects>
             <point key="canvasLocation" x="246" y="1052"/>
         </scene>
+        <!--Roster-->
+        <scene sceneID="EEU-UX-xKg">
+            <objects>
+                <viewController title="Roster" modalTransitionStyle="flipHorizontal" id="iMe-mE-tft" customClass="rosterBrokerEmployerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JMD-8q-fl2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="49a-sv-cLy">
+                                <rect key="frame" x="40" y="115" width="240" height="324"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="iMe-mE-tft" id="tsP-YP-ypf"/>
+                                    <outlet property="delegate" destination="iMe-mE-tft" id="arg-nx-utm"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="roster" image="rosternormal32.png" selectedImage="rosteractive32.png" id="opX-IR-CJZ"/>
+                    <connections>
+                        <outlet property="pRosterTable" destination="49a-sv-cLy" id="sKk-CG-jnI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Iw5-ex-fh8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1193" y="1100"/>
+        </scene>
+        <!--costs-->
+        <scene sceneID="tRT-ve-c3Z">
+            <objects>
+                <viewController id="1P0-ny-Yls" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3Hp-qQ-iky">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="costs" image="costsnormal32.png" id="cHk-oM-fLi"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hxN-Yq-Ke0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1598" y="1101"/>
+        </scene>
+        <!--info-->
+        <scene sceneID="vr9-SS-ATH">
+            <objects>
+                <viewController modalTransitionStyle="crossDissolve" id="nIa-18-hoM" customClass="detailBrokerEmployerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Nv9-Sp-hk2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="80" sectionHeaderHeight="18" sectionFooterHeight="18" id="aei-1N-E4Z">
+                                <rect key="frame" x="40" y="208" width="240" height="302"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="nIa-18-hoM" id="Jq3-zC-5xM"/>
+                                    <outlet property="delegate" destination="nIa-18-hoM" id="uKI-hy-lKX"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" id="RVP-BN-6gX">
+                                <rect key="frame" x="20" y="67" width="280" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UqR-Zk-BXm">
+                                        <rect key="frame" x="-72" y="10" width="286" height="64"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="24"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" id="bnc-qH-zwq">
+                                        <rect key="frame" x="-72" y="86" width="286" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="info" image="infonormal40_text.png" selectedImage="infonormal40_text.png" id="5XC-UI-hiI"/>
+                    <navigationItem key="navigationItem" id="1tz-r5-gAt"/>
+                    <connections>
+                        <outlet property="detailTable" destination="aei-1N-E4Z" id="eCP-oR-JRe"/>
+                        <outlet property="pCompany" destination="UqR-Zk-BXm" id="G6Q-Eq-Fgq"/>
+                        <outlet property="pCompanyFooter" destination="bnc-qH-zwq" id="aIZ-mr-rkS"/>
+                        <outlet property="vHeader" destination="RVP-BN-6gX" id="4qh-TP-A6Z"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Rf-UX-Os5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1193" y="1805"/>
+        </scene>
+        <!--plans-->
+        <scene sceneID="53M-GG-o9C">
+            <objects>
+                <viewController id="y8k-u1-9g3" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Z6i-lP-gdB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="plans" image="plansnormal32.png" selectedImage="plansnormal32.png" id="yoV-4e-NdA"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nsn-Gd-LWl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1599" y="1807"/>
+        </scene>
         <!--Carrier List View Controller-->
         <scene sceneID="hac-V1-gng">
             <objects>
@@ -358,11 +474,12 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     <navigationItem key="navigationItem" id="X0P-2M-xEO"/>
                     <connections>
                         <segue destination="7Ew-gz-wuR" kind="push" identifier="Broker Detail Page" id="wL3-OG-3Hu"/>
+                        <segue destination="7T1-NI-9kw" kind="push" identifier="Broker Employer Detail" id="6rH-EK-Nox"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wmp-38-KAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="683" y="58"/>
+            <point key="canvasLocation" x="707" y="281"/>
         </scene>
         <!--Broker Plan Detail View Controller-->
         <scene sceneID="x8n-Xm-Tsp">
@@ -433,7 +550,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gr0-Rd-SbL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1177.5" y="443.5"/>
+            <point key="canvasLocation" x="1514.5" y="409.5"/>
         </scene>
         <!--Menu-->
         <scene sceneID="d0p-NW-UJy">
@@ -485,7 +602,35 @@ If you are not an exisiting customer please sign up on your home computer.</stri
             </objects>
             <point key="canvasLocation" x="-162" y="-457"/>
         </scene>
+        <!--Employer Tab Controller-->
+        <scene sceneID="hml-Rf-ssx">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="7T1-NI-9kw" customClass="employerTabController" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="30g-8M-yqV"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="nis-Qh-D0b">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="nIa-18-hoM" kind="relationship" relationship="viewControllers" id="sX7-Yw-d9R"/>
+                        <segue destination="iMe-mE-tft" kind="relationship" relationship="viewControllers" id="Rj2-g6-O39"/>
+                        <segue destination="1P0-ny-Yls" kind="relationship" relationship="viewControllers" id="eHx-Jd-tu1"/>
+                        <segue destination="y8k-u1-9g3" kind="relationship" relationship="viewControllers" id="sQU-1f-QoF"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ioB-53-wHP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="707" y="1474"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="costsnormal32.png" width="32" height="32"/>
+        <image name="infonormal40_text.png" width="40" height="40"/>
+        <image name="plansnormal32.png" width="32" height="32"/>
+        <image name="rosteractive32.png" width="32" height="32"/>
+        <image name="rosternormal32.png" width="32" height="32"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wL3-OG-3Hu"/>
     </inferredMetricsTieBreakers>

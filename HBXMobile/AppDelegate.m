@@ -212,4 +212,14 @@
     }
 }
 
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    /*
+    NSLog(@"onglet sélectionné : %d / %d", [tabBarController selectedIndex], [[tabBarController viewControllers]count]);
+    //select the index where your logout button is
+    if ([tabBarController selectedIndex] == [[tabBarController viewControllers]count]-1) {
+        NSLog(@"logout");
+    }
+     */
+}
+
 @end

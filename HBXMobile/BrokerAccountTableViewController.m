@@ -12,7 +12,7 @@
 #import "brokerEmployersData.h"
 #import "brokerPlanDetailViewController.h"
 #import "tutorialViewcontroller.h"
-
+#import "detailBrokerEmployerViewController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -276,7 +276,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:temp];
 //    [string addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x007bc4) range:NSMakeRange(14, temp.length - 14)];
-    [string addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x0555555) range:NSMakeRange(14, temp.length - 14)];
+    [string addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x555555) range:NSMakeRange(14, temp.length - 14)];
 //    [string addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:NSMakeRange(14, temp.length - 14)]
 
 //    [string addAttribute:NSUnderlineColorAttributeName value:[UIColor redColor] range:NSMakeRange(13, temp.length - 13)];
@@ -1046,8 +1046,23 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         vc.type = (brokerEmployersData*)sender;
         vc.enrollHost = _enrollHost;
         vc.customCookie_a = _customCookie_a;
+    }
+    /*
+    if ([[segue identifier] isEqualToString:@"Broker Employer Detail"])
+    {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        // Get destination view
+        UITabBarController *tabar=segue.destinationViewController;
+        
+        int uu = [tabar.viewControllers count];
+        detailBrokerEmployerViewController *vc = [tabar.viewControllers objectAtIndex:0]; //[segue destinationViewController];
+        vc.bucket = indexPath.section;
+        vc.employerData = (brokerEmployersData*)sender;
+        vc.enrollHost = _enrollHost;
+        vc.customCookie_a = _customCookie_a;
         
     }
+     */
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1055,7 +1070,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (ttype.type == 1)
         return;
-    [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
+ //   [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
+        [self performSegueWithIdentifier:@"Broker Employer Detail" sender:ttype];
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     return;
 }
