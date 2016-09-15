@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "brokerEmployersData.h"
 
 @interface employerTabController : UITabBarController <UITabBarControllerDelegate>
+{
+    
+}
+
+@property (strong, nonatomic) brokerEmployersData *employerData;
+@property(nonatomic, assign) NSString *enrollHost;
+@property(nonatomic, assign) NSString *customCookie_a;
 
 @end

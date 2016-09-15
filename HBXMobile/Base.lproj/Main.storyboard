@@ -9,8 +9,10 @@
             <string>Roboto-Bold</string>
             <string>Roboto-Bold</string>
             <string>Roboto-Bold</string>
+            <string>Roboto-Bold</string>
         </mutableArray>
         <mutableArray key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
         </mutableArray>
@@ -220,11 +222,36 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                     <outlet property="delegate" destination="iMe-mE-tft" id="arg-nx-utm"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" id="Xge-Xf-Ev8">
+                                <rect key="frame" x="20" y="227" width="280" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oAx-K0-GME">
+                                        <rect key="frame" x="-72" y="10" width="286" height="64"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="24"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" id="3zo-Sc-bra">
+                                        <rect key="frame" x="-72" y="86" width="286" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                     </view>
                     <tabBarItem key="tabBarItem" title="roster" image="rosternormal32.png" selectedImage="rosteractive32.png" id="opX-IR-CJZ"/>
                     <connections>
+                        <outlet property="pCompany" destination="oAx-K0-GME" id="pgS-vU-NAT"/>
+                        <outlet property="pCompanyFooter" destination="3zo-Sc-bra" id="tOh-vM-dHz"/>
                         <outlet property="pRosterTable" destination="49a-sv-cLy" id="sKk-CG-jnI"/>
+                        <outlet property="vHeader" destination="Xge-Xf-Ev8" id="X8P-CU-IXx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iw5-ex-fh8" userLabel="First Responder" sceneMemberID="firstResponder"/>

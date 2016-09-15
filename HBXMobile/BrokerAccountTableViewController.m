@@ -13,6 +13,7 @@
 #import "brokerPlanDetailViewController.h"
 #import "tutorialViewcontroller.h"
 #import "detailBrokerEmployerViewController.h"
+#import "employerTabController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -1047,22 +1048,25 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         vc.enrollHost = _enrollHost;
         vc.customCookie_a = _customCookie_a;
     }
-    /*
+    
     if ([[segue identifier] isEqualToString:@"Broker Employer Detail"])
     {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         // Get destination view
-        UITabBarController *tabar=segue.destinationViewController;
-        
+ //       UITabBarController *tabar=segue.destinationViewController;
+        employerTabController *tabar=segue.destinationViewController;
+        tabar.employerData = (brokerEmployersData*)sender;
+        tabar.enrollHost = _enrollHost;
+        tabar.customCookie_a = _customCookie_a;
+/*
         int uu = [tabar.viewControllers count];
         detailBrokerEmployerViewController *vc = [tabar.viewControllers objectAtIndex:0]; //[segue destinationViewController];
         vc.bucket = indexPath.section;
         vc.employerData = (brokerEmployersData*)sender;
         vc.enrollHost = _enrollHost;
         vc.customCookie_a = _customCookie_a;
-        
+ */
     }
-     */
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

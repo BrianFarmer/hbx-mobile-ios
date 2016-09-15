@@ -37,8 +37,18 @@ alpha:1.0]
     
     [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
 
-    navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    //if Custom class with Navigation Controller
+    //    TabBarController *tabBar = (TabBarController *) self.navigationController.tabBarController;
+    
+    
+    employerData = tabBar.employerData;
+//    _enrollHost = tabBar.enrollHost;
+//    _customCookie_a = tabBar.customCookie_a;
+
+    navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
     navImage.backgroundColor = [UIColor clearColor];
     navImage.image = [UIImage imageNamed:@"navHeader"];
@@ -80,14 +90,11 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
-    
-    pRosterTable.frame = CGRectMake(10, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width - 10, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,4 +112,77 @@ alpha:1.0]
 }
 */
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 20;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 34;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CGFloat headerHeight = 34.0f;
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, pRosterTable.frame.size.width, headerHeight)];
+
+    headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;// | UIViewAutoresizingFlexibleHeight;
+    headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+    
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, pRosterTable.frame.size.width/2, headerHeight)];
+    label.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
+    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.numberOfLines = 1;
+    label.textAlignment = NSTextAlignmentLeft;
+    label.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    label.text = @"NAME";
+
+    [headerView addSubview:label];
+    
+    UILabel *lblStatus = [[UILabel alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
+    lblStatus.backgroundColor = [UIColor clearColor];
+    lblStatus.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
+    lblStatus.lineBreakMode = NSLineBreakByWordWrapping;
+    lblStatus.numberOfLines = 1;
+    lblStatus.textAlignment = NSTextAlignmentRight;
+    lblStatus.textColor = UIColorFromRGB(0x555555);
+    lblStatus.text = @"STATUS";
+
+    [headerView addSubview:lblStatus];
+    
+    return headerView;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+    }
+    
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+
+        cell.textLabel.textColor = UIColorFromRGB(0x555555);
+        cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+    
+    cell.textLabel.text = @"First Lastname";
+    cell.detailTextLabel.text = @"Enrolled";
+
+    return cell;
+}
 @end

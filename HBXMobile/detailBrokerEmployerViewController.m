@@ -8,6 +8,7 @@
 
 #import "detailBrokerEmployerViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "employerTabController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -30,9 +31,19 @@ alpha:1.0]
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //if Custom class
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    //if Custom class with Navigation Controller
+//    TabBarController *tabBar = (TabBarController *) self.navigationController.tabBarController;
+    
+    
+    employerData = tabBar.employerData;
+    _enrollHost = tabBar.enrollHost;
+    _customCookie_a = tabBar.customCookie_a;
+    
 //    self.tabBarController.delegate = self;
     
-    return;
 //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"infoactive32.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"infonormal32.png"]];
 //    [self.tabBarItem initWithTitle:@"info" image:[UIImage imageNamed:@"infoactive32.png"] selectedImage:[UIImage imageNamed:@"infonormal32.png"]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
@@ -40,7 +51,7 @@ alpha:1.0]
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
 
-       [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
+       [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG1.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
     
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -187,8 +198,6 @@ alpha:1.0]
     
     [urlRequest setAllHTTPHeaderFields:headers];
     
-    
-    
     NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
                                           returningResponse:&response
                                                       error:&error];
@@ -222,7 +231,7 @@ alpha:1.0]
 {
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
-    detailTable.frame = CGRectMake(10, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width - 10, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -437,7 +446,7 @@ alpha:1.0]
  
  //           if (indexPath.section == 1 && indexPath.row == 0)
             {
-                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(200, 55, 200, 200)];
+                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(220, 55, 200, 200)];
                 [pieChartRight setDelegate:self];
                 [pieChartRight setDataSource:self];
                 [pieChartRight setPieCenter:CGPointMake(60, 60)];
@@ -456,7 +465,7 @@ alpha:1.0]
                 
                 [cell.contentView addSubview:pieChartRight];
                 
-                UILabel *pEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 150, 50)];
+                UILabel *pEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 150, 50)];
                 pEnrolled.tag = 971;
                 pEnrolled.hidden = TRUE;
                 pEnrolled.numberOfLines = 2;
@@ -465,7 +474,7 @@ alpha:1.0]
                 pEnrolled.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pEnrolled];
                 
-                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(5, 60, 150, 50)];
+                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 150, 50)];
                 pWaived.tag = 972;
                 pWaived.hidden = TRUE;
                 pWaived.numberOfLines = 2;
@@ -474,7 +483,7 @@ alpha:1.0]
                 pWaived.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pWaived];
 
-                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(5, 120, 150, 50)];
+                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 120, 150, 50)];
                 pNotEnrolled.tag = 973;
                 pNotEnrolled.hidden = TRUE;
                 pNotEnrolled.numberOfLines = 2;
@@ -483,7 +492,7 @@ alpha:1.0]
                 pNotEnrolled.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pNotEnrolled];
                 
-                UILabel *pTotalEmployees = [[UILabel alloc] initWithFrame:CGRectMake(5, 180, 150, 50)];
+                UILabel *pTotalEmployees = [[UILabel alloc] initWithFrame:CGRectMake(10, 180, 150, 50)];
                 pTotalEmployees.tag = 974;
                 pTotalEmployees.hidden = TRUE;
                 pTotalEmployees.numberOfLines = 2;

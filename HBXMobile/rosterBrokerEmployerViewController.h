@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "brokerEmployersData.h"
+#import "employerTabController.h"
 
 @interface rosterBrokerEmployerViewController : UIViewController
 {
@@ -19,7 +20,7 @@
     IBOutlet UIView *vHeader;
 
     brokerEmployersData *employerData;
-        UIImageView *navImage;
+    UIImageView *navImage;
 }
 
 @end
