@@ -86,6 +86,7 @@
 		40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */; };
 		40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */; };
 		40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */; };
+		40ECFBFC1D8AF2ED003102E5 /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */; };
 		40EE697B1D8A095100BCB351 /* employerTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EE697A1D8A095100BCB351 /* employerTabController.m */; };
 		40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */; };
 		40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8511D5104CB0071FFD5 /* callus54x54.png */; };
@@ -97,7 +98,6 @@
 		40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */; };
 		40F1511B1D5260A10041C132 /* chevron_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511A1D5260A10041C132 /* chevron_right.png */; };
 		40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */; };
-		40F1FB921D84DB6F005EF01F /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F1FB911D84DB6F005EF01F /* XYPieChart.m */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
 		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
@@ -240,6 +240,8 @@
 		40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListViewController.m; sourceTree = "<group>"; };
 		40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40WHT.png; sourceTree = "<group>"; };
 		40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40_144ppi_WHT.png; sourceTree = "<group>"; };
+		40ECFBFA1D8AF2ED003102E5 /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		40EE69791D8A095100BCB351 /* employerTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = employerTabController.h; sourceTree = "<group>"; };
 		40EE697A1D8A095100BCB351 /* employerTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = employerTabController.m; sourceTree = "<group>"; };
 		40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT1.png; sourceTree = "<group>"; };
@@ -254,8 +256,6 @@
 		40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader512x147.png; sourceTree = "<group>"; };
 		40F1511A1D5260A10041C132 /* chevron_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_right.png; sourceTree = "<group>"; };
 		40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader_navbar.png; sourceTree = "<group>"; };
-		40F1FB901D84DB6F005EF01F /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
-		40F1FB911D84DB6F005EF01F /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
@@ -396,8 +396,7 @@
 		13FF470B1C8A2C5600C7C851 /* HBXMobile */ = {
 			isa = PBXGroup;
 			children = (
-				40F1FB901D84DB6F005EF01F /* XYPieChart.h */,
-				40F1FB911D84DB6F005EF01F /* XYPieChart.m */,
+				40ECFBF91D8AF2ED003102E5 /* XYGraph */,
 				13316B121D21B0D9001A450C /* Settings.h */,
 				13316B131D21B0D9001A450C /* Settings.m */,
 				134DE79B1CECEF4F00F8958A /* MGSwipe */,
@@ -549,6 +548,15 @@
 				13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		40ECFBF91D8AF2ED003102E5 /* XYGraph */ = {
+			isa = PBXGroup;
+			children = (
+				40ECFBFA1D8AF2ED003102E5 /* XYPieChart.h */,
+				40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */,
+			);
+			path = XYGraph;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -763,9 +771,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40ECFBFC1D8AF2ED003102E5 /* XYPieChart.m in Sources */,
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
-				40F1FB921D84DB6F005EF01F /* XYPieChart.m in Sources */,
 				40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
 				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
