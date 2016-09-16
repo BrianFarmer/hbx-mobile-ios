@@ -1,12 +1,12 @@
 //
-//  rosterBrokerEmployerViewController.m
+//  rosterCostsBrokerEmployerViewController.m
 //  HBXMobile
 //
-//  Created by John Boyd on 9/14/16.
+//  Created by John Boyd on 9/15/16.
 //  Copyright © 2016 David Boyd. All rights reserved.
 //
 
-#import "rosterBrokerEmployerViewController.h"
+#import "rosterCostsBrokerEmployerViewController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -14,11 +14,11 @@ green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
 blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
 alpha:1.0]
 
-@interface rosterBrokerEmployerViewController ()
+@interface rosterCostsBrokerEmployerViewController ()
 
 @end
 
-@implementation rosterBrokerEmployerViewController
+@implementation rosterCostsBrokerEmployerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,7 +36,7 @@ alpha:1.0]
                                                        nil] forState:UIControlStateNormal];
     
     [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
-
+    
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
@@ -45,9 +45,9 @@ alpha:1.0]
     
     
     employerData = tabBar.employerData;
-//    _enrollHost = tabBar.enrollHost;
-//    _customCookie_a = tabBar.customCookie_a;
-
+    //    _enrollHost = tabBar.enrollHost;
+    //    _customCookie_a = tabBar.customCookie_a;
+    
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
     navImage.backgroundColor = [UIColor clearColor];
@@ -90,18 +90,12 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-    slideView = [[UISlideView alloc] init];//]WithFrame:CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 44, 200, 200)];
-    slideView.backgroundColor = [UIColor clearColor];
-    slideView.delegate = self;
-    
-    [self.view addSubview:slideView];
-    
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
-    slideView.frame = CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 34, 200, pRosterTable.frame.size.height - 34);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -143,7 +137,7 @@ alpha:1.0]
 {
     CGFloat headerHeight = 34.0f;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, pRosterTable.frame.size.width, headerHeight)];
-
+    
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;// | UIViewAutoresizingFlexibleHeight;
     headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
     
@@ -155,9 +149,9 @@ alpha:1.0]
     label.textAlignment = NSTextAlignmentLeft;
     label.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
     label.text = @"NAME";
-
+    
     [headerView addSubview:label];
-/*
+    
     UILabel *lblStatus = [[UILabel alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
     lblStatus.backgroundColor = [UIColor clearColor];
     lblStatus.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
@@ -166,62 +160,10 @@ alpha:1.0]
     lblStatus.textAlignment = NSTextAlignmentRight;
     lblStatus.textColor = UIColorFromRGB(0x555555);
     lblStatus.text = @"STATUS";
-    lblStatus.userInteractionEnabled = YES;
- */
     
-    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
-//    button.layer.cornerRadius = 16;
-//    button.layer.borderWidth = 2;
-//    button.layer.borderColor = [UIColor whiteColor].CGColor;
-//    button.clipsToBounds = YES;
-    [button setBackgroundColor:[UIColor clearColor]];
-    button.tag = section;
-    button.titleLabel.textAlignment = NSTextAlignmentRight;
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [headerView addSubview:lblStatus];
     
-    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
-    [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"STATUS" forState:UIControlStateNormal];
-//    [Button addTarget:self action:@selector(doSomething:) forControlEvents:UIControlEventTouchUpInside];
-//    [button addTarget:self action:@selector(setBgColorForButton:) forControlEvents:UIControlEventTouchDown];
-
-    [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-    [button setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-    
-    [headerView addSubview:button];
-
-//    [headerView addSubview:button];
-    
-//    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
- //   [lblStatus addGestureRecognizer:recognizer];
-
     return headerView;
-}
-
-- (void)setBgColorForButton:(UIButton *)sender {
-        [sender setBackgroundColor:[UIColor blackColor]];
-}
-
-- (void)handleTap:(UIButton *)sender {
-//    UILabel *lblStatus = (UILabel*)sender.view;
-    
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
-//        lblStatus.backgroundColor = [UIColor lightGrayColor];
-//    [self.tableView beginUpdates];
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
-//    [self tableView:self.tableView didSelectHeader:indexPath];
-    
-//    [self.tableView endUpdates];
-    //    [self.tableView reloadData];
-    [sender setBackgroundColor:[UIColor clearColor]];
-    
-//    [pRosterTable setUserInteractionEnabled:FALSE];
-    
-//    [self.view bringSubviewToFront:slideView];
-    
-    [slideView handleLeftSwipe:TRUE];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -235,18 +177,14 @@ alpha:1.0]
     
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
-
-        cell.textLabel.textColor = UIColorFromRGB(0x555555);
-        cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+    
+    cell.textLabel.textColor = UIColorFromRGB(0x555555);
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
     
     cell.textLabel.text = @"First Lastname";
     cell.detailTextLabel.text = @"Enrolled";
-
+    
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-}
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define PRODUCTION_BUILD    1
+#define PRODUCTION_BUILD    0
 
 @interface Settings : NSObject
 {

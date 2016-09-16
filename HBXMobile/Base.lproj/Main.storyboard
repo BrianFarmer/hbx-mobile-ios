@@ -10,8 +10,10 @@
             <string>Roboto-Bold</string>
             <string>Roboto-Bold</string>
             <string>Roboto-Bold</string>
+            <string>Roboto-Bold</string>
         </mutableArray>
         <mutableArray key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
             <string>Roboto-Medium</string>
@@ -213,28 +215,19 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="49a-sv-cLy">
-                                <rect key="frame" x="40" y="115" width="240" height="324"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="iMe-mE-tft" id="tsP-YP-ypf"/>
-                                    <outlet property="delegate" destination="iMe-mE-tft" id="arg-nx-utm"/>
-                                </connections>
-                            </tableView>
                             <view contentMode="scaleToFill" id="Xge-Xf-Ev8">
-                                <rect key="frame" x="20" y="227" width="280" height="115"/>
+                                <rect key="frame" x="20" y="71" width="280" height="115"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oAx-K0-GME">
-                                        <rect key="frame" x="-72" y="10" width="286" height="64"/>
+                                        <rect key="frame" x="-6" y="8" width="286" height="64"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="24"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" id="3zo-Sc-bra">
-                                        <rect key="frame" x="-72" y="86" width="286" height="21"/>
+                                        <rect key="frame" x="-6" y="86" width="286" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
@@ -244,6 +237,15 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="49a-sv-cLy">
+                                <rect key="frame" x="40" y="194" width="240" height="324"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="iMe-mE-tft" id="tsP-YP-ypf"/>
+                                    <outlet property="delegate" destination="iMe-mE-tft" id="arg-nx-utm"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                     </view>
                     <tabBarItem key="tabBarItem" title="roster" image="rosternormal32.png" selectedImage="rosteractive32.png" id="opX-IR-CJZ"/>
@@ -261,13 +263,52 @@ If you are not an exisiting customer please sign up on your home computer.</stri
         <!--costs-->
         <scene sceneID="tRT-ve-c3Z">
             <objects>
-                <viewController id="1P0-ny-Yls" sceneMemberID="viewController">
+                <viewController id="1P0-ny-Yls" customClass="rosterCostsBrokerEmployerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Hp-qQ-iky">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="YmR-8H-spy">
+                                <rect key="frame" x="40" y="191" width="240" height="324"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="1P0-ny-Yls" id="xC5-lK-bke"/>
+                                    <outlet property="delegate" destination="3Hp-qQ-iky" id="SaY-Ol-rZw"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" id="9np-x0-uwE">
+                                <rect key="frame" x="20" y="68" width="280" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" id="XLw-jP-fmt">
+                                        <rect key="frame" x="0.0" y="86" width="286" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="18"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="e7c-nO-sfW">
+                                        <rect key="frame" x="0.0" y="8" width="286" height="64"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="24"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="costs" image="costsnormal32.png" id="cHk-oM-fLi"/>
+                    <connections>
+                        <outlet property="pCompany" destination="e7c-nO-sfW" id="V4C-tb-lxn"/>
+                        <outlet property="pCompanyFooter" destination="XLw-jP-fmt" id="xXJ-b9-hSa"/>
+                        <outlet property="pRosterTable" destination="YmR-8H-spy" id="M5f-Rb-p0c"/>
+                        <outlet property="vHeader" destination="9np-x0-uwE" id="xu5-yS-vLq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hxN-Yq-Ke0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

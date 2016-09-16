@@ -59,28 +59,7 @@ alpha:1.0]
                                                        nil] forState:UIControlStateNormal];
     
     [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
-/*
-    self.tabBarItem.image = [[UIImage imageNamed:@"infonormal32.png"]
-                             imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
-    self.tabBarItem.selectedImage = [[UIImage imageNamed:@"infoactive32.png"]
-                             imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    */
     self.slices = [NSMutableArray arrayWithCapacity:10];
-    
-//    for(int i = 0; i < 3; i ++)
-//    {
-//        NSNumber *one = [NSNumber numberWithInt:rand()%60+20];
-//        [_slices addObject:one];
-//    }
-    NSNumber *one = [NSNumber numberWithInt:20];
-    [_slices addObject:one];
-    
-    NSNumber *two = [NSNumber numberWithInt:4];
-          [_slices addObject:two];
-    
-    NSNumber *three = [NSNumber numberWithInt:6];
-    [_slices addObject:three];
     
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
@@ -136,6 +115,17 @@ alpha:1.0]
     
     [self loadDictionary];
     
+    int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
+ 
+    NSNumber *one = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_enrolled"] intValue]];
+    [_slices addObject:one];
+    
+    NSNumber *two = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_waived"] intValue]];
+    [_slices addObject:two];
+    
+    NSNumber *three = [NSNumber numberWithInt:iNotEnrolled];
+    [_slices addObject:three];
+
     NSDate *today = [NSDate date];
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
@@ -175,8 +165,16 @@ alpha:1.0]
 
 -(void)loadDictionary
 {
-    NSString *pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
-    
+    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *e_url = employerData.detail_url;
+    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+    BOOL pp = [e_url hasPrefix:@"https://"];
+    BOOL ll = [e_url hasPrefix:@"http://"];
+    if (!pp && !ll)
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    else
+        pUrl = employerData.detail_url;
+
     NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
     NSURLResponse * response = nil;
     NSError * error = nil;
@@ -446,7 +444,7 @@ alpha:1.0]
  
  //           if (indexPath.section == 1 && indexPath.row == 0)
             {
-                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(220, 55, 200, 200)];
+                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(210, 55, 200, 200)];
                 [pieChartRight setDelegate:self];
                 [pieChartRight setDataSource:self];
                 [pieChartRight setPieCenter:CGPointMake(60, 60)];
@@ -457,8 +455,8 @@ alpha:1.0]
                 
                 self.sliceColors =[NSArray arrayWithObjects:
                                    UIColorFromRGB(0x00a99e),
-                                   [UIColor redColor], //UIColorFromRGB(0x00a3e2)
                                    UIColorFromRGB(0x625ba8),
+                                   [UIColor redColor],
                                    nil];
                 
                 pieChartRight.hidden = TRUE;
@@ -602,16 +600,16 @@ alpha:1.0]
         if (indexPath.row == 0)
         {
             pEnrolled.hidden = FALSE;
-            pEnrolled.text = @"20\nENROLLED";
+            pEnrolled.text = [NSString stringWithFormat:@"%@\nENROLLED", [dictionary valueForKey:@"employees_enrolled"]];
 
             pWaived.hidden = FALSE;
-            pWaived.text = @"6\nWAIVED";
-            
+            pWaived.text = [NSString stringWithFormat:@"%@\nWAIVED", [dictionary valueForKey:@"employees_waived"]];
+
             pNotEnrolled.hidden = FALSE;
-            pNotEnrolled.text = @"4\nNOT ENROLLED";
+            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue]]; //@"4\nNOT ENROLLED";
             
             pTotalEmployees.hidden = FALSE;
-            pTotalEmployees.text = @"30\nTOTAL EMPLOYEES";
+            pTotalEmployees.text = [NSString stringWithFormat:@"%@\nTOTAL EMPLOYEES", [dictionary valueForKey:@"employees_total"]]; //@"30\nTOTAL EMPLOYEES";
             
             pChart.hidden = FALSE;
             [pChart reloadData];

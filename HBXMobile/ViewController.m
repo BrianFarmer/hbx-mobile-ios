@@ -484,7 +484,12 @@
     {
         case 1001:
             enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
-            [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]];
+            if (![enrollHost hasPrefix:@"http://"] && ![enrollHost hasPrefix:@"https://"])
+            {
+                enrollHost = [NSString stringWithFormat:@"http://%@", enrollHost];
+            }
+            
+            [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"%@/users/sign_in", enrollHost]];
             break;
         case 1002:
     //        txtEmail.text = @"bobby.heenan@yopmail.com";
@@ -499,8 +504,12 @@
             }
 
 #endif
+            if (![mobileHost hasPrefix:@"http://"] && ![mobileHost hasPrefix:@"https://"])
+            {
+                mobileHost = [NSString stringWithFormat:@"https://%@", mobileHost];
+            }
 
-            [self MOBILE_SERVER_Login:[NSString stringWithFormat:@"https://%@/login", mobileHost] host:mobileHost];
+            [self MOBILE_SERVER_Login:[NSString stringWithFormat:@"%@/login", mobileHost] host:mobileHost];
             break;
         case 1003:
         default:
@@ -571,7 +580,7 @@
 //ONLY NEEDED FOR ENROLL LOGIN DIRECTLY
 - (void)clearCookiesForURL {
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    NSArray *cookies = [cookieStorage cookiesForURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost]]];
+    NSArray *cookies = [cookieStorage cookiesForURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/sign_in", enrollHost]]];
     for (NSHTTPCookie *cookie in cookies) {
         NSLog(@"Deleting cookie for domain: %@", [cookie domain]);
         [cookieStorage deleteCookie:cookie];
@@ -681,7 +690,7 @@
     
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/users/sign_in", enrollHost];
+    NSString *pUrl = [NSString stringWithFormat:@"%@/users/sign_in", enrollHost];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     
@@ -940,6 +949,8 @@
             NSLog(@"%@\n", csrfToken);
         }
     
+    http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
+    
     switch (REQUEST_TYPE) {
         case GET_BROKER_ID:
             {
@@ -955,7 +966,11 @@
                 
                 loadLabel.text = @"Loading employer data";
                 if (iServerType == 1001)
-                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"http://%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                {
+        //            http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
+        //            [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/api/v1/mobile_api/employers_list", enrollHost]];
+               }
                 else
                     [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
             }
@@ -1025,7 +1040,7 @@
             [self POSTLogin];
             break;
         case POST_LOGIN_DONE:   //Only used for Enroll Server Login
-            [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"http://%@/broker_agencies", enrollHost]];
+            [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"%@/broker_agencies", enrollHost]];
 
             break;
         case 502:   //Only used for Enroll Server Login
@@ -1068,7 +1083,7 @@
     
     NSLog(@"%@", @"\r\r\rDOING RELOAD\r\r\r\r");
     
-    NSString *pUrl = [NSString stringWithFormat:@"http://%@/", enrollHost];
+    NSString *pUrl = [NSString stringWithFormat:@"%@/", enrollHost];
     
     [request setURL:[NSURL URLWithString:pUrl]];
     //    [request setURL:[NSURL URLWithString:@"http://10.36.27.206:3000/"]];
@@ -1244,7 +1259,7 @@
     
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                @"http://ec2-54-234-22-53.compute-1.amazonaws.com:3001/login/1", NSHTTPCookieDomain,
+                                request.URL.host, NSHTTPCookieDomain, //@"http://ec2-54-234-22-53.compute-1.amazonaws.com:3001/login/1"
                                 @"/", NSHTTPCookiePath,  // IMPORTANT!
                                 @"_session_id", NSHTTPCookieName,
                                 customCookie, NSHTTPCookieValue,
