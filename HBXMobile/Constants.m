@@ -12,7 +12,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-
+/*
 #import "Constants.h"
 
 //#warning To run this sample correctly, you must set an appropriate constants.
@@ -20,3 +20,4 @@ AWSRegionType const CognitoRegionType = AWSRegionUSEast1; //AWSRegionUnknown; //
 AWSRegionType const DefaultServiceRegionType = AWSRegionUSWest2; //AWSRegionUnknown; // e.g. AWSRegionUSEast1
 NSString *const CognitoIdentityPoolId = @"enter-poolid-here";
 NSString *const S3BucketName = @"enter_bucket_name";
+*/
