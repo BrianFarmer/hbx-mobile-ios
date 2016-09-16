@@ -49,6 +49,8 @@ alpha:1.0]
         
         bOpened = FALSE;
         
+        iSort = 3;
+        
     }
     return self;
 }
@@ -73,7 +75,7 @@ alpha:1.0]
     bOpened = FALSE;
 }
 
--(void) handleLeftSwipe:(BOOL)bHasPrivs //(UISwipeGestureRecognizer *) recognizer {
+-(void) handleLeftSwipe:(int)is //(UISwipeGestureRecognizer *) recognizer {
 {
     if (bOpened)
     {
@@ -85,11 +87,12 @@ alpha:1.0]
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDuration:0.5];
-    CGRect rc = self.frame;
+//    CGRect rc = self.frame;
     self.frame = CGRectMake(self.frame.origin.x - 200,self.frame.origin.y,200,self.frame.size.height);
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.superview cache:YES]; //UIViewAnimationTransitionFlipFromRight
     [UIView commitAnimations];
     bOpened = TRUE;
+    iSort = is;
 }
 
 - (void)viewDidLoad
@@ -106,9 +109,9 @@ alpha:1.0]
     [loggedInTable reloadData];
     
     [self.superview bringSubviewToFront:self];
-            self.userInteractionEnabled = TRUE;
-     loggedInTable.userInteractionEnabled = TRUE;
-            self.backgroundColor = [UIColor greenColor];
+    self.userInteractionEnabled = TRUE;
+    loggedInTable.userInteractionEnabled = TRUE;
+    self.backgroundColor = [UIColor greenColor];
 }
 
 #pragma mark - Table View
@@ -147,22 +150,26 @@ alpha:1.0]
         case 0:
             cell.textLabel.textColor = UIColorFromRGB(0x00a99e);
             cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            cell.imageView.image = [UIImage imageNamed:@"check_enrolled.png"];
+            if (iSort == indexPath.row)
+                cell.imageView.image = [UIImage imageNamed:@"check_enrolled.png"];
             break;
         case 1:
             cell.textLabel.textColor = UIColorFromRGB(0x625ba8);
             cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            cell.imageView.image = [UIImage imageNamed:@"check_waived.png"];
+            if (iSort == indexPath.row)
+                cell.imageView.image = [UIImage imageNamed:@"check_waived.png"];
             break;
         case 2:
             cell.textLabel.textColor = [UIColor redColor];
             cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            cell.imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
+            if (iSort == indexPath.row)
+                cell.imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
             break;
         case 3:
             cell.textLabel.textColor = UIColorFromRGB(0x555555);
             cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            cell.imageView.image = [UIImage imageNamed:@"check_showall.png"];
+            if (iSort == indexPath.row)
+                cell.imageView.image = [UIImage imageNamed:@"check_showall.png"];
             break;
             
     }
@@ -173,5 +180,6 @@ alpha:1.0]
 {
     bOpened = FALSE;
     [self handleRightSwipe:nil];
+    iSort = (int)indexPath.row;
 }
 @end

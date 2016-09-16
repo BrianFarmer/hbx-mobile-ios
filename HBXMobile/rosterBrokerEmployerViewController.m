@@ -221,7 +221,7 @@ alpha:1.0]
     
 //    [self.view bringSubviewToFront:slideView];
     
-    [slideView handleLeftSwipe:TRUE];
+    [slideView handleLeftSwipe:3];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
