@@ -65,8 +65,6 @@
 		40003F301D4FE45800CD059B /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2A1D4FE45800CD059B /* email.png */; };
 		40003F311D4FE45800CD059B /* phoneWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2B1D4FE45800CD059B /* phoneWHT.png */; };
 		40003F321D4FE45800CD059B /* emailWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2C1D4FE45800CD059B /* emailWHT.png */; };
-		40003F351D4FF67400CD059B /* emailus80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F331D4FF67400CD059B /* emailus80x80.png */; };
-		40003F361D4FF67400CD059B /* callus80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F341D4FF67400CD059B /* callus80x80.png */; };
 		40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */; };
 		4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */; };
 		4036BEEF1D5E616B000F6182 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4036BEEE1D5E616B000F6182 /* refresh.png */; };
@@ -75,27 +73,17 @@
 		4039C88C1D8C50AB00F7EA7B /* check_showall.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C8881D8C50AB00F7EA7B /* check_showall.png */; };
 		4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C8891D8C50AB00F7EA7B /* check_notenrolled.png */; };
 		4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C88A1D8C50AB00F7EA7B /* check_enrolled.png */; };
-		404CC1881D3FA10C00A9B31D /* light_blue_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */; };
-		404CC18C1D3FAA4B00A9B31D /* logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC18B1D3FAA4B00A9B31D /* logout.png */; };
-		404CC1921D3FAD4A00A9B31D /* icon_list_bullets_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */; };
-		404CC1961D3FE65D00A9B31D /* list_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 404CC1951D3FE65D00A9B31D /* list_icon.png */; };
 		40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */; };
-		40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */; };
-		40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */; };
 		40ECFBFC1D8AF2ED003102E5 /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */; };
 		40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40ECFC031D8B1BC9003102E5 /* tabBG1.png */; };
 		40ECFC071D8B52F3003102E5 /* rosterCostsBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40ECFC061D8B52F3003102E5 /* rosterCostsBrokerEmployerViewController.m */; };
 		40EE697B1D8A095100BCB351 /* employerTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EE697A1D8A095100BCB351 /* employerTabController.m */; };
-		40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */; };
 		40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8511D5104CB0071FFD5 /* callus54x54.png */; };
 		40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8521D5104CB0071FFD5 /* emailus54x54.png */; };
 		40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EEC8581D5112EE0071FFD5 /* tutorialViewController.m */; };
 		40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */; };
 		40EEC85F1D512B690071FFD5 /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC85E1D512B690071FFD5 /* chevron.png */; };
 		40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */; };
-		40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */; };
-		40F1511B1D5260A10041C132 /* chevron_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511A1D5260A10041C132 /* chevron_right.png */; };
-		40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
 		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
@@ -114,7 +102,6 @@
 		40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C11D88727D003279DD /* rosternormal32.png */; };
 		40F6F8C41D88727D003279DD /* costsnormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C21D88727D003279DD /* costsnormal32.png */; };
 		40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6F8C51D887BE9003279DD /* plansnormal32.png */; };
-		40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,8 +203,6 @@
 		40003F2A1D4FE45800CD059B /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
 		40003F2B1D4FE45800CD059B /* phoneWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT.png; sourceTree = "<group>"; };
 		40003F2C1D4FE45800CD059B /* emailWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailWHT.png; sourceTree = "<group>"; };
-		40003F331D4FF67400CD059B /* emailus80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailus80x80.png; sourceTree = "<group>"; };
-		40003F341D4FF67400CD059B /* callus80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = callus80x80.png; sourceTree = "<group>"; };
 		40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DCHealthLink_LogoWHT1.png; sourceTree = "<group>"; };
 		4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardiPad.storyboard; sourceTree = "<group>"; };
 		4036BEEE1D5E616B000F6182 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
@@ -227,14 +212,8 @@
 		4039C8881D8C50AB00F7EA7B /* check_showall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_showall.png; sourceTree = "<group>"; };
 		4039C8891D8C50AB00F7EA7B /* check_notenrolled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_notenrolled.png; sourceTree = "<group>"; };
 		4039C88A1D8C50AB00F7EA7B /* check_enrolled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_enrolled.png; sourceTree = "<group>"; };
-		404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light_blue_gradient.png; sourceTree = "<group>"; };
-		404CC18B1D3FAA4B00A9B31D /* logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logout.png; sourceTree = "<group>"; };
-		404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_list_bullets_1.png; sourceTree = "<group>"; };
-		404CC1951D3FE65D00A9B31D /* list_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_icon.png; sourceTree = "<group>"; };
 		40D466AD1D3EC24200ADC1FC /* CarrierListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListViewController.h; sourceTree = "<group>"; };
 		40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListViewController.m; sourceTree = "<group>"; };
-		40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40WHT.png; sourceTree = "<group>"; };
-		40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader200x40_144ppi_WHT.png; sourceTree = "<group>"; };
 		40ECFBFA1D8AF2ED003102E5 /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
 		40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		40ECFC031D8B1BC9003102E5 /* tabBG1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabBG1.png; sourceTree = "<group>"; };
@@ -242,7 +221,6 @@
 		40ECFC061D8B52F3003102E5 /* rosterCostsBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rosterCostsBrokerEmployerViewController.m; sourceTree = "<group>"; };
 		40EE69791D8A095100BCB351 /* employerTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = employerTabController.h; sourceTree = "<group>"; };
 		40EE697A1D8A095100BCB351 /* employerTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = employerTabController.m; sourceTree = "<group>"; };
-		40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT1.png; sourceTree = "<group>"; };
 		40EEC8511D5104CB0071FFD5 /* callus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = callus54x54.png; sourceTree = "<group>"; };
 		40EEC8521D5104CB0071FFD5 /* emailus54x54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailus54x54.png; sourceTree = "<group>"; };
 		40EEC8571D5112EE0071FFD5 /* tutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tutorialViewController.h; sourceTree = "<group>"; };
@@ -251,9 +229,6 @@
 		40EEC85E1D512B690071FFD5 /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
 		40F07D3D1D84360400BD3B7C /* detailBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailBrokerEmployerViewController.h; sourceTree = "<group>"; };
 		40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailBrokerEmployerViewController.m; sourceTree = "<group>"; };
-		40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader512x147.png; sourceTree = "<group>"; };
-		40F1511A1D5260A10041C132 /* chevron_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_right.png; sourceTree = "<group>"; };
-		40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader_navbar.png; sourceTree = "<group>"; };
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
@@ -274,7 +249,6 @@
 		40F6F8C11D88727D003279DD /* rosternormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosternormal32.png; sourceTree = "<group>"; };
 		40F6F8C21D88727D003279DD /* costsnormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = costsnormal32.png; sourceTree = "<group>"; };
 		40F6F8C51D887BE9003279DD /* plansnormal32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plansnormal32.png; sourceTree = "<group>"; };
-		40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BrokerMVP_AppHeader300x40WHT.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,19 +489,10 @@
 				40F6F8B91D886413003279DD /* infonormal40.png */,
 				40F6F8B31D8861A0003279DD /* infonormal48.png */,
 				4036BEEE1D5E616B000F6182 /* refresh.png */,
-				40DC56C81D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png */,
-				40DC56C61D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png */,
-				40F7EC321D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png */,
-				40F1511C1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png */,
-				40F1511A1D5260A10041C132 /* chevron_right.png */,
-				40F151181D525DD30041C132 /* BrokerMVP_AppHeader512x147.png */,
 				40EEC85E1D512B690071FFD5 /* chevron.png */,
 				40EEC8511D5104CB0071FFD5 /* callus54x54.png */,
 				40EEC8521D5104CB0071FFD5 /* emailus54x54.png */,
-				40EEC84F1D50EC2F0071FFD5 /* phoneWHT1.png */,
 				40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */,
-				40003F331D4FF67400CD059B /* emailus80x80.png */,
-				40003F341D4FF67400CD059B /* callus80x80.png */,
 				40003F271D4FE45800CD059B /* phone.png */,
 				40003F281D4FE45800CD059B /* message.png */,
 				40003F291D4FE45800CD059B /* location.png */,
@@ -535,10 +500,6 @@
 				40003F2B1D4FE45800CD059B /* phoneWHT.png */,
 				40003F2C1D4FE45800CD059B /* emailWHT.png */,
 				40003F251D4FC51900CD059B /* uparrowWHT.png */,
-				404CC1951D3FE65D00A9B31D /* list_icon.png */,
-				404CC1911D3FAD4A00A9B31D /* icon_list_bullets_1.png */,
-				404CC18B1D3FAA4B00A9B31D /* logout.png */,
-				404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */,
 				13A3730E1D0B1B3F008CA0E1 /* gear.png */,
 				13A373061D084053008CA0E1 /* header-employer-2.png */,
 				13A382221CDB2FCD006B5984 /* carriers */,
@@ -675,18 +636,14 @@
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */,
 				4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */,
-				40003F361D4FF67400CD059B /* callus80x80.png in Resources */,
 				13FF471F1C8A2C5600C7C851 /* LaunchScreen.storyboard in Resources */,
 				40EEC85F1D512B690071FFD5 /* chevron.png in Resources */,
 				40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */,
-				40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
-				40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
 				40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */,
-				40F1511B1D5260A10041C132 /* chevron_right.png in Resources */,
 				13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */,
 				4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */,
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
@@ -701,22 +658,16 @@
 				40F6F8BA1D886413003279DD /* infonormal40.png in Resources */,
 				40F6DDA31D899F340095519C /* infonormal40_text.png in Resources */,
 				13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */,
-				404CC1961D3FE65D00A9B31D /* list_icon.png in Resources */,
 				40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */,
 				40F6DDA71D89ABEA0095519C /* home_selected.png in Resources */,
 				40003F301D4FE45800CD059B /* email.png in Resources */,
 				4039C88B1D8C50AB00F7EA7B /* check_waived.png in Resources */,
 				40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */,
-				40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */,
 				40003F321D4FE45800CD059B /* emailWHT.png in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
 				40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */,
-				40EEC8501D50EC2F0071FFD5 /* phoneWHT1.png in Resources */,
-				40F1511D1D5362330041C132 /* BrokerMVP_AppHeader_navbar.png in Resources */,
 				40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */,
 				40003F261D4FC51900CD059B /* uparrowWHT.png in Resources */,
-				404CC18C1D3FAA4B00A9B31D /* logout.png in Resources */,
-				404CC1921D3FAD4A00A9B31D /* icon_list_bullets_1.png in Resources */,
 				40F6DDA11D8987020095519C /* open_plus32x32.png in Resources */,
 				13A3821D1CDB2E3E006B5984 /* Roboto-ThinItalic.ttf in Resources */,
 				13A382201CDB2F4D006B5984 /* menu-icon.png in Resources */,
@@ -731,14 +682,11 @@
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
 				4036BEEF1D5E616B000F6182 /* refresh.png in Resources */,
 				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
-				404CC1881D3FA10C00A9B31D /* light_blue_gradient.png in Resources */,
 				40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */,
 				40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
 				4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */,
-				40003F351D4FF67400CD059B /* emailus80x80.png in Resources */,
 				40003F2D1D4FE45800CD059B /* phone.png in Resources */,
-				40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
 				13A382151CDB2E3E006B5984 /* Roboto-BoldItalic.ttf in Resources */,
 			);
