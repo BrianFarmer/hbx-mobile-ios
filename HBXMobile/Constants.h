@@ -12,7 +12,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-
+/*
 #import <Foundation/Foundation.h>
 #import <AWSCore/AWSCore.h>
 
@@ -20,3 +20,4 @@ FOUNDATION_EXPORT AWSRegionType const CognitoRegionType;
 FOUNDATION_EXPORT AWSRegionType const DefaultServiceRegionType;
 FOUNDATION_EXPORT NSString *const CognitoIdentityPoolId;
 FOUNDATION_EXPORT NSString *const S3BucketName;
+*/
