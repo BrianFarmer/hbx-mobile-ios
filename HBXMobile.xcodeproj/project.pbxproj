@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 130AA2801CEE4C0400B43F24 /* emailWithCirclelightBlue.png */; };
 		130AA2831CEE568900B43F24 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 130AA2821CEE568900B43F24 /* MessageUI.framework */; };
 		1316CEC81CC586510075B214 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1316CEC71CC586510075B214 /* QuartzCore.framework */; };
 		13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AF51D352D520097D245 /* brokerEmployersData.m */; };
@@ -25,11 +24,7 @@
 		138119DC1C9ADBF1000A75AA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 138119DB1C9ADBF1000A75AA /* Constants.m */; };
 		138119E21C9ADF7F000A75AA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E11C9ADF7F000A75AA /* libz.tbd */; };
 		138119E41C9ADF93000A75AA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E31C9ADF93000A75AA /* SystemConfiguration.framework */; };
-		13A373011D084004008CA0E1 /* alert2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373001D084004008CA0E1 /* alert2.png */; };
-		13A373031D084022008CA0E1 /* chatWithCircleLightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373021D084022008CA0E1 /* chatWithCircleLightBlue.png */; };
 		13A373071D084053008CA0E1 /* header-employer-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373061D084053008CA0E1 /* header-employer-2.png */; };
-		13A3730A1D0846E0008CA0E1 /* markerWithCircleLightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */; };
-		13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */; };
 		13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3730E1D0B1B3F008CA0E1 /* gear.png */; };
 		13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A373111D0B279F008CA0E1 /* ConfigViewController.m */; };
 		13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13A382061CDB2E3E006B5984 /* Roboto-Black.ttf */; };
@@ -48,8 +43,6 @@
 		13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */; };
 		13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382231CDB2FE8006B5984 /* carefirst_logo_k_2935.png */; };
 		13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 13A382241CDB2FE8006B5984 /* kaiser.jpg */; };
-		13A3822A1CDB303E006B5984 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382291CDB303E006B5984 /* bell.png */; };
-		13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */; };
 		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
 		13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */; };
 		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
@@ -142,7 +135,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		130AA2801CEE4C0400B43F24 /* emailWithCirclelightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailWithCirclelightBlue.png; sourceTree = "<group>"; };
 		130AA2821CEE568900B43F24 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		1316CEC71CC586510075B214 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		13273AF41D352D520097D245 /* brokerEmployersData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerEmployersData.h; sourceTree = "<group>"; };
@@ -168,11 +160,7 @@
 		138119DB1C9ADBF1000A75AA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		138119E11C9ADF7F000A75AA /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		138119E31C9ADF93000A75AA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		13A373001D084004008CA0E1 /* alert2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alert2.png; path = images/alert2.png; sourceTree = "<group>"; };
-		13A373021D084022008CA0E1 /* chatWithCircleLightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = chatWithCircleLightBlue.png; path = images/chatWithCircleLightBlue.png; sourceTree = "<group>"; };
 		13A373061D084053008CA0E1 /* header-employer-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "header-employer-2.png"; path = "images/header-employer-2.png"; sourceTree = "<group>"; };
-		13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = markerWithCircleLightBlue.png; path = images/markerWithCircleLightBlue.png; sourceTree = "<group>"; };
-		13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = phoneCirclelightBlue.png; path = images/phoneCirclelightBlue.png; sourceTree = "<group>"; };
 		13A3730E1D0B1B3F008CA0E1 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		13A373101D0B279F008CA0E1 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
 		13A373111D0B279F008CA0E1 /* ConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController.m; sourceTree = "<group>"; };
@@ -192,8 +180,6 @@
 		13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-icon@2x.png"; path = "images/menu-icon@2x.png"; sourceTree = "<group>"; };
 		13A382231CDB2FE8006B5984 /* carefirst_logo_k_2935.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = carefirst_logo_k_2935.png; path = images/carriers/carefirst_logo_k_2935.png; sourceTree = "<group>"; };
 		13A382241CDB2FE8006B5984 /* kaiser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = kaiser.jpg; path = images/carriers/kaiser.jpg; sourceTree = "<group>"; };
-		13A382291CDB303E006B5984 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bell.png; path = images/bell.png; sourceTree = "<group>"; };
-		13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dchllogo_withouttag-2.png"; path = "images/dchllogo_withouttag-2.png"; sourceTree = "<group>"; };
 		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
 		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
 		13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountTableViewController.h; sourceTree = "<group>"; };
@@ -554,14 +540,7 @@
 				404CC18B1D3FAA4B00A9B31D /* logout.png */,
 				404CC1871D3FA10C00A9B31D /* light_blue_gradient.png */,
 				13A3730E1D0B1B3F008CA0E1 /* gear.png */,
-				13A373081D0846E0008CA0E1 /* markerWithCircleLightBlue.png */,
-				13A373091D0846E0008CA0E1 /* phoneCirclelightBlue.png */,
 				13A373061D084053008CA0E1 /* header-employer-2.png */,
-				13A373021D084022008CA0E1 /* chatWithCircleLightBlue.png */,
-				13A373001D084004008CA0E1 /* alert2.png */,
-				130AA2801CEE4C0400B43F24 /* emailWithCirclelightBlue.png */,
-				13A3822B1CDB31E7006B5984 /* dchllogo_withouttag-2.png */,
-				13A382291CDB303E006B5984 /* bell.png */,
 				13A382221CDB2FCD006B5984 /* carriers */,
 				13A3821E1CDB2F4D006B5984 /* menu-icon.png */,
 				13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */,
@@ -691,11 +670,8 @@
 			files = (
 				40F6DDA91D89ABF70095519C /* home.png in Resources */,
 				40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */,
-				13A373011D084004008CA0E1 /* alert2.png in Resources */,
 				40003F2E1D4FE45800CD059B /* message.png in Resources */,
 				40003F311D4FE45800CD059B /* phoneWHT.png in Resources */,
-				13A3822C1CDB31E7006B5984 /* dchllogo_withouttag-2.png in Resources */,
-				13A3730A1D0846E0008CA0E1 /* markerWithCircleLightBlue.png in Resources */,
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */,
 				4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */,
@@ -705,13 +681,11 @@
 				40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */,
 				40F7EC331D552FAB00BA1D50 /* BrokerMVP_AppHeader300x40WHT.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
-				130AA2811CEE4C0400B43F24 /* emailWithCirclelightBlue.png in Resources */,
 				40DC56C91D5A12BC00D6B195 /* BrokerMVP_AppHeader200x40_144ppi_WHT.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
 				40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */,
-				13A3822A1CDB303E006B5984 /* bell.png in Resources */,
 				40F1511B1D5260A10041C132 /* chevron_right.png in Resources */,
 				13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */,
 				4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */,
@@ -732,7 +706,6 @@
 				40F6DDA71D89ABEA0095519C /* home_selected.png in Resources */,
 				40003F301D4FE45800CD059B /* email.png in Resources */,
 				4039C88B1D8C50AB00F7EA7B /* check_waived.png in Resources */,
-				13A3730B1D0846E0008CA0E1 /* phoneCirclelightBlue.png in Resources */,
 				40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */,
 				40F151191D525DD30041C132 /* BrokerMVP_AppHeader512x147.png in Resources */,
 				40003F321D4FE45800CD059B /* emailWHT.png in Resources */,
@@ -766,7 +739,6 @@
 				40003F351D4FF67400CD059B /* emailus80x80.png in Resources */,
 				40003F2D1D4FE45800CD059B /* phone.png in Resources */,
 				40DC56C71D5A0A8500D6B195 /* BrokerMVP_AppHeader200x40WHT.png in Resources */,
-				13A373031D084022008CA0E1 /* chatWithCircleLightBlue.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
 				13A382151CDB2E3E006B5984 /* Roboto-BoldItalic.ttf in Resources */,
 			);
