@@ -35,7 +35,7 @@
     BOOL firstTime;
     BOOL bAlreadyShownTutorial;
     
-    UIImageView *pView1;
+    UIImageView *pHeaderImage;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

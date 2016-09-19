@@ -57,14 +57,14 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,115);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
-    pCompany.frame = CGRectMake(0, 0, self.view.frame.size.width, 65);
+    pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
     pCompany.textAlignment = NSTextAlignmentCenter;
     pCompany.text = employerData.companyName;
     
-    pCompanyFooter.frame = CGRectMake(0, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width, pCompanyFooter.frame.size.height);
+    pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width - 20, pCompanyFooter.frame.size.height);
     pCompanyFooter.textAlignment = NSTextAlignmentCenter;
     //    pCompanyFooter.backgroundColor = [UIColor greenColor];
     
@@ -96,7 +96,88 @@ alpha:1.0]
     
     [self.view addSubview:slideView];
     
+    pRosterTable.sectionIndexColor = [UIColor darkGrayColor];
+    pRosterTable.sectionIndexBackgroundColor = [UIColor clearColor];
+    
+    for (int btnCount=0;btnCount<4;btnCount++)
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag=30+btnCount;
+        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+        [button setBackgroundColor:[UIColor clearColor]];
+        UIImage *btnImage;
+        switch(btnCount)
+        {
+            case 0:
+                btnImage = [UIImage imageNamed:@"phone.png"];
+                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 1:
+                btnImage = [UIImage imageNamed:@"message.png"];
+                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 2:
+                btnImage = [UIImage imageNamed:@"location.png"];
+                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 3:
+                btnImage = [UIImage imageNamed:@"email.png"];
+                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+        }
+        
+        button.contentMode = UIViewContentModeScaleToFill;
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        [button setImage:btnImage forState:UIControlStateNormal];
+        
+        [vHeader addSubview:button];
+    }
+    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
+    
+    
+    NSMutableArray *persons = [NSMutableArray array];
+    for (int i = 0; i < 20; i++) {
+        if (i < 10)
+            [persons addObject:@"First Lastname"];
+        else
+            [persons addObject:@"Something else"];
+    }
+    pArray = [NSArray arrayWithArray:persons];
+    
+    NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
+    
+    for( NSString *string in pArray)
+        [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+    
+    sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+
 }
+
+- (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
+    int widthOfAllButtons = 0;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+        //    [thisButton setCenter:CGPointMake(0, thisView.frame.size.height / 2.0)];
+        widthOfAllButtons = widthOfAllButtons + thisButton.frame.size.width;
+    }
+    
+    int spaceBetweenButtons = (thisView.frame.size.width - widthOfAllButtons) / (buttonArray.count + 1);
+    
+    UIButton *lastButton = nil;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+        if (lastButton == nil) {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        } else {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons + lastButton.frame.origin.x + lastButton.frame.size.width, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        }
+        
+        lastButton = thisButton;
+    }
+    
+}
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -179,7 +260,7 @@ alpha:1.0]
     button.titleLabel.textAlignment = NSTextAlignmentRight;
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
-    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
     button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
     [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"STATUS" forState:UIControlStateNormal];
@@ -224,6 +305,39 @@ alpha:1.0]
     [slideView handleLeftSwipe:3];
 }
 
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return sectionIndex;//[[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", nil];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    NSIndexSet *indexes = [pArray indexesOfObjectsPassingTest:^BOOL(NSString *string, NSUInteger idx, BOOL *stop) {
+     //   *stop = TRUE;
+        return [string hasPrefix:title];
+    }];
+    
+//    int uu = [indexes firstIndex];
+    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[indexes firstIndex] inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    return 1;
+}
+/*
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    // Find the correct index of cell should scroll to.
+    int foundIndex = 0;
+    for (Object *obj in dataArray) {
+        if ([[[obj.YOURNAME substringToIndex:1] uppercaseString] compare:title] == NSOrderedSame || [[[obj.YOURNAME substringToIndex:1] uppercaseString] compare: title] == NSOrderedDescending)
+            break;
+        foundIndex++;
+    }
+    if(foundIndex >= [dataArray count])
+        foundIndex = [dataArray count]-1;
+    
+    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:foundIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    return 1;
+}
+*/
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -236,12 +350,19 @@ alpha:1.0]
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
 
-        cell.textLabel.textColor = UIColorFromRGB(0x555555);
-        cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+    cell.textLabel.textColor = UIColorFromRGB(0x555555);
+    cell.textLabel.text = [pArray objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = @"First Lastname";
-    cell.detailTextLabel.text = @"Enrolled";
-
+    if (indexPath.row > 10)
+    {
+        cell.detailTextLabel.text = @"Enrolled";
+        cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+    }
+    else
+    {
+        cell.detailTextLabel.text = @"Waived";
+        cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+    }
     return cell;
 }
 

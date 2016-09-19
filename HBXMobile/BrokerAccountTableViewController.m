@@ -36,14 +36,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     self.navigationController.navigationBarHidden = NO;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
-    pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
-    //    UIImageView *pView1 = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 160, 42)];
-    pView1.backgroundColor = [UIColor clearColor];
+    pHeaderImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
+    pHeaderImage.backgroundColor = [UIColor clearColor];
 //    pView1.image = [UIImage imageNamed:@"BrokerMVP_AppHeader200x40WHT.png"];
-    pView1.image = [UIImage imageNamed:@"navHeader"];//[UIImage imageNamed:@"BrokerMVP_AppHeader200x40_144ppi_WHT.png"];
-    pView1.contentMode = UIViewContentModeCenter;// UIViewContentModeScaleAspectFill;
+    pHeaderImage.image = [UIImage imageNamed:@"navHeader"];//[UIImage imageNamed:@"BrokerMVP_AppHeader200x40_144ppi_WHT.png"];
+    pHeaderImage.contentMode = UIViewContentModeCenter;// UIViewContentModeScaleAspectFill;
     
-    self.navigationItem.titleView = pView1;
+    self.navigationItem.titleView = pHeaderImage;
 
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.backgroundColor = [UIColor lightGrayColor];
@@ -121,10 +120,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         [self presentViewController:sub animated:YES completion: nil];
         bAlreadyShownTutorial = TRUE;
     }
-    
-//    [self.tableView setNeedsLayout];
-//    [self.tableView setNeedsDisplay];
-//    [self.tableView setFrame:CGRectMake(self.tableView.frame.origin.x, self.tableView.frame.origin.y+10, self.tableView.frame.size.width, self.tableView.frame.size.height-20)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -196,13 +191,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [self.searchController.searchBar resignFirstResponder];
     self.searchController.searchBar.hidden = TRUE;
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
-        self.navigationItem.titleView = pView1;
+    self.navigationItem.titleView = pHeaderImage;
 }
 
 -(void)processData
 {
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
-    CGSize screenSize = screenBound.size;
+//    CGRect screenBound = [[UIScreen mainScreen] bounds];
+//    CGSize screenSize = screenBound.size;
     NSData *data;
     [listOfCompanies removeAllObjects];
     [open_enrollment removeAllObjects];
@@ -240,10 +235,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     [self processBuckets];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
         [self setIntroHeader:13];
-    else
-        [self setIntroHeader:12];
+//    else
+//        [self setIntroHeader:12];
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
 }

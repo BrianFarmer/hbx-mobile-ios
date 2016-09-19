@@ -71,14 +71,14 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,115);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);//115);
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
-    pCompany.frame = CGRectMake(0, 0, self.view.frame.size.width, 65);
+    pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width-20, 65);
 
     pCompany.textAlignment = NSTextAlignmentCenter;
     pCompany.text = employerData.companyName;
 
-    pCompanyFooter.frame = CGRectMake(0, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width, pCompanyFooter.frame.size.height);
+    pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width - 20, pCompanyFooter.frame.size.height);
     pCompanyFooter.textAlignment = NSTextAlignmentCenter;
     //    pCompanyFooter.backgroundColor = [UIColor greenColor];
     
@@ -112,6 +112,53 @@ alpha:1.0]
 
     detailTable.backgroundColor = [UIColor clearColor];
     detailTable.backgroundView = nil;
+    
+    for (int btnCount=0;btnCount<4;btnCount++)
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag=30+btnCount;
+        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+        [button setBackgroundColor:[UIColor clearColor]];
+        UIImage *btnImage;
+        switch(btnCount)
+        {
+            case 0:
+                btnImage = [UIImage imageNamed:@"phone.png"];
+                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 1:
+                btnImage = [UIImage imageNamed:@"message.png"];
+                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 2:
+                btnImage = [UIImage imageNamed:@"location.png"];
+                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 3:
+                btnImage = [UIImage imageNamed:@"email.png"];
+                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+        }
+        
+        button.contentMode = UIViewContentModeScaleToFill;
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        [button setImage:btnImage forState:UIControlStateNormal];
+        
+        [vHeader addSubview:button];
+    }
+    
+    //    [self evenlySpaceTheseButtonsInThisView:@[button, button1, button2, button3] :self.view];
+    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
+    
+    UIButton *button = (UIButton*) [self.view viewWithTag:30];
+
+//    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,115);
+
+//    vHeader.frame = CGRectMake(0,0,screenSize.width, button.frame.origin.y + button.frame.size.height + 10);
+
+    
+    
     
     [self loadDictionary];
     
@@ -155,6 +202,30 @@ alpha:1.0]
 
     monthlyCostNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
     monthlyCostValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
+}
+
+- (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
+    int widthOfAllButtons = 0;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+        //    [thisButton setCenter:CGPointMake(0, thisView.frame.size.height / 2.0)];
+        widthOfAllButtons = widthOfAllButtons + thisButton.frame.size.width;
+    }
+    
+    int spaceBetweenButtons = (thisView.frame.size.width - widthOfAllButtons) / (buttonArray.count + 1);
+    
+    UIButton *lastButton = nil;
+    for (int i = 0; i < buttonArray.count; i++) {
+        UIButton *thisButton = [buttonArray objectAtIndex:i];
+        if (lastButton == nil) {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        } else {
+            [thisButton setFrame:CGRectMake(spaceBetweenButtons + lastButton.frame.origin.x + lastButton.frame.size.width, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
+        }
+        
+        lastButton = thisButton;
+    }
+    
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
@@ -422,9 +493,6 @@ alpha:1.0]
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-//    if (ttype.type == 1)
-//        return 20;
   if (indexPath.section == 1 && indexPath.row == 0)
     return 240;
   if (indexPath.section == 0 && indexPath.row == 0)

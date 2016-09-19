@@ -24,6 +24,9 @@
     UIImageView *navImage;
     
     UISlideView *slideView;
+    
+    NSArray *pArray;
+    NSArray *sectionIndex;
 }
 
 @end
