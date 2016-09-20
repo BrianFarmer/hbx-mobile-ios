@@ -9,6 +9,7 @@
 #import "detailBrokerEmployerViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "employerTabController.h"
+#import "rosterBrokerEmployerViewController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -105,6 +106,9 @@ alpha:1.0]
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
 
+    pCompany.backgroundColor = [UIColor greenColor];
+    pCompanyFooter.backgroundColor = [UIColor blueColor];
+    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
@@ -538,7 +542,12 @@ alpha:1.0]
                 pEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
                 pEnrolled.textColor = UIColorFromRGB(0x00a99e);
                 pEnrolled.backgroundColor = [UIColor clearColor];
+                UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnEnrolledLink:)];
+                // if labelView is not set userInteractionEnabled, you must do so
+                [pEnrolled setUserInteractionEnabled:YES];
+                [pEnrolled addGestureRecognizer:gesture];
                 [cell.contentView addSubview:pEnrolled];
+                
                 
                 UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 150, 50)];
                 pWaived.tag = 972;
@@ -549,6 +558,7 @@ alpha:1.0]
                 pWaived.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pWaived];
 
+                
                 UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 120, 150, 50)];
                 pNotEnrolled.tag = 973;
                 pNotEnrolled.hidden = TRUE;
@@ -557,6 +567,7 @@ alpha:1.0]
                 pNotEnrolled.textColor = [UIColor redColor]; //UIColorFromRGB(0x00a99e);
                 pNotEnrolled.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pNotEnrolled];
+                
                 
                 UILabel *pTotalEmployees = [[UILabel alloc] initWithFrame:CGRectMake(10, 180, 150, 50)];
                 pTotalEmployees.tag = 974;
@@ -669,7 +680,7 @@ alpha:1.0]
         {
             pEnrolled.hidden = FALSE;
             pEnrolled.text = [NSString stringWithFormat:@"%@\nENROLLED", [dictionary valueForKey:@"employees_enrolled"]];
-
+            
             pWaived.hidden = FALSE;
             pWaived.text = [NSString stringWithFormat:@"%@\nWAIVED", [dictionary valueForKey:@"employees_waived"]];
 
@@ -692,4 +703,12 @@ alpha:1.0]
     return cell;
 }
 
+-(void)userTappedOnEnrolledLink:(UIGestureRecognizer*)sender
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
+    tabBar.sortOrder = @"enrolled";
+
+    [self.tabBarController setSelectedIndex:1];
+}
 @end

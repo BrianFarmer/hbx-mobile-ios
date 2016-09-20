@@ -21,6 +21,8 @@
     
     brokerEmployersData *employerData;
     UIImageView *navImage;
+    
+    NSArray *pArray;
+    NSArray *sectionIndex;
 }
-
 @end

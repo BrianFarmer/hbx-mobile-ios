@@ -13,6 +13,7 @@
 		13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 13273AFB1D366FE60097D245 /* popupMessageBox.m */; };
 		13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13273AFC1D366FE60097D245 /* popupMessageBox.xib */; };
 		13316B141D21B0D9001A450C /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 13316B131D21B0D9001A450C /* Settings.m */; };
+		133254291D916C56003C621F /* plansBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 133254281D916C56003C621F /* plansBrokerEmployerViewController.m */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
 		134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */ = {isa = PBXBuildFile; fileRef = 134A09DC1CBE817000CD3229 /* SSL Certificate Creation */; };
 		134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 134DE79D1CECEF6600F8958A /* MGSwipeButton.m */; };
@@ -24,6 +25,7 @@
 		138119DC1C9ADBF1000A75AA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 138119DB1C9ADBF1000A75AA /* Constants.m */; };
 		138119E21C9ADF7F000A75AA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E11C9ADF7F000A75AA /* libz.tbd */; };
 		138119E41C9ADF93000A75AA /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138119E31C9ADF93000A75AA /* SystemConfiguration.framework */; };
+		139176641D91D80D005864D1 /* benefitGroupCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 139176631D91D80D005864D1 /* benefitGroupCardView.m */; };
 		13A373071D084053008CA0E1 /* header-employer-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A373061D084053008CA0E1 /* header-employer-2.png */; };
 		13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3730E1D0B1B3F008CA0E1 /* gear.png */; };
 		13A373121D0B279F008CA0E1 /* ConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13A373111D0B279F008CA0E1 /* ConfigViewController.m */; };
@@ -131,6 +133,8 @@
 		13273AFC1D366FE60097D245 /* popupMessageBox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = popupMessageBox.xib; sourceTree = "<group>"; };
 		13316B121D21B0D9001A450C /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		13316B131D21B0D9001A450C /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		133254271D916C56003C621F /* plansBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plansBrokerEmployerViewController.h; sourceTree = "<group>"; };
+		133254281D916C56003C621F /* plansBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = plansBrokerEmployerViewController.m; sourceTree = "<group>"; };
 		134A09D91CBE7D7F00CD3229 /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		134A09DC1CBE817000CD3229 /* SSL Certificate Creation */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SSL Certificate Creation"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.python; };
 		134DE79C1CECEF6600F8958A /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
@@ -147,6 +151,8 @@
 		138119DB1C9ADBF1000A75AA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		138119E11C9ADF7F000A75AA /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		138119E31C9ADF93000A75AA /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		139176621D91D80D005864D1 /* benefitGroupCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = benefitGroupCardView.h; sourceTree = "<group>"; };
+		139176631D91D80D005864D1 /* benefitGroupCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = benefitGroupCardView.m; sourceTree = "<group>"; };
 		13A373061D084053008CA0E1 /* header-employer-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "header-employer-2.png"; path = "images/header-employer-2.png"; sourceTree = "<group>"; };
 		13A3730E1D0B1B3F008CA0E1 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		13A373101D0B279F008CA0E1 /* ConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController.h; sourceTree = "<group>"; };
@@ -420,6 +426,10 @@
 				40EE697A1D8A095100BCB351 /* employerTabController.m */,
 				40ECFC051D8B52F3003102E5 /* rosterCostsBrokerEmployerViewController.h */,
 				40ECFC061D8B52F3003102E5 /* rosterCostsBrokerEmployerViewController.m */,
+				133254271D916C56003C621F /* plansBrokerEmployerViewController.h */,
+				133254281D916C56003C621F /* plansBrokerEmployerViewController.m */,
+				139176621D91D80D005864D1 /* benefitGroupCardView.h */,
+				139176631D91D80D005864D1 /* benefitGroupCardView.m */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -717,9 +727,11 @@
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
 				40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */,
+				133254291D916C56003C621F /* plansBrokerEmployerViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
 				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
+				139176641D91D80D005864D1 /* benefitGroupCardView.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,
 				40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */,
 				13273AFD1D366FE60097D245 /* popupMessageBox.m in Sources */,

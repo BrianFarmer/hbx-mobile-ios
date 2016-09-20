@@ -18,4 +18,6 @@
 @property(nonatomic, assign) NSString *enrollHost;
 @property(nonatomic, assign) NSString *customCookie_a;
 
+@property(nonatomic, assign) NSString *sortOrder;
+
 @end

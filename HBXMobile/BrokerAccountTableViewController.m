@@ -776,7 +776,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [self tableView:self.tableView didSelectHeader:indexPath];
     
     [self.tableView endUpdates];
-    //    [self.tableView reloadData];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)sender {
@@ -789,6 +792,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [self tableView:self.tableView didSelectHeader:indexPath];
     
     [self.tableView endUpdates];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
 //    [self.tableView reloadData];
 }
 
@@ -992,6 +999,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             [tableView insertRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationTop];
             //            cell.accessoryView =  [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeUp];
         }
+//        [tableView scrollToRowAtIndexPath:indexPath
+//                         atScrollPosition:UITableViewScrollPositionTop
+//                                 animated:YES];
+
     }
 }
 
