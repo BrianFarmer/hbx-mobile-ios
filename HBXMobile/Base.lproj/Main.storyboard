@@ -410,6 +410,11 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="plans" image="plansnormal32.png" selectedImage="plansnormal32.png" id="yoV-4e-NdA"/>
+                    <connections>
+                        <outlet property="pCompany" destination="dxW-1Z-gc9" id="qT9-BE-lko"/>
+                        <outlet property="pCompanyFooter" destination="RXH-53-1gH" id="vyD-9h-3Dc"/>
+                        <outlet property="vHeader" destination="w1X-5B-ua6" id="P2r-Hy-cmE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nsn-Gd-LWl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

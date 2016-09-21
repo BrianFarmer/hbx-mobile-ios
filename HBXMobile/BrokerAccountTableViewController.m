@@ -887,7 +887,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     cell.lblDaysLeftText.text = @"";//@"DAYS LEFT";
     
     cell.employerLabel.text = ttype.companyName;
-    cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue]];
     cell.alertButton.hidden = TRUE;
     
     cell.employerLabel.textColor = UIColorFromRGB(0x555555);
@@ -907,7 +906,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         cell.daysleftLabel.textColor = [UIColor redColor];
         cell.alertButton.hidden = FALSE;
         cell.leftColor.hidden = FALSE;
+        cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.planMinimum intValue] - ([ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue])];
+
     }
+    else
+        cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16. 
+    
     
 //    if (ttype.status == OPEN_ENROLLMENT_MET)
 //        cell.lblEmployeesNeeded.text = @"";

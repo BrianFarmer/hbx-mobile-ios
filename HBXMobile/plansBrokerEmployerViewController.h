@@ -7,10 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "brokerEmployersData.h"
+#import "employerTabController.h"
 
 @interface plansBrokerEmployerViewController : UIViewController
 {
     UIPageControl *pageControl;
+    
+    IBOutlet UILabel *pCompany;
+    IBOutlet UILabel *pCompanyFooter;
+    
+    IBOutlet UIView *vHeader;
+    
+    brokerEmployersData *employerData;
+    UIImageView *navImage;
+
 }
 
 @end

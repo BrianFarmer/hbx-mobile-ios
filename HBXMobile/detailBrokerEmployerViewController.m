@@ -105,9 +105,6 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-
-    pCompany.backgroundColor = [UIColor greenColor];
-    pCompanyFooter.backgroundColor = [UIColor blueColor];
     
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
@@ -549,7 +546,7 @@ alpha:1.0]
                 [cell.contentView addSubview:pEnrolled];
                 
                 
-                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 60, 150, 50)];
+                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 70, 150, 50)];
                 pWaived.tag = 972;
                 pWaived.hidden = TRUE;
                 pWaived.numberOfLines = 2;
@@ -559,7 +556,7 @@ alpha:1.0]
                 [cell.contentView addSubview:pWaived];
 
                 
-                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 120, 150, 50)];
+                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 130, 150, 50)];
                 pNotEnrolled.tag = 973;
                 pNotEnrolled.hidden = TRUE;
                 pNotEnrolled.numberOfLines = 2;
