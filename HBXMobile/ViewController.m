@@ -514,11 +514,11 @@
         case 1003:
         default:
             {
-                #if (TARGET_IPHONE_SIMULATOR)
+//                #if (TARGET_IPHONE_SIMULATOR)
                     [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
-                #else
-                    [self askSecurityQuestion:FALSE];
-                #endif
+//                #else
+//                    [self askSecurityQuestion:FALSE];
+//                #endif
             }
             break;
     }
