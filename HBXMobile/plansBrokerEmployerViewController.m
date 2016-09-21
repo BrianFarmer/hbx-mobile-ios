@@ -45,7 +45,7 @@
          */
         benefitGroupCardView *imageView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i, 0.0, frameX, 200)];
         imageView.benefitGroupName = @"CEO's & Managers";
-
+        [imageView layoutView];
         [scrollView addSubview:imageView];
     }
     scrollView.contentSize = CGSizeMake(frameX*3, 200);

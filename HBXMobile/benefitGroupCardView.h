@@ -24,4 +24,6 @@
 @property (nonatomic, retain) NSString      *benefitGroupName;
 @property (nonatomic, retain) NSString      *referencePlan;
 
+-(void)layoutView;
+
 @end
