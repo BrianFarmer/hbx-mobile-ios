@@ -53,31 +53,32 @@ alpha:1.0]
     [lblBenefitGroupName sizeToFit];
     [self addSubview:lblBenefitGroupName];
     
-    UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(5,85,150, 20)];
+    UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(5,75,150, 20)];
     lblPlans.text = @"PLANS OFFERED";
     lblPlans.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblPlans.textColor = UIColorFromRGB(0x555555);
     [lblPlans sizeToFit];
     [self addSubview:lblPlans];
     
-    UILabel *lblPlansName = [[UILabel alloc] initWithFrame:CGRectMake(5,105,150, 20)];
+    UILabel *lblPlansName = [[UILabel alloc] initWithFrame:CGRectMake(5,95,150, 20)];
     lblPlansName.text = @"ALL Kaiser plans (any Metal Level)";
     lblPlansName.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
     lblPlansName.textColor = UIColorFromRGB(0x555555);
     [lblPlansName sizeToFit];
     [self addSubview:lblPlansName];
     
-    UILabel *lblEligibility= [[UILabel alloc] initWithFrame:CGRectMake(5,145,100, 20)];
+    UILabel *lblEligibility= [[UILabel alloc] initWithFrame:CGRectMake(5,135,100, 20)];
     lblEligibility.text = @"ELIGIBILITY ";
     lblEligibility.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblEligibility.textColor = UIColorFromRGB(0x555555);
     [lblEligibility sizeToFit];
     [self addSubview:lblEligibility];
     
-    UILabel *lblEligibilityText = [[UILabel alloc] initWithFrame:CGRectMake(5,165,100, 20)];
+    UILabel *lblEligibilityText = [[UILabel alloc] initWithFrame:CGRectMake(5,155, self.frame.size.width - 10, 20)];
     lblEligibilityText.text = @"First of the month following or coiciding with data of hire.";
     lblEligibilityText.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
     lblEligibilityText.textColor = UIColorFromRGB(0x555555);
+    lblEligibilityText.numberOfLines = 2;
     [lblEligibilityText sizeToFit];
     [self addSubview:lblEligibilityText];
     

@@ -68,6 +68,8 @@
 		40003F311D4FE45800CD059B /* phoneWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2B1D4FE45800CD059B /* phoneWHT.png */; };
 		40003F321D4FE45800CD059B /* emailWHT.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F2C1D4FE45800CD059B /* emailWHT.png */; };
 		40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */; };
+		400AE1F21D9407AE0097DEA6 /* costsactive32.png in Resources */ = {isa = PBXBuildFile; fileRef = 400AE1F11D9407AE0097DEA6 /* costsactive32.png */; };
+		400AE1F41D940C6F0097DEA6 /* plansactive32.png in Resources */ = {isa = PBXBuildFile; fileRef = 400AE1F31D940C6F0097DEA6 /* plansactive32.png */; };
 		4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */; };
 		4036BEEF1D5E616B000F6182 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4036BEEE1D5E616B000F6182 /* refresh.png */; };
 		4039C8861D8C035100F7EA7B /* UISlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4039C8851D8C035100F7EA7B /* UISlideView.m */; };
@@ -210,6 +212,8 @@
 		40003F2B1D4FE45800CD059B /* phoneWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phoneWHT.png; sourceTree = "<group>"; };
 		40003F2C1D4FE45800CD059B /* emailWHT.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emailWHT.png; sourceTree = "<group>"; };
 		40003F391D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DCHealthLink_LogoWHT1.png; sourceTree = "<group>"; };
+		400AE1F11D9407AE0097DEA6 /* costsactive32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = costsactive32.png; sourceTree = "<group>"; };
+		400AE1F31D940C6F0097DEA6 /* plansactive32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plansactive32.png; sourceTree = "<group>"; };
 		4017F78D1D8077C00093CE90 /* StoryboardiPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryboardiPad.storyboard; sourceTree = "<group>"; };
 		4036BEEE1D5E616B000F6182 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		4039C8841D8C035100F7EA7B /* UISlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISlideView.h; sourceTree = "<group>"; };
@@ -478,6 +482,8 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				400AE1F31D940C6F0097DEA6 /* plansactive32.png */,
+				400AE1F11D9407AE0097DEA6 /* costsactive32.png */,
 				4039C8871D8C50AB00F7EA7B /* check_waived.png */,
 				4039C8881D8C50AB00F7EA7B /* check_showall.png */,
 				4039C8891D8C50AB00F7EA7B /* check_notenrolled.png */,
@@ -649,6 +655,7 @@
 				13FF471F1C8A2C5600C7C851 /* LaunchScreen.storyboard in Resources */,
 				40EEC85F1D512B690071FFD5 /* chevron.png in Resources */,
 				40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */,
+				400AE1F21D9407AE0097DEA6 /* costsactive32.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
@@ -695,6 +702,7 @@
 				40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */,
 				40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
+				400AE1F41D940C6F0097DEA6 /* plansactive32.png in Resources */,
 				4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */,
 				40003F2D1D4FE45800CD059B /* phone.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,

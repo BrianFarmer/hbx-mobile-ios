@@ -43,4 +43,5 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *active_general_agency;
 @property (nonatomic, retain) NSArray  *contact_info;
 @property (nonatomic, retain) NSString *detail_url;
+@property (nonatomic, retain) NSString *roster_url;
 @end

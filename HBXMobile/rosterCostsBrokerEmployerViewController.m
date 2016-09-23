@@ -23,19 +23,6 @@ alpha:1.0]
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.tabBarItem setImage:[[UIImage imageNamed:@"rosternormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    
-    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"rosteractive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
-    
-    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
-    
-    [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                       UIColorFromRGB(0x007BC4), NSForegroundColorAttributeName,
-                                                       nil] forState:UIControlStateNormal];
-    
-    [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
     
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;

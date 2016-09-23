@@ -8,6 +8,7 @@
 
 #import "plansBrokerEmployerViewController.h"
 #import "benefitGroupCardView.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -46,6 +47,8 @@ alpha:1.0]
     
     pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width - 20, pCompanyFooter.frame.size.height);
     pCompanyFooter.textAlignment = NSTextAlignmentCenter;
+    pCompanyFooter.font = [UIFont fontWithName:@"Roboto-Bold" size:18];
+    
     //    pCompanyFooter.backgroundColor = [UIColor greenColor];
     
     if (employerData.status == (enrollmentState)NEEDS_ATTENTION)
@@ -110,8 +113,8 @@ alpha:1.0]
     CGSize size = [[UIScreen mainScreen] bounds].size;
     CGFloat frameX = size.width;
     CGFloat frameY = size.height-30; //padding for UIpageControl
-    
-    UIScrollView  *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 20, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 20)]; //155, frameX, 200)];
+
+    UIScrollView  *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height)]; //155, frameX, 200)];
                                  
     scrollView.pagingEnabled = YES;
     
@@ -120,26 +123,38 @@ alpha:1.0]
     scrollView.delegate = self;
     
     [self.view addSubview: scrollView];
-    
-    
+  
+
     for(int i = 0; i < 3; i++)
     {
         benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40)];
         cardView.benefitGroupName = @"CEO's & Managers";
         [cardView layoutView];
+/*
+        cardView.layer.masksToBounds = NO;
+        cardView.layer.shadowOffset = CGSizeMake(-2, 5);
+        cardView.layer.shadowRadius = 5;
+        cardView.layer.shadowOpacity = 0.5;
+        
+        cardView.layer.shadowPath = [UIBezierPath bezierPathWithRect:cardView.bounds].CGPath;
+*/        
         [scrollView addSubview:cardView];
     }
-    scrollView.contentSize = CGSizeMake(frameX*3, 200);
     
- 
+    scrollView.contentSize = CGSizeMake(frameX*3, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40);//200);
+    int iht = self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40;
+    int uu = scrollView.frame.origin.y;
+    
     // Init Page Control
     pageControl = [[UIPageControl alloc] init];
-    pageControl.frame = CGRectMake(10, scrollView.frame.origin.y - 20, scrollView.frame.size.width, 20);
+//    pageControl.frame = CGRectMake(10, scrollView.frame.origin.y - 20, scrollView.frame.size.width, 20);
+    pageControl.frame = CGRectMake(10,369+165,scrollView.frame.size.width-20, 20);
+//   benefitGroupCardView.frame.origin.y + benefitGroupCardView.frame.size.height, scrollView.frame.size.width, 20);
     pageControl.numberOfPages = 3;
     pageControl.currentPage = 0;
     pageControl.backgroundColor = [UIColor clearColor];
     
-    pageControl.currentPageIndicatorTintColor = [UIColor blueColor];
+    pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     pageControl.pageIndicatorTintColor = [UIColor grayColor];
     [self.view addSubview:pageControl];
   

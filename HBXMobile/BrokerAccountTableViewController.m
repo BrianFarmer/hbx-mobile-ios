@@ -76,7 +76,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     self.view.autoresizesSubviews = YES;
     
-    bAlreadyShownTutorial = FALSE;
+    bAlreadyShownTutorial = [[NSUserDefaults standardUserDefaults] boolForKey:@"alreadyShownTutorial"];
     
     brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
@@ -119,6 +119,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:sub animated:YES completion: nil];
         bAlreadyShownTutorial = TRUE;
+        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"alreadyShownTutorial"];
     }
 }
 
@@ -374,6 +375,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
 
             pCompany.detail_url = [ck valueForKeyPath:@"employer_details_url"];
+            pCompany.roster_url = [ck valueForKeyPath:@"employee_roster_url"];
             
             pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
             pCompany.contact_info = [ck valueForKeyPath:@"contact_info"];

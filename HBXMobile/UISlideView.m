@@ -105,7 +105,12 @@ alpha:1.0]
     [pCounts addObject:@"Waived"];
     [pCounts addObject:@"Not Enrolled"];
     [pCounts addObject:@"Show All"];
-    
+
+    [pCounts addObject:@"Enrolled for next year"];
+    [pCounts addObject:@"Waived for next year"];
+    [pCounts addObject:@"Not enrolled for next year"];
+    [pCounts addObject:@"Show All"];
+
     [loggedInTable reloadData];
     
     [self.superview bringSubviewToFront:self];
@@ -118,7 +123,7 @@ alpha:1.0]
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -128,7 +133,64 @@ alpha:1.0]
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0;
+    return 34;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 34;
+}
+/*
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    
+    switch (section)
+    {
+        case 0:
+            sectionName = NSLocalizedString(@"mySectionName", @"mySectionName");
+            break;
+        case 1:
+            sectionName = NSLocalizedString(@"myOtherSectionName", @"myOtherSectionName");
+            break;
+            // ...
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
+}
+*/
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // The view for the header
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
+    
+    // Set a custom background color and a border
+    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+    headerView.layer.borderWidth = 1.0;
+    
+    headerView.tag = section;
+    
+    // Add a label
+    UILabel* headerLabel = [[UILabel alloc] init];
+    headerLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - 5, 34);
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.textColor = [UIColor darkGrayColor];
+    headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
+
+    if (section == 0)
+        headerLabel.text = @"ACTIVE STATUS";
+    else
+        headerLabel.text = @"RENEWAL STATUS";
+    
+    headerLabel.textAlignment = NSTextAlignmentLeft;
+    
+    // Add the label to the header view
+    [headerView addSubview:headerLabel];
+    
+    return headerView;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,7 +205,11 @@ alpha:1.0]
     cell.backgroundColor = [UIColor clearColor];
     
     cell.textLabel.textAlignment = NSTextAlignmentRight;
+    if (indexPath.section == 0)
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+    else
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12];
+    
     
     switch (indexPath.row)
     {

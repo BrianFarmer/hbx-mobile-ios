@@ -47,12 +47,12 @@ alpha:1.0]
     
 //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"infoactive32.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"infonormal32.png"]];
 //    [self.tabBarItem initWithTitle:@"info" image:[UIImage imageNamed:@"infoactive32.png"] selectedImage:[UIImage imageNamed:@"infonormal32.png"]];
-    [self.tabBarItem setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//    [self.tabBarItem setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
-    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
-
-       [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG1.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
+/*
+    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG1.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
     
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -60,6 +60,7 @@ alpha:1.0]
                                                        nil] forState:UIControlStateNormal];
     
     [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
+ */
     self.slices = [NSMutableArray arrayWithCapacity:10];
     
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];

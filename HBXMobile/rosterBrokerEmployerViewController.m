@@ -23,31 +23,13 @@ alpha:1.0]
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.tabBarItem setImage:[[UIImage imageNamed:@"rosternormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    
-    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"rosteractive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
-    
-    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
-    
-    [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                       UIColorFromRGB(0x007BC4), NSForegroundColorAttributeName,
-                                                       nil] forState:UIControlStateNormal];
-    
-    [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
 
-    
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
-    //if Custom class with Navigation Controller
-    //    TabBarController *tabBar = (TabBarController *) self.navigationController.tabBarController;
-    
-    
     employerData = tabBar.employerData;
-//    _enrollHost = tabBar.enrollHost;
-//    _customCookie_a = tabBar.customCookie_a;
-
+    _enrollHost = tabBar.enrollHost;
+    _customCookie_a = tabBar.customCookie_a;
+    
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
     navImage.backgroundColor = [UIColor clearColor];
@@ -135,6 +117,7 @@ alpha:1.0]
     }
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
+     [self loadDictionary];
     
     NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < 20; i++) {
@@ -151,6 +134,8 @@ alpha:1.0]
         [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    
 
 }
 
@@ -190,6 +175,54 @@ alpha:1.0]
     // Dispose of any resources that can be recreated.
 }
 
+-(void)loadDictionary
+{
+    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *e_url = employerData.detail_url;
+    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+    BOOL pp = [e_url hasPrefix:@"https://"];
+    BOOL ll = [e_url hasPrefix:@"http://"];
+    if (!pp && !ll)
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.roster_url];
+    else
+        pUrl = employerData.roster_url;
+    
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    
+    [urlRequest setURL:[NSURL URLWithString:pUrl]];
+    [urlRequest setHTTPMethod:@"GET"];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        
+        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    }
+    
+    rosterList = [dictionary valueForKey:@"roster"][0];// valueForKey:@"roster"][0];
+
+}
+
 /*
 #pragma mark - Navigation
 
@@ -207,7 +240,7 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return [rosterList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -351,8 +384,13 @@ alpha:1.0]
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
 
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
-    cell.textLabel.text = [pArray objectAtIndex:indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
     
+    NSArray *pk = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    cell.detailTextLabel.text = [pk valueForKey:@"coverage_kind"];
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+
+ /*
     if (indexPath.row > 10)
     {
         cell.detailTextLabel.text = @"Enrolled";
@@ -363,6 +401,8 @@ alpha:1.0]
         cell.detailTextLabel.text = @"Waived";
         cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
     }
+  */
+    
     return cell;
 }
 
