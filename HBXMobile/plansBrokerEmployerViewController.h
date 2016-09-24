@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "brokerEmployersData.h"
 #import "employerTabController.h"
+#import "benefitGroupCardView.h"
 
-@interface plansBrokerEmployerViewController : UIViewController
+@interface plansBrokerEmployerViewController : UIViewController <planCardViewDelegate>
 {
     UIPageControl *pageControl;
     
@@ -21,6 +22,8 @@
     
     brokerEmployersData *employerData;
     UIImageView *navImage;
+    
+    UIScrollView  *scrollView;
 
 }
 

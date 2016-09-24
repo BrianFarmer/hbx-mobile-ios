@@ -130,13 +130,10 @@ alpha:1.0]
     
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
-    for( NSString *string in pArray)
+    for( NSString *string in [rosterList valueForKey:@"first_name"])
         [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    
-    
-
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -219,7 +216,7 @@ alpha:1.0]
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
     
-    rosterList = [dictionary valueForKey:@"roster"][0];// valueForKey:@"roster"][0];
+    rosterList = [dictionary valueForKey:@"roster"];//[0];// valueForKey:@"roster"][0];
 
 }
 
@@ -335,7 +332,7 @@ alpha:1.0]
     
 //    [self.view bringSubviewToFront:slideView];
     
-    [slideView handleLeftSwipe:3];
+    [slideView handleLeftSwipe];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -371,6 +368,59 @@ alpha:1.0]
     return 1;
 }
 */
+
+-(NSString*)getRenewalEnrollment:(NSInteger)row
+{
+    NSArray *pk = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"];
+    
+    for (int ii=0;ii<[pk count];ii++)
+    {
+        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        
+        NSString *a;
+        NSString *b;
+        NSString *c;
+        
+        a = [pp valueForKey:@"coverage_kind"];
+        b = [pp valueForKey:@"period_type"];
+        c = [pp valueForKey:@"status"];
+        
+        if ([b isEqualToString:@"renewal"])
+            if ([a isEqualToString:@"health"])
+                return c;
+
+        NSLog(@"%@    ---   %@   -----   %@", a,b,c);
+        
+    }
+    return nil;
+}
+
+-(NSString*)getActiveEnrollment:(NSInteger)row
+{
+    NSArray *pk = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"];
+    
+    for (int ii=0;ii<[pk count];ii++)
+    {
+        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        
+        NSString *a;
+        NSString *b;
+        NSString *c;
+        
+        a = [pp valueForKey:@"coverage_kind"];
+        b = [pp valueForKey:@"period_type"];
+        c = [pp valueForKey:@"status"];
+    
+        if ([b isEqualToString:@"active"])
+            if ([a isEqualToString:@"health"])
+                return c;
+        
+        NSLog(@"%@    ---   %@   -----   %@", a,b,c);
+        
+    }
+    return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -378,6 +428,14 @@ alpha:1.0]
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+/*
+        UILabel* detailLabel_1 = [[UILabel alloc] init];
+        detailLabel_1.frame = CGRectMake(10, 17, tableView.frame.size.width, 10);
+        detailLabel_1.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
+        detailLabel_1.tag = 33;
+        detailLabel_1.hidden = FALSE;
+        [cell.contentView addSubview:detailLabel_1];
+*/
     }
     
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
@@ -386,9 +444,42 @@ alpha:1.0]
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
     
-    NSArray *pk = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
-    cell.detailTextLabel.text = [pk valueForKey:@"coverage_kind"];
-    cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
+
+    NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
+    NSString *sActive = [self getActiveEnrollment:indexPath.row];
+    if ([sActive isEqualToString:@"Enrolled"])
+        attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
+    else if ([sActive isEqualToString:@"Not Enrolled"])
+        attrs = @{ NSForegroundColorAttributeName : [UIColor redColor]};
+    else
+        attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
+
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:sActive attributes:attrs];
+                             
+    NSString *sRenewal = [self getRenewalEnrollment:indexPath.row];
+    
+    NSDictionary *attrsRenew;
+    if ([sRenewal isEqualToString:@"Enrolled"])
+        attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
+    else if ([sRenewal isEqualToString:@"Not Enrolled"])
+        attrsRenew = @{ NSForegroundColorAttributeName : [UIColor redColor]};
+    else
+        attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
+    
+    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@ %@",sRenewal, @"for next year"] attributes:attrsRenew];
+    
+    [attributedTitle1 beginEditing];
+    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:12] range:NSMakeRange(0, attributedTitle1.length)];
+    [attributedTitle1 endEditing];
+    
+    [attributedTitle appendAttributedString:attributedTitle1];
+
+    cell.detailTextLabel.numberOfLines = 2;
+    cell.detailTextLabel.attributedText = attributedTitle;
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@ for next year", [self getActiveEnrollment:indexPath.row], [self getRenewalEnrollment:indexPath.row]];
+    
+//    cell.detailTextLabel.text = [self getActiveEnrollment:indexPath.row];
+//    cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
 
  /*
     if (indexPath.row > 10)

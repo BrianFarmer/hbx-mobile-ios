@@ -114,7 +114,7 @@ alpha:1.0]
     CGFloat frameX = size.width;
     CGFloat frameY = size.height-30; //padding for UIpageControl
 
-    UIScrollView  *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height)]; //155, frameX, 200)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height)]; //155, frameX, 200)];
                                  
     scrollView.pagingEnabled = YES;
     
@@ -129,7 +129,8 @@ alpha:1.0]
     {
         benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40)];
         cardView.benefitGroupName = @"CEO's & Managers";
-        [cardView layoutView];
+        cardView.delegate = self;
+        [cardView layoutView:i+1 totalPages:3];
 /*
         cardView.layer.masksToBounds = NO;
         cardView.layer.shadowOffset = CGSizeMake(-2, 5);
@@ -158,6 +159,12 @@ alpha:1.0]
     pageControl.pageIndicatorTintColor = [UIColor grayColor];
     [self.view addSubview:pageControl];
   
+}
+
+-(void)scrolltoNextPage:(int)page
+{
+    [scrollView setContentOffset:CGPointMake(scrollView.frame.size.width*page, 0.0f) animated:YES];
+//    scroll.contentOffset = CGPointMake(scroll.frame.size.width*pageNo, 0);
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {

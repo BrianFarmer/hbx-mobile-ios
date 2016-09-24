@@ -37,44 +37,63 @@ alpha:1.0]
     return self;
 }
 
--(void)layoutView
+-(void)userTappedOnPageNo:(UIGestureRecognizer*)sender
 {
-    UILabel *lblBenefitGroup = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 150, 20)];
+    if (currrentCard == 3)
+        [_delegate scrolltoNextPage:0];
+    else
+        [_delegate scrolltoNextPage:currrentCard];
+}
+
+-(void)layoutView:(int)cc totalPages:(int)totalCards
+{
+    currrentCard = cc;
+    UILabel *lblBenefitGroup = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 150, 20)];
     lblBenefitGroup.text = @"BENEFIT GROUP ";
     lblBenefitGroup.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblBenefitGroup.textColor = UIColorFromRGB(0x555555);
     [lblBenefitGroup sizeToFit];
     [self addSubview:lblBenefitGroup];
     
-    UILabel *lblBenefitGroupName = [[UILabel alloc] initWithFrame:CGRectMake(5,25,150, 20)];
+    UILabel *lblPageNo = [[UILabel alloc] initWithFrame:CGRectMake(lblBenefitGroup.frame.origin.x + lblBenefitGroup.frame.size.width + 5, 5, 150, 20)];
+    lblPageNo.text = [NSString stringWithFormat:@"(%d/%d)", currrentCard, totalCards];
+    lblPageNo.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
+    lblPageNo.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]; //UIColorFromRGB(0x555555);
+    [lblPageNo sizeToFit];
+    [self addSubview:lblPageNo];
+    UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnPageNo:)];
+    [lblPageNo setUserInteractionEnabled:YES];
+    [lblPageNo addGestureRecognizer:gesture];
+
+    UILabel *lblBenefitGroupName = [[UILabel alloc] initWithFrame:CGRectMake(10, 25, 150, 20)];
     lblBenefitGroupName.text = @"CEO's & Managers";
-    lblBenefitGroupName.font = [UIFont fontWithName:@"Roboto-Bold" size:18.0f];
+    lblBenefitGroupName.font = [UIFont fontWithName:@"Roboto-Regular" size:20.0f];
     lblBenefitGroupName.textColor = UIColorFromRGB(0x555555);
     [lblBenefitGroupName sizeToFit];
     [self addSubview:lblBenefitGroupName];
     
-    UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(5,75,150, 20)];
+    UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(10,75,150, 20)];
     lblPlans.text = @"PLANS OFFERED";
     lblPlans.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblPlans.textColor = UIColorFromRGB(0x555555);
     [lblPlans sizeToFit];
     [self addSubview:lblPlans];
     
-    UILabel *lblPlansName = [[UILabel alloc] initWithFrame:CGRectMake(5,95,150, 20)];
+    UILabel *lblPlansName = [[UILabel alloc] initWithFrame:CGRectMake(10,95,150, 20)];
     lblPlansName.text = @"ALL Kaiser plans (any Metal Level)";
     lblPlansName.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
     lblPlansName.textColor = UIColorFromRGB(0x555555);
     [lblPlansName sizeToFit];
     [self addSubview:lblPlansName];
     
-    UILabel *lblEligibility= [[UILabel alloc] initWithFrame:CGRectMake(5,135,100, 20)];
+    UILabel *lblEligibility= [[UILabel alloc] initWithFrame:CGRectMake(10,135,100, 20)];
     lblEligibility.text = @"ELIGIBILITY ";
     lblEligibility.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblEligibility.textColor = UIColorFromRGB(0x555555);
     [lblEligibility sizeToFit];
     [self addSubview:lblEligibility];
     
-    UILabel *lblEligibilityText = [[UILabel alloc] initWithFrame:CGRectMake(5,155, self.frame.size.width - 10, 20)];
+    UILabel *lblEligibilityText = [[UILabel alloc] initWithFrame:CGRectMake(10, 155, self.frame.size.width - 10, 20)];
     lblEligibilityText.text = @"First of the month following or coiciding with data of hire.";
     lblEligibilityText.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
     lblEligibilityText.textColor = UIColorFromRGB(0x555555);
@@ -82,7 +101,7 @@ alpha:1.0]
     [lblEligibilityText sizeToFit];
     [self addSubview:lblEligibilityText];
     
-    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(5,205,100, 20)];
+    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(10,205,100, 20)];
     lblContribution.text = @"CONTRIBUTION LEVELS";
     lblContribution.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblContribution.textColor = UIColorFromRGB(0x555555);
@@ -112,7 +131,7 @@ alpha:1.0]
     [attributedTitle appendAttributedString:attributedTitle1];
     [attributedTitle appendAttributedString:attributedTitle2];
     
-    UILabel *lblContributionEmployee = [[UILabel alloc] initWithFrame:CGRectMake(5,225,100, 20)];
+    UILabel *lblContributionEmployee = [[UILabel alloc] initWithFrame:CGRectMake(10,225,100, 20)];
     lblContributionEmployee.attributedText =  attributedTitle;
     lblContributionEmployee.numberOfLines = 2;
     lblContributionEmployee.textAlignment = NSTextAlignmentCenter;
@@ -212,14 +231,14 @@ alpha:1.0]
     [lblContributionChild sizeToFit];
     [self addSubview:lblContributionChild];
 
-    UILabel *lblReference = [[UILabel alloc] initWithFrame:CGRectMake(5,315,100, 20)];
+    UILabel *lblReference = [[UILabel alloc] initWithFrame:CGRectMake(10,315,100, 20)];
     lblReference.text = @"REFERENCE PLAN";
     lblReference.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblReference.textColor = UIColorFromRGB(0x555555);
         [lblReference sizeToFit];
     [self addSubview:lblReference];
     
-    UILabel *lblReferenceText = [[UILabel alloc] initWithFrame:CGRectMake(5,335,100, 20)];
+    UILabel *lblReferenceText = [[UILabel alloc] initWithFrame:CGRectMake(10,335,100, 20)];
     lblReferenceText.text = @"KP DC Silver 2000/35/Dental";
     lblReferenceText.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
     lblReferenceText.textColor = UIColorFromRGB(0x555555);

@@ -49,7 +49,7 @@ alpha:1.0]
         
         bOpened = FALSE;
         
-        iSort = 3;
+//        iSort = 3;
         
     }
     return self;
@@ -75,7 +75,7 @@ alpha:1.0]
     bOpened = FALSE;
 }
 
--(void) handleLeftSwipe:(int)is //(UISwipeGestureRecognizer *) recognizer {
+-(void) handleLeftSwipe //:(int)is //(UISwipeGestureRecognizer *) recognizer {
 {
     if (bOpened)
     {
@@ -92,7 +92,7 @@ alpha:1.0]
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.superview cache:YES]; //UIViewAnimationTransitionFlipFromRight
     [UIView commitAnimations];
     bOpened = TRUE;
-    iSort = is;
+//    iSort = is;
 }
 
 - (void)viewDidLoad
@@ -104,12 +104,12 @@ alpha:1.0]
     [pCounts addObject:@"Enrolled"];
     [pCounts addObject:@"Waived"];
     [pCounts addObject:@"Not Enrolled"];
-    [pCounts addObject:@"Show All"];
+//    [pCounts addObject:@"Show All"];
 
     [pCounts addObject:@"Enrolled for next year"];
     [pCounts addObject:@"Waived for next year"];
     [pCounts addObject:@"Not enrolled for next year"];
-    [pCounts addObject:@"Show All"];
+//    [pCounts addObject:@"Show All"];
 
     [loggedInTable reloadData];
     
@@ -123,12 +123,15 @@ alpha:1.0]
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [pCounts count];
+    if (section == 2)
+        return 1;
+    
+    return [pCounts count] / 2;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -182,8 +185,10 @@ alpha:1.0]
 
     if (section == 0)
         headerLabel.text = @"ACTIVE STATUS";
-    else
+    else if (section == 1)
         headerLabel.text = @"RENEWAL STATUS";
+    else
+        headerLabel.text = @"";
     
     headerLabel.textAlignment = NSTextAlignmentLeft;
     
@@ -205,47 +210,67 @@ alpha:1.0]
     cell.backgroundColor = [UIColor clearColor];
     
     cell.textLabel.textAlignment = NSTextAlignmentRight;
-    if (indexPath.section == 0)
-    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+    if (indexPath.section == 0 || indexPath.section == 2)
+        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
     else
-    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12];
+        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12];
     
-    
-    switch (indexPath.row)
+    if (indexPath.section == 2)
     {
-        case 0:
-            cell.textLabel.textColor = UIColorFromRGB(0x00a99e);
-            cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            if (iSort == indexPath.row)
-                cell.imageView.image = [UIImage imageNamed:@"check_enrolled.png"];
-            break;
-        case 1:
-            cell.textLabel.textColor = UIColorFromRGB(0x625ba8);
-            cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            if (iSort == indexPath.row)
-                cell.imageView.image = [UIImage imageNamed:@"check_waived.png"];
-            break;
-        case 2:
-            cell.textLabel.textColor = [UIColor redColor];
-            cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            if (iSort == indexPath.row)
-                cell.imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
-            break;
-        case 3:
-            cell.textLabel.textColor = UIColorFromRGB(0x555555);
-            cell.textLabel.text = [pCounts objectAtIndex:indexPath.row];
-            if (iSort == indexPath.row)
-                cell.imageView.image = [UIImage imageNamed:@"check_showall.png"];
-            break;
-            
+        cell.textLabel.textColor = UIColorFromRGB(0x555555);
+        cell.textLabel.text = @"Show All";
+        if (iSort == indexPath)
+            cell.imageView.image = [UIImage imageNamed:@"check_showall.png"];
+    }
+    else
+    {
+        switch (indexPath.row)
+        {
+            case 0:
+                cell.textLabel.textColor = UIColorFromRGB(0x00a99e);
+                cell.textLabel.text = [pCounts objectAtIndex:indexPath.section * 3 + indexPath.row];
+                if (iSort == indexPath)
+                    cell.imageView.image = [UIImage imageNamed:@"check_enrolled.png"];
+                break;
+            case 1:
+                cell.textLabel.textColor = UIColorFromRGB(0x625ba8);
+                cell.textLabel.text = [pCounts objectAtIndex:indexPath.section * 3 + indexPath.row];
+                if (iSort == indexPath)
+                    cell.imageView.image = [UIImage imageNamed:@"check_waived.png"];
+                break;
+            case 2:
+                cell.textLabel.textColor = [UIColor redColor];
+                cell.textLabel.text = [pCounts objectAtIndex:indexPath.section * 3 + indexPath.row];
+                if (iSort == indexPath)
+                    cell.imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
+                break;
+        }
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView cellForRowAtIndexPath:iSort].imageView.image = nil;
+    
+    switch (indexPath.row)
+    {
+    case 0:
+        if (indexPath.section == 2)
+            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_showall.png"];
+        else
+            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_enrolled.png"];
+        break;
+    case 1:
+            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_waived.png"];
+        break;
+    case 2:
+            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
+        break;
+    }
+    
     bOpened = FALSE;
     [self handleRightSwipe:nil];
-    iSort = (int)indexPath.row;
+    iSort = indexPath;
 }
 @end

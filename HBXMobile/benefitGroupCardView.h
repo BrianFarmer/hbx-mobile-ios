@@ -8,13 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol planCardViewDelegate
+
+-(void)scrolltoNextPage:(int)page;
+
+@end
+
 @interface benefitGroupCardView : UIView
 {
-
+    int  currrentCard;
 }
 
-@property (nonatomic, assign) int  currrentCard;
-@property (nonatomic, assign) int  numberCards;
+//@property (nonatomic, assign) int  currrentCard;
+//@property (nonatomic, assign) int  totalCards;
 
 @property (nonatomic, assign) int  employeeContribution;
 @property (nonatomic, assign) int  spouseContribution;
@@ -24,6 +30,8 @@
 @property (nonatomic, retain) NSString      *benefitGroupName;
 @property (nonatomic, retain) NSString      *referencePlan;
 
--(void)layoutView;
+@property (nonatomic, weak)id<planCardViewDelegate> delegate;
+
+-(void)layoutView:(int)cp totalPages:(int)tp;
 
 @end

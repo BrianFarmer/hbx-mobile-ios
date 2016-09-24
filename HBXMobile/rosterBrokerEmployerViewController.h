@@ -28,7 +28,7 @@
     NSArray *pArray;
     NSArray *sectionIndex;
     
-        NSDictionary *dictionary;
+    NSDictionary *dictionary;
     NSArray *rosterList;
 }
 

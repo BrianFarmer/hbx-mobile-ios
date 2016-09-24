@@ -446,6 +446,25 @@ alpha:1.0]
     [self tableView:detailTable didSelectHeader:indexPath];
     
     [detailTable endUpdates];
+
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [detailTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)handleButtonTap:(id)sender {
+    UIView *pHeaderView = (UIView*)sender;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [detailTable beginUpdates];
+    [detailTable reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:detailTable didSelectHeader:indexPath];
+    
+    [detailTable endUpdates];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [detailTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectHeader:(NSIndexPath *)indexPath

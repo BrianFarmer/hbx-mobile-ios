@@ -19,13 +19,13 @@
     NSMutableArray *pCounts;
     
     BOOL    bOpened;
-    int     iSort;
+    NSIndexPath     *iSort;
     
     __weak id <uiSlideViewDelegate> delegate;
 }
 
 @property (nonatomic, weak) id<uiSlideViewDelegate> delegate;
 
--(void) handleLeftSwipe:(int)iSort; 
+-(void) handleLeftSwipe;//:(NSIndexPath*)iSort;
 
 @end
