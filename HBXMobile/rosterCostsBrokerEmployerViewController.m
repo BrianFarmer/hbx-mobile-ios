@@ -237,7 +237,7 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return [rosterList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -258,9 +258,9 @@ alpha:1.0]
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;// | UIViewAutoresizingFlexibleHeight;
     headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
     
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, pRosterTable.frame.size.width/2, headerHeight)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 140, headerHeight)];
     label.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
+    label.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.numberOfLines = 1;
     label.textAlignment = NSTextAlignmentLeft;
@@ -268,17 +268,35 @@ alpha:1.0]
     label.text = @"NAME";
     
     [headerView addSubview:label];
+
+    int imid = (tableView.frame.size.width - 110); //- (label.frame.origin.x + label.frame.size.width)) / 2;
+    int ipop=(label.frame.origin.x + label.frame.size.width);
     
-    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
+    int uuu = imid - ipop;
+    
+    UILabel * label1 = [[UILabel alloc] initWithFrame:CGRectMake(imid - uuu, 0, 110, headerHeight)];// pRosterTable.frame.size.width/2, headerHeight)];
+    label1.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
+    label1.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
+    label1.lineBreakMode = NSLineBreakByWordWrapping;
+    label1.numberOfLines = 1;
+    label1.textAlignment = NSTextAlignmentLeft;
+    label1.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    label1.text = @"EMPLOYER $";
+    
+    [headerView addSubview:label1];
+
+    
+//    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
+    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 110, 0, 110, headerHeight)];
     [button setBackgroundColor:[UIColor clearColor]];
     button.tag = section;
     button.titleLabel.textAlignment = NSTextAlignmentRight;
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
     button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
-    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0];
+    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
     [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"COSTS" forState:UIControlStateNormal];
+    [button setTitle:@"EMPLOYEE $" forState:UIControlStateNormal];
     
     [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     [button setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
@@ -296,17 +314,54 @@ alpha:1.0]
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        
+        
+        UILabel* detailLabel_1 = [[UILabel alloc] init];
+        detailLabel_1.frame = CGRectMake(15, 4, 140, 20);
+        detailLabel_1.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+        detailLabel_1.tag = 33;
+        detailLabel_1.hidden = TRUE;
+        detailLabel_1.textColor = UIColorFromRGB(0x555555);
+        [cell.contentView addSubview:detailLabel_1];
+         
+        
+        
+        UILabel* detailLabel_2 = [[UILabel alloc] init];
+        detailLabel_2.frame = CGRectMake(140, 12, 110, 20);
+        detailLabel_2.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+        detailLabel_2.tag = 34;
+        detailLabel_2.hidden = FALSE;
+        detailLabel_2.textAlignment = NSTextAlignmentCenter;
+        detailLabel_2.textColor = UIColorFromRGB(0x555555);
+        [cell.contentView addSubview:detailLabel_2];
+         
+        
+        
+        UILabel* detailLabel_3 = [[UILabel alloc] init];
+        detailLabel_3.frame = CGRectMake(tableView.frame.size.width - 110, 12, 110, 20);
+        detailLabel_3.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+        detailLabel_3.tag = 35;
+        detailLabel_3.hidden = FALSE;
+        detailLabel_3.textAlignment = NSTextAlignmentCenter;
+        detailLabel_3.textColor = UIColorFromRGB(0x555555);
+        [cell.contentView addSubview:detailLabel_3];
+         
     }
     
-    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+//    UILabel *dt1 = [cell viewWithTag:33];
+    UILabel *dt2 = [cell viewWithTag:34];
+    UILabel *dt3 = [cell viewWithTag:35];
     
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
-    cell.detailTextLabel.textColor = UIColorFromRGB(0x00a99e);
     
-    cell.textLabel.text = @"First Lastname";
-    cell.detailTextLabel.text = @"$1000.00";
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
     
+    NSString *oo = [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+    NSString *ll =  [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+    
+    dt2.text = oo;
+    dt3.text = ll;
     return cell;
 }
 

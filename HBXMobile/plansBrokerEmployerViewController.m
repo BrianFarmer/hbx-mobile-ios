@@ -150,7 +150,8 @@ alpha:1.0]
     // Init Page Control
     pageControl = [[UIPageControl alloc] init];
 //    pageControl.frame = CGRectMake(10, scrollView.frame.origin.y - 20, scrollView.frame.size.width, 20);
-    pageControl.frame = CGRectMake(10,369+165,scrollView.frame.size.width-20, 20);
+    //369+165
+    pageControl.frame = CGRectMake(10,self.tabBarController.tabBar.frame.origin.y - 20,scrollView.frame.size.width-20, 20);
 //   benefitGroupCardView.frame.origin.y + benefitGroupCardView.frame.size.height, scrollView.frame.size.width, 20);
     pageControl.numberOfPages = 3;
     pageControl.currentPage = 0;
