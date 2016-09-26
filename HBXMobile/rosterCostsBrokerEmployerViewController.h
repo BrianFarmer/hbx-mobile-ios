@@ -24,5 +24,12 @@
     
     NSArray *pArray;
     NSArray *sectionIndex;
+    
+    NSDictionary *dictionary;
+    NSArray *rosterList;
 }
+
+@property(nonatomic, assign) NSString *enrollHost;
+@property(nonatomic, assign) NSString *customCookie_a;
+
 @end

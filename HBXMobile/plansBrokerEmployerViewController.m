@@ -127,10 +127,11 @@ alpha:1.0]
 
     for(int i = 0; i < 3; i++)
     {
-        benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40)];
+        benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 30)];
         cardView.benefitGroupName = @"CEO's & Managers";
         cardView.delegate = self;
         [cardView layoutView:i+1 totalPages:3];
+        cardView.layer.cornerRadius = 3;
 /*
         cardView.layer.masksToBounds = NO;
         cardView.layer.shadowOffset = CGSizeMake(-2, 5);

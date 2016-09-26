@@ -401,7 +401,8 @@ alpha:1.0]
     
     for (int ii=0;ii<[pk count];ii++)
     {
-        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+//        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        NSDictionary *pp = [[[[[rosterList objectAtIndex:row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
         
         NSString *a;
         NSString *b;
@@ -446,7 +447,9 @@ alpha:1.0]
     
 
     NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
-    NSString *sActive = [self getActiveEnrollment:indexPath.row];
+    NSString *sActive = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+
+ //   [self getActiveEnrollment:indexPath.row];
     if ([sActive isEqualToString:@"Enrolled"])
         attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
     else if ([sActive isEqualToString:@"Not Enrolled"])
@@ -456,7 +459,8 @@ alpha:1.0]
 
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:sActive attributes:attrs];
                              
-    NSString *sRenewal = [self getRenewalEnrollment:indexPath.row];
+    NSString *sRenewal = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+//[self getRenewalEnrollment:indexPath.row];
     
     NSDictionary *attrsRenew;
     if ([sRenewal isEqualToString:@"Enrolled"])

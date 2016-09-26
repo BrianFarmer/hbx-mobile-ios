@@ -117,6 +117,8 @@ alpha:1.0]
     }
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
+    [self loadDictionary];
+    
     NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < 20; i++) {
         if (i < 10)
@@ -168,6 +170,54 @@ alpha:1.0]
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)loadDictionary
+{
+    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *e_url = employerData.detail_url;
+    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+    BOOL pp = [e_url hasPrefix:@"https://"];
+    BOOL ll = [e_url hasPrefix:@"http://"];
+    if (!pp && !ll)
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.roster_url];
+    else
+        pUrl = employerData.roster_url;
+    
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:pUrl]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    
+    [urlRequest setURL:[NSURL URLWithString:pUrl]];
+    [urlRequest setHTTPMethod:@"GET"];
+    [urlRequest setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        
+        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    }
+    
+    rosterList = [dictionary valueForKey:@"roster"];//[0];// valueForKey:@"roster"][0];
+    
 }
 
 /*
