@@ -24,16 +24,9 @@ alpha:1.0]
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
-    
-    //if Custom class with Navigation Controller
-    //    TabBarController *tabBar = (TabBarController *) self.navigationController.tabBarController;
-    
-    
+
     employerData = tabBar.employerData;
-    //    _enrollHost = tabBar.enrollHost;
-    //    _customCookie_a = tabBar.customCookie_a;
     
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
@@ -43,7 +36,6 @@ alpha:1.0]
     
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
-    //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -159,12 +151,13 @@ alpha:1.0]
         
         lastButton = thisButton;
     }
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
+    
+ //   self.view.transform = CGAffineTransformMakeScale(22, 22);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -174,9 +167,9 @@ alpha:1.0]
 
 -(void)loadDictionary
 {
-    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *pUrl;
     NSString *e_url = employerData.detail_url;
-    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+
     BOOL pp = [e_url hasPrefix:@"https://"];
     BOOL ll = [e_url hasPrefix:@"http://"];
     if (!pp && !ll)
@@ -252,6 +245,7 @@ alpha:1.0]
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
     CGFloat headerHeight = 34.0f;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, pRosterTable.frame.size.width, headerHeight)];
     
@@ -259,43 +253,39 @@ alpha:1.0]
     headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 140, headerHeight)];
-    label.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 15:13];
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.numberOfLines = 1;
     label.textAlignment = NSTextAlignmentLeft;
-    label.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    label.textColor = UIColorFromRGB(0x555555);
     label.text = @"NAME";
     
     [headerView addSubview:label];
+    
+    int iLabelWidth = (iOSDeviceScreenSize.width > 320) ? 110:100;
 
-    int imid = (tableView.frame.size.width - 110); //- (label.frame.origin.x + label.frame.size.width)) / 2;
-    int ipop=(label.frame.origin.x + label.frame.size.width);
-    
-    int uuu = imid - ipop;
-    
-    UILabel * label1 = [[UILabel alloc] initWithFrame:CGRectMake(imid - uuu, 0, 110, headerHeight)];// pRosterTable.frame.size.width/2, headerHeight)];
-    label1.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
-    label1.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
+    UILabel * label1 = [[UILabel alloc] initWithFrame:CGRectMake(tableView.frame.size.width - (iLabelWidth*2), 0, iLabelWidth, headerHeight)];
+    label1.backgroundColor = [UIColor clearColor];
+    label1.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 15:13];
     label1.lineBreakMode = NSLineBreakByWordWrapping;
     label1.numberOfLines = 1;
-    label1.textAlignment = NSTextAlignmentLeft;
-    label1.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    label1.textAlignment = NSTextAlignmentCenter;
+
+    label1.textColor = UIColorFromRGB(0x555555);
     label1.text = @"EMPLOYER $";
-    
+    label1.backgroundColor = [UIColor clearColor];
     [headerView addSubview:label1];
 
     
-//    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
-    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 110, 0, 110, headerHeight)];
+    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width - iLabelWidth, 0, iLabelWidth, headerHeight)];
     [button setBackgroundColor:[UIColor clearColor]];
     button.tag = section;
-    button.titleLabel.textAlignment = NSTextAlignmentRight;
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    
-    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
-    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:15];
-    [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.textAlignment = NSTextAlignmentLeft;
+//    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+//    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, (iOSDeviceScreenSize.width > 320) ? 20:10);
+    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 15:13];
+//    [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"EMPLOYEE $" forState:UIControlStateNormal];
     
     [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
@@ -310,26 +300,18 @@ alpha:1.0]
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
+
+    CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
+    int iLabelWidth = (iOSDeviceScreenSize.width > 320) ? 110:100;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         
         
-        UILabel* detailLabel_1 = [[UILabel alloc] init];
-        detailLabel_1.frame = CGRectMake(15, 4, 140, 20);
-        detailLabel_1.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
-            cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
-        detailLabel_1.tag = 33;
-        detailLabel_1.hidden = TRUE;
-        detailLabel_1.textColor = UIColorFromRGB(0x555555);
-        [cell.contentView addSubview:detailLabel_1];
-         
-        
-        
         UILabel* detailLabel_2 = [[UILabel alloc] init];
-        detailLabel_2.frame = CGRectMake(140, 12, 110, 20);
-        detailLabel_2.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+        detailLabel_2.frame = CGRectMake(tableView.frame.size.width - iLabelWidth - iLabelWidth, 12, iLabelWidth, 20);
+        detailLabel_2.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
         detailLabel_2.tag = 34;
         detailLabel_2.hidden = FALSE;
         detailLabel_2.textAlignment = NSTextAlignmentCenter;
@@ -339,8 +321,8 @@ alpha:1.0]
         
         
         UILabel* detailLabel_3 = [[UILabel alloc] init];
-        detailLabel_3.frame = CGRectMake(tableView.frame.size.width - 110, 12, 110, 20);
-        detailLabel_3.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
+        detailLabel_3.frame = CGRectMake(tableView.frame.size.width - iLabelWidth, 12, iLabelWidth, 20);
+        detailLabel_3.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
         detailLabel_3.tag = 35;
         detailLabel_3.hidden = FALSE;
         detailLabel_3.textAlignment = NSTextAlignmentCenter;
@@ -349,10 +331,10 @@ alpha:1.0]
          
     }
     
-//    UILabel *dt1 = [cell viewWithTag:33];
     UILabel *dt2 = [cell viewWithTag:34];
     UILabel *dt3 = [cell viewWithTag:35];
     
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
@@ -360,8 +342,16 @@ alpha:1.0]
     NSString *oo = [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
     NSString *ll =  [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
     
-    dt2.text = oo;
-    dt3.text = ll;
+    if ([oo isEqualToString:@"0"] || !oo)
+    {
+        dt2.text = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];;
+        dt3.text =  [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+    }
+    else
+    {
+        dt2.text = oo;
+        dt3.text = ll;
+    }
     return cell;
 }
 

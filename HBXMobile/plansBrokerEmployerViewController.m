@@ -132,6 +132,8 @@ alpha:1.0]
         cardView.delegate = self;
         [cardView layoutView:i+1 totalPages:3];
         cardView.layer.cornerRadius = 3;
+        
+
 /*
         cardView.layer.masksToBounds = NO;
         cardView.layer.shadowOffset = CGSizeMake(-2, 5);

@@ -35,36 +35,13 @@ alpha:1.0]
     //if Custom class
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
-    //if Custom class with Navigation Controller
-//    TabBarController *tabBar = (TabBarController *) self.navigationController.tabBarController;
-    
-    
     employerData = tabBar.employerData;
     _enrollHost = tabBar.enrollHost;
     _customCookie_a = tabBar.customCookie_a;
     
-//    self.tabBarController.delegate = self;
-    
-//    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"infoactive32.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"infonormal32.png"]];
-//    [self.tabBarItem initWithTitle:@"info" image:[UIImage imageNamed:@"infoactive32.png"] selectedImage:[UIImage imageNamed:@"infonormal32.png"]];
-//    [self.tabBarItem setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-
-//    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    //    [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"home_selected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"home.png"]];
-/*
-    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"tabBG1.png"]]; //[UIImage imageNamed:@"tabbar_selected.png"]];
-    
-    [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
-    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                       UIColorFromRGB(0x007BC4), NSForegroundColorAttributeName,
-                                                       nil] forState:UIControlStateNormal];
-    
-    [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
- */
     self.slices = [NSMutableArray arrayWithCapacity:10];
     
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
-    
     
     navImage.backgroundColor = [UIColor clearColor];
     navImage.image = [UIImage imageNamed:@"navHeader"];
@@ -153,15 +130,6 @@ alpha:1.0]
     //    [self evenlySpaceTheseButtonsInThisView:@[button, button1, button2, button3] :self.view];
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
-    UIButton *button = (UIButton*) [self.view viewWithTag:30];
-
-//    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,115);
-
-//    vHeader.frame = CGRectMake(0,0,screenSize.width, button.frame.origin.y + button.frame.size.height + 10);
-
-    
-    
-    
     [self loadDictionary];
     
     int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
@@ -192,16 +160,47 @@ alpha:1.0]
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
     [numberFormatter setMaximumFractionDigits:2];
 
-    NSDate *startDate = [f dateFromString:employerData.open_enrollment_begins];
-    [f setDateFormat:@"MMM dd, yyyy"];
-    
-    if ([startDate compare:today] == NSOrderedAscending)
-        renewalNames = [[NSArray alloc] initWithObjects: @"", @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
-    else
-        renewalNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
-    
-    renewalValues = [[NSArray alloc] initWithObjects: @"0", [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], employerData.binder_payment_due, nil];
+    if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS)
+    {
+        NSDate *employerApplicationDate = [f dateFromString:employerData.renewal_application_due];
+        NSDate *planYearDate = [f dateFromString:employerData.planYear]; //plan_year_begins
+        NSDate *binderDate = [f dateFromString:employerData.binder_payment_due];
+        
+        NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *components1 = [gregorianCalendar components:NSCalendarUnitDay
+                                                             fromDate:today
+                                                               toDate:employerApplicationDate
+                                                              options:NSCalendarWrapComponents];
+        
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+        if ([employerData.binder_payment_due length] > 0)
+        {
+            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
+            renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
+        }
+        else
+        {
+            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
+            renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], nil];
+        }
 
+        
+        
+    }
+    else
+    {
+        NSDate *startDate = [f dateFromString:employerData.open_enrollment_begins];
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+        if ([startDate compare:today] == NSOrderedAscending)
+            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+        else
+            renewalNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+        
+        renewalValues = [[NSArray alloc] initWithObjects: @"0", [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], employerData.binder_payment_due, nil];
+    }
+    
     monthlyCostNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
     monthlyCostValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
 }

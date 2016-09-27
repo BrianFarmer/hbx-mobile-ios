@@ -56,7 +56,6 @@
     NSURLConnection *conn;
     
     NSString *_brokerId;
-    NSString *sFirstName;
     
     int REQUEST_TYPE;
     BOOL reLoad;
@@ -70,11 +69,8 @@
     
     NSDate *methodStart;
     UIImageView *pLogoOnTop;
-//            UIButton *secondButton;
-//          IBOutlet     UIButton *thirdButton;
 }
 
-//@property (strong, nonatomic) IBOutlet UIButton *submitButton;
 @property(nonatomic, retain) CLLocationManager *locationManager;
 
 @end

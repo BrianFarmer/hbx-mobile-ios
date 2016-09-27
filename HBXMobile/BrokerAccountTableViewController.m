@@ -38,8 +38,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     pHeaderImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     pHeaderImage.backgroundColor = [UIColor clearColor];
-//    pView1.image = [UIImage imageNamed:@"BrokerMVP_AppHeader200x40WHT.png"];
-    pHeaderImage.image = [UIImage imageNamed:@"navHeader"];//[UIImage imageNamed:@"BrokerMVP_AppHeader200x40_144ppi_WHT.png"];
+    pHeaderImage.image = [UIImage imageNamed:@"navHeader"];
     pHeaderImage.contentMode = UIViewContentModeCenter;// UIViewContentModeScaleAspectFill;
     
     self.navigationItem.titleView = pHeaderImage;

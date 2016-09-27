@@ -14,31 +14,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Settings.h"
 
-#define FS_ERROR_KEY(code)                    [NSString stringWithFormat:@"%d", code]
-#define FS_ERROR_LOCALIZED_DESCRIPTION(code)  NSLocalizedStringFromTable(FS_ERROR_KEY(code), @"FSError", nil)
+
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-
-#define SCREEN_WIDTH ([[UIScreen mainScreen] bounds].size.width)
-#define SCREEN_HEIGHT ([[UIScreen mainScreen] bounds].size.height)
-#define SCREEN_MAX_LENGTH (MAX(SCREEN_WIDTH, SCREEN_HEIGHT))
-#define SCREEN_MIN_LENGTH (MIN(SCREEN_WIDTH, SCREEN_HEIGHT))
-
-#define IS_IPHONE_4_OR_LESS (IS_IPHONE && SCREEN_MAX_LENGTH < 568.0)
-#define IS_IPHONE_5 (IS_IPHONE && SCREEN_MAX_LENGTH == 568.0)
-#define IS_IPHONE_6 (IS_IPHONE && SCREEN_MAX_LENGTH == 667.0)
-#define IS_IPHONE_6P (IS_IPHONE && SCREEN_MAX_LENGTH == 736.0)
-
-//#define HOST @"10.36.27.206:3000"
-
-//#define HOST @"10.36.27.236:3000"
-//#define HOST_NS @"10.36.27.236:3001"
-
-
-//#define HOST @"localhost:3000"
-//@interface NSURLRequest(Private)
-//+(void)setAllowsAnyHTTPSCertificate:(BOOL)inAllow forHost:(NSString *)inHost;
-//@end
-
 
 @interface ViewController ()
 
@@ -109,77 +86,7 @@
         border1.borderWidth = borderWidth;
         [txtPassword.layer addSublayer:border1];
         txtPassword.layer.masksToBounds = YES;
-        /*
-         //       in ViewDidload add the follwoing section to add the second button to the view
-         secondButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-         [secondButton setTitle:@"Second" forState:UIControlStateNormal];
-         secondButton.frame = CGRectMake(100,100,200,50);
-         secondButton.backgroundColor = [UIColor redColor];
-         //     [secondButton sizeToFit];
-         secondButton.translatesAutoresizingMaskIntoConstraints = NO;
-         
-         [self.view addSubview:secondButton];
-         
-         NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:secondButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-40.f];
-         
-         [self.view addConstraint:constraint];
-         
-         constraint = [NSLayoutConstraint constraintWithItem:secondButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f];
-         
-         [self.view addConstraint:constraint];
-         
-         
-         constraint = [NSLayoutConstraint constraintWithItem:thirdButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem: nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:300.0f];
-         
-         [self.view addConstraint:constraint];
-         
-         */
         
-        //        _submitButton.translatesAutoresizingMaskIntoConstraints = NO;
-        //        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:_submitButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeading multiplier:1.0f constant:0.f];
-        /*
-         NSLayoutConstraint *centreHorizontallyConstraint = [NSLayoutConstraint
-         constraintWithItem:secondButton
-         attribute:NSLayoutAttributeCenterX
-         relatedBy:NSLayoutRelationEqual
-         toItem:self.view
-         attribute:NSLayoutAttributeCenterX
-         multiplier:1.0
-         constant:-40];
-         */
-        //        [self.view addConstraint:centreHorizontallyConstraint];
-        /*
-         NSLayoutConstraint *centreHorizontallyConstraint = [NSLayoutConstraint
-         constraintWithItem:self.submitButton
-         attribute:NSLayoutAttributeCenterX
-         relatedBy:NSLayoutRelationEqual
-         toItem:self.view
-         attribute:NSLayoutAttributeCenterX
-         multiplier:1.0
-         constant:0];
-         
-         [self.view addConstraint:centreHorizontallyConstraint];
-         */
-        /*
-         [self.view addConstraint:
-         [NSLayoutConstraint constraintWithItem:self.submitButton //self.view
-         attribute:NSLayoutAttributeCenterX
-         relatedBy:0
-         toItem:self.view
-         attribute:NSLayoutAttributeCenterX
-         multiplier:1
-         constant:0]];
-         */
-        /*
-         [self.view addConstraint:
-         [NSLayoutConstraint constraintWithItem:_submitButton //self
-         attribute:NSLayoutAttributeCenterY
-         relatedBy:0
-         toItem:self
-         attribute:NSLayoutAttributeCenterY
-         multiplier:1
-         constant:0]];
-         */
         lblVersion.numberOfLines = 3;
         lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
         lblVersion.frame = CGRectMake(self.view.frame.size.width - 50, self.view.frame.size.height - 30, 70, 15);
@@ -859,7 +766,6 @@
 
 - ( void )connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    
     NSHTTPURLResponse        *httpResponse = (NSHTTPURLResponse *)response;
     NSInteger code = [httpResponse statusCode];
     
