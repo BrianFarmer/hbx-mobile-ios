@@ -272,5 +272,7 @@ alpha:1.0]
     bOpened = FALSE;
     [self handleRightSwipe:nil];
     iSort = indexPath;
+    
+    [delegate sortByStatus:indexPath];
 }
 @end

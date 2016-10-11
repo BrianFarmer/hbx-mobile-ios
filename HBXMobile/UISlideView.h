@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol uiSlideViewDelegate
-//-(void)addUser;
+-(void)sortByStatus:(NSIndexPath*)idx;
 //-(void)addSpecial;
 @end
 

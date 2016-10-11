@@ -118,7 +118,15 @@ alpha:1.0]
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
      [self loadDictionary];
+   /*
+    NSString *substring = @"Enrolled";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"enrollments.active.health.status contains[c] %@",substring];
+
+    NSArray *filteredKeys = [rosterList filteredArrayUsingPredicate:predicate];
     
+    displayArray = filteredKeys;
+    */
+/*
     NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < 20; i++) {
         if (i < 10)
@@ -127,7 +135,7 @@ alpha:1.0]
             [persons addObject:@"Something else"];
     }
     pArray = [NSArray arrayWithArray:persons];
-    
+*/    
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
     for( NSString *string in [rosterList valueForKey:@"first_name"])
@@ -163,8 +171,28 @@ alpha:1.0]
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
     slideView.frame = CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 34, 200, pRosterTable.frame.size.height - 34);
+    
+    if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
+        return;
+    
+    NSIndexPath *myIP;
+    
+    if ([tabBar.sortOrder isEqualToString:@"Enrolled"])
+        myIP = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    if ([tabBar.sortOrder isEqualToString:@"Waived"])
+        myIP = [NSIndexPath indexPathForRow:1 inSection:0];
+
+    if ([tabBar.sortOrder isEqualToString:@"Not Enrolled"])
+        myIP = [NSIndexPath indexPathForRow:2 inSection:0];
+
+    
+    [self sortByStatus:myIP];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -217,7 +245,7 @@ alpha:1.0]
     }
     
     rosterList = [dictionary valueForKey:@"roster"];//[0];// valueForKey:@"roster"][0];
-
+    displayArray = rosterList;
 }
 
 /*
@@ -237,7 +265,7 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [rosterList count];
+    return [displayArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -256,7 +284,7 @@ alpha:1.0]
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, pRosterTable.frame.size.width, headerHeight)];
 
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;// | UIViewAutoresizingFlexibleHeight;
-    headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+    headerView.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD9D9D9);
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, pRosterTable.frame.size.width/2, headerHeight)];
     label.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor clearColor];
@@ -296,14 +324,17 @@ alpha:1.0]
     [button setTitle:@"STATUS" forState:UIControlStateNormal];
 //    [Button addTarget:self action:@selector(doSomething:) forControlEvents:UIControlEventTouchUpInside];
 //    [button addTarget:self action:@selector(setBgColorForButton:) forControlEvents:UIControlEventTouchDown];
-
+    UIImage *pImage = [UIImage imageNamed:@"OpenCaret.png"];
+    [button setImage:pImage forState:UIControlStateNormal];
+    
     [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-    [button setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
     
+    button.imageEdgeInsets = UIEdgeInsetsMake(0., button.frame.size.width - (pImage.size.width + 15.), 0., 0.);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., pImage.size.width);
+    
     [headerView addSubview:button];
-
-//    [headerView addSubview:button];
     
 //    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
  //   [lblStatus addGestureRecognizer:recognizer];
@@ -328,6 +359,9 @@ alpha:1.0]
     //    [self.tableView reloadData];
     [sender setBackgroundColor:[UIColor clearColor]];
     
+    UIImage *pImage = [UIImage imageNamed:@"CloseCaret.png"];
+    [sender setImage:pImage forState:UIControlStateNormal];
+
 //    [pRosterTable setUserInteractionEnabled:FALSE];
     
 //    [self.view bringSubviewToFront:slideView];
@@ -342,7 +376,8 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    NSIndexSet *indexes = [pArray indexesOfObjectsPassingTest:^BOOL(NSString *string, NSUInteger idx, BOOL *stop) {
+    //sectionIndex was pArray
+    NSIndexSet *indexes = [sectionIndex indexesOfObjectsPassingTest:^BOOL(NSString *string, NSUInteger idx, BOOL *stop) {
      //   *stop = TRUE;
         return [string hasPrefix:title];
     }];
@@ -371,11 +406,11 @@ alpha:1.0]
 
 -(NSString*)getRenewalEnrollment:(NSInteger)row
 {
-    NSArray *pk = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"];
+    NSArray *pk = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"];
     
     for (int ii=0;ii<[pk count];ii++)
     {
-        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        NSDictionary *pp = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
         
         NSString *a;
         NSString *b;
@@ -397,12 +432,12 @@ alpha:1.0]
 
 -(NSString*)getActiveEnrollment:(NSInteger)row
 {
-    NSArray *pk = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"];
+    NSArray *pk = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"];
     
     for (int ii=0;ii<[pk count];ii++)
     {
 //        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
-        NSDictionary *pp = [[[[[rosterList objectAtIndex:row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+        NSDictionary *pp = [[[[[displayArray objectAtIndex:row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
         
         NSString *a;
         NSString *b;
@@ -447,7 +482,7 @@ alpha:1.0]
     
 
     NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
-    NSString *sActive = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+    NSString *sActive = [[[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
 
  //   [self getActiveEnrollment:indexPath.row];
     if ([sActive isEqualToString:@"Enrolled"])
@@ -459,7 +494,7 @@ alpha:1.0]
 
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:sActive attributes:attrs];
                              
-    NSString *sRenewal = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+    NSString *sRenewal = [[[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
 //[self getRenewalEnrollment:indexPath.row];
     
     NSDictionary *attrsRenew;
@@ -503,6 +538,57 @@ alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSArray *po = [rosterList objectAtIndex:indexPath.row] ;
+       [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:nil];
+
+}
+
+-(void)sortByStatus:(NSIndexPath*)idx
+{
+    NSPredicate *predicate;
+    NSString *substring = @"Enrolled";
+    NSString *type = @"active";
+    
+    if (idx.section == 2)
+        displayArray = rosterList;
+    else
+    {
+        if (idx.section == 0)
+            type = @"active";
+        else
+            type = @"renewal";
+        
+        switch (idx.row) {
+            case 0:
+                substring = @"Enrolled";
+                break;
+            case 1:
+                substring = @"Waived";
+                break;
+            case 2:
+                substring = @"Not Enrolled";
+                break;
+            default:
+                break;
+        }
+//        predicate = [NSPredicate predicateWithFormat:@"enrollments.active.health.status contains[c] %@", substring];
+        predicate = [NSPredicate predicateWithFormat:@"enrollments.%@.health.status == %@", type, substring];
+        
+        NSArray *filteredKeys = [rosterList filteredArrayUsingPredicate:predicate];
+        
+        displayArray = filteredKeys;
+    }
+    
+    NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
+    
+    for( NSString *string in [displayArray valueForKey:@"first_name"])
+        [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+    
+    sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    [pRosterTable reloadData];
+    
+    ((employerTabController *) self.tabBarController).sortOrder = substring;
 
 }
 @end

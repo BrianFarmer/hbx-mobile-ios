@@ -44,7 +44,7 @@
         
     }
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         UIColor *color = [UIColor whiteColor];
         txtEmail.attributedPlaceholder =
@@ -62,18 +62,26 @@
         submitButton.frame = CGRectMake(iLeftPos, 465, 300, 44);
         txtEmail.frame = CGRectMake(iLeftPos, 200, 300, 40);
         txtPassword.frame = CGRectMake(iLeftPos, 260, 300, 40);
-        lblEnableTouchID.frame = CGRectMake(20, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
+        lblEnableTouchID.frame = CGRectMake(iLeftPos, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
         switchTouchId.frame = CGRectMake(iLeftPos + 300 - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
         lblSaveUserID.frame = CGRectMake(iLeftPos, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40);
         switchSaveMe.frame = CGRectMake(iLeftPos + 300 - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
 
+                [switchSaveMe setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+        
+        switchSaveMe.thumbTintColor = [UIColor whiteColor];
+        switchSaveMe.tintColor = [UIColor whiteColor];
+        switchSaveMe.layer.cornerRadius = 16;
+        switchSaveMe.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+
+        
         bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
         lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
 
         pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 25, 300, 300 * .333);
         
         CALayer *border = [CALayer layer];
-        CGFloat borderWidth = 2;
+        CGFloat borderWidth = 1;
         border.borderColor = [UIColor whiteColor].CGColor;
         border.frame = CGRectMake(0, txtEmail.frame.size.height - borderWidth, txtEmail.frame.size.width, txtEmail.frame.size.height);
         border.borderWidth = borderWidth;
@@ -327,6 +335,28 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)switchSaveUserChange:(UISwitch *)sender
+{
+    if (sender.on) {
+        NSLog(@"If body ");
+//        [sender setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+ //       [sender setBackgroundColor:[UIColor whiteColor]];
+ //       [sender setOnTintColor:[UIColor greenColor]];
+    //     [sender setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+    //    [switchSaveMe setOn:YES animated:NO];
+        
+    }else{
+        NSLog(@"Else body ");
+        
+        //       switchTouchId.onTintColor = [UIColor redColor];
+
+  //      sender.layer.cornerRadius = 16;
+ //       [sender setTintColor:[UIColor greenColor]];
+//        [sender setThumbTintColor:[UIColor whiteColor]];
+    //    [sender setBackgroundColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+    }
+}
+
 - (IBAction)enableTouchIdSwitch:(id)sender {
     if (switchTouchId.on)
     {
@@ -422,6 +452,7 @@
         default:
             {
 //                #if (TARGET_IPHONE_SIMULATOR)
+                    [loading setHidden:TRUE];
                     [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
 //                #else
 //                    [self askSecurityQuestion:FALSE];

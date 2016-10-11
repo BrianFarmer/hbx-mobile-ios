@@ -110,7 +110,7 @@ alpha:1.0]
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
     [self loadDictionary];
-    
+/*
     NSMutableArray *persons = [NSMutableArray array];
     for (int i = 0; i < 20; i++) {
         if (i < 10)
@@ -119,7 +119,7 @@ alpha:1.0]
             [persons addObject:@"Something else"];
     }
     pArray = [NSArray arrayWithArray:persons];
-    
+*/
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
     for( NSString *string in pArray)
@@ -250,7 +250,7 @@ alpha:1.0]
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, pRosterTable.frame.size.width, headerHeight)];
     
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;// | UIViewAutoresizingFlexibleHeight;
-    headerView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+    headerView.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD9D9D9);
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 140, headerHeight)];
     label.backgroundColor = [UIColor clearColor];

@@ -25,11 +25,12 @@
     
     UISlideView *slideView;
     
-    NSArray *pArray;
     NSArray *sectionIndex;
     
     NSDictionary *dictionary;
     NSArray *rosterList;
+    
+    NSArray *displayArray;
 }
 
 @property(nonatomic, assign) NSString *enrollHost;

@@ -130,7 +130,7 @@ alpha:1.0]
     //    [self evenlySpaceTheseButtonsInThisView:@[button, button1, button2, button3] :self.view];
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
-    [self loadDictionary];
+    ((employerTabController *) self.tabBarController).detailDictionary = [self loadDictionary];
     
     int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
  
@@ -235,7 +235,7 @@ alpha:1.0]
     //    self.secondViewController.aLabel.text = self.stringFromTableViewController;
 }
 
--(void)loadDictionary
+-(NSDictionary*)loadDictionary
 {
     NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
     NSString *e_url = employerData.detail_url;
@@ -277,7 +277,11 @@ alpha:1.0]
         NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        
+        return dictionary;
     }
+    
+    return nil;
 }
 
 - (NSUInteger)numberOfSlicesInPieChart:(XYPieChart *)pieChart
@@ -351,7 +355,7 @@ alpha:1.0]
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 60;
+    return 50;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -362,7 +366,7 @@ alpha:1.0]
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 60)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 50)];
     
     // Set a custom background color and a border
     //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
@@ -393,7 +397,7 @@ alpha:1.0]
  
     if ([expandedSections containsIndex:section])
     {
-        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         imgVew.backgroundColor = [UIColor clearColor];
         imgVew.image = [UIImage imageNamed:@"close_arrow32x32.png"];
         imgVew.contentMode = UIViewContentModeScaleAspectFit;
@@ -402,7 +406,7 @@ alpha:1.0]
     }
     else
     {
-        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
+        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         button.layer.cornerRadius = 16;
         button.layer.borderWidth = 2;
         button.layer.borderColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
@@ -419,8 +423,8 @@ alpha:1.0]
         [headerView addSubview:button];
     }
     
-    headerView.backgroundColor = [UIColor colorWithRed:216.0f/255.0f green:216.0f/255.0f blue:216.0f/255.0f alpha:1.0f];
-    headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 60);
+    headerView.backgroundColor = UIColorFromRGB(0xebebeb);//[UIColor colorWithRed:216.0f/255.0f green:216.0f/255.0f blue:216.0f/255.0f alpha:1.0f];
+    headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 48);
     headerLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];;//UIColorFromRGB(0x007bc4);
     headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
     headerLabel.text = [sections objectAtIndex:section];///  @"This is the custom header view";
@@ -559,7 +563,7 @@ alpha:1.0]
                 pEnrolled.textColor = UIColorFromRGB(0x00a99e);
                 pEnrolled.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnEnrolledLink:)];
-                // if labelView is not set userInteractionEnabled, you must do so
+
                 [pEnrolled setUserInteractionEnabled:YES];
                 [pEnrolled addGestureRecognizer:gesture];
                 [cell.contentView addSubview:pEnrolled];
@@ -572,6 +576,10 @@ alpha:1.0]
                 pWaived.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
                 pWaived.textColor = UIColorFromRGB(0x625ba8);
                 pWaived.backgroundColor = [UIColor clearColor];
+                UITapGestureRecognizer* gestureWaived = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnWaivedLink:)];
+  
+                [pWaived setUserInteractionEnabled:YES];
+                [pWaived addGestureRecognizer:gestureWaived];
                 [cell.contentView addSubview:pWaived];
 
                 
@@ -582,6 +590,10 @@ alpha:1.0]
                 pNotEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
                 pNotEnrolled.textColor = [UIColor redColor]; //UIColorFromRGB(0x00a99e);
                 pNotEnrolled.backgroundColor = [UIColor clearColor];
+                UITapGestureRecognizer* gestureNotEnrolled = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnNotEnrolledLink:)];
+
+                [pNotEnrolled setUserInteractionEnabled:YES];
+                [pNotEnrolled addGestureRecognizer:gestureNotEnrolled];
                 [cell.contentView addSubview:pNotEnrolled];
                 
                 
@@ -723,8 +735,26 @@ alpha:1.0]
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
-    tabBar.sortOrder = @"enrolled";
+    tabBar.sortOrder = @"Enrolled";
+    
+    [self.tabBarController setSelectedIndex:1];
+}
 
+-(void)userTappedOnWaivedLink:(UIGestureRecognizer*)sender
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    tabBar.sortOrder = @"Waived";
+    
+    [self.tabBarController setSelectedIndex:1];
+}
+
+-(void)userTappedOnNotEnrolledLink:(UIGestureRecognizer*)sender
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    tabBar.sortOrder = @"Not Enrolled";
+    
     [self.tabBarController setSelectedIndex:1];
 }
 @end

@@ -15,6 +15,7 @@
 }
 
 @property (strong, nonatomic) brokerEmployersData *employerData;
+@property (strong, nonatomic) NSDictionary *detailDictionary;
 @property(nonatomic, assign) NSString *enrollHost;
 @property(nonatomic, assign) NSString *customCookie_a;
 

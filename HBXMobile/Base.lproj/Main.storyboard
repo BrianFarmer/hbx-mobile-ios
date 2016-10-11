@@ -17,20 +17,81 @@
         </array>
     </customFonts>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="MainLogin" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainLogin" title="Login View Controller" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="97C-m2-7XG">
-                                <frame key="frameInset" minY="323" width="320" height="245"/>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="jke-0V-5WV">
+                                <frame key="frameInset" minX="265" minY="318" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="thumbTintColor" red="0.050980392156862744" green="0.396078431372549" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="switchSaveUserChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="TeR-v8-lvV"/>
+                                </connections>
+                            </switch>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ADD-wV-QgI">
+                                <frame key="frameInset" minX="31" minY="374" width="316" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="25"/>
+                                <state key="normal" title="LOG IN"/>
+                                <connections>
+                                    <action selector="handleButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GZJ-e0-dEk"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Enable Touch ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DdY-Q8-2EM">
+                                <frame key="frameInset" minX="68" minY="260" width="181" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Remember me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Gd3-Od-kdS">
+                                <frame key="frameInset" minX="68" minY="323" width="146" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="1DI-yp-bQL">
+                                <frame key="frameInset" minX="265" minY="255" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="thumbTintColor" red="0.050980392156862744" green="0.396078431372549" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
+                            </switch>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="16" id="1qW-j2-G6a">
+                                <frame key="frameInset" minX="68" minY="134" width="238" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="16" id="Dqe-NB-ttF">
+                                <frame key="frameInset" minX="68" minY="183" width="238" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vpV-Hy-LwY">
+                                <frame key="frameInset" minX="303" minY="637" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
+                                <color key="textColor" red="0.95280562930000001" green="0.99380361539999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" misplaced="YES" id="MRz-O9-Ga6">
+                                <frame key="frameInset" minX="31" minY="412" width="320" height="255"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rB8-L7-3lB">
-                                        <frame key="frameInset" minX="68" minY="61" width="191" height="203"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="foN-dG-Ie5">
+                                        <frame key="frameInset" minX="65" minY="52" width="191" height="203"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <string key="text">DC Health Link Mobile is for existing Health Link customers.
 
@@ -39,94 +100,31 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JMH-Oe-jo6">
-                                        <frame key="frameInset" minX="270" minY="220" width="42" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
-                                        <color key="textColor" red="0.95280562930000001" green="0.99380361539999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.039215686274509803" green="0.25098039215686274" blue="0.38823529411764707" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <view contentMode="scaleToFill" id="nIO-Bl-J6U">
-                                <frame key="frameInset" minX="20" minY="106" width="280" height="301"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REMEMBER ME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IxK-Mv-bPe">
-                                        <frame key="frameInset" minX="20" minY="184" width="153" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="s31-ED-25N">
-                                        <frame key="frameInset" minX="209" minY="125" width="51" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="16" id="2xf-WL-AwF">
-                                        <frame key="frameInset" minX="20" minY="15" width="238" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress"/>
-                                    </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="16" id="dET-08-jMC">
-                                        <frame key="frameInset" minX="20" minY="67" width="238" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                    </textField>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="wzA-fo-e9T">
-                                        <frame key="frameInset" minX="209" minY="187" width="51" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ENABLE TOUCH ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4Fn-bz-oHN">
-                                        <frame key="frameInset" minX="20" minY="127" width="181" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FD6-vP-RUs">
-                                        <frame key="frameInset" minX="22" minY="240" width="236" height="41"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.86666666670000003" green="0.090196078430000007" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="25"/>
-                                        <state key="normal" title="LOGIN">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="handleButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rfl-Qg-8Q3"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.4823529411764706" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="SQH-gz-2r5"/>
                     <connections>
-                        <outlet property="bottomView" destination="97C-m2-7XG" id="hZ3-1k-MCs"/>
-                        <outlet property="lblDisclaimer" destination="rB8-L7-3lB" id="LIT-0l-SZX"/>
-                        <outlet property="lblEnableTouchID" destination="4Fn-bz-oHN" id="t3V-bh-euc"/>
-                        <outlet property="lblSaveUserID" destination="IxK-Mv-bPe" id="eMc-Bc-HYc"/>
-                        <outlet property="lblVersion" destination="JMH-Oe-jo6" id="GZ9-6l-EHh"/>
-                        <outlet property="submitButton" destination="FD6-vP-RUs" id="b1z-KK-s1e"/>
-                        <outlet property="switchSaveMe" destination="wzA-fo-e9T" id="1xW-ZK-mVe"/>
-                        <outlet property="switchTouchId" destination="s31-ED-25N" id="VAg-rg-hvl"/>
-                        <outlet property="topView" destination="nIO-Bl-J6U" id="Wfe-01-bmE"/>
-                        <outlet property="txtEmail" destination="2xf-WL-AwF" id="Nvh-pJ-pz5"/>
-                        <outlet property="txtPassword" destination="dET-08-jMC" id="15f-Lk-llq"/>
-                        <segue destination="BJO-um-fM0" kind="push" identifier="Broker View" id="M1G-1s-kR4"/>
+                        <outlet property="bottomView" destination="MRz-O9-Ga6" id="n3z-Kr-bZ4"/>
+                        <outlet property="lblDisclaimer" destination="foN-dG-Ie5" id="v8M-Vv-ruL"/>
+                        <outlet property="lblEnableTouchID" destination="DdY-Q8-2EM" id="dEl-Cx-h3g"/>
+                        <outlet property="lblSaveUserID" destination="Gd3-Od-kdS" id="ado-Uj-8MV"/>
+                        <outlet property="lblVersion" destination="vpV-Hy-LwY" id="IEF-1O-WEn"/>
+                        <outlet property="submitButton" destination="ADD-wV-QgI" id="nUu-78-f4i"/>
+                        <outlet property="switchSaveMe" destination="jke-0V-5WV" id="zcU-Xc-ddL"/>
+                        <outlet property="switchTouchId" destination="1DI-yp-bQL" id="6eT-Hf-wsR"/>
+                        <outlet property="txtEmail" destination="1qW-j2-G6a" id="Kde-QG-VsT"/>
+                        <outlet property="txtPassword" destination="Dqe-NB-ttF" id="aaz-Im-RxY"/>
                         <segue destination="TLe-x9-diw" kind="push" identifier="Config View" id="Bg8-mz-D2f"/>
-                        <segue destination="6eE-vy-OqQ" kind="push" identifier="Broker View 1" id="Jwg-Ju-xw4"/>
                         <segue destination="KKs-7c-HiG" kind="push" identifier="BrokerTable" id="7e4-Ge-fDl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="268" y="-457"/>
+            <point key="canvasLocation" x="267.5" y="-457.5"/>
         </scene>
         <!--Config View Controller-->
         <scene sceneID="UVr-1Y-zBR">
@@ -157,6 +155,103 @@ If you are not an exisiting customer please sign up on your home computer.</stri
             </objects>
             <point key="canvasLocation" x="734" y="-662"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="cWB-5V-TK3">
+            <objects>
+                <viewController id="QWI-Kk-paF" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uZj-xb-dmc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="UNw-zB-11z">
+                                <frame key="frameInset"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" id="Gzj-CA-166">
+                                        <frame key="frameInset" minY="323" width="320" height="245"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QrV-cD-V53">
+                                                <frame key="frameInset" minX="68" minY="61" width="191" height="203"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">DC Health Link Mobile is for existing Health Link customers.
+
+If you are not an exisiting customer please sign up on your home computer.</string>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IcE-sc-DX8">
+                                                <frame key="frameInset" minX="270" minY="220" width="42" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
+                                                <color key="textColor" red="0.95280562930000001" green="0.99380361539999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.039215686270000001" green="0.25098039220000001" blue="0.38823529410000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" id="G5q-TT-zWs">
+                                        <frame key="frameInset" minX="20" minY="106" width="280" height="301"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REMEMBER ME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D5j-8y-ZDN">
+                                                <frame key="frameInset" minX="20" minY="184" width="153" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="erO-rK-aNC">
+                                                <frame key="frameInset" minX="209" minY="125" width="51" height="31"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </switch>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="16" id="pzu-ws-zG4">
+                                                <frame key="frameInset" minX="20" minY="15" width="238" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress"/>
+                                            </textField>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="16" id="o0c-vl-QUv">
+                                                <frame key="frameInset" minX="20" minY="67" width="238" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                            </textField>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="ZEx-V0-vho">
+                                                <frame key="frameInset" minX="209" minY="187" width="51" height="31"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </switch>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ENABLE TOUCH ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jzc-Tm-ahk">
+                                                <frame key="frameInset" minX="20" minY="127" width="181" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ebK-3t-Dw2">
+                                                <frame key="frameInset" minX="22" minY="240" width="236" height="41"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.86666666670000003" green="0.090196078430000007" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="25"/>
+                                                <state key="normal" title="LOGIN">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.4823529412" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bx4-zv-5IY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="915" y="-686"/>
+        </scene>
         <!--Broker Search Result Table View Controller-->
         <scene sceneID="mZ9-Fr-lh3">
             <objects>
@@ -167,10 +262,10 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="prototypeCell" id="GaO-sp-O9j" customClass="MGSwipeTableCell">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GaO-sp-O9j" id="q7r-5S-xmZ">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                    <frame key="frameInset" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -187,7 +282,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EoO-lR-plp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="246" y="1052"/>
+            <point key="canvasLocation" x="297" y="924"/>
         </scene>
         <!--Roster-->
         <scene sceneID="EEU-UX-xKg">
@@ -236,6 +331,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <outlet property="pCompanyFooter" destination="3zo-Sc-bra" id="tOh-vM-dHz"/>
                         <outlet property="pRosterTable" destination="49a-sv-cLy" id="sKk-CG-jnI"/>
                         <outlet property="vHeader" destination="Xge-Xf-Ev8" id="X8P-CU-IXx"/>
+                        <segue destination="exl-gG-8DY" kind="push" identifier="ShowEmployeeProfile" id="CPr-ab-NrY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iw5-ex-fh8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -295,6 +391,35 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hxN-Yq-Ke0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1598" y="1101"/>
+        </scene>
+        <!--Employee Profile View Controller-->
+        <scene sceneID="vWF-dP-kC9">
+            <objects>
+                <viewController id="exl-gG-8DY" customClass="EmployeeProfileViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5dv-QE-eYU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="f1o-mR-uzj">
+                                <frame key="frameInset" minX="67" minY="179" width="240" height="238"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="exl-gG-8DY" id="67l-82-atO"/>
+                                    <outlet property="delegate" destination="exl-gG-8DY" id="r2V-tF-EgC"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="chR-b0-M5E"/>
+                    <connections>
+                        <outlet property="profileTable" destination="f1o-mR-uzj" id="392-QK-bjO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2eu-K3-V7Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2034.5" y="1099.5"/>
         </scene>
         <!--info-->
         <scene sceneID="vr9-SS-ATH">
@@ -433,7 +558,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
             <objects>
                 <viewController storyboardIdentifier="Broker View" title="Broker View" id="BJO-um-fM0" customClass="BrokerAccountViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ex9-8g-OiK">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="1" id="1DE-7E-y1H">
@@ -514,7 +639,6 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                     <connections>
                         <outlet property="brokerTable" destination="1DE-7E-y1H" id="bg5-Lx-ezC"/>
                         <outlet property="searchDisplayController" destination="aWv-gH-FuI" id="ped-ap-FYQ"/>
-                        <segue destination="7Ew-gz-wuR" kind="push" identifier="Broker Detail Page" id="rPO-Jn-jbJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1V6-Dt-hyk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -542,7 +666,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                 <rect key="frame" x="0.0" y="28" width="375" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kf2-MS-2uN" id="Ex9-Jh-qSC">
-                                    <frame key="frameInset" width="375" height="53"/>
+                                    <frame key="frameInset" width="375" height="53.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -717,6 +841,6 @@ If you are not an exisiting customer please sign up on your home computer.</stri
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="wL3-OG-3Hu"/>
+        <segue reference="jsv-1g-VSj"/>
     </inferredMetricsTieBreakers>
 </document>

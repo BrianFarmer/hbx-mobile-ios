@@ -118,19 +118,23 @@ alpha:1.0]
                                  
     scrollView.pagingEnabled = YES;
     
-    scrollView.backgroundColor = UIColorFromRGB(0xd3d3d3); //d3d3d3
+    scrollView.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xd3d3d3); //d3d3d3
     scrollView.contentSize = CGSizeMake(frameX, frameY);
     scrollView.delegate = self;
     
     [self.view addSubview: scrollView];
   
+//    NSDictionary *aa = [[[_delegate getEmployer] valueForKey:@"plan_offerings"] valueForKey:@"active"];
+    
+    NSArray *po = [[[self getEmployer] valueForKey:@"plan_offerings"] valueForKey:@"active"];// valueForKey:@"active"];
 
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < [po count]; i++)
     {
         benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 30)];
         cardView.benefitGroupName = @"CEO's & Managers";
+        cardView.po = [po objectAtIndex:i];
         cardView.delegate = self;
-        [cardView layoutView:i+1 totalPages:3];
+        [cardView layoutView:i+1 totalPages:[po count]];
         cardView.layer.cornerRadius = 3;
         
 
@@ -146,8 +150,8 @@ alpha:1.0]
     }
     
     scrollView.contentSize = CGSizeMake(frameX*3, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40);//200);
-    int iht = self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40;
-    int uu = scrollView.frame.origin.y;
+//    int iht = self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40;
+//    int uu = scrollView.frame.origin.y;
     
     // Init Page Control
     pageControl = [[UIPageControl alloc] init];
@@ -155,7 +159,7 @@ alpha:1.0]
     //369+165
     pageControl.frame = CGRectMake(10,self.tabBarController.tabBar.frame.origin.y - 20,scrollView.frame.size.width-20, 20);
 //   benefitGroupCardView.frame.origin.y + benefitGroupCardView.frame.size.height, scrollView.frame.size.width, 20);
-    pageControl.numberOfPages = 3;
+    pageControl.numberOfPages = [po count];
     pageControl.currentPage = 0;
     pageControl.backgroundColor = [UIColor clearColor];
     
@@ -204,6 +208,11 @@ alpha:1.0]
     pageControl.currentPage = (int)xPos/width;
 }
 
+-(NSDictionary*)getEmployer
+{
+    return ((employerTabController *) self.tabBarController).detailDictionary;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -218,5 +227,14 @@ alpha:1.0]
     // Pass the selected object to the new view controller.
 }
 */
+-(void)phoneEmployer:(id)sender
+{
+    //    -(void)showAddressBook{
+    ABPeoplePickerNavigationController *_addressBookController = [[ABPeoplePickerNavigationController alloc] init];
+    [_addressBookController setPeoplePickerDelegate:self];
+    [self presentViewController:_addressBookController animated:YES completion:nil];
+    //    }
+
+}
 
 @end

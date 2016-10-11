@@ -8,6 +8,7 @@
 
 #import "benefitGroupCardView.h"
 
+
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
@@ -40,7 +41,7 @@ alpha:1.0]
 
 -(void)userTappedOnPageNo:(UIGestureRecognizer*)sender
 {
-    if (currrentCard == 3)
+    if (currrentCard == cardCount)
         [_delegate scrolltoNextPage:0];
     else
         [_delegate scrolltoNextPage:currrentCard];
@@ -51,15 +52,43 @@ alpha:1.0]
     NSLog(@"W:%f     H:%f", self.bounds.size.width, self.bounds.size.height);
     CGFloat scaleX = self.frame.size.width/394;
     CGFloat scaleY = self.frame.size.height/448;
-    CGFloat scale = MIN(scaleX, scaleY);
-
-    CGFloat mscale = [UIScreen mainScreen].scale;
+    CGFloat scale = MIN(scaleX, scaleY);    
     
+    _planDetails = [[NSMutableArray alloc] init];
+    [_planDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
+
+    [_planDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
+
+    [_planDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"health"] valueForKey:@"reference_plan_name"], nil]];
+
+
+    
+    _planDentalDetails = [[NSMutableArray alloc] init];
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
+    
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
+
+//    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\u2022 %@", @"BlueDental Preferred"],  [NSString stringWithFormat:@"\u2022 %@", @"BlueDental Traditional"],  [NSString stringWithFormat:@"\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
+
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Preferred"], nil]];
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Traditional"], nil]];
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
+
+    
+    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"dental"] valueForKey:@"reference_plan_name"], nil]];
+
 //    UIView *_innerView = [[UIView alloc] initWithFrame:self.bounds];
 //    _innerView.clipsToBounds = YES;
 //    [self addSubview:_innerView];
+//    plansBrokerEmployerViewController *pView = (plansBrokerEmployerViewController*)[[self superview] superview];
+    
+//    brokerEmployersData *employerData = pView.employerData;
+    
+    
+    
     
     currrentCard = cc;
+    cardCount = totalCards;
     UILabel *lblBenefitGroup = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 150, 20)];
     lblBenefitGroup.text = @"BENEFIT GROUP ";
     lblBenefitGroup.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
@@ -77,12 +106,44 @@ alpha:1.0]
     [lblPageNo setUserInteractionEnabled:YES];
     [lblPageNo addGestureRecognizer:gesture];
 
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
+                                [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
+    
+    NSArray *itemArray = [NSArray arrayWithObjects: @"Active Year", @"In Renewal", nil];
+     UISegmentedControl *planYearControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+     planYearControl.frame = CGRectMake(self.frame.size.width - 150, 5, 140, 25);
+    [planYearControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+
+    [planYearControl setTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+    
+     [planYearControl addTarget:self action:@selector(MySegmentControlAction:) forControlEvents: UIControlEventValueChanged];
+     planYearControl.selectedSegmentIndex = 0;
+    
+    if (cc == 1)
+     [self addSubview:planYearControl];
+    
+    
     UILabel *lblBenefitGroupName = [[UILabel alloc] initWithFrame:CGRectMake(10, 25, 150, 20)];
-    lblBenefitGroupName.text = @"CEO's & Managers";
+    lblBenefitGroupName.text = [_po valueForKey:@"benefit_group_name"];
     lblBenefitGroupName.font = [UIFont fontWithName:@"Roboto-Regular" size:20.0f];
     lblBenefitGroupName.textColor = UIColorFromRGB(0x555555);
     [lblBenefitGroupName sizeToFit];
     [self addSubview:lblBenefitGroupName];
+    
+    
+    planTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 65, self.frame.size.width, self.frame.size.height - 65) style:UITableViewStyleGrouped];
+    planTable.dataSource = self;
+    planTable.delegate = self;
+    planTable.rowHeight = 44.0f;
+    planTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    planTable.layer.cornerRadius = 10;
+    
+    [planTable setBackgroundView:nil];
+    [planTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
+    [self addSubview:planTable];
+
+    return;
     
     UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(10,85,150, 20)];
     lblPlans.text = @"PLANS OFFERED";
@@ -120,156 +181,6 @@ alpha:1.0]
     [lblContribution sizeToFit];
     [self addSubview:lblContribution];
 
-    
-    NSDictionary *attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a3e2) };
-    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"80" attributes:attrs];
-    
-    [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
-    [attributedTitle endEditing];
-
-    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
-    
-    [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
-    [attributedTitle1 endEditing];
-    
-    NSMutableAttributedString *attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"EMPLOYEE" attributes:attrs];
-    
-    [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
-    [attributedTitle2 endEditing];
-    
-    [attributedTitle appendAttributedString:attributedTitle1];
-    [attributedTitle appendAttributedString:attributedTitle2];
-    
-    UILabel *lblContributionEmployee = [[UILabel alloc] initWithFrame:CGRectMake(10,260,100, 20)];
-    lblContributionEmployee.attributedText =  attributedTitle;
-    lblContributionEmployee.numberOfLines = 2;
-    lblContributionEmployee.textAlignment = NSTextAlignmentCenter;
-    [lblContributionEmployee sizeToFit];
-    [self addSubview:lblContributionEmployee];
-    
-    
-    attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e) };
-    attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"20" attributes:attrs];
-    
-    [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
-    [attributedTitle endEditing];
-    
-    attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
-    
-    [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
-    [attributedTitle1 endEditing];
-    
-    attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"SPOUSE" attributes:attrs];
-    
-    [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
-    [attributedTitle2 endEditing];
-    
-    [attributedTitle appendAttributedString:attributedTitle1];
-    [attributedTitle appendAttributedString:attributedTitle2];
-    
-    
-    UILabel *lblContributionSpouse = [[UILabel alloc] initWithFrame:CGRectMake(100,260,100, 20)];
-    lblContributionSpouse.attributedText =  attributedTitle;
-    lblContributionSpouse.numberOfLines = 2;
-    lblContributionSpouse.textAlignment = NSTextAlignmentCenter;
-    [lblContributionSpouse sizeToFit];
-//    lblContributionSpouse.frame = CGRectMake(180,225,lblContributionSpouse.frame.size.width, lblContributionSpouse.frame.size.height);
-
-    [self addSubview:lblContributionSpouse];
-    
-    
-    attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8) };
-    attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"10" attributes:attrs];
-    
-    [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
-    [attributedTitle endEditing];
-    
-    attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
-    
-    [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
-    [attributedTitle1 endEditing];
-    
-    attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"DOMESTIC\nPARTNER" attributes:attrs];
-    
-    [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
-    [attributedTitle2 endEditing];
-    
-    [attributedTitle appendAttributedString:attributedTitle1];
-    [attributedTitle appendAttributedString:attributedTitle2];
-
-    UILabel *lblContributionPartner = [[UILabel alloc] initWithFrame:CGRectMake(180,260,100, 20)];
-    lblContributionPartner.attributedText =  attributedTitle;
-    lblContributionPartner.numberOfLines = 3;
-    lblContributionPartner.textAlignment = NSTextAlignmentCenter;
-//    lblContributionPartner.adjustsFontSizeToFitWidth=YES;
-//    lblContributionPartner.minimumScaleFactor=0.5;
-    [lblContributionPartner sizeToFit];
-//    lblContributionPartner.backgroundColor = [UIColor grayColor];
-    
- //   lblContributionPartner.frame = CGRectMake(180,225,lblContributionPartner.frame.size.width, lblContributionPartner.frame.size.height);
-    [self addSubview:lblContributionPartner];
-/*
-    CGSize maximumSize = CGSizeMake(300, 9999);
-    NSString *dateString = @"The date today is January 1st, 1999";
-    UIFont *dateFont = [UIFont fontWithName:@"Roboto-Bold" size:16];
-//    CGSize dateStringSize = [attributedTitle sizeWithFont:dateFont
-//                                   constrainedToSize:maximumSize
-//                                       lineBreakMode:lblContributionPartner.lineBreakMode];
-    int ih = [attributedTitle boundingRectWithSize:lblContributionPartner.frame.size
-                                                    options:NSStringDrawingUsesLineFragmentOrigin
-                                                    context:nil].size.height;
-
-    CGRect dateFrame = CGRectMake(180,225,lblContributionPartner.frame.size.width, 50);
-    
-    lblContributionPartner.frame = dateFrame;
-  */
-    
-    
-    attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0xf06eaa) };
-    attributedTitle = [[NSMutableAttributedString alloc] initWithString:@"10" attributes:attrs];
-    
-    [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
-    [attributedTitle endEditing];
-    
-    attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
-    
-    [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
-    [attributedTitle1 endEditing];
-    
-    attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"CHILD <26" attributes:attrs];
-    
-    [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
-    [attributedTitle2 endEditing];
-    
-    [attributedTitle appendAttributedString:attributedTitle1];
-    [attributedTitle appendAttributedString:attributedTitle2];
-    
-    
-    UILabel *lblContributionChild = [[UILabel alloc] initWithFrame:CGRectMake(270, 260, 100, 20)];
-    lblContributionChild.attributedText =  attributedTitle;
-    lblContributionChild.numberOfLines = 2;
-    lblContributionChild.textAlignment = NSTextAlignmentCenter;
-
-//        lblContributionChild.backgroundColor = [UIColor grayColor];
-//    lblContributionChild.adjustsFontSizeToFitWidth=YES;
-//    lblContributionChild.minimumScaleFactor=0.5;
-    [lblContributionChild sizeToFit];
-//    lblContributionChild.frame = CGRectMake(270,225,lblContributionChild.frame.size.width, lblContributionChild.frame.size.height);
-    
-    [self addSubview:lblContributionChild];
-    
     
     int uu = self.frame.origin.y + self.frame.size.height;// - 40;
     
@@ -312,8 +223,16 @@ alpha:1.0]
     lblContributionPartner.transform = CGAffineTransformScale(CGAffineTransformIdentity, fScale, fScale);
     lblContributionChild.transform = CGAffineTransformScale(CGAffineTransformIdentity, fScale, fScale);
 */
-    [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :self];
+ //   [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :self];
 
+}
+
+- (void)MySegmentControlAction:(UISegmentedControl *)segment
+{
+    if(segment.selectedSegmentIndex == 0)
+    {
+        // code for the first button
+    }
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -340,4 +259,368 @@ alpha:1.0]
     
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+
+    
+    return 2;//[_messageArray count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+if (section == 1)
+    return 6;
+    
+    return 0;//[[_messageArray objectAtIndex:section] count];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+
+    
+    return 34.0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 1.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 1 && (indexPath.section == 0 || indexPath.section == 1))
+        return 118;
+    
+    if (indexPath.section == 1 && (indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4))
+        return 35;
+
+    if (indexPath.section == 1 && indexPath.row == 5 )
+        return 55;
+
+    CGSize labelSize = CGSizeMake(200.0, 20.0);
+    NSString *cellText;
+    if (indexPath.section == 0)
+        cellText = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+    else
+        cellText = [[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+    
+    UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
+    
+    if ([cellText length] > 0)
+        labelSize = [cellText sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
+    
+    if (labelSize.height + 10 < 44)
+        return 44;
+    
+    return (labelSize.height + 20);
+}
+
+- (UITableViewCell *) getCellContentView:(NSString *)cellIdentifier {
+    
+    CGRect CellFrame = CGRectMake(0, 0, self.frame.size.width, 105);
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    UIView *conrtibutionView = [[UIView alloc] initWithFrame:CellFrame];
+    conrtibutionView.tag = 120;
+    conrtibutionView.hidden = YES;
+    
+    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, 100, 20)];
+    lblContribution.text = @"CONTRIBUTION LEVELS";
+    lblContribution.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
+    lblContribution.textColor = UIColorFromRGB(0x555555);
+    [lblContribution sizeToFit];
+    [conrtibutionView addSubview:lblContribution];
+
+    
+    UILabel *lblContributionEmployee = [[UILabel alloc] initWithFrame:CGRectMake(20, 30, 100, 20)];
+    lblContributionEmployee.tag = 121;
+    lblContributionEmployee.numberOfLines = 2;
+    lblContributionEmployee.textAlignment = NSTextAlignmentCenter;
+    [lblContributionEmployee sizeToFit];
+    [conrtibutionView addSubview:lblContributionEmployee];
+    
+    
+    UILabel *lblContributionSpouse = [[UILabel alloc] initWithFrame:CGRectMake(100,30,100, 20)];
+    lblContributionSpouse.tag = 122;
+    lblContributionSpouse.numberOfLines = 2;
+    lblContributionSpouse.textAlignment = NSTextAlignmentCenter;
+    [lblContributionSpouse sizeToFit];
+    [conrtibutionView addSubview:lblContributionSpouse];
+    
+    
+    UILabel *lblContributionPartner = [[UILabel alloc] initWithFrame:CGRectMake(200,30,100, 20)];
+    lblContributionPartner.tag = 123;
+    lblContributionPartner.numberOfLines = 3;
+    lblContributionPartner.textAlignment = NSTextAlignmentCenter;
+    [lblContributionPartner sizeToFit];
+    [conrtibutionView addSubview:lblContributionPartner];
+    
+    
+    UILabel *lblContributionChild = [[UILabel alloc] initWithFrame:CGRectMake(300, 30, 100, 20)];
+    lblContributionChild.tag = 124;
+    lblContributionChild.numberOfLines = 2;
+    lblContributionChild.textAlignment = NSTextAlignmentCenter;
+    [lblContributionChild sizeToFit];
+    [conrtibutionView addSubview:lblContributionChild];
+    
+//    [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :conrtibutionView];
+    
+    [cell.contentView addSubview:conrtibutionView];
+    
+    return cell;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // The view for the header
+//    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(tableView.frame.size.width/2 - 75, 0, 150, 34)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 34)];
+    
+    // Set a custom background color and a border
+    headerView.backgroundColor = UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+    headerView.layer.borderWidth = 1.0;
+    
+    headerView.tag = section;
+    
+    // Add a label
+    UILabel* headerLabel = [[UILabel alloc] init];
+    headerLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - 5, 34);
+//    headerLabel.frame = CGRectMake(tableView.frame.size.width/2-75, 0, 150, 34);
+    headerLabel.backgroundColor = [UIColor clearColor];//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    headerLabel.textColor = [UIColor whiteColor];
+    headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
+    if (section == 0)
+        headerLabel.text = @"Health";
+    else
+        headerLabel.text = @"Dental";
+
+    headerLabel.textAlignment = NSTextAlignmentCenter;
+    
+    // Add the label to the header view
+    [headerView addSubview:headerLabel];
+    
+    
+    UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-40, 2, 28, 28)];
+    imgVew.backgroundColor = [UIColor clearColor];
+    imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"];
+    imgVew.contentMode = UIViewContentModeScaleAspectFit;
+    // Add the image to the header view
+    [headerView addSubview:imgVew];
+    return headerView;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        cell = [self getCellContentView:CellIdentifier];
+  }
+    
+    cell.textLabel.textColor = UIColorFromRGB(0x555555);
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x555555);
+    
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:14];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = @"";
+    
+//    cell.textLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]; //[UIColor redColor];
+//    cell.detailTextLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    
+    UIView *lblContributionView = (UIView *)[cell viewWithTag:120];
+    lblContributionView.hidden = YES;
+    
+    if (indexPath.section == 0)
+    {
+//        NSString *txt = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+/*
+        if (indexPath.section == 0 && indexPath.row == 1)
+        {
+            lblContributionView.hidden = NO;
+            UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:121];
+            UILabel *lblContributionSpouse = (UILabel *)[cell viewWithTag:122];
+            UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
+            UILabel *lblContributionChild = (UILabel *)[cell viewWithTag:124];
+            
+            NSString *empCont =  [[[[_po valueForKey:@"health"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
+            lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
+            
+            [lblContributionEmployee sizeToFit];
+            
+            NSString *spouseCont =  [[[[_po valueForKey:@"health"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
+            lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+
+            [lblContributionSpouse sizeToFit];
+            
+            NSString *partnerCont =  [[[[_po valueForKey:@"health"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+            lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+
+            [lblContributionPartner sizeToFit];
+            
+            NSString *childCont =  [[[[_po valueForKey:@"health"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
+            lblContributionChild.attributedText = [self setAttributedLabel:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
+            
+            [lblContributionChild sizeToFit];
+
+            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :lblContributionView];
+        }
+        else
+        {
+            cell.textLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0];
+            cell.detailTextLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+        }
+        */
+    }
+    else
+    {
+        
+        if (indexPath.section == 1 && indexPath.row == 1)
+        {
+            lblContributionView.hidden = NO;
+            UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:121];
+            UILabel *lblContributionSpouse = (UILabel *)[cell viewWithTag:122];
+            UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
+            UILabel *lblContributionChild = (UILabel *)[cell viewWithTag:124];
+            
+            NSString *empCont =  [[[[_po valueForKey:@"dental"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
+            lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
+            
+            [lblContributionEmployee sizeToFit];
+            
+            NSString *spouseCont =  [[[[_po valueForKey:@"dental"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
+            lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+            
+            [lblContributionSpouse sizeToFit];
+            
+            NSString *partnerCont =  [[[[_po valueForKey:@"dental"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+            lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+            
+            [lblContributionPartner sizeToFit];
+            
+            NSString *childCont =  [[[[_po valueForKey:@"dental"] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
+            lblContributionChild.attributedText = [self setAttributedLabel:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
+            
+            [lblContributionChild sizeToFit];
+            
+            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :lblContributionView];
+        }
+        else
+        {
+            if (![[[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"EPLIST"])
+                cell.textLabel.text = [[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:0];
+            cell.detailTextLabel.text = [[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+        }
+        
+        
+    }
+    return cell;
+}
+
+-(NSAttributedString*)setAttributedLabel:(NSString*)labelText1 text2:(NSString*)labelText2 color:(UIColor*)color
+{
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:labelText1 attributes:attrs];
+    
+    [attributedTitle beginEditing];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
+    [attributedTitle endEditing];
+    
+    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
+    
+    [attributedTitle1 beginEditing];
+    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
+    [attributedTitle1 endEditing];
+    
+    NSMutableAttributedString *attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:labelText2 attributes:attrs];
+    
+    [attributedTitle2 beginEditing];
+    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
+    [attributedTitle2 endEditing];
+    
+    [attributedTitle appendAttributedString:attributedTitle1];
+    [attributedTitle appendAttributedString:attributedTitle2];
+
+    return attributedTitle;
+}
+/*
+attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e) };
+attributedTitle = [[NSMutableAttributedString alloc] initWithString:spouseCont attributes:attrs];
+
+[attributedTitle beginEditing];
+[attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
+[attributedTitle endEditing];
+
+attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
+
+[attributedTitle1 beginEditing];
+[attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
+[attributedTitle1 endEditing];
+
+attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"SPOUSE" attributes:attrs];
+
+[attributedTitle2 beginEditing];
+[attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
+[attributedTitle2 endEditing];
+
+[attributedTitle appendAttributedString:attributedTitle1];
+[attributedTitle appendAttributedString:attributedTitle2];
+ 
+ 
+ 
+ attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8) };
+ attributedTitle = [[NSMutableAttributedString alloc] initWithString:partnerCont attributes:attrs];
+ 
+ [attributedTitle beginEditing];
+ [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
+ [attributedTitle endEditing];
+ 
+ attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
+ 
+ [attributedTitle1 beginEditing];
+ [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
+ [attributedTitle1 endEditing];
+ 
+ attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"DOMESTIC\nPARTNER" attributes:attrs];
+ 
+ [attributedTitle2 beginEditing];
+ [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
+ [attributedTitle2 endEditing];
+ 
+ [attributedTitle appendAttributedString:attributedTitle1];
+ [attributedTitle appendAttributedString:attributedTitle2];
+
+ 
+ 
+ attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0xf06eaa) };
+ attributedTitle = [[NSMutableAttributedString alloc] initWithString:childCont attributes:attrs];
+ 
+ [attributedTitle beginEditing];
+ [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
+ [attributedTitle endEditing];
+ 
+ attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
+ 
+ [attributedTitle1 beginEditing];
+ [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
+ [attributedTitle1 endEditing];
+ 
+ attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"CHILD <26" attributes:attrs];
+ 
+ [attributedTitle2 beginEditing];
+ [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
+ [attributedTitle2 endEditing];
+ 
+ [attributedTitle appendAttributedString:attributedTitle1];
+ [attributedTitle appendAttributedString:attributedTitle2];
+
+*/
 @end

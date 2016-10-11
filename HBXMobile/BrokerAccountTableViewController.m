@@ -1062,7 +1062,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     if ([[segue identifier] isEqualToString:@"Broker Employer Detail"])
     {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         // Get destination view
  //       UITabBarController *tabar=segue.destinationViewController;
         employerTabController *tabar=segue.destinationViewController;

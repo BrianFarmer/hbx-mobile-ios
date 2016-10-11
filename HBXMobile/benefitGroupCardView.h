@@ -7,16 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "brokerEmployersData.h"
 
 @protocol planCardViewDelegate
 
 -(void)scrolltoNextPage:(int)page;
+-(brokerEmployersData*)getEmployer;
 
 @end
 
-@interface benefitGroupCardView : UIView
+@interface benefitGroupCardView : UIView <UITableViewDataSource, UITableViewDelegate>
 {
     int  currrentCard;
+    int  cardCount;
+    
+    NSMutableArray *_planDetails;
+    NSMutableArray *_planDentalDetails;
+    
+    UITableView *planTable;
 }
 
 //@property (nonatomic, assign) int  currrentCard;
@@ -26,6 +34,8 @@
 @property (nonatomic, assign) int  spouseContribution;
 @property (nonatomic, assign) int  dpContribution;
 @property (nonatomic, assign) int  childContribution;
+
+@property (strong, nonatomic) NSArray *po;
 
 @property (nonatomic, retain) NSString      *benefitGroupName;
 @property (nonatomic, retain) NSString      *referencePlan;
