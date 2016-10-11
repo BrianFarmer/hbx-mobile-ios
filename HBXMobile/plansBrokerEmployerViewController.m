@@ -38,7 +38,7 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,175);
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
@@ -109,6 +109,23 @@ alpha:1.0]
         [vHeader addSubview:button];
     }
     [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
+
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
+                                [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
+    
+    NSArray *itemArray = [NSArray arrayWithObjects: @"Active Year", @"In Renewal", nil];
+    UISegmentedControl *planYearControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+    planYearControl.frame = CGRectMake(self.view.frame.size.width/2 - 70, [self.view viewWithTag:30].frame.origin.y + [self.view viewWithTag:30].frame.size.height + 10, 140, 25);
+    [planYearControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    
+    [planYearControl setTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+    
+    [planYearControl addTarget:self action:@selector(MySegmentControlAction:) forControlEvents: UIControlEventValueChanged];
+    planYearControl.selectedSegmentIndex = 0;
+    
+    [self.view addSubview:planYearControl];
 
     CGSize size = [[UIScreen mainScreen] bounds].size;
     CGFloat frameX = size.width;

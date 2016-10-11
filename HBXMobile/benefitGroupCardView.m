@@ -105,7 +105,7 @@ alpha:1.0]
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnPageNo:)];
     [lblPageNo setUserInteractionEnabled:YES];
     [lblPageNo addGestureRecognizer:gesture];
-
+/*
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
                                 [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
@@ -122,7 +122,7 @@ alpha:1.0]
     
     if (cc == 1)
      [self addSubview:planYearControl];
-    
+ */   
     
     UILabel *lblBenefitGroupName = [[UILabel alloc] initWithFrame:CGRectMake(10, 25, 150, 20)];
     lblBenefitGroupName.text = [_po valueForKey:@"benefit_group_name"];
@@ -272,7 +272,7 @@ alpha:1.0]
 if (section == 1)
     return 6;
     
-    return 0;//[[_messageArray objectAtIndex:section] count];
+    return 3;//[[_messageArray objectAtIndex:section] count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -325,10 +325,11 @@ if (section == 1)
     conrtibutionView.tag = 120;
     conrtibutionView.hidden = YES;
     
-    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, 100, 20)];
+    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 100, 20)];
     lblContribution.text = @"CONTRIBUTION LEVELS";
     lblContribution.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
     lblContribution.textColor = UIColorFromRGB(0x555555);
+    lblContribution.textAlignment = NSTextAlignmentLeft;
     [lblContribution sizeToFit];
     [conrtibutionView addSubview:lblContribution];
 
@@ -442,7 +443,7 @@ if (section == 1)
     if (indexPath.section == 0)
     {
 //        NSString *txt = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
-/*
+
         if (indexPath.section == 0 && indexPath.row == 1)
         {
             lblContributionView.hidden = NO;
@@ -478,11 +479,9 @@ if (section == 1)
             cell.textLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0];
             cell.detailTextLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
         }
-        */
     }
     else
     {
-        
         if (indexPath.section == 1 && indexPath.row == 1)
         {
             lblContributionView.hidden = NO;
@@ -519,8 +518,6 @@ if (section == 1)
                 cell.textLabel.text = [[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:0];
             cell.detailTextLabel.text = [[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:1];
         }
-        
-        
     }
     return cell;
 }
@@ -530,20 +527,23 @@ if (section == 1)
     NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:labelText1 attributes:attrs];
     
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    
     [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 24.0 : 32.0] range:NSMakeRange(0, attributedTitle.length)];
     [attributedTitle endEditing];
     
     NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
     
     [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
+    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 16.0 : 18.0] range:NSMakeRange(0, attributedTitle1.length)];
     [attributedTitle1 endEditing];
     
     NSMutableAttributedString *attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:labelText2 attributes:attrs];
     
     [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
+    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 14.0 : 16.0] range:NSMakeRange(0, attributedTitle2.length)];
     [attributedTitle2 endEditing];
     
     [attributedTitle appendAttributedString:attributedTitle1];

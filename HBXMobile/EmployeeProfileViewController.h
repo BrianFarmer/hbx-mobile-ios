@@ -13,11 +13,20 @@
     UIImageView *navImage;
     IBOutlet UIView *vHeader;
     
+    IBOutlet UILabel *pName;
+    IBOutlet UILabel *pStatus_a;
+    IBOutlet UILabel *pStatus_b;
+    
     IBOutlet UITableView *profileTable;
     
     NSArray *sections;
     
     NSMutableIndexSet *expandedSections;
+    
+    NSArray *detailValues;
+    NSArray *dependentValues;
 }
+
+@property (strong, nonatomic) NSArray *employeeData;
 
 @end

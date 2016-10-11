@@ -7,6 +7,7 @@
 //
 
 #import "rosterBrokerEmployerViewController.h"
+#import "EmployeeProfileViewController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -536,11 +537,24 @@ alpha:1.0]
     return cell;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"ShowEmployeeProfile"])
+    {
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        // Get destination view
+        EmployeeProfileViewController *vc = [segue destinationViewController];
+        vc.employeeData = (NSArray*)sender;
+//        vc.bucket = indexPath.section;
+//        vc.type = (brokerEmployersData*)sender;
+
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *po = [rosterList objectAtIndex:indexPath.row] ;
-       [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:nil];
-
+    [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
 
 -(void)sortByStatus:(NSIndexPath*)idx

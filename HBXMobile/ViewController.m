@@ -56,29 +56,47 @@
         [[NSAttributedString alloc]
          initWithString:@"Password"
          attributes:@{NSForegroundColorAttributeName:color}];
+ 
+        int scaleWidth;
         
-        int iLeftPos = self.view.frame.size.width/2 - 150;
+        if (self.view.frame.size.width <= 320)
+            scaleWidth = 250;
+        else
+            scaleWidth = 300;
         
-        submitButton.frame = CGRectMake(iLeftPos, 465, 300, 44);
+        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, self.view.frame.size.height - 200, 180, 170);// submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
+        lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
+
+        submitButton.frame = CGRectMake(self.view.frame.size.width / 2 - scaleWidth/2, bottomView.frame.origin.y - 44, scaleWidth, 44);
+        
+        lblSaveUserID.frame = CGRectMake(submitButton.frame.origin.x, submitButton.frame.origin.y - 50, 150, 40);
+        switchSaveMe.frame = CGRectMake(submitButton.frame.origin.x + scaleWidth - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
+        
+        lblEnableTouchID.frame = CGRectMake(submitButton.frame.origin.x, lblSaveUserID.frame.origin.y - 50, 150, 40);
+        switchTouchId.frame = CGRectMake(submitButton.frame.origin.x + scaleWidth - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
+
+        txtPassword.frame = CGRectMake(submitButton.frame.origin.x, lblEnableTouchID.frame.origin.y - 50, scaleWidth, 40);
+        txtEmail.frame = CGRectMake(submitButton.frame.origin.x, txtPassword.frame.origin.y - 50, scaleWidth, 40);
+
+/*
         txtEmail.frame = CGRectMake(iLeftPos, 200, 300, 40);
         txtPassword.frame = CGRectMake(iLeftPos, 260, 300, 40);
-        lblEnableTouchID.frame = CGRectMake(iLeftPos, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
-        switchTouchId.frame = CGRectMake(iLeftPos + 300 - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
+ lblEnableTouchID.frame = CGRectMake(iLeftPos, txtPassword.frame.origin.y + txtPassword.frame.size.height + 20, 150, 40);
+ switchTouchId.frame = CGRectMake(iLeftPos + 300 - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
         lblSaveUserID.frame = CGRectMake(iLeftPos, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40);
         switchSaveMe.frame = CGRectMake(iLeftPos + 300 - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
-
-                [switchSaveMe setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+*/
+        [switchSaveMe setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
         
         switchSaveMe.thumbTintColor = [UIColor whiteColor];
         switchSaveMe.tintColor = [UIColor whiteColor];
         switchSaveMe.layer.cornerRadius = 16;
         switchSaveMe.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
 
-        
-        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
-        lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
-
-        pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 25, 300, 300 * .333);
+        if (self.view.frame.size.width <= 320)
+            pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-250/2, 25, 250, 250 * .333);
+        else
+            pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 25, 300, 300 * .333);
         
         CALayer *border = [CALayer layer];
         CGFloat borderWidth = 1;
@@ -95,9 +113,8 @@
         [txtPassword.layer addSublayer:border1];
         txtPassword.layer.masksToBounds = YES;
         
-        lblVersion.numberOfLines = 3;
-        lblVersion.lineBreakMode = NSLineBreakByWordWrapping;
-        lblVersion.frame = CGRectMake(self.view.frame.size.width - 50, self.view.frame.size.height - 30, 70, 15);
+        lblVersion.numberOfLines = 1;
+        lblVersion.frame = CGRectMake(self.view.frame.size.width - 50, self.view.frame.size.height - 25, 70, 15);
         lblVersion.text = [NSString stringWithFormat:@"v %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     }
 }
@@ -156,7 +173,10 @@
     if (screenSize.height < 600)
         lblDisclaimer.font = [UIFont fontWithName:@"Roboto-Regular" size:12.0];
 
-
+/***************************
+ ***************************
+ 10-11-16
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && screenSize.height > 600)
     {
         // Place iPhone/iPod specific code here...
@@ -171,7 +191,6 @@
         switchSaveMe.frame = CGRectMake(topView.frame.origin.x + topView.frame.size.width - switchSaveMe.frame.size.width - 40, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
         bottomView.frame = CGRectMake(bottomView.frame.origin.x, bottomView.frame.origin.y + 60, screenSize.width, screenSize.height - (bottomView.frame.origin.y + 60));
         lblDisclaimer.frame = CGRectMake(screenSize.width / 2 - 90, 80, 180, 204);
-        
     }
     else
     {
@@ -210,6 +229,22 @@
     UIView * separator2 = [[UIView alloc] initWithFrame:CGRectMake(22, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 10, topView.frame.size.width - 22, 1)];
     separator2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     [topView addSubview:separator2];
+*/
+    
+    if (!PRODUCTION_BUILD)
+    {
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - 36, 32, 32)];
+        UIImage *img = [UIImage imageNamed:@"gear.png"];
+        [btn setImage:img forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(showConfig:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btn];
+        
+        lblDB = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width /2 - 100, self.view.frame.size.height - 20, 200, 15)];
+        lblDB.textAlignment = NSTextAlignmentCenter;
+        lblDB.font = [UIFont systemFontOfSize:10];
+        lblDB.textColor = [UIColor whiteColor];
+        [self.view addSubview:lblDB];
+    }
 
     submitButton.layer.cornerRadius = 10;
     submitButton.clipsToBounds = YES;

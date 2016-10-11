@@ -536,7 +536,12 @@ alpha:1.0]
  
  //           if (indexPath.section == 1 && indexPath.row == 0)
             {
-                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(210, 55, 200, 200)];
+                int iPos = 170;
+                if (self.view.frame.size.width <= 320)
+                    iPos = 170;
+                else
+                    iPos = 200;
+                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(iPos, 45, iPos, iPos)];
                 [pieChartRight setDelegate:self];
                 [pieChartRight setDataSource:self];
                 [pieChartRight setPieCenter:CGPointMake(60, 60)];
