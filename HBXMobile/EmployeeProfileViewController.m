@@ -419,7 +419,6 @@ alpha:1.0]
     if (indexPath.section == 0)
     {
         cell.textLabel.text = [detailValues objectAtIndex:indexPath.row];
-        
     }
 
     if (indexPath.section == 1)
@@ -455,7 +454,9 @@ alpha:1.0]
 
     if (indexPath.section == 2)
     {
-        cell.detailTextLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+        cell.detailTextLabel.textColor = UIColorFromRGB(0x555555); //[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+        cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:12];
+
         NSArray *po = [_employeeData valueForKey:@"dependents"][indexPath.row];
         cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [po valueForKey:@"first_name"], [po valueForKey:@"middle_name"], [po valueForKey:@"last_name"], [po valueForKey:@"name_suffix"]];
         cell.detailTextLabel.text = [NSString stringWithFormat:@"dob: %@ \tssn: %@ \tgender: %@", [po valueForKey:@"date_of_birth"], [po valueForKey:@"ssn_masked"], [po valueForKey:@"gender"]];
@@ -481,7 +482,7 @@ alpha:1.0]
     NSMutableAttributedString *attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:labelText2 attributes:attrs];
     
     [attributedTitle2 beginEditing];
-    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:14] range:NSMakeRange(0, attributedTitle2.length)];
+    [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:12] range:NSMakeRange(0, attributedTitle2.length)];
     [attributedTitle2 endEditing];
     
 //    [attributedTitle appendAttributedString:attributedTitle1];
