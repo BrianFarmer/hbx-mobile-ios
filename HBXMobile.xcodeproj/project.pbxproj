@@ -94,6 +94,7 @@
 		40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
+		40F63B6B1DAE5ED5006CDA13 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */; };
 		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
 		40F6DDA11D8987020095519C /* open_plus32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9F1D8987020095519C /* open_plus32x32.png */; };
 		40F6DDA31D899F340095519C /* infonormal40_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DDA21D899F340095519C /* infonormal40_text.png */; };
@@ -251,6 +252,8 @@
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
+		40F63B691DAE5ED5006CDA13 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		40F6DD9E1D8987020095519C /* close_arrow32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_arrow32x32.png; sourceTree = "<group>"; };
 		40F6DD9F1D8987020095519C /* open_plus32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_plus32x32.png; sourceTree = "<group>"; };
 		40F6DDA21D899F340095519C /* infonormal40_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infonormal40_text.png; sourceTree = "<group>"; };
@@ -445,6 +448,8 @@
 				139176631D91D80D005864D1 /* benefitGroupCardView.m */,
 				13CBA70E1DA5838100481667 /* EmployeeProfileViewController.h */,
 				13CBA70F1DA5838100481667 /* EmployeeProfileViewController.m */,
+				40F63B691DAE5ED5006CDA13 /* HeaderView.h */,
+				40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -749,6 +754,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40ECFBFC1D8AF2ED003102E5 /* XYPieChart.m in Sources */,
+				40F63B6B1DAE5ED5006CDA13 /* HeaderView.m in Sources */,
 				137327591C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m in Sources */,
 				13FF471A1C8A2C5600C7C851 /* HBXMobile.xcdatamodeld in Sources */,
 				40EEC85A1D5112EE0071FFD5 /* tutorialViewController.m in Sources */,

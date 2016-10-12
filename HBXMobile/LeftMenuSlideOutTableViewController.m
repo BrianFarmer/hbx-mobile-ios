@@ -253,7 +253,10 @@ viewForFooterInSection:(NSInteger)section {
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.backgroundColor = [UIColor clearColor]; //[UIColor colorWithRed:.1 green:.1 blue:.1 alpha:.4];
     
-
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor redColor];
+    [cell setSelectedBackgroundView:bgColorView];
     
     if (indexPath.section == 0)
     {

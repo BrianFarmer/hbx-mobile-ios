@@ -21,3 +21,5 @@ AWSRegionType const DefaultServiceRegionType = AWSRegionUSWest2; //AWSRegionUnkn
 NSString *const CognitoIdentityPoolId = @"enter-poolid-here";
 NSString *const S3BucketName = @"enter_bucket_name";
 */
+
+

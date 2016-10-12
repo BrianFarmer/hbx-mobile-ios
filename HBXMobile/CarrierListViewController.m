@@ -9,6 +9,12 @@
 #import "CarrierListViewController.h"
 #import "SlideNavigationController.h"
 
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:1.0]
+
 @interface CarrierListViewController ()
 
 @end
@@ -27,7 +33,11 @@
     
     [tblCarriers setBackgroundView:nil];
     [tblCarriers setBackgroundColor:[UIColor clearColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
-    [tblCarriers setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"light_blue_gradient.png"]]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = tblCarriers.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[UIColorFromRGB(0x003D62) CGColor], (id)[UIColorFromRGB(0x0074BA) CGColor], nil];
+    [self.view.layer insertSublayer:gradient atIndex:0];
 
     NSURL *url = [NSURL URLWithString:@"https://dchealthlink.com/shared/json/carriers.json"];
     data = [NSData dataWithContentsOfURL:url];
@@ -37,7 +47,6 @@
         NSError *error = nil;
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,8 +81,15 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:simpleTableIdentifier];
     }
+
+    cell.backgroundColor = [UIColor clearColor];
+
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor redColor];
+    [cell setSelectedBackgroundView:bgColorView];
     
-    cell.backgroundColor = [UIColor colorWithRed:.1 green:.1 blue:.1 alpha:.4];
+//    cell.backgroundColor = [UIColor colorWithRed:.1 green:.1 blue:.1 alpha:.4];
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
     
@@ -86,31 +102,6 @@
     if ([cell.detailTextLabel.text length] == 0)
         cell.detailTextLabel.text = [pItem valueForKey:@"phone"];        
     
-    /*
-    if (indexPath.row == 0)
-    {
-        cell.textLabel.text = @"Aetna";
-        cell.detailTextLabel.text = @"1-855-319-7290";
-    }
-    
-    if (indexPath.row == 1)
-    {
-        cell.textLabel.text = @"CareFirst";
-        cell.detailTextLabel.text = @"1-855-444-3119";
-    }
-    
-    if (indexPath.row == 2)
-    {
-        cell.textLabel.text = @"Kaiser Permanente";
-        cell.detailTextLabel.text = @"1-800-777-7902";
-    }
-    
-    if (indexPath.row == 3)
-    {
-        cell.textLabel.text = @"UnitedHealthcare";
-        cell.detailTextLabel.text = @"1-877-856-2430";
-    }
-    */
     return cell;
     
 }

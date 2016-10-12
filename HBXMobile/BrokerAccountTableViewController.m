@@ -700,7 +700,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         if ((section == 0 && clients_needing_immediate_attention > 0) || section > 0)
         {
             UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, 20)];
-            subHeaderView.backgroundColor = UIColorFromRGB(0xD9D9D9);
+            subHeaderView.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD9D9D9);
             
             UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
             headerTitle.text = @"CLIENT";
@@ -844,7 +844,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     if (ttype.type == 1)
     {
-        cell.backgroundColor = UIColorFromRGB(0xD0D0D0);
+        cell.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD0D0D0);
 
         cell.employerLabel.text = @"";
         cell.employeesLabel.text = @"";

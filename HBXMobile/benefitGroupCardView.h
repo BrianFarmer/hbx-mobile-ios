@@ -42,6 +42,6 @@
 
 @property (nonatomic, weak)id<planCardViewDelegate> delegate;
 
--(void)layoutView:(int)cp totalPages:(int)tp;
+-(void)layoutView:(int)cp totalPages:(NSInteger)tp;
 
 @end

@@ -64,19 +64,45 @@
         else
             scaleWidth = 300;
         
-        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, self.view.frame.size.height - 200, 180, 170);// submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
+        int iStart = self.view.frame.size.height;
+        if (self.view.frame.size.height > 600)
+        {
+            if (self.view.frame.size.height > 700)
+                iStart = 250;
+            else
+                iStart = 250;
+        }
+        else
+            iStart = 200;
+        
+        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, self.view.frame.size.height - iStart, 180, 170);// submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
         lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
 
         submitButton.frame = CGRectMake(self.view.frame.size.width / 2 - scaleWidth/2, bottomView.frame.origin.y - 44, scaleWidth, 44);
         
-        lblSaveUserID.frame = CGRectMake(submitButton.frame.origin.x, submitButton.frame.origin.y - 50, 150, 40);
+        lblSaveUserID.frame = CGRectMake(submitButton.frame.origin.x, submitButton.frame.origin.y - 70, 150, 40);
         switchSaveMe.frame = CGRectMake(submitButton.frame.origin.x + scaleWidth - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
-        
-        lblEnableTouchID.frame = CGRectMake(submitButton.frame.origin.x, lblSaveUserID.frame.origin.y - 50, 150, 40);
-        switchTouchId.frame = CGRectMake(submitButton.frame.origin.x + scaleWidth - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
 
-        txtPassword.frame = CGRectMake(submitButton.frame.origin.x, lblEnableTouchID.frame.origin.y - 50, scaleWidth, 40);
-        txtEmail.frame = CGRectMake(submitButton.frame.origin.x, txtPassword.frame.origin.y - 50, scaleWidth, 40);
+        BOOL hasTouchID = NO;
+        
+        if ([LAContext class]) {
+            LAContext *context = [LAContext new];
+            NSError *error = nil;
+            hasTouchID = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
+            
+            if (hasTouchID)
+            {
+                lblEnableTouchID.frame = CGRectMake(submitButton.frame.origin.x, lblSaveUserID.frame.origin.y - 50, 150, 40);
+                switchTouchId.frame = CGRectMake(submitButton.frame.origin.x + scaleWidth - switchTouchId.frame.size.width, lblEnableTouchID.frame.origin.y + 5, switchTouchId.frame.size.width, 40);
+            }
+        }
+        
+        if (hasTouchID)
+            txtPassword.frame = CGRectMake(submitButton.frame.origin.x, lblEnableTouchID.frame.origin.y - 65, scaleWidth, 40);
+        else
+            txtPassword.frame = CGRectMake(submitButton.frame.origin.x, lblSaveUserID.frame.origin.y - 80, scaleWidth, 40);
+        
+        txtEmail.frame = CGRectMake(submitButton.frame.origin.x, txtPassword.frame.origin.y - 60, scaleWidth, 40);
 
 /*
         txtEmail.frame = CGRectMake(iLeftPos, 200, 300, 40);
@@ -96,7 +122,7 @@
         if (self.view.frame.size.width <= 320)
             pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-250/2, 25, 250, 250 * .333);
         else
-            pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 25, 300, 300 * .333);
+            pLogoOnTop.frame = CGRectMake(self.view.frame.size.width/2-300/2, 35, 300, 300 * .333);
         
         CALayer *border = [CALayer layer];
         CGFloat borderWidth = 1;

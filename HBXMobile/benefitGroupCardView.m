@@ -56,36 +56,17 @@ alpha:1.0]
     
     _planDetails = [[NSMutableArray alloc] init];
     [_planDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
-
     [_planDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
-
     [_planDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"health"] valueForKey:@"reference_plan_name"], nil]];
 
 
-    
     _planDentalDetails = [[NSMutableArray alloc] init];
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
-    
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
-
-//    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\u2022 %@", @"BlueDental Preferred"],  [NSString stringWithFormat:@"\u2022 %@", @"BlueDental Traditional"],  [NSString stringWithFormat:@"\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
-
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Preferred"], nil]];
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Traditional"], nil]];
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
-
-    
     [_planDentalDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"dental"] valueForKey:@"reference_plan_name"], nil]];
-
-//    UIView *_innerView = [[UIView alloc] initWithFrame:self.bounds];
-//    _innerView.clipsToBounds = YES;
-//    [self addSubview:_innerView];
-//    plansBrokerEmployerViewController *pView = (plansBrokerEmployerViewController*)[[self superview] superview];
-    
-//    brokerEmployersData *employerData = pView.employerData;
-    
-    
-    
     
     currrentCard = cc;
     cardCount = totalCards;
@@ -143,65 +124,10 @@ alpha:1.0]
     [planTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
     [self addSubview:planTable];
 
-    return;
-    
-    UILabel *lblPlans = [[UILabel alloc] initWithFrame:CGRectMake(10,85,150, 20)];
-    lblPlans.text = @"PLANS OFFERED";
-    lblPlans.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
-    lblPlans.textColor = UIColorFromRGB(0x555555);
-    [lblPlans sizeToFit];
-    [self addSubview:lblPlans];
-    
-    UILabel *lblPlansName = [[UILabel alloc] initWithFrame:CGRectMake(10,105,150, 20)];
-    lblPlansName.text = @"ALL Kaiser plans (any Metal Level)";
-    lblPlansName.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
-    lblPlansName.textColor = UIColorFromRGB(0x555555);
-    [lblPlansName sizeToFit];
-    [self addSubview:lblPlansName];
-    
-    UILabel *lblEligibility= [[UILabel alloc] initWithFrame:CGRectMake(10,155,100, 20)];
-    lblEligibility.text = @"ELIGIBILITY ";
-    lblEligibility.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
-    lblEligibility.textColor = UIColorFromRGB(0x555555);
-    [lblEligibility sizeToFit];
-    [self addSubview:lblEligibility];
-    
-    UILabel *lblEligibilityText = [[UILabel alloc] initWithFrame:CGRectMake(10, 175, self.frame.size.width - 10, 20)];
-    lblEligibilityText.text = @"First of the month following or coiciding with data of hire.";
-    lblEligibilityText.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
-    lblEligibilityText.textColor = UIColorFromRGB(0x555555);
-    lblEligibilityText.numberOfLines = 2;
-    [lblEligibilityText sizeToFit];
-    [self addSubview:lblEligibilityText];
-    
-    UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(10,235,100, 20)];
-    lblContribution.text = @"CONTRIBUTION LEVELS";
-    lblContribution.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
-    lblContribution.textColor = UIColorFromRGB(0x555555);
-    [lblContribution sizeToFit];
-    [self addSubview:lblContribution];
 
-    
-    int uu = self.frame.origin.y + self.frame.size.height;// - 40;
-    
-    UILabel *lblReference = [[UILabel alloc] initWithFrame:CGRectMake(10,375,100, 20)];
-    lblReference.text = @"REFERENCE PLAN";
-    lblReference.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
-    lblReference.textColor = UIColorFromRGB(0x555555);
-        [lblReference sizeToFit];
-    [self addSubview:lblReference];
-    
-    UILabel *lblReferenceText = [[UILabel alloc] initWithFrame:CGRectMake(10,395,100, 20)];
-    lblReferenceText.text = @"KP DC Silver 2000/35/Dental";
-    lblReferenceText.font = [UIFont fontWithName:@"Roboto-Regular" size:14.0f];
-    lblReferenceText.textColor = UIColorFromRGB(0x555555);
-        [lblReferenceText sizeToFit];
-    [self addSubview:lblReferenceText];
-
-    
 //    [self layer].anchorPoint = CGPointMake(0.0f, 0.0f);
 //    self.transform = CGAffineTransformMakeScale(2, 2);
-    
+/*
     if (scale < 1)
     {
         for (UIView *subview in [self subviews]) {
@@ -215,8 +141,7 @@ alpha:1.0]
         
         }
     }
-
- 
+*/
  /*
     lblContributionEmployee.transform = CGAffineTransformScale(CGAffineTransformIdentity, fScale, fScale);
     lblContributionSpouse.transform = CGAffineTransformScale(CGAffineTransformIdentity, fScale, fScale);
@@ -225,14 +150,6 @@ alpha:1.0]
 */
  //   [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :self];
 
-}
-
-- (void)MySegmentControlAction:(UISegmentedControl *)segment
-{
-    if(segment.selectedSegmentIndex == 0)
-    {
-        // code for the first button
-    }
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -261,24 +178,19 @@ alpha:1.0]
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
-    
     return 2;//[_messageArray count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 1)
+        return 6;
     
-if (section == 1)
-    return 6;
-    
-    return 3;//[[_messageArray objectAtIndex:section] count];
+    return 3;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-
-    
     return 34.0;
 }
 
@@ -551,76 +463,4 @@ if (section == 1)
 
     return attributedTitle;
 }
-/*
-attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e) };
-attributedTitle = [[NSMutableAttributedString alloc] initWithString:spouseCont attributes:attrs];
-
-[attributedTitle beginEditing];
-[attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
-[attributedTitle endEditing];
-
-attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
-
-[attributedTitle1 beginEditing];
-[attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
-[attributedTitle1 endEditing];
-
-attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"SPOUSE" attributes:attrs];
-
-[attributedTitle2 beginEditing];
-[attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
-[attributedTitle2 endEditing];
-
-[attributedTitle appendAttributedString:attributedTitle1];
-[attributedTitle appendAttributedString:attributedTitle2];
- 
- 
- 
- attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8) };
- attributedTitle = [[NSMutableAttributedString alloc] initWithString:partnerCont attributes:attrs];
- 
- [attributedTitle beginEditing];
- [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
- [attributedTitle endEditing];
- 
- attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
- 
- [attributedTitle1 beginEditing];
- [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
- [attributedTitle1 endEditing];
- 
- attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"DOMESTIC\nPARTNER" attributes:attrs];
- 
- [attributedTitle2 beginEditing];
- [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
- [attributedTitle2 endEditing];
- 
- [attributedTitle appendAttributedString:attributedTitle1];
- [attributedTitle appendAttributedString:attributedTitle2];
-
- 
- 
- attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0xf06eaa) };
- attributedTitle = [[NSMutableAttributedString alloc] initWithString:childCont attributes:attrs];
- 
- [attributedTitle beginEditing];
- [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:32.0] range:NSMakeRange(0, attributedTitle.length)];
- [attributedTitle endEditing];
- 
- attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
- 
- [attributedTitle1 beginEditing];
- [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:18] range:NSMakeRange(0, attributedTitle1.length)];
- [attributedTitle1 endEditing];
- 
- attributedTitle2 = [[NSMutableAttributedString alloc] initWithString:@"CHILD <26" attributes:attrs];
- 
- [attributedTitle2 beginEditing];
- [attributedTitle2 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:16] range:NSMakeRange(0, attributedTitle2.length)];
- [attributedTitle2 endEditing];
- 
- [attributedTitle appendAttributedString:attributedTitle1];
- [attributedTitle appendAttributedString:attributedTitle2];
-
-*/
 @end

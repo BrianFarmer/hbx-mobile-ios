@@ -39,6 +39,8 @@ alpha:1.0]
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,175);
+    [vHeader layoutHeaderView:employerData];
+    
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
@@ -74,41 +76,6 @@ alpha:1.0]
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
     
-    for (int btnCount=0;btnCount<4;btnCount++)
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag=30+btnCount;
-        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
-        [button setBackgroundColor:[UIColor clearColor]];
-        UIImage *btnImage;
-        switch(btnCount)
-        {
-            case 0:
-                btnImage = [UIImage imageNamed:@"phone.png"];
-                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 1:
-                btnImage = [UIImage imageNamed:@"message.png"];
-                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 2:
-                btnImage = [UIImage imageNamed:@"location.png"];
-                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 3:
-                btnImage = [UIImage imageNamed:@"email.png"];
-                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-        }
-        
-        button.contentMode = UIViewContentModeScaleToFill;
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        [button setImage:btnImage forState:UIControlStateNormal];
-        
-        [vHeader addSubview:button];
-    }
-    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
 
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -122,14 +89,14 @@ alpha:1.0]
     
     [planYearControl setTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
     
-    [planYearControl addTarget:self action:@selector(MySegmentControlAction:) forControlEvents: UIControlEventValueChanged];
+    [planYearControl addTarget:self action:@selector(HandleSegmentControlAction:) forControlEvents: UIControlEventValueChanged];
     planYearControl.selectedSegmentIndex = 0;
     
     [self.view addSubview:planYearControl];
 
     CGSize size = [[UIScreen mainScreen] bounds].size;
     CGFloat frameX = size.width;
-    CGFloat frameY = size.height-30; //padding for UIpageControl
+    CGFloat frameY = size.height-30; 
 
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height)]; //155, frameX, 200)];
                                  
@@ -148,34 +115,29 @@ alpha:1.0]
     for(int i = 0; i < [po count]; i++)
     {
         benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 30)];
-        cardView.benefitGroupName = @"CEO's & Managers";
         cardView.po = [po objectAtIndex:i];
         cardView.delegate = self;
+        cardView.tag = 300+i;
         [cardView layoutView:i+1 totalPages:[po count]];
         cardView.layer.cornerRadius = 3;
-        
-
 /*
         cardView.layer.masksToBounds = NO;
         cardView.layer.shadowOffset = CGSizeMake(-2, 5);
         cardView.layer.shadowRadius = 5;
         cardView.layer.shadowOpacity = 0.5;
-        
         cardView.layer.shadowPath = [UIBezierPath bezierPathWithRect:cardView.bounds].CGPath;
 */        
         [scrollView addSubview:cardView];
     }
     
-    scrollView.contentSize = CGSizeMake(frameX*3, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40);//200);
-//    int iht = self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40;
-//    int uu = scrollView.frame.origin.y;
+    scrollView.contentSize = CGSizeMake(frameX*[po count], self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40);//200);
+
     
     // Init Page Control
     pageControl = [[UIPageControl alloc] init];
 //    pageControl.frame = CGRectMake(10, scrollView.frame.origin.y - 20, scrollView.frame.size.width, 20);
     //369+165
     pageControl.frame = CGRectMake(10,self.tabBarController.tabBar.frame.origin.y - 20,scrollView.frame.size.width-20, 20);
-//   benefitGroupCardView.frame.origin.y + benefitGroupCardView.frame.size.height, scrollView.frame.size.width, 20);
     pageControl.numberOfPages = [po count];
     pageControl.currentPage = 0;
     pageControl.backgroundColor = [UIColor clearColor];
@@ -189,40 +151,80 @@ alpha:1.0]
 -(void)scrolltoNextPage:(int)page
 {
     [scrollView setContentOffset:CGPointMake(scrollView.frame.size.width*page, 0.0f) animated:YES];
-//    scroll.contentOffset = CGPointMake(scroll.frame.size.width*pageNo, 0);
 }
 
-- (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
-    int widthOfAllButtons = 0;
-    for (int i = 0; i < buttonArray.count; i++) {
-        UIButton *thisButton = [buttonArray objectAtIndex:i];
-        //    [thisButton setCenter:CGPointMake(0, thisView.frame.size.height / 2.0)];
-        widthOfAllButtons = widthOfAllButtons + thisButton.frame.size.width;
-    }
-    
-    int spaceBetweenButtons = (thisView.frame.size.width - widthOfAllButtons) / (buttonArray.count + 1);
-    
-    UIButton *lastButton = nil;
-    for (int i = 0; i < buttonArray.count; i++) {
-        UIButton *thisButton = [buttonArray objectAtIndex:i];
-        if (lastButton == nil) {
-            [thisButton setFrame:CGRectMake(spaceBetweenButtons, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
-        } else {
-            [thisButton setFrame:CGRectMake(spaceBetweenButtons + lastButton.frame.origin.x + lastButton.frame.size.width, thisButton.frame.origin.y, thisButton.frame.size.width, thisButton.frame.size.height)];
-        }
-        
-        lastButton = thisButton;
-    }
-    
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidScroll:(UIScrollView *)sView
 {
-    int width = scrollView.frame.size.width;
-    float xPos = scrollView.contentOffset.x+10;
+    int width = sView.frame.size.width;
+    float xPos = sView.contentOffset.x+10;
     
     //Calculate the page we are on based on x coordinate position and width of scroll view
     pageControl.currentPage = (int)xPos/width;
+}
+
+- (void)HandleSegmentControlAction:(UISegmentedControl *)segment
+{
+    if(segment.selectedSegmentIndex == 0)
+    {
+        for(UIView *subview in [scrollView subviews]) {
+            [subview removeFromSuperview];
+        }
+        
+        CGSize size = [[UIScreen mainScreen] bounds].size;
+        CGFloat frameX = size.width;
+        
+        NSArray *pRenewal = [[[self getEmployer] valueForKey:@"plan_offerings"] valueForKey:@"active"];
+        
+        for(int i = 0; i < [pRenewal count]; i++)
+        {
+            benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 30)];
+            cardView.po = [pRenewal objectAtIndex:i];
+            cardView.delegate = self;
+            cardView.tag = 300+i;
+            [cardView layoutView:i+1 totalPages:[pRenewal count]];
+            cardView.layer.cornerRadius = 3;
+            
+            [scrollView addSubview:cardView];
+        }
+        
+        pageControl.numberOfPages = [pRenewal count];
+    }
+    
+    if(segment.selectedSegmentIndex == 1)
+    {
+        /*
+         NSArray *po = [[[self getEmployer] valueForKey:@"plan_offerings"] valueForKey:@"active"];
+         
+         for(int i = 0; i < [po count]; i++)
+         {
+             benefitGroupCardView *cardView = [self.view viewWithTag:300+i];
+             [cardView removeFromSuperview];
+         }
+        */
+        for(UIView *subview in [scrollView subviews]) {
+            [subview removeFromSuperview];
+        }
+
+        CGSize size = [[UIScreen mainScreen] bounds].size;
+        CGFloat frameX = size.width;
+
+        NSArray *pRenewal = [[[self getEmployer] valueForKey:@"plan_offerings"] valueForKey:@"renewal"];
+        
+        for(int i = 0; i < [pRenewal count]; i++)
+        {
+            benefitGroupCardView *cardView = [[benefitGroupCardView alloc] initWithFrame:CGRectMake(frameX * i + 10, 10.0, frameX - 20, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 30)];
+            cardView.po = [pRenewal objectAtIndex:i];
+            cardView.delegate = self;
+            cardView.tag = 300+i;
+            [cardView layoutView:i+1 totalPages:[pRenewal count]];
+            cardView.layer.cornerRadius = 3;
+ 
+            [scrollView addSubview:cardView];
+        }
+        
+        pageControl.numberOfPages = [pRenewal count];
+    }
+
 }
 
 -(NSDictionary*)getEmployer

@@ -12,8 +12,9 @@
 #import "benefitGroupCardView.h"
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
+#import "HeaderView.h"
 
-@interface plansBrokerEmployerViewController : UIViewController <planCardViewDelegate>
+@interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate>
 {
     UIPageControl *pageControl;
 //    UISegmentedControl *planYearControl;
@@ -21,7 +22,7 @@
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
     
-    IBOutlet UIView *vHeader;
+    IBOutlet HeaderView *vHeader;
     
     brokerEmployersData *employerData;
     UIImageView *navImage;

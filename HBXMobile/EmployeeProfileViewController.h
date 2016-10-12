@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HeaderView.h"
+#import "brokerEmployersData.h"
 
 @interface EmployeeProfileViewController : UIViewController
 {
     UIImageView *navImage;
-    IBOutlet UIView *vHeader;
+    IBOutlet HeaderView *vHeader;
     
     IBOutlet UILabel *pName;
     IBOutlet UILabel *pStatus_a;
@@ -28,5 +30,5 @@
 }
 
 @property (strong, nonatomic) NSArray *employeeData;
-
+@property (strong, nonatomic) brokerEmployersData *employerData;
 @end

@@ -10,13 +10,14 @@
 #import "brokerEmployersData.h"
 #import "popupMessageBox.h"
 #import "XYGraph/XYPieChart.h"
+#import "HeaderView.h"
 
 @interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate>
 {
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
     
-    IBOutlet UIView *vHeader;
+    IBOutlet HeaderView *vHeader;
     
     IBOutlet UITableView *detailTable;
     

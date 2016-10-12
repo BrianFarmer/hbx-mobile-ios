@@ -73,5 +73,4 @@ alpha:1.0]
     //    self.secondViewController = (YourSecondViewController*) viewController;
     //    self.secondViewController.aLabel.text = self.stringFromTableViewController;
 }
-
 @end

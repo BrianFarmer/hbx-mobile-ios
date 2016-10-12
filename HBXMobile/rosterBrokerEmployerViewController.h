@@ -10,6 +10,7 @@
 #import "brokerEmployersData.h"
 #import "employerTabController.h"
 #import "UISlideView.h"
+#import "HeaderView.h"
 
 @interface rosterBrokerEmployerViewController : UIViewController <uiSlideViewDelegate>
 {
@@ -18,7 +19,7 @@
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
     
-    IBOutlet UIView *vHeader;
+    IBOutlet HeaderView *vHeader;
 
     brokerEmployersData *employerData;
     UIImageView *navImage;

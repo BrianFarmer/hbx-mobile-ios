@@ -41,6 +41,8 @@ alpha:1.0]
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+    [vHeader layoutHeaderView:employerData];
+    
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
@@ -82,41 +84,6 @@ alpha:1.0]
     pRosterTable.sectionIndexColor = [UIColor darkGrayColor];
     pRosterTable.sectionIndexBackgroundColor = [UIColor clearColor];
     
-    for (int btnCount=0;btnCount<4;btnCount++)
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag=30+btnCount;
-        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
-        [button setBackgroundColor:[UIColor clearColor]];
-        UIImage *btnImage;
-        switch(btnCount)
-        {
-            case 0:
-                btnImage = [UIImage imageNamed:@"phone.png"];
-                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 1:
-                btnImage = [UIImage imageNamed:@"message.png"];
-                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 2:
-                btnImage = [UIImage imageNamed:@"location.png"];
-                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 3:
-                btnImage = [UIImage imageNamed:@"email.png"];
-                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-        }
-        
-        button.contentMode = UIViewContentModeScaleToFill;
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        [button setImage:btnImage forState:UIControlStateNormal];
-        
-        [vHeader addSubview:button];
-    }
-    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
     
      [self loadDictionary];
    /*
@@ -545,9 +512,7 @@ alpha:1.0]
         // Get destination view
         EmployeeProfileViewController *vc = [segue destinationViewController];
         vc.employeeData = (NSArray*)sender;
-//        vc.bucket = indexPath.section;
-//        vc.type = (brokerEmployersData*)sender;
-
+        vc.employerData = employerData;
     }
 }
 

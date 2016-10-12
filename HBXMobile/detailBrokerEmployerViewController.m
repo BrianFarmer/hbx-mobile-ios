@@ -50,7 +50,9 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);//115);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+    [vHeader layoutHeaderView:employerData];
+    
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width-20, 65);
 
@@ -91,45 +93,7 @@ alpha:1.0]
 
     detailTable.backgroundColor = [UIColor clearColor];
     detailTable.backgroundView = nil;
-    
-    for (int btnCount=0;btnCount<4;btnCount++)
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag=30+btnCount;
-        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
-        [button setBackgroundColor:[UIColor clearColor]];
-        UIImage *btnImage;
-        switch(btnCount)
-        {
-            case 0:
-                btnImage = [UIImage imageNamed:@"phone.png"];
-                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 1:
-                btnImage = [UIImage imageNamed:@"message.png"];
-                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 2:
-                btnImage = [UIImage imageNamed:@"location.png"];
-                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 3:
-                btnImage = [UIImage imageNamed:@"email.png"];
-                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-        }
         
-        button.contentMode = UIViewContentModeScaleToFill;
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        [button setImage:btnImage forState:UIControlStateNormal];
-        
-        [vHeader addSubview:button];
-    }
-    
-    //    [self evenlySpaceTheseButtonsInThisView:@[button, button1, button2, button3] :self.view];
-    [self evenlySpaceTheseButtonsInThisView:@[[self.view viewWithTag:30], [self.view viewWithTag:31], [self.view viewWithTag:32], [self.view viewWithTag:33]] :self.view];
-    
     ((employerTabController *) self.tabBarController).detailDictionary = [self loadDictionary];
     
     int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
@@ -184,9 +148,6 @@ alpha:1.0]
             renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
             renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], nil];
         }
-
-        
-        
     }
     else
     {
