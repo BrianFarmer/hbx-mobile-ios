@@ -111,7 +111,10 @@ alpha:1.0]
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
-    
+
+    NSDateFormatter *out = [[NSDateFormatter alloc] init];
+    [out setDateFormat:@"MMM dd, yyyy"];
+
     NSDate *endDate = [f dateFromString:employerData.open_enrollment_ends];
     
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -124,7 +127,7 @@ alpha:1.0]
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
     [numberFormatter setMaximumFractionDigits:2];
 
-    if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS)
+    if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS || employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
     {
         NSDate *employerApplicationDate = [f dateFromString:employerData.renewal_application_due];
         NSDate *planYearDate = [f dateFromString:employerData.planYear]; //plan_year_begins
@@ -136,17 +139,26 @@ alpha:1.0]
                                                                toDate:employerApplicationDate
                                                               options:NSCalendarWrapComponents];
         
-        [f setDateFormat:@"MMM dd, yyyy"];
         
-        if ([employerData.binder_payment_due length] > 0)
+        if (employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
         {
-            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
-            renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
+            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Renewal Available", @"Next Coverage Year Begins", @"Open Enrollment Ends", nil];
+            renewalValues = [[NSArray alloc] initWithObjects: @"0", [out stringFromDate:[f dateFromString:employerData.renewal_application_available]], [out stringFromDate:planYearDate], [out stringFromDate:[f dateFromString:employerData.open_enrollment_ends]], nil];
         }
         else
         {
-            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
-            renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], nil];
+            [f setDateFormat:@"MMM dd, yyyy"];
+
+            if ([employerData.binder_payment_due length] > 0)
+            {
+                renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
+                renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], [f stringFromDate:binderDate], nil];
+            }
+            else
+            {
+                renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", nil];
+                renewalValues = [[NSArray alloc] initWithObjects: @"0", [NSString stringWithFormat:@"%ld days left", (long)[components1 day]], [NSString stringWithFormat:@"%ld days left", (long)[components day]], [f stringFromDate:planYearDate], nil];
+            }
         }
     }
     else
