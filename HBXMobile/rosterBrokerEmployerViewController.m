@@ -315,30 +315,19 @@ alpha:1.0]
 }
 
 - (void)handleTap:(UIButton *)sender {
-//    UILabel *lblStatus = (UILabel*)sender.view;
-    
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
-//        lblStatus.backgroundColor = [UIColor lightGrayColor];
-//    [self.tableView beginUpdates];
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
-//    [self tableView:self.tableView didSelectHeader:indexPath];
-    
-//    [self.tableView endUpdates];
-    //    [self.tableView reloadData];
     [sender setBackgroundColor:[UIColor clearColor]];
     
     UIImage *pImage = [UIImage imageNamed:@"CloseCaret.png"];
     [sender setImage:pImage forState:UIControlStateNormal];
-
-//    [pRosterTable setUserInteractionEnabled:FALSE];
-    
-//    [self.view bringSubviewToFront:slideView];
     
     [slideView handleLeftSwipe];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
+    NSArray *indexes = [tableView indexPathsForVisibleRows];
+    if ([indexes count] >= [sectionIndex count])
+        return nil;
     return sectionIndex;//[[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", nil];
 }
 

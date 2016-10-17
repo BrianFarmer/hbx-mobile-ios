@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Settings.h"
 
 @interface ConfigViewController : UIViewController <UITextFieldDelegate>
 {
@@ -19,5 +20,11 @@
     NSMutableIndexSet *expandedCell;
     
     int eUseWhichServer;
+    
+    IBOutlet UISegmentedControl *planControl;
+    
+    IBOutlet UILabel *lblPlanScreen;
 }
+
+-(IBAction)HandleSegmentControlAction:(id)sender;
 @end

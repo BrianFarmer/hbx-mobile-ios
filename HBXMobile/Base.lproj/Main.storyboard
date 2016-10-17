@@ -124,7 +124,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="267.5" y="-457.5"/>
+            <point key="canvasLocation" x="297" y="-545"/>
         </scene>
         <!--Config View Controller-->
         <scene sceneID="UVr-1Y-zBR">
@@ -134,8 +134,8 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="50u-bg-aW8">
-                                <frame key="frameInset" minX="40" minY="391" width="240" height="128"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="50u-bg-aW8">
+                                <frame key="frameInset" minX="67" minY="102" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
@@ -143,17 +143,37 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                     <outlet property="delegate" destination="TLe-x9-diw" id="NHj-qu-VSy"/>
                                 </connections>
                             </tableView>
+                            <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Nit-Jc-Ac8">
+                                <frame key="frameInset" minX="94" minY="291" width="194" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Version 1"/>
+                                    <segment title="Version 2"/>
+                                </segments>
+                                <connections>
+                                    <action selector="HandleSegmentControlAction:" destination="TLe-x9-diw" eventType="valueChanged" id="kx5-Td-TQD"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Plans Tab Screen" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Em6-53-jCc">
+                                <frame key="frameInset" minX="104" minY="262" width="167" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="Esl-W4-hby"/>
                     <connections>
                         <outlet property="configTable" destination="50u-bg-aW8" id="jaQ-oV-aVE"/>
+                        <outlet property="lblPlanScreen" destination="Em6-53-jCc" id="EFc-cJ-eGg"/>
+                        <outlet property="planControl" destination="Nit-Jc-Ac8" id="24H-c6-i5B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Owb-cq-jgG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="734" y="-662"/>
+            <point key="canvasLocation" x="733.5" y="-662.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="cWB-5V-TK3">
@@ -250,7 +270,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bx4-zv-5IY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="791" y="-704"/>
+            <point key="canvasLocation" x="1295" y="-679"/>
         </scene>
         <!--Broker Search Result Table View Controller-->
         <scene sceneID="mZ9-Fr-lh3">

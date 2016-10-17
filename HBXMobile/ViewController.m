@@ -74,8 +74,10 @@
         }
         else
             iStart = 200;
+
+        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, self.view.frame.size.height - iStart, 180, 170);// submitButton.frame.origin.y +
         
-        bottomView.frame = CGRectMake(self.view.frame.size.width / 2 - 90, self.view.frame.size.height - iStart, 180, 170);// submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
+       // bottomView.frame = CGRectMake(0, self.view.frame.size.height - iStart, self.view.frame.size.width, 170);// submitButton.frame.origin.y + submitButton.frame.size.height + 10, 300, 200);
         lblDisclaimer.frame = CGRectMake(0, 0, 180, 204);
 
         submitButton.frame = CGRectMake(self.view.frame.size.width / 2 - scaleWidth/2, bottomView.frame.origin.y - 44, scaleWidth, 44);
@@ -326,6 +328,9 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
+    Settings *obj=[Settings getInstance];
+    obj.iPlanVersion = 1;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -947,7 +952,7 @@
             NSLog(@"%@\n", csrfToken);
         }
     
-    http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
+//    http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
     
     switch (REQUEST_TYPE) {
         case GET_BROKER_ID:

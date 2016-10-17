@@ -72,14 +72,6 @@ alpha:1.0]
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
 
-
-    
-    
-    
-    
-    
-    
-    
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
@@ -250,11 +242,10 @@ alpha:1.0]
             [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[_employeeData valueForKey:@"dependents"] count]] forState:UIControlStateNormal];
         else
         {
-            UIImage *btnImage = [UIImage imageNamed:@"open_plus32x32.png"];
-            [button setImage:btnImage forState:UIControlStateNormal];
+            button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:24.0];
+            [button setTitle:[NSString stringWithFormat:@"%@", @"+"] forState:UIControlStateNormal];
         }
         
- //       [button setTitle:[NSString stringWithFormat:@"%@", @"+"] forState:UIControlStateNormal];
         [headerView addSubview:button];
     }
     
@@ -286,9 +277,25 @@ alpha:1.0]
     [profileTable endUpdates];
     
     if ([expandedSections containsIndex:pHeaderView.tag])
+    {
+        if ([profileTable numberOfRowsInSection:pHeaderView.tag] > 0)
+            [profileTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+}
+
+- (void)handleButtonTap:(id)sender {
+    UIView *pHeaderView = (UIView*)sender;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [profileTable beginUpdates];
+    [profileTable reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:profileTable didSelectHeader:indexPath];
+    
+    [profileTable endUpdates];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
         [profileTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
- 
- 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectHeader:(NSIndexPath *)indexPath
@@ -312,7 +319,8 @@ alpha:1.0]
         else
         {
             [expandedSections addIndex:section];
-            rows = [self tableView:tableView numberOfRowsInSection:section];
+            if ((rows = [self tableView:tableView numberOfRowsInSection:section]) == 0)
+                [expandedSections removeIndex:section];
         }
         
         for (int i=0; i<rows; i++) ///(DB) modified this from i=1 to i=0 to account for viewHeader being clicked and not first row.
@@ -404,21 +412,24 @@ alpha:1.0]
             UILabel *lblContributionSpouse = (UILabel *)[cell viewWithTag:122];
             UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
 
-            NSString *empCont =   [[lo valueForKey:@"total_premium"] stringValue];
-            lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
-            
-            [lblContributionEmployee sizeToFit];
-            
-            NSString *spouseCont =   [[lo valueForKey:@"employer_contribution"] stringValue];
-            lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
-            
-            [lblContributionSpouse sizeToFit];
-            
-            NSString *partnerCont =   [[lo valueForKey:@"employee_cost"] stringValue];
-            lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"\nYOU PAY" color:UIColorFromRGB(0x625ba8)];
-            
-            [lblContributionPartner sizeToFit];
-            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner] :lblContributionView];
+            if (![[lo valueForKey:@"status"] isEqualToString:@"Not Enrolled"])
+            {
+                NSString *empCont =   [[lo valueForKey:@"total_premium"] stringValue];
+                lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
+                
+                [lblContributionEmployee sizeToFit];
+                
+                NSString *spouseCont =   [[lo valueForKey:@"employer_contribution"] stringValue];
+                lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
+                
+                [lblContributionSpouse sizeToFit];
+                
+                NSString *partnerCont =   [[lo valueForKey:@"employee_cost"] stringValue];
+                lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"\nYOU PAY" color:UIColorFromRGB(0x625ba8)];
+                
+                [lblContributionPartner sizeToFit];
+                [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner] :lblContributionView];
+            }
         }
     }
 

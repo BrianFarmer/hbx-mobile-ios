@@ -20,6 +20,7 @@
 @property(nonatomic,retain)NSString *sMobileServer;
 @property(nonatomic,retain)NSString *sEnrollServer;
 @property(nonatomic,retain)NSString *sUser;
+@property(nonatomic,assign)int iPlanVersion;
 
 +(Settings*)getInstance;
 -(NSString*)getMobileServer;

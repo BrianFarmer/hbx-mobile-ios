@@ -17,7 +17,6 @@
 @interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate>
 {
     UIPageControl *pageControl;
-//    UISegmentedControl *planYearControl;
     
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
@@ -28,7 +27,14 @@
     UIImageView *navImage;
     
     UIScrollView  *scrollView;
+    
+    UITableView *planTable;
+    
+    NSMutableArray *_planDetails;
+    NSMutableArray *_planDentalDetails;
+    NSMutableIndexSet *expandedSections;
 
+    NSArray *plans;
 }
 
 @end

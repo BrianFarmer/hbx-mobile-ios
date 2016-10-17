@@ -195,7 +195,7 @@
 		13F169A11D2D3E70004DF9B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerSearchResultTableViewController.h; sourceTree = "<group>"; };
 		13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerSearchResultTableViewController.m; sourceTree = "<group>"; };
-		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FF47091C8A2C5600C7C851 /* 		.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "\t\t.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13FF470D1C8A2C5600C7C851 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		13FF470F1C8A2C5600C7C851 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13FF47101C8A2C5600C7C851 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -380,7 +380,7 @@
 		13FF470A1C8A2C5600C7C851 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13FF47091C8A2C5600C7C851 /* HBXMobile.app */,
+				13FF47091C8A2C5600C7C851 /* 		.app */,
 				13FF47251C8A2C5600C7C851 /* HBXMobileTests.xctest */,
 				13FF47301C8A2C5600C7C851 /* HBXMobileUITests.xctest */,
 			);
@@ -556,9 +556,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13FF47081C8A2C5600C7C851 /* HBXMobile */ = {
+		13FF47081C8A2C5600C7C851 /* 		 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "HBXMobile" */;
+			buildConfigurationList = 13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "		" */;
 			buildPhases = (
 				13FF47051C8A2C5600C7C851 /* Sources */,
 				13FF47061C8A2C5600C7C851 /* Frameworks */,
@@ -568,9 +568,9 @@
 			);
 			dependencies = (
 			);
-			name = HBXMobile;
+			name = "		";
 			productName = HBXMobile;
-			productReference = 13FF47091C8A2C5600C7C851 /* HBXMobile.app */;
+			productReference = 13FF47091C8A2C5600C7C851 /* 		.app */;
 			productType = "com.apple.product-type.application";
 		};
 		13FF47241C8A2C5600C7C851 /* HBXMobileTests */ = {
@@ -652,7 +652,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13FF47081C8A2C5600C7C851 /* HBXMobile */,
+				13FF47081C8A2C5600C7C851 /* 		 */,
 				13FF47241C8A2C5600C7C851 /* HBXMobileTests */,
 				13FF472F1C8A2C5600C7C851 /* HBXMobileUITests */,
 			);
@@ -807,12 +807,12 @@
 /* Begin PBXTargetDependency section */
 		13FF47271C8A2C5600C7C851 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13FF47081C8A2C5600C7C851 /* HBXMobile */;
+			target = 13FF47081C8A2C5600C7C851 /* 		 */;
 			targetProxy = 13FF47261C8A2C5600C7C851 /* PBXContainerItemProxy */;
 		};
 		13FF47321C8A2C5600C7C851 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13FF47081C8A2C5600C7C851 /* HBXMobile */;
+			target = 13FF47081C8A2C5600C7C851 /* 		 */;
 			targetProxy = 13FF47311C8A2C5600C7C851 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1046,7 +1046,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "HBXMobile" */ = {
+		13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "		" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13FF473A1C8A2C5600C7C851 /* Debug */,

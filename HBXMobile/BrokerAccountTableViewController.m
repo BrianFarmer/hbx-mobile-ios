@@ -593,12 +593,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     UIColor * colors[4] = {[UIColor clearColor],
         [UIColor clearColor],
         [UIColor clearColor],[UIColor clearColor]};
-    UIImage * icons[4] = {[UIImage imageNamed:@"phone.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"email.png"]};
+//    UIImage * icons[4] = {[UIImage imageNamed:@"phone.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"email.png"]};
+    UIImage * icons[4] = {[UIImage imageNamed:@"email.png"],  [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"phone.png"]};
     for (int i = 0; i < number; ++i)
     {
         MGSwipeButton * button = [MGSwipeButton buttonWithTitle:@"" icon:icons[i] backgroundColor:colors[i] padding:10 callback:^BOOL(MGSwipeTableCell * sender){
             NSLog(@"Convenience callback received (left).");
-            if (i == 0)
+            if (i == 3)
             {
 //                [self phoneEmployer:sender];
                 NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -613,13 +614,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 [self presentViewController:sub animated:YES completion: nil];
             }
             
-            if (i == 1)
+            if (i == 2)
                 [self smsEmployer:sender];
             
-            if (i == 2)
+            if (i == 1)
                 [self showDirections:sender];
             
-            if (i == 3)
+            if (i == 0)
                 [self emailEmployer:sender];
             
             return YES;
@@ -1096,7 +1097,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     firstTime = TRUE;
     if (((brokerEmployersData *)ttype).type == 1)
         return;
-    [self performSegueWithIdentifier:@"Broker Detail Page" sender:(brokerEmployersData *)ttype];
+    [self performSegueWithIdentifier:@"Broker Employer Detail" sender:(brokerEmployersData *)ttype];
     return;
 }
 

@@ -61,7 +61,6 @@ alpha:1.0]
 
     pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width - 20, pCompanyFooter.frame.size.height);
     pCompanyFooter.textAlignment = NSTextAlignmentCenter;
-    //    pCompanyFooter.backgroundColor = [UIColor greenColor];
     
     if (employerData.status == (enrollmentState)NEEDS_ATTENTION)
     {
@@ -386,11 +385,11 @@ alpha:1.0]
         button.clipsToBounds = YES;
         button.tag = section;
         [button setTitleColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:24.0];
         [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
         
-        UIImage *btnImage = [UIImage imageNamed:@"open_plus32x32.png"];
-        [button setImage:btnImage forState:UIControlStateNormal];
+//        UIImage *btnImage = [UIImage imageNamed:@"open_plus32x32.png"];
+//        [button setImage:btnImage forState:UIControlStateNormal];
         
         [button setTitle:[NSString stringWithFormat:@"%@", @"+"] forState:UIControlStateNormal];
         [headerView addSubview:button];

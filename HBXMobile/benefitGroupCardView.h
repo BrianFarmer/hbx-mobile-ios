@@ -23,6 +23,7 @@
     
     NSMutableArray *_planDetails;
     NSMutableArray *_planDentalDetails;
+    NSMutableIndexSet *expandedSections;
     
     UITableView *planTable;
 }

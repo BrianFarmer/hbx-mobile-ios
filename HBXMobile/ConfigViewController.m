@@ -52,7 +52,7 @@
             checkedIndexPath = [NSIndexPath indexPathForRow:0 inSection: 0];;
             
         }
-            break;
+        break;
         case USE_MOBILE:
         {
             [configTableNames insertObject:@"Mobile server" atIndex:2];
@@ -77,6 +77,24 @@
         }
             break;
     }
+
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
+                                [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
+
+    [planControl setBackgroundColor:[UIColor whiteColor]];
+    [planControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [planControl setTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+    planControl.layer.borderColor=[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+    planControl.layer.cornerRadius = 1;
+    planControl.layer.borderWidth = 1.5f;
+    planControl.frame = CGRectMake(self.view.frame.size.width/2 - planControl.frame.size.width/2, planControl.frame.origin.y, planControl.frame.size.width, planControl.frame.size.height);
+    
+    lblPlanScreen.frame = CGRectMake(self.view.frame.size.width/2 - lblPlanScreen.frame.size.width/2, lblPlanScreen.frame.origin.y, lblPlanScreen.frame.size.width, lblPlanScreen.frame.size.height);
+
+    Settings *obj=[Settings getInstance];
+    
+    [planControl setSelectedSegmentIndex:(obj.iPlanVersion == 1) ? 0:1];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -251,5 +269,15 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         checkedIndexPath = selectedIndexPath;
     }
+}
+
+- (void)HandleSegmentControlAction:(UISegmentedControl *)segment
+{
+    Settings *obj=[Settings getInstance];
+    
+    if(segment.selectedSegmentIndex == 0)
+        obj.iPlanVersion = 1;
+    else
+        obj.iPlanVersion = 2;
 }
 @end

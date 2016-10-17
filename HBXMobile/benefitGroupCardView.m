@@ -54,6 +54,11 @@ alpha:1.0]
     CGFloat scaleY = self.frame.size.height/448;
     CGFloat scale = MIN(scaleX, scaleY);    
     
+    if (!expandedSections)
+        expandedSections = [[NSMutableIndexSet alloc] init];
+
+    [expandedSections addIndex:0];
+    
     _planDetails = [[NSMutableArray alloc] init];
     [_planDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
     [_planDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
@@ -61,13 +66,16 @@ alpha:1.0]
 
 
     _planDentalDetails = [[NSMutableArray alloc] init];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Preferred"], nil]];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Traditional"], nil]];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
-    [_planDentalDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"dental"] valueForKey:@"reference_plan_name"], nil]];
     
+    if ([_po valueForKey:@"dental"] != [NSNull null])
+    {
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELIGIBILITY", [_po valueForKey:@"eligibility_rule"], nil]];
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"0", nil]];
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Preferred"], nil]];
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"BlueDental Traditional"], nil]];
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\t\u2022 %@", @"Delta Dental PPO Basic Plan for Families for Small Businesses"], nil]];
+        [_planDentalDetails addObject:[NSArray arrayWithObjects:@"REFERENCE PLAN", [[_po valueForKey:@"dental"] valueForKey:@"reference_plan_name"], nil]];
+    }
     currrentCard = cc;
     cardCount = totalCards;
     UILabel *lblBenefitGroup = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 150, 20)];
@@ -178,15 +186,23 @@ alpha:1.0]
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;//[_messageArray count];
+    if ([_planDentalDetails count] > 0)
+        return 2;
+    
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 1)
-        return 6;
+    if ([expandedSections containsIndex:section])
+    {
+        if (section == 1)
+            return 6;
+        
+        return 3;
+    }
     
-    return 3;
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -314,14 +330,113 @@ alpha:1.0]
     // Add the label to the header view
     [headerView addSubview:headerLabel];
     
-    
-    UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-40, 2, 28, 28)];
-    imgVew.backgroundColor = [UIColor clearColor];
-    imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"];
-    imgVew.contentMode = UIViewContentModeScaleAspectFit;
-    // Add the image to the header view
-    [headerView addSubview:imgVew];
+    if ([expandedSections containsIndex:section])
+    {
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-40, 2, 28, 28)];
+        imgVew.backgroundColor = [UIColor clearColor];
+        imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"];
+        imgVew.contentMode = UIViewContentModeScaleAspectFit;
+        // Add the image to the header view
+        [headerView addSubview:imgVew];
+    }
+    else
+    {
+        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-40, 2, 28, 28)];
+        button.layer.cornerRadius = 14;
+        button.layer.borderWidth = 2;
+        button.layer.borderColor = [UIColor whiteColor].CGColor;//  [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+        button.clipsToBounds = YES;
+        button.tag = section;
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:24.0];
+        [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [button setTitle:[NSString stringWithFormat:@"%@", @"+"] forState:UIControlStateNormal];
+        
+        [headerView addSubview:button];
+    }
+
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [headerView addGestureRecognizer:recognizer];
+
     return headerView;
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)sender {
+    UIView *pHeaderView = (UIView*)sender.view;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [planTable beginUpdates];
+    [planTable reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:planTable didSelectHeader:indexPath];
+    
+    [planTable endUpdates];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [planTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)handleButtonTap:(id)sender {
+    UIView *pHeaderView = (UIView*)sender;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag];
+    
+    [planTable beginUpdates];
+    [planTable reloadSections:[NSIndexSet indexSetWithIndex:pHeaderView.tag] withRowAnimation:NO];
+    [self tableView:planTable didSelectHeader:indexPath];
+    
+    [planTable endUpdates];
+    
+    if ([expandedSections containsIndex:pHeaderView.tag])
+        [planTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectHeader:(NSIndexPath *)indexPath
+{
+    if (!indexPath.row)
+    {
+        // only first row toggles exapand/collapse
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        NSInteger section = indexPath.section;
+        BOOL currentlyExpanded = [expandedSections containsIndex:section];
+        NSInteger rows;
+        
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        
+        if (currentlyExpanded)
+        {
+            rows = [self tableView:tableView numberOfRowsInSection:section];
+            [expandedSections removeIndex:section];
+        }
+        else
+        {
+            [expandedSections addIndex:section];
+            if ((rows = [self tableView:tableView numberOfRowsInSection:section]) == 0)
+                [expandedSections removeIndex:section];
+        }
+        
+        for (int i=0; i<rows; i++) ///(DB) modified this from i=1 to i=0 to account for viewHeader being clicked and not first row.
+        {
+            NSIndexPath *tmpIndexPath = [NSIndexPath indexPathForRow:i
+                                                           inSection:section];
+            [tmpArray addObject:tmpIndexPath];
+        }
+        
+        if (currentlyExpanded)
+        {
+            [tableView deleteRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationBottom];
+            
+            //              cell.accessoryView = [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeDown];
+        }
+        else
+        {
+            [tableView insertRowsAtIndexPaths:tmpArray withRowAnimation:UITableViewRowAnimationTop];
+            //            cell.accessoryView =  [DTCustomColoredAccessory accessoryWithColor:[UIColor grayColor] type:DTCustomColoredAccessoryTypeUp];
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

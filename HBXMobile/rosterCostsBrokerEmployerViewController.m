@@ -312,6 +312,19 @@ alpha:1.0]
     {
         dt2.text = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];;
         dt3.text =  [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+        
+        if ([dt2.text isEqualToString:@"Waived"])
+        {
+            dt2.textColor = UIColorFromRGB(0x625ba8);
+            dt3.textColor = UIColorFromRGB(0x625ba8);
+        }
+        
+        if ([dt2.text isEqualToString:@"Not Enrolled"])
+        {
+            dt2.textColor = [UIColor redColor];
+            dt3.textColor = [UIColor redColor];
+        }
+
     }
     else
     {
