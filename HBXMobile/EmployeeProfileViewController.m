@@ -408,27 +408,26 @@ alpha:1.0]
             NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
             
             lblContributionView.hidden = NO;
-            UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:121];
-            UILabel *lblContributionSpouse = (UILabel *)[cell viewWithTag:122];
-            UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
+            UILabel *lblContributionTotal = (UILabel *)[cell viewWithTag:121];
+            UILabel *lblContributionEmployer = (UILabel *)[cell viewWithTag:122];
+            UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:123];
 
             if (![[lo valueForKey:@"status"] isEqualToString:@"Not Enrolled"])
             {
-                NSString *empCont =   [[lo valueForKey:@"total_premium"] stringValue];
-                lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
+                NSString *totalCont = [NSString stringWithFormat:@"$%@",[[lo valueForKey:@"total_premium"] stringValue]];
+                lblContributionTotal.attributedText = [self setAttributedLabel:totalCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
+                [lblContributionTotal sizeToFit];
                 
+                NSString *employerCont = [NSString stringWithFormat:@"$%@",[[lo valueForKey:@"employer_contribution"] stringValue]];
+                lblContributionEmployer.attributedText = [self setAttributedLabel:employerCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
+                
+                [lblContributionEmployer sizeToFit];
+                
+                NSString *employeeCont = [NSString stringWithFormat:@"$%@", [[lo valueForKey:@"employee_cost"] stringValue]];
+                lblContributionEmployee.attributedText = [self setAttributedLabel:employeeCont text2:@"\nEMPLOYEE PAYS" color:UIColorFromRGB(0x625ba8)];
                 [lblContributionEmployee sizeToFit];
                 
-                NSString *spouseCont =   [[lo valueForKey:@"employer_contribution"] stringValue];
-                lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
-                
-                [lblContributionSpouse sizeToFit];
-                
-                NSString *partnerCont =   [[lo valueForKey:@"employee_cost"] stringValue];
-                lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"\nYOU PAY" color:UIColorFromRGB(0x625ba8)];
-                
-                [lblContributionPartner sizeToFit];
-                [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner] :lblContributionView];
+                [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionEmployer, lblContributionEmployee] :lblContributionView];
             }
         }
     }
@@ -440,7 +439,15 @@ alpha:1.0]
 
         NSArray *po = [_employeeData valueForKey:@"dependents"][indexPath.row];
         cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [po valueForKey:@"first_name"], [po valueForKey:@"middle_name"], [po valueForKey:@"last_name"], [po valueForKey:@"name_suffix"]];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"dob: %@ \tssn: %@ \tgender: %@", [po valueForKey:@"date_of_birth"], [po valueForKey:@"ssn_masked"], [po valueForKey:@"gender"]];
+        
+        NSDateFormatter *f = [[NSDateFormatter alloc] init];
+        [f setDateFormat:@"yyyy-MM-dd"];
+        
+        NSDate *dob = [f dateFromString:[_employeeData valueForKey:@"date_of_birth"]];
+        
+        [f setDateFormat:@"MM/dd/yyyy"];
+
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"dob: %@ \t \tgender: %@", [f stringFromDate:dob], [po valueForKey:@"gender"]];
     }
     return cell;
 }

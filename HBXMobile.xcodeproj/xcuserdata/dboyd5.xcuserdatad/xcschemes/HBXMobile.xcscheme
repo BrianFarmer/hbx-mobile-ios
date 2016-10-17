@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13FF47081C8A2C5600C7C851"
-               BuildableName = "HBXMobile.app"
-               BlueprintName = "HBXMobile"
+               BuildableName = "&#9;&#9;.app"
+               BlueprintName = "&#9;&#9;"
                ReferencedContainer = "container:HBXMobile.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13FF47081C8A2C5600C7C851"
-            BuildableName = "HBXMobile.app"
-            BlueprintName = "HBXMobile"
+            BuildableName = "&#9;&#9;.app"
+            BlueprintName = "&#9;&#9;"
             ReferencedContainer = "container:HBXMobile.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,8 +76,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13FF47081C8A2C5600C7C851"
-            BuildableName = "HBXMobile.app"
-            BlueprintName = "HBXMobile"
+            BuildableName = "&#9;&#9;.app"
+            BlueprintName = "&#9;&#9;"
             ReferencedContainer = "container:HBXMobile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13FF47081C8A2C5600C7C851"
-            BuildableName = "HBXMobile.app"
-            BlueprintName = "HBXMobile"
+            BuildableName = "&#9;&#9;.app"
+            BlueprintName = "&#9;&#9;"
             ReferencedContainer = "container:HBXMobile.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

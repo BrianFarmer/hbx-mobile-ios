@@ -260,7 +260,7 @@ viewForFooterInSection:(NSInteger)section {
     
     if (indexPath.section == 0)
     {
-        cell.textLabel.text = @"Carriers";
+        cell.textLabel.text = @"Contact Carriers";
  //       cell.imageView.image = [UIImage imageNamed:@"list_icon.png"];
 /*
         if (indexPath.row == 1)

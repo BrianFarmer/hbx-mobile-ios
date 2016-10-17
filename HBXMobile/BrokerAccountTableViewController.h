@@ -36,6 +36,7 @@
     BOOL bAlreadyShownTutorial;
     
     UIImageView *pHeaderImage;
+    BOOL bAddedOpenEnrollmentDivider;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

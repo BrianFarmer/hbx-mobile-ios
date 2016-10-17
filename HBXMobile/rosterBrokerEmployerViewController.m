@@ -435,7 +435,8 @@ alpha:1.0]
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
 
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
+//    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[displayArray objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[displayArray objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
     
 
     NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
@@ -453,25 +454,28 @@ alpha:1.0]
                              
     NSString *sRenewal = [[[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
 //[self getRenewalEnrollment:indexPath.row];
-    
-    NSDictionary *attrsRenew;
-    if ([sRenewal isEqualToString:@"Enrolled"])
-        attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
-    else if ([sRenewal isEqualToString:@"Not Enrolled"])
-        attrsRenew = @{ NSForegroundColorAttributeName : [UIColor redColor]};
-    else
-        attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
-    
-    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@ %@",sRenewal, @"for next year"] attributes:attrsRenew];
-    
-    [attributedTitle1 beginEditing];
-    [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:12] range:NSMakeRange(0, attributedTitle1.length)];
-    [attributedTitle1 endEditing];
-    
-    [attributedTitle appendAttributedString:attributedTitle1];
+    if (sRenewal != nil)
+    {
+        NSDictionary *attrsRenew;
+        if ([sRenewal isEqualToString:@"Enrolled"])
+            attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
+        else if ([sRenewal isEqualToString:@"Not Enrolled"])
+            attrsRenew = @{ NSForegroundColorAttributeName : [UIColor redColor]};
+        else
+            attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
+        
+        NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@ %@",sRenewal, @"for next year"] attributes:attrsRenew];
+        
+        [attributedTitle1 beginEditing];
+        [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:12] range:NSMakeRange(0, attributedTitle1.length)];
+        [attributedTitle1 endEditing];
+        
+        [attributedTitle appendAttributedString:attributedTitle1];
 
-    cell.detailTextLabel.numberOfLines = 2;
+        cell.detailTextLabel.numberOfLines = 2;
+    }
     cell.detailTextLabel.attributedText = attributedTitle;
+
 //    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@ for next year", [self getActiveEnrollment:indexPath.row], [self getRenewalEnrollment:indexPath.row]];
     
 //    cell.detailTextLabel.text = [self getActiveEnrollment:indexPath.row];
@@ -507,7 +511,7 @@ alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *po = [rosterList objectAtIndex:indexPath.row] ;
+    NSArray *po = [displayArray objectAtIndex:indexPath.row] ;
     [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
 

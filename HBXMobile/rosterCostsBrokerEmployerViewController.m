@@ -7,6 +7,7 @@
 //
 
 #import "rosterCostsBrokerEmployerViewController.h"
+#import "EmployeeProfileViewController.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -239,7 +240,7 @@ alpha:1.0]
     label1.textAlignment = NSTextAlignmentCenter;
 
     label1.textColor = UIColorFromRGB(0x555555);
-    label1.text = @"EMPLOYER $";
+    label1.text = @"EMPLOYER";
     label1.backgroundColor = [UIColor clearColor];
     [headerView addSubview:label1];
 
@@ -252,7 +253,7 @@ alpha:1.0]
 //    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, (iOSDeviceScreenSize.width > 320) ? 20:10);
     button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 15:13];
 //    [button addTarget:self action:@selector(handleTap:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"EMPLOYEE $" forState:UIControlStateNormal];
+    [button setTitle:@"EMPLOYEE" forState:UIControlStateNormal];
     
     [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     [button setTitleColor:UIColorFromRGB(0x555555) forState:UIControlStateNormal];
@@ -328,8 +329,18 @@ alpha:1.0]
     }
     else
     {
-        dt2.text = oo;
-        dt3.text = ll;
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+        [numberFormatter setMaximumFractionDigits:2];
+        
+        oo = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[oo floatValue]]];
+        ll = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[ll floatValue]]];
+        
+        //        pCompany.employee_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue]]];
+        //        pCompany.employer_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue]]];
+
+        dt2.text = oo;//[NSString stringWithFormat:@"$%@", oo];
+        dt3.text = ll;//[NSString stringWithFormat:@"$%@", ll];
     }
     return cell;
 }
@@ -347,6 +358,24 @@ alpha:1.0]
     
     [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[indexes firstIndex] inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     return 1;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"ShowEmployeeProfile"])
+    {
+        //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        // Get destination view
+        EmployeeProfileViewController *vc = [segue destinationViewController];
+        vc.employeeData = (NSArray*)sender;
+        vc.employerData = employerData;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *po = [rosterList objectAtIndex:indexPath.row] ;
+    [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
 
 @end

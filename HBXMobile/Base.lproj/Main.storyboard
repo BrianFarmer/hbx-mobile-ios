@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="Acm-hi-XzD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES" initialViewController="Acm-hi-XzD">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -406,11 +406,12 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <outlet property="pCompanyFooter" destination="XLw-jP-fmt" id="xXJ-b9-hSa"/>
                         <outlet property="pRosterTable" destination="YmR-8H-spy" id="M5f-Rb-p0c"/>
                         <outlet property="vHeader" destination="9np-x0-uwE" id="xu5-yS-vLq"/>
+                        <segue destination="exl-gG-8DY" kind="push" identifier="ShowEmployeeProfile" id="XSk-UU-zw9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hxN-Yq-Ke0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1598" y="1101"/>
+            <point key="canvasLocation" x="1713" y="1179"/>
         </scene>
         <!--Employee Profile View Controller-->
         <scene sceneID="vWF-dP-kC9">
@@ -472,7 +473,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2eu-K3-V7Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2034.5" y="1099.5"/>
+            <point key="canvasLocation" x="2242" y="1101"/>
         </scene>
         <!--info-->
         <scene sceneID="vr9-SS-ATH">
@@ -894,6 +895,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="XSk-UU-zw9"/>
         <segue reference="jsv-1g-VSj"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -347,7 +347,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 -(void)processBuckets
 {
     NSArray *ck;
-    BOOL bAddedDivider = FALSE;
+    bAddedOpenEnrollmentDivider = FALSE;
     total_active_clients = 0;
     
     for (int x=0;x<[subscriberPlans count];x++)
@@ -402,6 +402,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 {
                     pCompany.status = RENEWAL_IN_PROGRESS;
                     [renewals addObject:pCompany];
+                    [all_others addObject:pCompany];
                 }
                 else
                 {
@@ -436,16 +437,17 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                     }
                     else if ( [pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue] >= [pCompany.planMinimum intValue] )
                     {
-                        if (!bAddedDivider)
+                        if (!bAddedOpenEnrollmentDivider)
                         {
                             brokerEmployersData *pCompanyDivider = [[brokerEmployersData alloc] init];
                             pCompanyDivider.type = 1;
                             [open_enrollment addObject:pCompanyDivider];
-                            bAddedDivider = TRUE;
+                            bAddedOpenEnrollmentDivider = TRUE;
                         }
                         pCompany.status = OPEN_ENROLLMENT_MET;
                         [open_enrollment addObject:pCompany];
                     }
+                    [all_others addObject:pCompany];
                 }
                 else
                 {
@@ -459,6 +461,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                     {
                         pCompany.status = RENEWAL_IN_PROGRESS;
                         [renewals addObject:pCompany];
+                        [all_others addObject:pCompany];
                     }
                     else
                     {
@@ -758,7 +761,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         button.tag = section;
         button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
         [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+        if (section == 0 && bAddedOpenEnrollmentDivider)
+        {
+            [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]-1] forState:UIControlStateNormal];
+        }
+        else
+        {
         [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]] forState:UIControlStateNormal];
+        }
         [headerView addSubview:button];
     }
     
@@ -905,11 +915,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if (ttype.status == NEEDS_ATTENTION)
     {
 //        cell.lblEmployeesNeeded.text = @"";     //@"EMPLOYEES NEEDED";
-        cell.daysleftLabel.textColor = [UIColor redColor];
+        cell.daysleftLabel.textColor = UIColorFromRGB(0x555555);//[UIColor redColor];
         cell.alertButton.hidden = FALSE;
         cell.leftColor.hidden = FALSE;
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.planMinimum intValue] - ([ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue])];
-
+        cell.employeesLabel.textColor = [UIColor redColor];
+            cell.leftColor.frame = CGRectMake(0,0, 4, 88);
     }
     else
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16. 
@@ -1087,7 +1098,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if (ttype.type == 1)
         return;
  //   [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
-        [self performSegueWithIdentifier:@"Broker Employer Detail" sender:ttype];
+    
+    MGSwipeTableCell *cell = (MGSwipeTableCell *)[(UITableView *)self.view cellForRowAtIndexPath:indexPath];
+    if (ttype.status == NEEDS_ATTENTION)
+        cell.leftColor.backgroundColor = [UIColor redColor];
+
+    [self performSegueWithIdentifier:@"Broker Employer Detail" sender:ttype];
+    
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     return;
 }
