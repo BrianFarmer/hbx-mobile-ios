@@ -8,6 +8,12 @@
 
 #import "HeaderView.h"
 
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:1.0]
+
 @implementation HeaderView
 
 /*
@@ -82,6 +88,42 @@
     }
     
     [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
+
+    
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
+
+    NSDate *endDate = [f dateFromString:employerData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:364];
+    NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+
+    [f setDateFormat:@"MMM dd, yyyy"];
+
+    UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
+    
+    pLabelCoverage.numberOfLines = 0;
+    pLabelCoverage.textAlignment = NSTextAlignmentCenter;
+    pLabelCoverage.backgroundColor = [UIColor clearColor];
+    pLabelCoverage.hidden = FALSE;
+    NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+    
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x555555) };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
+    
+    NSString *temp_a = @"Coverage Year";
+    NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
+    [string1 beginEditing];
+    [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Regular" size:16.0] range:NSMakeRange(0, string1.length)];
+    [string1 endEditing];
+    
+    [attributedTitle appendAttributedString:string1];
+    
+    pLabelCoverage.attributedText = attributedTitle;
+    
+    [self addSubview:pLabelCoverage];
 
 }
 

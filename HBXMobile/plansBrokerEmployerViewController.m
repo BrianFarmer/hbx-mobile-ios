@@ -84,7 +84,7 @@ alpha:1.0]
                                 [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
     
     NSArray *itemArray = [NSArray arrayWithObjects: @"ACTIVE YEAR", @"IN RENEWAL", nil];
-    UISegmentedControl *planYearControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+    planYearControl = [[UISegmentedControl alloc] initWithItems:itemArray];
     planYearControl.frame = CGRectMake(self.view.frame.size.width/2 - 80, [self.view viewWithTag:30].frame.origin.y + [self.view viewWithTag:30].frame.size.height + 10, 160, 30);
     [planYearControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
     
@@ -332,17 +332,22 @@ alpha:1.0]
 {
 //    if ([_planDentalDetails count] > 0)
 //        return 2;
+    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+        return 1;
     
     return [plans count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
+    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+        return 1;
+
     if ([expandedSections containsIndex:section])
     {
-//        if (section == 1)
-//            return 6;
+//        if ([[[plans[section] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
+
+
         if ([plans[section] valueForKey:@"dental"] != [NSNull null])
             return 5 + 9;
         else
@@ -361,8 +366,12 @@ alpha:1.0]
 {
     return 1.0;
 }
-
-
+/*
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewAutomaticDimension + 20;
+}
+*/
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 3 || indexPath.row == 8) // && (indexPath.section == 0 || indexPath.section == 1))
@@ -419,7 +428,7 @@ alpha:1.0]
     
     UILabel *lblContributionSpouse = [[UILabel alloc] initWithFrame:CGRectMake(100,30,100, 20)];
     lblContributionSpouse.tag = 122;
-    lblContributionSpouse.numberOfLines = 2;
+    lblContributionSpouse.numberOfLines = 4;
     lblContributionSpouse.textAlignment = NSTextAlignmentCenter;
     [lblContributionSpouse sizeToFit];
     [conrtibutionView addSubview:lblContributionSpouse];
@@ -427,7 +436,7 @@ alpha:1.0]
     
     UILabel *lblContributionPartner = [[UILabel alloc] initWithFrame:CGRectMake(200,30,100, 20)];
     lblContributionPartner.tag = 123;
-    lblContributionPartner.numberOfLines = 3;
+    lblContributionPartner.numberOfLines = 4;
     lblContributionPartner.textAlignment = NSTextAlignmentCenter;
     [lblContributionPartner sizeToFit];
     [conrtibutionView addSubview:lblContributionPartner];
@@ -449,6 +458,9 @@ alpha:1.0]
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+        return nil;
+
     // The view for the header
     //    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(tableView.frame.size.width/2 - 75, 0, 150, 34)];
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
@@ -633,6 +645,21 @@ alpha:1.0]
     UILabel *pSeperator = [cell viewWithTag:976];
     pSeperator.hidden = TRUE;
 
+    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+    {
+        cell.textLabel.text = @"Renewal Plan Starts";
+        
+        NSDateFormatter *f = [[NSDateFormatter alloc] init];
+        [f setDateFormat:@"yyyy-MM-dd"];
+        
+        NSDate *renewalDate = [f dateFromString:employerData.renewal_application_available];
+        
+        [f setDateFormat:@"MM/dd/yyyy"];
+
+        cell.detailTextLabel.text = [f stringFromDate:renewalDate];
+        
+        return cell;
+    }
 //    if (indexPath.section == 0)
     {
         //        NSString *txt = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
@@ -656,12 +683,22 @@ alpha:1.0]
             
             [lblContributionEmployee sizeToFit];
             
-            NSString *spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
+            NSString *spouseCont;
+            
+            if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] == (NSString *)[NSNull null])
+                spouseCont = @"Not\nCovered";
+            else
+                spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
             lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
             
             [lblContributionSpouse sizeToFit];
             
-            NSString *partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+            NSString *partnerCont;
+            if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] == (NSString *)[NSNull null])
+                partnerCont = @"Not\nCovered";
+            else
+                partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+
             lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
             
             [lblContributionPartner sizeToFit];
@@ -691,7 +728,10 @@ alpha:1.0]
             if (indexPath.row == 1)
             {
                 cell.textLabel.text = @"PLANS OFFERED";
-                cell.detailTextLabel.text = [[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"plans_by_summary_text"];
+                if ([[[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
+                    cell.detailTextLabel.text = [[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"reference_plan_name"];
+                else
+                    cell.detailTextLabel.text = [[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"plans_by_summary_text"];
             }
             if (indexPath.row == 2)
             {
@@ -700,8 +740,11 @@ alpha:1.0]
             }
             if (indexPath.row == 4)
             {
-                cell.textLabel.text = @"REFERENCE PLAN";
-                cell.detailTextLabel.text = [[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"reference_plan_name"];
+                if (![[[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
+                {
+                    cell.textLabel.text = @"REFERENCE PLAN";
+                    cell.detailTextLabel.text = [[plans[indexPath.section] valueForKey:@"health"] valueForKey:@"reference_plan_name"];
+                }
             }
             
             //DENTAL
@@ -845,12 +888,22 @@ alpha:1.0]
     
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
+    NSString *sPercent;
     
     [attributedTitle beginEditing];
-    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 24.0 : 32.0] range:NSMakeRange(0, attributedTitle.length)];
+    if ([labelText1 isEqualToString:@"Not\nCovered"])
+    {
+        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 12.0 : 18.0] range:NSMakeRange(0, attributedTitle.length)];
+        sPercent = @"\n";
+    }
+    else
+    {
+        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 18.0 : 24.0] range:NSMakeRange(0, attributedTitle.length)];
+        sPercent = @"%\n";
+    }
     [attributedTitle endEditing];
     
-    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:@"%\n" attributes:attrs];
+    NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:sPercent attributes:attrs];
     
     [attributedTitle1 beginEditing];
     [attributedTitle1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Bold" size:(screenSize.width <= 320) ? 16.0 : 18.0] range:NSMakeRange(0, attributedTitle1.length)];

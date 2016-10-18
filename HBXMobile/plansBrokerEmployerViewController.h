@@ -35,6 +35,7 @@
     NSMutableIndexSet *expandedSections;
 
     NSArray *plans;
+    UISegmentedControl *planYearControl;
 }
 
 @end
