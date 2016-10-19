@@ -492,7 +492,7 @@ alpha:1.0]
   if (indexPath.section == 1 && indexPath.row == 0)
     return 240;
   if (indexPath.section == 0 && indexPath.row == 0)
-      return 80;
+      return 0;//80;
     
     return 40;
 }
@@ -644,6 +644,7 @@ alpha:1.0]
             cell.textLabel.text = [renewalNames objectAtIndex:indexPath.row];
             cell.detailTextLabel.text = [renewalValues objectAtIndex:indexPath.row];
         }
+        /*
         else
         {
             NSDateFormatter *f = [[NSDateFormatter alloc] init];
@@ -677,6 +678,7 @@ alpha:1.0]
 
             pLabelCoverage.attributedText = attributedTitle;
         }
+         */
         
     }
     else if (indexPath.section == 1)

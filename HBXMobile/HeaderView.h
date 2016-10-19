@@ -20,5 +20,6 @@
 @property (nonatomic, retain) NSArray *dataArray;
 
 -(void)layoutHeaderView:(brokerEmployersData *)eData;
+-(void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage;
 
 @end

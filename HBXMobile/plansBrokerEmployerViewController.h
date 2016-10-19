@@ -30,8 +30,10 @@
     
     UITableView *planTable;
     
-    NSMutableArray *_planDetails;
-    NSMutableArray *_planDentalDetails;
+    NSMutableArray *_pd;
+    
+    //NSMutableArray *_planDetails;
+    //NSMutableArray *_planDentalDetails;
     NSMutableIndexSet *expandedSections;
 
     NSArray *plans;

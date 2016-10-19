@@ -41,8 +41,8 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,175);
-    [vHeader layoutHeaderView:employerData];
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+    [vHeader layoutHeaderView:employerData showcoverage:NO];
     
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -193,8 +193,75 @@ alpha:1.0]
             }
         }
 */
+        [self processData];
     }
   
+}
+
+-(void)processData
+{
+//    int ii = 0;
+    _pd = [[NSMutableArray alloc] init];
+    
+    for (int ii = 0;ii<[plans count];ii++)
+    {
+        NSLog(@"%@", plans);
+        
+        NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
+        [_planDetails addObject:[NSArray arrayWithObjects:@"HEALTH PLAN", @"", nil]];
+        
+        if ([[[plans[ii] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
+        {
+            [_planDetails addObject: [NSArray arrayWithObjects:@"PLANS OFFERED", [NSString stringWithFormat:@"%@", [[plans[ii] valueForKey:@"health"] valueForKey:@"reference_plan_name"]], nil]];
+    //        [_planDetails addObject:[[plans[ii] valueForKey:@"health"] valueForKey:@"reference_plan_name"]];
+        }
+        else
+        {
+            [_planDetails addObject: [NSArray arrayWithObjects:@"PLANS OFFERED", [NSString stringWithFormat:@"%@", [[plans[ii] valueForKey:@"health"] valueForKey:@"plans_by_summary_text"]], nil]];
+
+    //        [_planDetails addObject:[[plans[ii] valueForKey:@"health"] valueForKey:@"plans_by_summary_text"]];
+        }
+
+        [_planDetails addObject: [NSArray arrayWithObjects:@"ELIGIBILITY", [NSString stringWithFormat:@"%@", [plans[ii] valueForKey:@"eligibility_rule"]], nil]];
+
+        [_planDetails addObject: [NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"", nil]];
+
+        //Dont show Ref Plan is only single_carrier
+        if (![[[plans[ii] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
+            [_planDetails addObject: [NSArray arrayWithObjects:@"REFERENCE PLAN", [NSString stringWithFormat:@"%@", [[plans[ii] valueForKey:@"health"] valueForKey:@"reference_plan_name"]], nil]];
+
+        [_planDetails addObject:[NSArray arrayWithObjects:@"DENTAL PLAN", @"", nil]];
+        
+        
+        if ([plans[ii] valueForKey:@"dental"] != [NSNull null])
+        {
+            NSArray *dentalPlans = [[plans[ii] valueForKey:@"dental"] valueForKey:@"elected_dental_plans"];
+            
+            if ( [[[plans[ii] valueForKey:@"dental"] valueForKey:@"plans_by_summary_text"] containsString:@"Custom"])
+            {
+                [_planDetails addObject:[NSArray arrayWithObjects:@"ELECTED DENTAL PLANS", @"", nil]];
+                
+                for (int uu=0;uu<[dentalPlans count];uu++)
+                    [_planDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\u2022 %@", [[dentalPlans objectAtIndex:uu] valueForKey:@"plan_name"]], nil]];
+            }
+            else
+                [_planDetails addObject: [NSArray arrayWithObjects:@"PLANS OFFERED", [NSString stringWithFormat:@"%@", [[plans[ii] valueForKey:@"health"] valueForKey:@"plans_by_summary_text"]], nil]];
+            
+            [_planDetails addObject: [NSArray arrayWithObjects:@"ELIGIBILITY", [NSString stringWithFormat:@"%@", [plans[ii] valueForKey:@"eligibility_rule"]], nil]];
+
+            [_planDetails addObject: [NSArray arrayWithObjects:@"CONTRIBUTION LEVELS", @"", nil]];
+            
+            if (![[[plans[ii] valueForKey:@"dental"] valueForKey:@"plans_by_summary_text"] containsString:@"Custom"])
+                for (int uu=0;uu<[dentalPlans count];uu++)
+                    [_planDetails addObject:[NSArray arrayWithObjects:@"EPLIST", [NSString stringWithFormat:@"\u2022 %@", [[dentalPlans objectAtIndex:uu] valueForKey:@"plan_name"]], nil]];
+
+            [_planDetails addObject: [NSArray arrayWithObjects:@"REFERENCE PLAN", [NSString stringWithFormat:@"%@", [[plans[ii] valueForKey:@"dental"] valueForKey:@"reference_plan_name"]], nil]];
+        }
+        else
+            [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Dental Plan Available", nil]];
+
+        [_pd addObject:_planDetails];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -230,6 +297,7 @@ alpha:1.0]
         else
             plans = [[tabBar.detailDictionary valueForKey:@"plan_offerings"] valueForKey:@"renewal"];// valueForKey:@"active"];
         
+        [self processData];
         [planTable reloadData];
     }
     else
@@ -335,7 +403,7 @@ alpha:1.0]
     if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
         return 1;
     
-    return [plans count];
+    return [_pd count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -345,13 +413,13 @@ alpha:1.0]
 
     if ([expandedSections containsIndex:section])
     {
-//        if ([[[plans[section] valueForKey:@"health"] valueForKey:@"plan_option_kind"] isEqualToString:@"single_carrier"])
-
-
+        /*
         if ([plans[section] valueForKey:@"dental"] != [NSNull null])
             return 5 + 9;
         else
             return 5;
+         */
+        return [[_pd objectAtIndex:section] count];
     }
     
     return 0;//[plans count];
@@ -374,6 +442,34 @@ alpha:1.0]
 */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    NSArray *_planDetails = [_pd objectAtIndex:indexPath.section];
+    
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"CONTRIBUTION LEVELS"])
+        return 118;
+
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"EPLIST"])
+    {
+            CGSize labelSize = CGSizeMake(200.0, 20.0);
+        NSString *cellText = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+        UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
+        
+        if ([cellText length] > 0)
+            labelSize = [cellText sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
+        
+        if (labelSize.height + 10 < 44)
+            return 30;
+        
+        return 45;
+    }
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"ELECTED DENTAL PLANS"])
+        return 30;
+
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"NA"])
+        return 40;
+
+    return 60;
+/*
     if (indexPath.row == 3 || indexPath.row == 8) // && (indexPath.section == 0 || indexPath.section == 1))
         return 118;
     
@@ -382,14 +478,17 @@ alpha:1.0]
     
 //    if (indexPath.section == 1 && indexPath.row == 5 )
 //        return 55;
-    
+ */
     CGSize labelSize = CGSizeMake(200.0, 20.0);
     NSString *cellText;
+    
+    cellText = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+/*
     if (indexPath.section == 0)
         cellText = [plans[indexPath.section] valueForKey:@"eligibility_rule"];//[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
     else
         cellText = [plans[indexPath.section] valueForKey:@"eligibility_rule"];//[[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:1];
-    
+    */
     UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
     
     if ([cellText length] > 0)
@@ -399,6 +498,7 @@ alpha:1.0]
         return 44;
     
     return (labelSize.height + 20);
+
 }
 
 - (UITableViewCell *) getCellContentView:(NSString *)cellIdentifier {
@@ -413,40 +513,91 @@ alpha:1.0]
     UILabel *lblContribution = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 100, 20)];
     lblContribution.text = @"CONTRIBUTION LEVELS";
     lblContribution.font = [UIFont fontWithName:@"Roboto-Bold" size:14.0f];
-    lblContribution.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//UIColorFromRGB(0x555555);
+    lblContribution.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//UIColorFromRGB(0x555555);
     lblContribution.textAlignment = NSTextAlignmentLeft;
     [lblContribution sizeToFit];
     [conrtibutionView addSubview:lblContribution];
     
+    
+    
+    
+    UILabel *p1 = [[UILabel alloc] initWithFrame:CGRectMake( 10, 70, 80, 75)];
+    UILabel *p2 = [[UILabel alloc] initWithFrame:CGRectMake(100, 70, 80, 75)];
+    UILabel *p3 = [[UILabel alloc] initWithFrame:CGRectMake(190, 70, 80, 75)];
+    UILabel *p4 = [[UILabel alloc] initWithFrame:CGRectMake(280, 70, 80, 75)];
+    
+    //    pdavid.backgroundColor = [UIColor orangeColor];
+    
+    //    [self.view addSubview:pdavid];
+    p1.textAlignment = NSTextAlignmentCenter;
+    p1.numberOfLines = 0;
+    p1.tag = 125;
+    p1.attributedText = [self setAttributedLabel2:@"EMPLOYEE" text2:@"" color:UIColorFromRGB(0x00a3e2)];
+    
+    
+    p2.textAlignment = NSTextAlignmentCenter;
+    p2.numberOfLines = 0;
+    p2.tag = 126;
+    p2.attributedText = [self setAttributedLabel2:@"SPOUSE" text2:@"" color:UIColorFromRGB(0x00a99e)];
+    
+    
+    p3.textAlignment = NSTextAlignmentCenter;
+    p3.numberOfLines = 0;
+    p3.tag = 127;
+    p3.attributedText = [self setAttributedLabel2:@"DOMESTIC\nPARTNER" text2:@"" color:UIColorFromRGB(0x625ba8)];
+    
+    
+    p4.textAlignment = NSTextAlignmentCenter;
+    p4.numberOfLines = 0;
+    p4.tag = 128;
+    p4.attributedText = [self setAttributedLabel2:@"CHILD <26" text2:@"" color:UIColorFromRGB(0xf06eaa)];
+    
+    [p1 sizeToFit];
+    [p2 sizeToFit];
+    [p3 sizeToFit];
+    [p4 sizeToFit];
+    
+    [conrtibutionView addSubview:p1];
+    [conrtibutionView addSubview:p2];
+    [conrtibutionView addSubview:p3];
+    [conrtibutionView addSubview:p4];
+    
+    
+    [self evenlySpaceTheseButtonsInThisView:@[p1, p2, p3, p4] :conrtibutionView];
+   
+    
+    
+    
+    
     UILabel *lblContributionEmployee = [[UILabel alloc] initWithFrame:CGRectMake(20, 30, 100, 20)];
     lblContributionEmployee.tag = 121;
-    lblContributionEmployee.numberOfLines = 2;
+    lblContributionEmployee.numberOfLines = 0;
     lblContributionEmployee.textAlignment = NSTextAlignmentCenter;
-    [lblContributionEmployee sizeToFit];
+//    [lblContributionEmployee sizeToFit];
     [conrtibutionView addSubview:lblContributionEmployee];
     
     
     UILabel *lblContributionSpouse = [[UILabel alloc] initWithFrame:CGRectMake(100,30,100, 20)];
     lblContributionSpouse.tag = 122;
-    lblContributionSpouse.numberOfLines = 4;
+    lblContributionSpouse.numberOfLines = 0;
     lblContributionSpouse.textAlignment = NSTextAlignmentCenter;
-    [lblContributionSpouse sizeToFit];
+//    [lblContributionSpouse sizeToFit];
     [conrtibutionView addSubview:lblContributionSpouse];
     
     
     UILabel *lblContributionPartner = [[UILabel alloc] initWithFrame:CGRectMake(200,30,100, 20)];
     lblContributionPartner.tag = 123;
-    lblContributionPartner.numberOfLines = 4;
+    lblContributionPartner.numberOfLines = 0;
     lblContributionPartner.textAlignment = NSTextAlignmentCenter;
-    [lblContributionPartner sizeToFit];
+//    [lblContributionPartner sizeToFit];
     [conrtibutionView addSubview:lblContributionPartner];
     
     
     UILabel *lblContributionChild = [[UILabel alloc] initWithFrame:CGRectMake(300, 30, 100, 20)];
     lblContributionChild.tag = 124;
-    lblContributionChild.numberOfLines = 2;
+    lblContributionChild.numberOfLines = 0;
     lblContributionChild.textAlignment = NSTextAlignmentCenter;
-    [lblContributionChild sizeToFit];
+//    [lblContributionChild sizeToFit];
     [conrtibutionView addSubview:lblContributionChild];
     
     //    [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :conrtibutionView];
@@ -454,6 +605,60 @@ alpha:1.0]
     [cell.contentView addSubview:conrtibutionView];
     
     return cell;
+}
+
+-(NSAttributedString*)setAttributedLabel1:(NSString*)labelText1 text2:(NSString*)labelText2 color:(UIColor*)color
+{
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:labelText1 attributes:attrs];
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    NSString *sPercent;
+    
+    [attributedTitle beginEditing];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:(screenSize.width <= 320) ? 20.0 : 32.0] range:NSMakeRange(0, attributedTitle.length)];
+    sPercent = @"%\n";
+    [attributedTitle endEditing];
+    
+    sPercent = @"\n";
+    return attributedTitle;
+}
+
+-(NSAttributedString*)setAttributedLabel2:(NSString*)labelText1 text2:(NSString*)labelText2 color:(UIColor*)color
+{
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:labelText1 attributes:attrs];
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    NSString *sPercent;
+    
+    [attributedTitle beginEditing];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Regular" size:(screenSize.width <= 320) ? 12.0 : 14.0] range:NSMakeRange(0, attributedTitle.length)];
+    sPercent = @"%\n";
+    [attributedTitle endEditing];
+    
+    sPercent = @"\n";
+    return attributedTitle;
+}
+
+-(NSAttributedString*)setAttributedLabel3:(NSString*)labelText1 text2:(NSString*)labelText2 color:(UIColor*)color
+{
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:labelText1 attributes:attrs];
+    
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    NSString *sPercent;
+    
+    [attributedTitle beginEditing];
+    [attributedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica-Bold" size:(screenSize.width <= 320) ? 12.0 : 16.0] range:NSMakeRange(0, attributedTitle.length)];
+    sPercent = @"%\n";
+    [attributedTitle endEditing];
+    
+    sPercent = @"\n";
+    return attributedTitle;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -616,6 +821,145 @@ alpha:1.0]
         seperatorView.tag = 976;
         seperatorView.backgroundColor = [UIColor colorWithWhite:224.0/255.0 alpha:1.0];
         [cell.contentView addSubview:seperatorView];
+        
+    }
+    
+    //    cell.backgroundColor = UIColorFromRGB(0xebebeb);
+    cell.textLabel.textColor = UIColorFromRGB(0x555555);
+    cell.detailTextLabel.textColor = UIColorFromRGB(0x555555);
+    
+    cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:14];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:14];
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = @"";
+
+    UIView *lblContributionView = (UIView *)[cell viewWithTag:120];
+    lblContributionView.hidden = YES;
+    
+    UILabel *pSeperator = [cell viewWithTag:976];
+    pSeperator.hidden = TRUE;
+
+    NSArray *_planDetails = [_pd objectAtIndex:indexPath.section];
+
+    NSString *sKey;
+    //if (indexPath.section == 0 && indexPath.row == 2)
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"CONTRIBUTION LEVELS"])
+    {
+        lblContributionView.hidden = NO;
+        UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:121];
+        UILabel *lblContributionSpouse = (UILabel *)[cell viewWithTag:122];
+        UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
+        UILabel *lblContributionChild = (UILabel *)[cell viewWithTag:124];
+        
+        UILabel *p1 = (UILabel *)[cell viewWithTag:125];
+        UILabel *p2 = (UILabel *)[cell viewWithTag:126];
+        UILabel *p3 = (UILabel *)[cell viewWithTag:127];
+        UILabel *p4 = (UILabel *)[cell viewWithTag:128];
+        
+        lblContributionEmployee.frame = CGRectMake(20, 30, 100, 20);
+        lblContributionSpouse.frame = CGRectMake(20, 30, 100, 20);
+        lblContributionPartner.frame = CGRectMake(20, 30, 100, 20);
+        lblContributionChild.frame = CGRectMake(20, 30, 100, 20);
+        
+        
+        if (indexPath.row == 3)
+            sKey = @"health";
+        else
+            sKey = @"dental";
+        
+        NSString *empCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
+        lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
+        
+        [lblContributionEmployee sizeToFit];
+        
+        NSString *spouseCont;
+        
+        if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] == (NSString *)[NSNull null])
+        {
+            spouseCont = @"Not\nCovered";
+            lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x00a99e)];
+            
+        }
+        else
+        {
+            spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
+            lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+        }
+        
+        [lblContributionSpouse sizeToFit];
+        
+        NSString *partnerCont;
+        if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] == (NSString *)[NSNull null])
+        {
+            partnerCont = @"Not\nCovered";
+            lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x625ba8)];
+            
+        }
+        else
+        {
+            partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+            lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+        }
+        
+        [lblContributionPartner sizeToFit];
+        
+        NSString *childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
+        lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
+        
+        [lblContributionChild sizeToFit];
+        
+        //            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :lblContributionView];
+        lblContributionEmployee.frame = CGRectMake(p1.frame.origin.x + (p1.frame.size.width/2 - lblContributionEmployee.frame.size.width/2), lblContributionEmployee.frame.origin.y, lblContributionEmployee.frame.size.width, lblContributionEmployee.frame.size.height);
+        
+        lblContributionSpouse.frame = CGRectMake(p2.frame.origin.x + (p2.frame.size.width/2 - lblContributionSpouse.frame.size.width/2), lblContributionSpouse.frame.origin.y, lblContributionSpouse.frame.size.width, lblContributionSpouse.frame.size.height);
+        
+        lblContributionPartner.frame = CGRectMake(p3.frame.origin.x + (p3.frame.size.width/2 - lblContributionPartner.frame.size.width/2), lblContributionPartner.frame.origin.y, lblContributionPartner.frame.size.width, lblContributionPartner.frame.size.height);
+        
+        lblContributionChild.frame = CGRectMake(p4.frame.origin.x + (p4.frame.size.width/2 - lblContributionChild.frame.size.width/2), lblContributionChild.frame.origin.y, lblContributionChild.frame.size.width, lblContributionChild.frame.size.height);
+        
+    }
+    else
+    {
+        if (![[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"EPLIST"] && ![[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"NA"])
+            cell.textLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0];//@"";
+        
+        cell.detailTextLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+        
+        if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"HEALTH PLAN"] || [[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"DENTAL PLAN"])
+            pSeperator.hidden = FALSE;
+    }
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *_planDetails = [_pd objectAtIndex:indexPath.section];
+
+    if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"EPLIST"])
+        return 3;
+
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath1:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        cell = [self getCellContentView:CellIdentifier];
+        
+        CGRect sepFrame = CGRectMake(10, 45, tableView.frame.size.width - 90, 1);
+        UIView *seperatorView = [[UIView alloc] initWithFrame:sepFrame];
+        seperatorView.hidden = TRUE;
+        seperatorView.tag = 976;
+        seperatorView.backgroundColor = [UIColor colorWithWhite:224.0/255.0 alpha:1.0];
+        [cell.contentView addSubview:seperatorView];
 
     }
     
@@ -673,42 +1017,71 @@ alpha:1.0]
             UILabel *lblContributionPartner = (UILabel *)[cell viewWithTag:123];
             UILabel *lblContributionChild = (UILabel *)[cell viewWithTag:124];
 
+            UILabel *p1 = (UILabel *)[cell viewWithTag:125];
+            UILabel *p2 = (UILabel *)[cell viewWithTag:126];
+            UILabel *p3 = (UILabel *)[cell viewWithTag:127];
+            UILabel *p4 = (UILabel *)[cell viewWithTag:128];
+
+            lblContributionEmployee.frame = CGRectMake(20, 30, 100, 20);
+            lblContributionSpouse.frame = CGRectMake(20, 30, 100, 20);
+            lblContributionPartner.frame = CGRectMake(20, 30, 100, 20);
+            lblContributionChild.frame = CGRectMake(20, 30, 100, 20);
+            
+            
             if (indexPath.row == 3)
                 sKey = @"health";
             else
                 sKey = @"dental";
             
             NSString *empCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
-            lblContributionEmployee.attributedText = [self setAttributedLabel:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
+            lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
             
             [lblContributionEmployee sizeToFit];
             
             NSString *spouseCont;
             
             if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] == (NSString *)[NSNull null])
+            {
                 spouseCont = @"Not\nCovered";
+                lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x00a99e)];
+
+            }
             else
+            {
                 spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
-            lblContributionSpouse.attributedText = [self setAttributedLabel:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+                lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+            }
             
             [lblContributionSpouse sizeToFit];
             
             NSString *partnerCont;
             if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] == (NSString *)[NSNull null])
+            {
                 partnerCont = @"Not\nCovered";
-            else
-                partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+                lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x625ba8)];
 
-            lblContributionPartner.attributedText = [self setAttributedLabel:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+            }
+            else
+            {
+                partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
+                lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+            }
             
             [lblContributionPartner sizeToFit];
             
             NSString *childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
-            lblContributionChild.attributedText = [self setAttributedLabel:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
+            lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
             
             [lblContributionChild sizeToFit];
             
-            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :lblContributionView];
+//            [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionSpouse, lblContributionPartner, lblContributionChild] :lblContributionView];
+            lblContributionEmployee.frame = CGRectMake(p1.frame.origin.x + (p1.frame.size.width/2 - lblContributionEmployee.frame.size.width/2), lblContributionEmployee.frame.origin.y, lblContributionEmployee.frame.size.width, lblContributionEmployee.frame.size.height);
+            
+            lblContributionSpouse.frame = CGRectMake(p2.frame.origin.x + (p2.frame.size.width/2 - lblContributionSpouse.frame.size.width/2), lblContributionSpouse.frame.origin.y, lblContributionSpouse.frame.size.width, lblContributionSpouse.frame.size.height);
+            
+            lblContributionPartner.frame = CGRectMake(p3.frame.origin.x + (p3.frame.size.width/2 - lblContributionPartner.frame.size.width/2), lblContributionPartner.frame.origin.y, lblContributionPartner.frame.size.width, lblContributionPartner.frame.size.height);
+            
+            lblContributionChild.frame = CGRectMake(p4.frame.origin.x + (p4.frame.size.width/2 - lblContributionChild.frame.size.width/2), lblContributionChild.frame.origin.y, lblContributionChild.frame.size.width, lblContributionChild.frame.size.height);
 
         }
         else

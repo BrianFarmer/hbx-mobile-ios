@@ -37,7 +37,7 @@ alpha:1.0]
     
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     [vHeader layoutHeaderView:employerData];
     
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
