@@ -10,13 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "employerTabController.h"
 #import "rosterBrokerEmployerViewController.h"
-
-#define UIColorFromRGB(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
-blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
-alpha:1.0]
-
+#import "Constants.h"
 
 @interface detailBrokerEmployerViewController ()
 
@@ -52,7 +46,7 @@ alpha:1.0]
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     [vHeader layoutHeaderView:employerData];
-    
+/*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width-20, 65);
 
@@ -84,7 +78,7 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-    
+*/    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
@@ -352,16 +346,13 @@ alpha:1.0]
 
     switch (section) {
         case 0:
-            headerView.backgroundColor = [UIColor lightGrayColor]; //UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-            //            headerLabel.backgroundColor = UIColorFromRGB(0x00a99e);
+            headerView.backgroundColor = EMPLOYER_DETAIL_HEADER_DRAWER_RENEWAL;
             break;
         case 1:
-            headerView.backgroundColor = UIColorFromRGB(0x00a3e2);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-            //           headerLabel.backgroundColor = UIColorFromRGB(0x00a3e2);
+            headerView.backgroundColor = EMPLOYER_DETAIL_HEADER_DRAWER_PART;
             break;
         case 2:
-            headerView.backgroundColor = UIColorFromRGB(0x625ba8);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
-            //         headerLabel.backgroundColor = UIColorFromRGB(0x625ba8);
+            headerView.backgroundColor = EMPLOYER_DETAIL_HEADER_DRAWER_COSTS;
             break;
         default:
             break;
@@ -371,9 +362,8 @@ alpha:1.0]
     {
         UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         imgVew.backgroundColor = [UIColor clearColor];
-        imgVew.image = [UIImage imageNamed:@"close_arrow32x32.png"];
+        imgVew.image = [UIImage imageNamed:@"uparrowWHT.png"]; //close_arrow32x32.png
         imgVew.contentMode = UIViewContentModeScaleAspectFit;
-        // Add the image to the header view
         [headerView addSubview:imgVew];
     }
     else
@@ -381,23 +371,22 @@ alpha:1.0]
         UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         button.layer.cornerRadius = 16;
         button.layer.borderWidth = 2;
-        button.layer.borderColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+        button.layer.borderColor = EMPLOYER_DETAIL_HEADER_DRAWER_TEXT.CGColor;//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
         button.clipsToBounds = YES;
         button.tag = section;
-        [button setTitleColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1] forState:UIControlStateNormal];
+//        [button setTitleColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1] forState:UIControlStateNormal];
+        [button setTitleColor:EMPLOYER_DETAIL_HEADER_DRAWER_TEXT forState:UIControlStateNormal];
+        
         button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:24.0];
         [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
-        
-//        UIImage *btnImage = [UIImage imageNamed:@"open_plus32x32.png"];
-//        [button setImage:btnImage forState:UIControlStateNormal];
         
         [button setTitle:[NSString stringWithFormat:@"%@", @"+"] forState:UIControlStateNormal];
         [headerView addSubview:button];
     }
     
-    headerView.backgroundColor = UIColorFromRGB(0xebebeb);//[UIColor colorWithRed:216.0f/255.0f green:216.0f/255.0f blue:216.0f/255.0f alpha:1.0f];
+//    headerView.backgroundColor = UIColorFromRGB(0xebebeb);
     headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 48);
-    headerLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];;//UIColorFromRGB(0x007bc4);
+    headerLabel.textColor = EMPLOYER_DETAIL_HEADER_DRAWER_TEXT;//[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];;//UIColorFromRGB(0x007bc4);
     headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
     headerLabel.text = [sections objectAtIndex:section];///  @"This is the custom header view";
     headerLabel.textAlignment = NSTextAlignmentLeft;
@@ -523,9 +512,9 @@ alpha:1.0]
                 pieChartRight.tag = 970;
                 
                 self.sliceColors =[NSArray arrayWithObjects:
-                                   UIColorFromRGB(0x00a99e),
-                                   UIColorFromRGB(0x625ba8),
-                                   [UIColor redColor],
+                                   EMPLOYER_DETAIL_PARTICIPATION_ENROLLED,
+                                   EMPLOYER_DETAIL_PARTICIPATION_WAIVED,
+                                   EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED,
                                    nil];
                 
                 pieChartRight.hidden = TRUE;
@@ -537,7 +526,7 @@ alpha:1.0]
                 pEnrolled.hidden = TRUE;
                 pEnrolled.numberOfLines = 2;
                 pEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
-                pEnrolled.textColor = UIColorFromRGB(0x00a99e);
+                pEnrolled.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;//UIColorFromRGB(0x00a99e);
                 pEnrolled.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnEnrolledLink:)];
 
@@ -551,7 +540,7 @@ alpha:1.0]
                 pWaived.hidden = TRUE;
                 pWaived.numberOfLines = 2;
                 pWaived.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
-                pWaived.textColor = UIColorFromRGB(0x625ba8);
+                pWaived.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED; //UIColorFromRGB(0x625ba8);
                 pWaived.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gestureWaived = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnWaivedLink:)];
   
@@ -565,7 +554,7 @@ alpha:1.0]
                 pNotEnrolled.hidden = TRUE;
                 pNotEnrolled.numberOfLines = 2;
                 pNotEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
-                pNotEnrolled.textColor = [UIColor redColor]; //UIColorFromRGB(0x00a99e);
+                pNotEnrolled.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
                 pNotEnrolled.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gestureNotEnrolled = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnNotEnrolledLink:)];
 
@@ -579,7 +568,7 @@ alpha:1.0]
                 pTotalEmployees.hidden = TRUE;
                 pTotalEmployees.numberOfLines = 2;
                 pTotalEmployees.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
-                pTotalEmployees.textColor = UIColorFromRGB(0x555555);
+                pTotalEmployees.textColor = EMPLOYER_DETAIL_PARTICIPATION_ALL;
                 pTotalEmployees.backgroundColor = [UIColor clearColor];
                 [cell.contentView addSubview:pTotalEmployees];
                 

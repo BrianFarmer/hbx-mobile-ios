@@ -21,5 +21,5 @@
 @property(nonatomic, assign) NSString *customCookie_a;
 
 @property(nonatomic, assign) NSString *sortOrder;
-
+@property(nonatomic, assign) NSIndexPath *iPath;
 @end

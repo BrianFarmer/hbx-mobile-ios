@@ -14,13 +14,7 @@
 #import "tutorialViewcontroller.h"
 #import "detailBrokerEmployerViewController.h"
 #import "employerTabController.h"
-
-#define UIColorFromRGB(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
-blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
-alpha:1.0]
-
+#import "Constants.h"
 
 static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
@@ -650,6 +644,11 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     return 88;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 2;
+}
+
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
@@ -667,15 +666,15 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     switch (section) {
         case 0:
-            headerView.backgroundColor = UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            headerView.backgroundColor = EMPLOYER_LIST_HEADER_DRAWERS_OE;//UIColorFromRGB(0x00a99e);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
 //            headerLabel.backgroundColor = UIColorFromRGB(0x00a99e);
             break;
         case 1:
-            headerView.backgroundColor = UIColorFromRGB(0x00a3e2);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            headerView.backgroundColor = EMPLOYER_LIST_HEADER_DRAWERS_RIP;//UIColorFromRGB(0x00a3e2);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
  //           headerLabel.backgroundColor = UIColorFromRGB(0x00a3e2);
             break;
         case 2:
-            headerView.backgroundColor = UIColorFromRGB(0x625ba8);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+            headerView.backgroundColor = EMPLOYER_LIST_HEADER_DRAWERS_AC;//UIColorFromRGB(0x625ba8);//[UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
    //         headerLabel.backgroundColor = UIColorFromRGB(0x625ba8);
             break;
             
@@ -748,7 +747,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     {
         if (section == 0 && clients_needing_immediate_attention > 0)
         {
-            UIView *_leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, headerView.frame.size.height)];
+            UIView *_leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, headerView.frame.size.height)];
             _leftColor.backgroundColor = [UIColor redColor];
             [headerView addSubview:_leftColor];
         }
@@ -886,7 +885,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
 
-    cell.leftColor.frame = CGRectMake(0,0, 4, 88);
+//    cell.leftColor.frame = CGRectMake(0, 0, 5, 10);
     
     cell.delegate = self;
     cell.leftSwipeSettings.transition = MGSwipeTransition3D;
@@ -920,7 +919,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         cell.leftColor.hidden = FALSE;
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.planMinimum intValue] - ([ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue])];
         cell.employeesLabel.textColor = [UIColor redColor];
-            cell.leftColor.frame = CGRectMake(0,0, 4, 88);
+        cell.leftColor.frame = CGRectMake(0, 0, 5, 86);
     }
     else
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16. 

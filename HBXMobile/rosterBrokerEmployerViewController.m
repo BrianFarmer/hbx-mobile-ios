@@ -8,12 +8,7 @@
 
 #import "rosterBrokerEmployerViewController.h"
 #import "EmployeeProfileViewController.h"
-
-#define UIColorFromRGB(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
-blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
-alpha:1.0]
+#import "Constants.h"
 
 @interface rosterBrokerEmployerViewController ()
 
@@ -42,7 +37,7 @@ alpha:1.0]
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     [vHeader layoutHeaderView:employerData];
-    
+/*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
@@ -75,6 +70,7 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
+ */
     slideView = [[UISlideView alloc] init];//]WithFrame:CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 44, 200, 200)];
     slideView.backgroundColor = [UIColor clearColor];
     slideView.delegate = self;
@@ -146,7 +142,7 @@ alpha:1.0]
     
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
         return;
-    
+/*
     NSIndexPath *myIP;
     
     if ([tabBar.sortOrder isEqualToString:@"Enrolled"])
@@ -158,8 +154,11 @@ alpha:1.0]
     if ([tabBar.sortOrder isEqualToString:@"Not Enrolled"])
         myIP = [NSIndexPath indexPathForRow:2 inSection:0];
 
-    
-    [self sortByStatus:myIP];
+    if ([tabBar.sortOrder isEqualToString:@"Terminated"])
+        myIP = [NSIndexPath indexPathForRow:3 inSection:0];
+
+*/    
+    [self sortByStatus:tabBar.iPath];
 
 }
 
@@ -444,11 +443,13 @@ alpha:1.0]
 
  //   [self getActiveEnrollment:indexPath.row];
     if ([sActive isEqualToString:@"Enrolled"])
-        attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
+        attrs = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_ENROLLED};
     else if ([sActive isEqualToString:@"Not Enrolled"])
-        attrs = @{ NSForegroundColorAttributeName : [UIColor redColor]};
+        attrs = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED};
+    else if ([sActive isEqualToString:@"Terminated"])
+        attrs = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_TERMINATED};
     else
-        attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
+        attrs = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_WAIVED};
 
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:sActive attributes:attrs];
                              
@@ -458,11 +459,13 @@ alpha:1.0]
     {
         NSDictionary *attrsRenew;
         if ([sRenewal isEqualToString:@"Enrolled"])
-            attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};
+            attrsRenew = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_ENROLLED};
         else if ([sRenewal isEqualToString:@"Not Enrolled"])
-            attrsRenew = @{ NSForegroundColorAttributeName : [UIColor redColor]};
+            attrsRenew = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED};
+        else if ([sRenewal isEqualToString:@"Terminated"])
+            attrsRenew = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_TERMINATED};
         else
-            attrsRenew = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x625ba8)};
+            attrsRenew = @{ NSForegroundColorAttributeName : EMPLOYER_DETAIL_PARTICIPATION_WAIVED};
         
         NSMutableAttributedString *attributedTitle1 = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@ %@",sRenewal, @"for next year"] attributes:attrsRenew];
         
@@ -540,7 +543,10 @@ alpha:1.0]
             case 2:
                 substring = @"Not Enrolled";
                 break;
-            default:
+            case 3:
+                substring = @"Terminated";
+                break;
+           default:
                 break;
         }
 //        predicate = [NSPredicate predicateWithFormat:@"enrollments.active.health.status contains[c] %@", substring];
@@ -561,6 +567,6 @@ alpha:1.0]
     [pRosterTable reloadData];
     
     ((employerTabController *) self.tabBarController).sortOrder = substring;
-
+    ((employerTabController *) self.tabBarController).iPath = idx;
 }
 @end

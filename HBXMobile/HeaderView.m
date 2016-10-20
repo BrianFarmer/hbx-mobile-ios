@@ -7,6 +7,7 @@
 //
 
 #import "HeaderView.h"
+#import "Constants.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -55,12 +56,122 @@ alpha:1.0]
 - (void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage;
 {
     employerData = eData;
+    
+    UILabel *pCompany = [[UILabel alloc] init];
+    
+    pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
+    pCompany.text = employerData.companyName;
+    pCompany.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
+    pCompany.numberOfLines = 0;
+    
+    pCompany.textAlignment = NSTextAlignmentCenter;
+//    [pCompany sizeToFit];
+    pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, 40);
+  
+    CGSize labelSize = CGSizeMake(200.0, 20.0);
+    UIFont *cellFont = [UIFont fontWithName:@"Roboto-Bold" size:24];
+    
+    if ([pCompany.text length] > 0)
+        labelSize = [pCompany.text sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
+    
+    if (labelSize.height > 40)
+        pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height - 30);
+   
+//    pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height);
+//    else
+    
+    
+    UILabel *pCompanyFooter = [[UILabel alloc] init];
+    pCompanyFooter.font = [UIFont fontWithName:@"Roboto-Medium" size:16];
+   
+    UILabel * pLabelCoverage;
+    
+    if (bShowCoverage)
+    {
+        NSDateFormatter *f = [[NSDateFormatter alloc] init];
+        [f setDateFormat:@"yyyy-MM-dd"];
+        
+        NSDate *endDate = [f dateFromString:employerData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+        
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+        [dateComponents setDay:364];
+        NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+        
+        [f setDateFormat:@"MMM dd, yyyy"];
+        
+//        UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
+        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, pCompany.frame.origin.y + pCompany.frame.size.height, self.frame.size.width, 45)];
+        pLabelCoverage.tag = 975;
+        
+        pLabelCoverage.numberOfLines = 2;
+        pLabelCoverage.backgroundColor = [UIColor clearColor];
+        pLabelCoverage.font = [UIFont fontWithName:@"Roboto-Medium" size:15];
+        pLabelCoverage.textAlignment = NSTextAlignmentCenter;
+        pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
+        
+        pLabelCoverage.hidden = FALSE;
+        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        
+        NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
+        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
+        
+        NSString *temp_a = @"Coverage Year";
+        NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
+        [string1 beginEditing];
+        [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
+        [string1 endEditing];
+        
+        [attributedTitle appendAttributedString:string1];
+        
+        pLabelCoverage.attributedText = attributedTitle;
+        
+        [self addSubview:pLabelCoverage];
+        pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height, self.frame.size.width - 20, 20);
+
+    }
+    else
+        pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.frame.size.width - 20, pCompanyFooter.frame.size.height);
+
+    
+    pCompanyFooter.textAlignment = NSTextAlignmentCenter;
+    pCompanyFooter.textColor = UIColorFromRGB(0x555555);
+//    pCompany.backgroundColor  = [UIColor greenColor];
+    
+    if (employerData.status == (enrollmentState)NEEDS_ATTENTION)
+    {
+        pCompanyFooter.text = NSLocalizedString(@"TITLE_NOTE", @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET");
+        pCompanyFooter.textColor = ENROLLMENT_STATUS_OE_MIN_NOTMET;
+        
+    }
+    else if (employerData.status == (enrollmentState)OPEN_ENROLLMENT_MET)
+    {
+        pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS";
+        pCompanyFooter.textColor = ENROLLMENT_STATUS_OE_MIN_MET;//[UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f]; //[UIColor yellowColor];
+        
+    }
+    else if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS)
+    {
+        pCompanyFooter.text = @"RENEWAL PENDING"; //@"RENEWAL IN PROGRESS";
+        pCompanyFooter.textColor = ENROLLMENT_STATUS_RENEWAL_IN_PROG;//[UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f];
+    }
+    else if (employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
+    {
+        pCompanyFooter.text = @"IN COVERAGE";
+        pCompanyFooter.textColor = ENROLLMENT_STATUS_ALL_CLIENTS;//[UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
+    }
+
+    [self addSubview:pCompany];
+    [self addSubview:pCompanyFooter];
+    
     for (int btnCount=0;btnCount<4;btnCount++)
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.tag=30+btnCount;
-        [button setFrame:CGRectMake(10, 95, 38, 38)];
-        //        [button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+    //    [button setFrame:CGRectMake(10, 95, 38, 38)];
+        //[button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+        [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - 48, 38, 38)];
+        
         [button setBackgroundColor:[UIColor clearColor]];
         UIImage *btnImage;
         switch(btnCount)
@@ -93,47 +204,13 @@ alpha:1.0]
     
     [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
 
-    if (bShowCoverage)
+    int jj = pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height;
+    int bb = [self viewWithTag:30].frame.origin.y;
+    if (bb - jj > 15)
     {
-        NSDateFormatter *f = [[NSDateFormatter alloc] init];
-        [f setDateFormat:@"yyyy-MM-dd"];
-
-        NSDate *endDate = [f dateFromString:employerData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+        pCompanyFooter.frame = CGRectMake(pCompanyFooter.frame.origin.x,pCompanyFooter.frame.origin.y+20,pCompanyFooter.frame.size.width,pCompanyFooter.frame.size.height);
         
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-        [dateComponents setDay:364];
-        NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
-
-        [f setDateFormat:@"MMM dd, yyyy"];
-
-        UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
-    //    UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, tableView.frame.size.width, 50)];
-        pLabelCoverage.tag = 975;
-
-        pLabelCoverage.numberOfLines = 2;
-        pLabelCoverage.backgroundColor = [UIColor clearColor];
-        pLabelCoverage.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
-        pLabelCoverage.textAlignment = NSTextAlignmentCenter;
-        pLabelCoverage.textColor = UIColorFromRGB(0x555555);
-
-        pLabelCoverage.hidden = FALSE;
-        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
-        
-        NSDictionary *attrs = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x555555) };
-        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
-        
-        NSString *temp_a = @"Coverage Year";
-        NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
-        [string1 beginEditing];
-        [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Regular" size:16.0] range:NSMakeRange(0, string1.length)];
-        [string1 endEditing];
-        
-        [attributedTitle appendAttributedString:string1];
-        
-        pLabelCoverage.attributedText = attributedTitle;
-        
-        [self addSubview:pLabelCoverage];
+        pLabelCoverage.frame = CGRectMake(pLabelCoverage.frame.origin.x,pLabelCoverage.frame.origin.y+10,pLabelCoverage.frame.size.width,pLabelCoverage.frame.size.height);
     }
 
 }

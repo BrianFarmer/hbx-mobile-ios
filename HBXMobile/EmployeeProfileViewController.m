@@ -34,7 +34,7 @@ alpha:1.0]
 
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     [vHeader layoutHeaderView:_employerData];
-    
+/*
     pName.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     
     pName.textAlignment = NSTextAlignmentCenter;
@@ -66,7 +66,7 @@ alpha:1.0]
     
     pStatus_b.frame = CGRectMake(10, pStatus_a.frame.origin.y + pStatus_a.frame.size.height, self.view.frame.size.width - 20, pStatus_b.frame.size.height);
     pStatus_b.textAlignment = NSTextAlignmentCenter;
-    
+    */
     sections = [[NSArray alloc] initWithObjects: @"DETAILS", @"HEALTH PLAN", @"DEPENDENTS", nil];
     
     if (!expandedSections)

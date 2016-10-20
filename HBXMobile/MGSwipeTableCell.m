@@ -632,7 +632,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         _lblDaysLeftText.numberOfLines = 2;
 */
         
-        _leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, self.frame.size.height)];
+        _leftColor = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, self.frame.size.height-20)];
         _leftColor.backgroundColor = [UIColor redColor];
         _leftColor.hidden = FALSE;
         [self.contentView addSubview:_leftColor];
@@ -668,7 +668,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         [self initViews:YES];
         
         _headerTitle2.frame = CGRectMake(self.frame.size.width - 55, 0, 75, self.frame.size.height);
-        _leftColor.frame = CGRectMake(0, 0, 4, self.frame.size.height);
+        _leftColor.frame = CGRectMake(0, 0, 5, self.frame.size.height-2);
         _employerLabel.frame = CGRectMake(_employerLabel.frame.origin.x, _employerLabel.frame.origin.y, _employerLabel.frame.size.width + 40, _employerLabel.frame.size.height);
         _employeesLabel.frame = CGRectMake(_employeesLabel.frame.origin.x + 40, _employeesLabel.frame.origin.y, _employeesLabel.frame.size.width, _employeesLabel.frame.size.height);
 //        _lblEmployeesNeeded.frame = CGRectMake(_lblEmployeesNeeded.frame.origin.x + 40, _lblEmployeesNeeded.frame.origin.y, _lblEmployeesNeeded.frame.size.width, _lblEmployeesNeeded.frame.size.height);
