@@ -277,6 +277,7 @@
 		40F8BFA61DB94D3F00FFEEDE /* check_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_yellow.png; sourceTree = "<group>"; };
 		40F8BFA81DB94DE500FFEEDE /* check_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_green.png; sourceTree = "<group>"; };
 		40F8BFAA1DB94E3300FFEEDE /* check_purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_purple.png; sourceTree = "<group>"; };
+		40F8BFAC1DB9595600FFEEDE /* 		.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "\t\t.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,6 +370,7 @@
 		13FF47001C8A2C5600C7C851 = {
 			isa = PBXGroup;
 			children = (
+				40F8BFAC1DB9595600FFEEDE /* 		.entitlements */,
 				40F1FB931D84DD75005EF01F /* CoreGraphics.framework */,
 				130AA2821CEE568900B43F24 /* MessageUI.framework */,
 				134DE7A51CED442E00F8958A /* MapKit.framework */,
@@ -960,6 +962,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "\t\t.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -985,6 +988,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "\t\t.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
