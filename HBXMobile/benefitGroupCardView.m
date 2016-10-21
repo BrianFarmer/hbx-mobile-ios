@@ -47,12 +47,12 @@ alpha:1.0]
         [_delegate scrolltoNextPage:currrentCard];
 }
 
--(void)layoutView:(int)cc totalPages:(int)totalCards
+-(void)layoutView:(int)cc totalPages:(NSInteger)totalCards
 {
     NSLog(@"W:%f     H:%f", self.bounds.size.width, self.bounds.size.height);
-    CGFloat scaleX = self.frame.size.width/394;
-    CGFloat scaleY = self.frame.size.height/448;
-    CGFloat scale = MIN(scaleX, scaleY);    
+//    CGFloat scaleX = self.frame.size.width/394;
+//    CGFloat scaleY = self.frame.size.height/448;
+//    CGFloat scale = MIN(scaleX, scaleY);
     
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];

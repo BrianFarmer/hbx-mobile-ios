@@ -198,7 +198,7 @@
 		13F169A11D2D3E70004DF9B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerSearchResultTableViewController.h; sourceTree = "<group>"; };
 		13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerSearchResultTableViewController.m; sourceTree = "<group>"; };
-		13FF47091C8A2C5600C7C851 /* 		.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "\t\t.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13FF470D1C8A2C5600C7C851 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		13FF470F1C8A2C5600C7C851 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13FF47101C8A2C5600C7C851 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -277,7 +277,6 @@
 		40F8BFA61DB94D3F00FFEEDE /* check_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_yellow.png; sourceTree = "<group>"; };
 		40F8BFA81DB94DE500FFEEDE /* check_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_green.png; sourceTree = "<group>"; };
 		40F8BFAA1DB94E3300FFEEDE /* check_purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_purple.png; sourceTree = "<group>"; };
-		40F8BFAC1DB9595600FFEEDE /* 		.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "\t\t.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,7 +369,6 @@
 		13FF47001C8A2C5600C7C851 = {
 			isa = PBXGroup;
 			children = (
-				40F8BFAC1DB9595600FFEEDE /* 		.entitlements */,
 				40F1FB931D84DD75005EF01F /* CoreGraphics.framework */,
 				130AA2821CEE568900B43F24 /* MessageUI.framework */,
 				134DE7A51CED442E00F8958A /* MapKit.framework */,
@@ -388,7 +386,7 @@
 		13FF470A1C8A2C5600C7C851 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13FF47091C8A2C5600C7C851 /* 		.app */,
+				13FF47091C8A2C5600C7C851 /* HBXMobile.app */,
 				13FF47251C8A2C5600C7C851 /* HBXMobileTests.xctest */,
 				13FF47301C8A2C5600C7C851 /* HBXMobileUITests.xctest */,
 			);
@@ -581,7 +579,7 @@
 			);
 			name = "		";
 			productName = HBXMobile;
-			productReference = 13FF47091C8A2C5600C7C851 /* 		.app */;
+			productReference = 13FF47091C8A2C5600C7C851 /* HBXMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
 		13FF47241C8A2C5600C7C851 /* HBXMobileTests */ = {
@@ -962,7 +960,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "\t\t.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -977,7 +975,7 @@
 					"$(PROJECT_DIR)/HBXMobile/frameworks/AWSCore.framework/Versions/A",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gov.dc.HBXMobile;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HBXMobile;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -988,7 +986,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "\t\t.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1003,7 +1001,7 @@
 					"$(PROJECT_DIR)/HBXMobile/frameworks/AWSCore.framework/Versions/A",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gov.dc.HBXMobile;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HBXMobile;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;

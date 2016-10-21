@@ -450,15 +450,24 @@ alpha:1.0]
 
     if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"EPLIST"])
     {
-            CGSize labelSize = CGSizeMake(200.0, 20.0);
+//            CGSize labelSize = CGSizeMake(200.0, 20.0);
         NSString *cellText = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
         UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
         
+//        if ([cellText length] > 0)
+ //           labelSize = [cellText sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
+
         if ([cellText length] > 0)
-            labelSize = [cellText sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
-        
-        if (labelSize.height + 10 < 44)
-            return 30;
+        {
+            CGSize size = [cellText sizeWithAttributes:
+                           @{NSFontAttributeName: cellFont}];
+            
+            // Values are fractional -- you should take the ceilf to get equivalent values
+            CGSize adjustedSize = CGSizeMake(ceilf(size.width), ceilf(size.height));
+            
+            if (adjustedSize.height + 10 < 44)
+                return 30;
+        }
         
         return 45;
     }
@@ -478,17 +487,11 @@ alpha:1.0]
     
 //    if (indexPath.section == 1 && indexPath.row == 5 )
 //        return 55;
- */
+ 
     CGSize labelSize = CGSizeMake(200.0, 20.0);
     NSString *cellText;
     
     cellText = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
-/*
-    if (indexPath.section == 0)
-        cellText = [plans[indexPath.section] valueForKey:@"eligibility_rule"];//[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
-    else
-        cellText = [plans[indexPath.section] valueForKey:@"eligibility_rule"];//[[_planDentalDetails objectAtIndex:indexPath.row] objectAtIndex:1];
-    */
     UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
     
     if ([cellText length] > 0)
@@ -498,7 +501,7 @@ alpha:1.0]
         return 44;
     
     return (labelSize.height + 20);
-
+*/
 }
 
 - (UITableViewCell *) getCellContentView:(NSString *)cellIdentifier {

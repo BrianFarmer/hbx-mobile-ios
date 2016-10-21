@@ -106,8 +106,9 @@
     [f setDateFormat:@"yyyy-MM-dd"];
 
     NSDateFormatter *out = [[NSDateFormatter alloc] init];
-    [out setDateFormat:@"MMM dd, yyyy"];
-
+//    [out setDateFormat:@"MMM dd, yyyy"];
+    [out setDateFormat:@"MM/dd/yyyy"];
+    
     NSDate *endDate = [f dateFromString:employerData.open_enrollment_ends];
     
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -140,8 +141,9 @@
         }
         else
         {
-            [f setDateFormat:@"MMM dd, yyyy"];
-
+//            [f setDateFormat:@"MMM dd, yyyy"];
+            [f setDateFormat:@"MM/dd/yyyy"];
+            
             if ([employerData.binder_payment_due length] > 0)
             {
                 renewalNames = [[NSArray alloc] initWithObjects: @"", @"Employer Application Due", @"Open Enrollment Ends", @"Coverage Begins", @"Binder Payment Due", nil];
@@ -157,7 +159,8 @@
     else
     {
         NSDate *startDate = [f dateFromString:employerData.open_enrollment_begins];
-        [f setDateFormat:@"MMM dd, yyyy"];
+ //       [f setDateFormat:@"MMM dd, yyyy"];
+        [f setDateFormat:@"MM/dd/yyyy"];
         
         if ([startDate compare:today] == NSOrderedAscending)
             renewalNames = [[NSArray alloc] initWithObjects: @"", @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];

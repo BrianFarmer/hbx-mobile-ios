@@ -114,6 +114,10 @@
         lblSaveUserID.frame = CGRectMake(iLeftPos, lblEnableTouchID.frame.origin.y + lblEnableTouchID.frame.size.height + 20, 150, 40);
         switchSaveMe.frame = CGRectMake(iLeftPos + 300 - switchSaveMe.frame.size.width, lblSaveUserID.frame.origin.y + 5, switchSaveMe.frame.size.width, 40);
 */
+        
+        switchTouchId.thumbTintColor = [UIColor whiteColor];
+        switchTouchId.tintColor = [UIColor whiteColor];
+        
         [switchSaveMe setThumbTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
         
         switchSaveMe.thumbTintColor = [UIColor whiteColor];
@@ -188,6 +192,7 @@
         LAContext *context = [LAContext new];
         NSError *error = nil;
         hasTouchID = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
+        
         if (!hasTouchID)
         {
             [lblEnableTouchID setHidden:TRUE];
