@@ -47,28 +47,21 @@ alpha:1.0]
         NSError *error = nil;
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"%@", dictionary);
-//        NSArray *array = [NSArray arrayWithObject:[NSMutableDictionary dictionaryWithObject:@"plans" forKey:@""]];   // you can also do same for Name key...
+        for (NSDictionary *itemDict in dictionary)
+        {
+ //           NSArray *womensArray = (NSArray*)[itemDict objectForKey:@"plans"];
+                    NSLog(@"%@",itemDict);
+            
+            NSArray *pp = [dictionary valueForKey:itemDict];
+            for (NSDictionary *items in pp)
+            {
+                                NSString *name = [pp valueForKey:@"plans"];
+  //              NSString *name = [items objectForKey:@"phone"];
+                                    NSLog(@"%@",items);
+                //Do the comparison here
+            }
+        }
 
-        NSArray *array1 = [NSArray arrayWithObject:[NSMutableDictionary dictionaryWithObject:@"health" forKey:@"plans"]];   // you can also do same for Name key...
-        NSArray *data1 = [NSArray arrayWithObject:dictionary];//[NSMutableDictionary dictionaryWithObject:@"foo" forKey:@"BAR"]];
-
-
-        NSDictionary *ll = [data1 objectAtIndex:0];
-                NSString *llp = [ll valueForKey:@"kaiser.phone"];
-        NSArray *filteredarray = [data1 filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(kaiser.plans.plans == %@)", @"health"]];
-        
-        
-//        NSArray *data1 = [NSArray arrayWithObject:dictionary];//[NSMutableDictionary dictionaryWithObject:@"foo" forKey:@"BAR"]];
-//        NSArray *ll = [data1 objectAtIndex:0];// objectAtIndex:0];
- //       NSArray *filtered = [ll filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"kaiser.plans == %@", @"health"]];
-        
-        NSPredicate *predicate;
-  //      NSArray *pa = [data1 allValues];// valueForKeyPath:@""];
-        predicate = [NSPredicate predicateWithFormat:@"plans == %@", @"health"];//]type, substring];
-        
-        NSArray *filteredKeys = [data1 filteredArrayUsingPredicate:predicate];
-
-        NSLog(@"HERE");
     }
 }
 
