@@ -12,6 +12,7 @@
 {
     NSData *data;
     NSDictionary *dictionary;
+    NSArray *planTypes;
     
     IBOutlet UITableView *tblCarriers;
 }

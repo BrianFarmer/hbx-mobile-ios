@@ -789,7 +789,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [self.tableView endUpdates];
     
     if ([expandedSections containsIndex:pHeaderView.tag])
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    {
+        if ( [[self.filteredProducts objectAtIndex:pHeaderView.tag] count] > 0)
+        {
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+    }
 
 }
 
@@ -805,7 +810,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [self.tableView endUpdates];
     
     if ([expandedSections containsIndex:pHeaderView.tag])
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    {
+        if ( [[self.filteredProducts objectAtIndex:pHeaderView.tag] count] > 0)
+        {
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:pHeaderView.tag] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+    }
 
 //    [self.tableView reloadData];
 }

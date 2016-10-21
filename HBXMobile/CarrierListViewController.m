@@ -42,27 +42,37 @@ alpha:1.0]
     NSURL *url = [NSURL URLWithString:@"https://dchealthlink.com/shared/json/carriers.json"];
     data = [NSData dataWithContentsOfURL:url];
     
+    NSMutableArray *healthArray = [[NSMutableArray alloc] init];
+    NSMutableArray *dentalArray = [[NSMutableArray alloc] init];
+    
     if (data != nil)
     {
         NSError *error = nil;
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"%@", dictionary);
-        for (NSDictionary *itemDict in dictionary)
+//        for (NSDictionary *itemDict in dictionary)
+        for (NSString *itemDict in dictionary)
         {
- //           NSArray *womensArray = (NSArray*)[itemDict objectForKey:@"plans"];
-                    NSLog(@"%@",itemDict);
+            NSLog(@"%@",itemDict);
             
             NSArray *pp = [dictionary valueForKey:itemDict];
-            for (NSDictionary *items in pp)
+            NSArray *name = [pp valueForKey:@"plans"];
+            for (int yy=0;yy<[name count];yy++)
             {
-                                NSString *name = [pp valueForKey:@"plans"];
-  //              NSString *name = [items objectForKey:@"phone"];
-                                    NSLog(@"%@",items);
-                //Do the comparison here
+                NSString *stype = [name objectAtIndex:yy];
+                if ([stype isEqualToString:@"health"])
+                    [healthArray addObject:pp];
+                else
+                    [dentalArray addObject:pp];
             }
+            NSLog(@"%@",name);
         }
 
     }
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+
+    planTypes = [NSArray arrayWithObjects:[healthArray sortedArrayUsingDescriptors:@[sort]], [dentalArray sortedArrayUsingDescriptors:@[sort]], nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,11 +91,30 @@ alpha:1.0]
 */
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [planTypes count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [dictionary count];
+    return [[planTypes objectAtIndex:section] count];//[dictionary count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSString *sectionName;
+    switch (section)
+    {
+        case 0:
+            sectionName = @"Health";
+            break;
+        case 1:
+            sectionName = @"Dental";
+            break;
+            // ...
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -112,7 +141,7 @@ alpha:1.0]
     cell.textLabel.textColor = [UIColor whiteColor]; //[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]; //[UIColor redColor];
     cell.detailTextLabel.textColor = [UIColor whiteColor]; //[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     
-    NSArray *pItem = [dictionary allValues][indexPath.row];
+    NSArray *pItem = [[planTypes objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];//    [dictionary allValues][indexPath.row];
     cell.textLabel.text = [pItem valueForKey:@"name"];
     cell.detailTextLabel.text = [pItem valueForKey:@"phone_brokers"];
     if ([cell.detailTextLabel.text length] == 0)
