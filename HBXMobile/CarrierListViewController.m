@@ -43,7 +43,7 @@ alpha:1.0]
     data = [NSData dataWithContentsOfURL:url];
     
     NSMutableArray *healthArray = [[NSMutableArray alloc] init];
-    NSMutableArray *dentalArray = [[NSMutableArray alloc] init];
+    NSMutableArray *dentalArray = [[NSMutableArray alloc] init]; 
     
     if (data != nil)
     {

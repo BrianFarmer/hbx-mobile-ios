@@ -342,7 +342,7 @@
     //    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
     //    headerView.layer.borderWidth = 1.0;
     
-    headerView.tag = section;
+    headerView.tag = section; 
     
     // Add a label
     UILabel* headerLabel = [[UILabel alloc] init];
