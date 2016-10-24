@@ -42,8 +42,8 @@ alpha:1.0]
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
-    [vHeader layoutHeaderView:employerData showcoverage:NO];
-    
+    [vHeader layoutHeaderView:employerData showcoverage:YES];
+/*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
     
@@ -78,7 +78,7 @@ alpha:1.0]
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-    
+*/    
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
                                 [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
