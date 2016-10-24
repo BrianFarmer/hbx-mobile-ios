@@ -707,6 +707,7 @@
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
     tabBar.sortOrder = @"Enrolled";
+    tabBar.iPath = nil;
     
     [self.tabBarController setSelectedIndex:1];
 }
@@ -716,6 +717,7 @@
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     tabBar.sortOrder = @"Waived";
+    tabBar.iPath = nil;
     
     [self.tabBarController setSelectedIndex:1];
 }
@@ -725,6 +727,7 @@
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     tabBar.sortOrder = @"Not Enrolled";
+    tabBar.iPath = nil;
     
     [self.tabBarController setSelectedIndex:1];
 }

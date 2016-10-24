@@ -467,6 +467,41 @@
     [loading setHidden:FALSE];
     loadLabel.text = @"Loading";
     
+    iServerType = [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue];
+    if (PRODUCTION_BUILD)
+    {
+        iServerType = 1002;
+    }
+    else
+    {
+        if (iServerType == 1001)
+        {
+            if ([txtEmail.text length] == 0)
+            {
+                txtEmail.text = @"bill.murray@example.com";
+                txtPassword.text = @"Test123!";
+            }
+        }
+
+        if (iServerType == 1002)
+        {
+            if ([txtEmail.text length] == 0)
+            {
+                txtEmail.text = @"seth.rollins@yopmail.com";
+                txtPassword.text = @"$RFde3#1!87";
+            }
+        }
+        
+        if (iServerType == 1003 || iServerType == 0)
+        {
+            if ([txtEmail.text length] == 0)
+            {
+                txtEmail.text = @"githubuser@github.com";
+                txtPassword.text = @"Test4Github";
+            }
+        }
+    }
+    
     if (switchSaveMe.isOn)
     {
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
@@ -482,11 +517,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
     [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 
-    iServerType = [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue];
-    if (PRODUCTION_BUILD)
-    {
-        iServerType = 1002;
-    }
     
     switch(iServerType)
     {
@@ -505,11 +535,6 @@
             mobileHost = @"hbx-mobile.dchbx.org";
 #else
             mobileHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"mobileServer"];
-            if ([txtEmail.text length] == 0)
-            {
-                txtEmail.text = @"seth.rollins@yopmail.com";
-                txtPassword.text = @"$RFde3#1!87";
-            }
 
 #endif
             if (![mobileHost hasPrefix:@"http://"] && ![mobileHost hasPrefix:@"https://"])
@@ -523,6 +548,9 @@
         default:
             {
 //                #if (TARGET_IPHONE_SIMULATOR)
+                    if (switchTouchId.on)
+                        bUseTouchID = TRUE;
+                
                     [loading setHidden:TRUE];
                     [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
 //                #else
@@ -998,6 +1026,10 @@
             NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
             NSLog(@"executionTime = %f\n\n\n", executionTime);
 
+            if (switchTouchId.on)
+            {
+                bUseTouchID = YES;
+            }
             
             [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
         }

@@ -10,12 +10,7 @@
 #import "benefitGroupCardView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Settings.h"
-
-#define UIColorFromRGB(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
-blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
-alpha:1.0]
+#import "Constants.h"
 
 #define VERSION 2
 
@@ -41,8 +36,8 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
-    [vHeader layoutHeaderView:employerData showcoverage:YES];
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,215);
+    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:YES];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -535,25 +530,25 @@ alpha:1.0]
     p1.textAlignment = NSTextAlignmentCenter;
     p1.numberOfLines = 0;
     p1.tag = 125;
-    p1.attributedText = [self setAttributedLabel2:@"EMPLOYEE" text2:@"" color:UIColorFromRGB(0x00a3e2)];
+    p1.attributedText = [self setAttributedLabel2:@"EMPLOYEE" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE];
     
     
     p2.textAlignment = NSTextAlignmentCenter;
     p2.numberOfLines = 0;
     p2.tag = 126;
-    p2.attributedText = [self setAttributedLabel2:@"SPOUSE" text2:@"" color:UIColorFromRGB(0x00a99e)];
+    p2.attributedText = [self setAttributedLabel2:@"SPOUSE" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE];
     
     
     p3.textAlignment = NSTextAlignmentCenter;
     p3.numberOfLines = 0;
     p3.tag = 127;
-    p3.attributedText = [self setAttributedLabel2:@"DOMESTIC\nPARTNER" text2:@"" color:UIColorFromRGB(0x625ba8)];
+    p3.attributedText = [self setAttributedLabel2:@"DOMESTIC\nPARTNER" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER];
     
     
     p4.textAlignment = NSTextAlignmentCenter;
     p4.numberOfLines = 0;
     p4.tag = 128;
-    p4.attributedText = [self setAttributedLabel2:@"CHILD <26" text2:@"" color:UIColorFromRGB(0xf06eaa)];
+    p4.attributedText = [self setAttributedLabel2:@"CHILD <26" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_CHILD];
     
     [p1 sizeToFit];
     [p2 sizeToFit];
@@ -874,7 +869,7 @@ alpha:1.0]
             sKey = @"dental";
         
         NSString *empCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
-        lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:UIColorFromRGB(0x00a3e2)];
+        lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE]; //UIColorFromRGB(0x00a3e2)
         
         [lblContributionEmployee sizeToFit];
         
@@ -883,13 +878,13 @@ alpha:1.0]
         if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] == (NSString *)[NSNull null])
         {
             spouseCont = @"Not\nCovered";
-            lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x00a99e)];
+            lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
             
         }
         else
         {
             spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
-            lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:UIColorFromRGB(0x00a99e)];
+            lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
         }
         
         [lblContributionSpouse sizeToFit];
@@ -898,19 +893,19 @@ alpha:1.0]
         if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] == (NSString *)[NSNull null])
         {
             partnerCont = @"Not\nCovered";
-            lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:UIColorFromRGB(0x625ba8)];
+            lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER]; //UIColorFromRGB(0x625ba8)
             
         }
         else
         {
             partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
-            lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:UIColorFromRGB(0x625ba8)];
+            lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER];
         }
         
         [lblContributionPartner sizeToFit];
         
         NSString *childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
-        lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:UIColorFromRGB(0xf06eaa)];
+        lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:EMPLOYER_PLAN_CONTRIBUTION_CHILD]; //UIColorFromRGB(0xf06eaa)
         
         [lblContributionChild sizeToFit];
         

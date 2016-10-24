@@ -372,7 +372,7 @@ alpha:1.0]
     
     cell.employerLabel.text = ttype.companyName;
     cell.employeesLabel.text = ttype.employeesEnrolled;
-    cell.alertButton.hidden = TRUE;
+//    cell.alertButton.hidden = TRUE;
     
     NSDate *today = [NSDate date];
     
@@ -387,7 +387,7 @@ alpha:1.0]
     {
         cell.lblEmployeesNeeded.text = @"EMPLOYEES NEEDED";
         cell.daysleftLabel.textColor = [UIColor redColor];
-        cell.alertButton.hidden = FALSE;
+//        cell.alertButton.hidden = FALSE;
         cell.leftColor.hidden = FALSE;
     }
     

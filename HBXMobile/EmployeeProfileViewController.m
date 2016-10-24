@@ -33,8 +33,9 @@ alpha:1.0]
     self.navigationController.topViewController.navigationItem.titleView = navImage;
 
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
-    [vHeader layoutHeaderView:_employerData];
-/*
+
+//    [vHeader layoutHeaderView:_employerData];
+
     pName.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     
     pName.textAlignment = NSTextAlignmentCenter;
@@ -44,6 +45,8 @@ alpha:1.0]
     [pName sizeToFit];
     pName.frame = CGRectMake(self.view.frame.size.width/2 - pName.frame.size.width/2, 0, pName.frame.size.width, pName.frame.size.height);
 
+    int posY = [vHeader layoutEmployeeProfile:_employerData nameY:pName.frame.origin.y + pName.frame.size.height];
+    
     pStatus_a.text = [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
     if ([pStatus_a.text isEqualToString:@"Enrolled"])
         pStatus_a.textColor = UIColorFromRGB(0x00a99e);
@@ -52,7 +55,7 @@ alpha:1.0]
     if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
         pStatus_a.textColor = [UIColor redColor];
     
-    pStatus_a.frame = CGRectMake(10, pName.frame.origin.y + pName.frame.size.height, self.view.frame.size.width - 20, pStatus_a.frame.size.height);
+    pStatus_a.frame = CGRectMake(10, posY + 5, self.view.frame.size.width - 20, pStatus_a.frame.size.height); //pName.frame.origin.y + pName.frame.size.height
     pStatus_a.textAlignment = NSTextAlignmentCenter;
     
     pStatus_b.text = [NSString stringWithFormat:@"%@ for next year", [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"]];
@@ -66,7 +69,10 @@ alpha:1.0]
     
     pStatus_b.frame = CGRectMake(10, pStatus_a.frame.origin.y + pStatus_a.frame.size.height, self.view.frame.size.width - 20, pStatus_b.frame.size.height);
     pStatus_b.textAlignment = NSTextAlignmentCenter;
-    */
+    
+
+    
+    
     sections = [[NSArray alloc] initWithObjects: @"DETAILS", @"HEALTH PLAN", @"DEPENDENTS", nil];
     
     if (!expandedSections)
@@ -90,8 +96,27 @@ alpha:1.0]
 /*
     dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [[lo valueForKey:@"employer_contribution"] stringValue], [[lo valueForKey:@"employee_cost"] stringValue], [[lo valueForKey:@"total_premium"] stringValue], [lo valueForKey:@"metal_level"], nil];
 */
-    dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", [lo valueForKey:@"metal_level"]], @"", nil];
+    if ([pStatus_a.text isEqualToString:@"Terminated"])
+    {
+        [f setDateFormat:@"yyyy-MM-dd"];
+        NSDate *term_on = [f dateFromString:[lo valueForKey:@"terminated_on"]];
+        [f setDateFormat:@"MM/dd/yyyy"];
 
+        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Terminated On: %@", [f stringFromDate:term_on]], [NSString stringWithFormat:@"Terminated Reason: %@", [lo valueForKey:@"terminate_reason"]], [NSString stringWithFormat:@"Metal Level: %@", [lo valueForKey:@"metal_level"]], @"", nil];
+    }
+    else if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
+    {
+        dependentValues = [[NSArray alloc] initWithObjects: @"Not Enrolled in any plan for this year", @"", nil];
+    }
+    else
+    {
+        [f setDateFormat:@"yyyy-MM-dd"];
+        NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
+        [f setDateFormat:@"MM/dd/yyyy"];
+
+        
+        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", [lo valueForKey:@"metal_level"]], @"", nil];
+    }
     profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -167,8 +192,35 @@ alpha:1.0]
         return 24;
     if (indexPath.section == 1)
     {
-        if (indexPath.row < 4)
+        if (indexPath.row < [dependentValues count] - 1)
+        {
+            NSString *cellText = [dependentValues objectAtIndex:indexPath.row];
+            UIFont *cellFont = [UIFont fontWithName:@"Roboto-Regular" size:14];
+            
+            if ([cellText length] > 0)
+            {
+                NSAttributedString *attributedText =
+                [[NSAttributedString alloc] initWithString:cellText
+                                                attributes:@{NSFontAttributeName: cellFont}];
+                CGRect rect = [attributedText boundingRectWithSize:(CGSize){tableView.frame.size.width, CGFLOAT_MAX}
+                                                           options:NSStringDrawingUsesLineFragmentOrigin
+                                                           context:nil];
+                CGSize size = rect.size;
+
+//                CGSize size = [cellText sizeWithAttributes:
+  //                             @{NSFontAttributeName: cellFont}];
+                
+                // Values are fractional -- you should take the ceilf to get equivalent values
+                CGSize adjustedSize = CGSizeMake(ceilf(size.width), ceilf(size.height));
+                
+                if (adjustedSize.height < 20)
+                    return 25;
+                
+                return adjustedSize.height;
+            }
+            
             return 24;
+        }
         else
             return 85;
     }
@@ -387,6 +439,7 @@ alpha:1.0]
 
     cell.textLabel.text = @"";
     cell.detailTextLabel.text = @"";
+    cell.textLabel.numberOfLines = 0;
     
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:14];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12];
@@ -401,7 +454,7 @@ alpha:1.0]
 
     if (indexPath.section == 1)
     {
-        if (indexPath.row < 4)
+        if (indexPath.row < [dependentValues count] - 1)
             cell.textLabel.text = [dependentValues objectAtIndex:indexPath.row];
         else
         {
@@ -424,10 +477,10 @@ alpha:1.0]
                 [lblContributionEmployer sizeToFit];
                 
                 NSString *employeeCont = [NSString stringWithFormat:@"$%@", [[lo valueForKey:@"employee_cost"] stringValue]];
-                lblContributionEmployee.attributedText = [self setAttributedLabel:employeeCont text2:@"\nEMPLOYEE PAYS" color:UIColorFromRGB(0x625ba8)];
+                lblContributionEmployee.attributedText = [self setAttributedLabel:employeeCont text2:@"\nEMPLOYEE\nPAYS" color:UIColorFromRGB(0x625ba8)];
                 [lblContributionEmployee sizeToFit];
                 
-                [self evenlySpaceTheseButtonsInThisView:@[lblContributionEmployee, lblContributionEmployer, lblContributionEmployee] :lblContributionView];
+                [self evenlySpaceTheseButtonsInThisView:@[lblContributionTotal, lblContributionEmployer, lblContributionEmployee] :lblContributionView];
             }
         }
     }

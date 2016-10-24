@@ -141,23 +141,26 @@
     
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
         return;
-/*
-    NSIndexPath *myIP;
-    
-    if ([tabBar.sortOrder isEqualToString:@"Enrolled"])
-        myIP = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    if ([tabBar.sortOrder isEqualToString:@"Waived"])
-        myIP = [NSIndexPath indexPathForRow:1 inSection:0];
+    if (tabBar.iPath == nil)
+    {
+        NSIndexPath *myIP;
+        
+        if ([tabBar.sortOrder isEqualToString:@"Enrolled"])
+            myIP = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        if ([tabBar.sortOrder isEqualToString:@"Waived"])
+            myIP = [NSIndexPath indexPathForRow:1 inSection:0];
 
-    if ([tabBar.sortOrder isEqualToString:@"Not Enrolled"])
-        myIP = [NSIndexPath indexPathForRow:2 inSection:0];
+        if ([tabBar.sortOrder isEqualToString:@"Not Enrolled"])
+            myIP = [NSIndexPath indexPathForRow:2 inSection:0];
 
-    if ([tabBar.sortOrder isEqualToString:@"Terminated"])
-        myIP = [NSIndexPath indexPathForRow:3 inSection:0];
-
-*/    
-    [self sortByStatus:tabBar.iPath];
+        if ([tabBar.sortOrder isEqualToString:@"Terminated"])
+            myIP = [NSIndexPath indexPathForRow:3 inSection:0];
+            
+        [self sortByStatus:myIP];
+    }
+    else
+        [self sortByStatus:tabBar.iPath];
 
 }
 

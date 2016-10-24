@@ -826,7 +826,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
- //   int yy = tableView.frame.size.width;
     
     MGSwipeTableCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
     if (!cell) {
@@ -864,7 +863,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     if (ttype.type == 1)
     {
-        cell.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD0D0D0);
+        cell.backgroundColor = UIColorFromRGB(0xebebeb);
 
         cell.employerLabel.text = @"";
         cell.employeesLabel.text = @"";
@@ -908,7 +907,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     cell.lblDaysLeftText.text = @"";//@"DAYS LEFT";
     
     cell.employerLabel.text = ttype.companyName;
-    cell.alertButton.hidden = TRUE;
+//    cell.alertButton.hidden = TRUE;
     
     cell.employerLabel.textColor = UIColorFromRGB(0x555555);
     cell.employeesLabel.textColor = UIColorFromRGB(0x555555);
@@ -923,25 +922,18 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     if (ttype.status == NEEDS_ATTENTION)
     {
-//        cell.lblEmployeesNeeded.text = @"";     //@"EMPLOYEES NEEDED";
-        cell.daysleftLabel.textColor = UIColorFromRGB(0x555555);//[UIColor redColor];
-        cell.alertButton.hidden = FALSE;
+        cell.daysleftLabel.textColor = UIColorFromRGB(0x555555);
+//        cell.alertButton.hidden = FALSE;
         cell.leftColor.hidden = FALSE;
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.planMinimum intValue] - ([ttype.employeesEnrolled intValue] + [ttype.employeesWaived intValue])];
         cell.employeesLabel.textColor = [UIColor redColor];
         cell.leftColor.frame = CGRectMake(0, 0, 5, 86);
     }
     else
-        cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16. 
+        cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16.
     
-    
-//    if (ttype.status == OPEN_ENROLLMENT_MET)
-//        cell.lblEmployeesNeeded.text = @"";
-    
-    if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED)
+    if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED || indexPath.section == 2)
     {
-//        cell.lblEmployeesNeeded.text = @""; //@"PLAN\nYEAR";
-
         cell.employeesLabel.text = [self userVisibleDateTime:ttype.planYear];;
         
         int width = ceil([cell.employeesLabel.text sizeWithAttributes:@{NSFontAttributeName: cell.employeesLabel.font}].width);
@@ -951,7 +943,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         iOffset = 15;
     }
     
-    if (ttype.status == NO_ACTION_REQUIRED)
+    if (ttype.status == NO_ACTION_REQUIRED || indexPath.section == 2)
     {
         cell.lblDaysLeftText.text = @"";
         cell.daysleftLabel.text = @"";

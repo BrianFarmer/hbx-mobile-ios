@@ -30,17 +30,23 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 #define UI_COLOR_ANOTHER_BLUE               UIColorFromRGB(0x044972)
 #define UI_COLOR_LIGHT_BLUE                 UIColorFromRGB(0x007BC4)
 
-#define UI_COLOR_TEAL                       UIColorFromRGB(0x00a99e)
+#define UI_COLOR_PASTEL_GREEN               UIColorFromRGB(0x00a99e)
 #define UI_COLOR_PASTEL_BLUE                UIColorFromRGB(0x00a3e2)
 #define UI_COLOR_PURPLE                     UIColorFromRGB(0x625ba8)
 #define UI_COLOR_YELLOW                     UIColorFromRGB(0xEAAA00)
 #define UI_COLOR_RED                        UIColorFromRGB(0xE72B2D)
 #define UI_COLOR_GREEN                      UIColorFromRGB(0x69A30D)
-#define UI_COLOR_DARK_GRAY                  UIColorFromRGB(0x555555)
+#define UI_COLOR_SUPER_DARK_GRAY            UIColorFromRGB(0x555555)
 #define UI_COLOR_LIGHT_GRAY                 UIColorFromRGB(0xebebeb)
 #define UI_COLOR_WHITE                      UIColorFromRGB(0xffffff)
+#define UI_COLOR_PINK                       UIColorFromRGB(0xf06eaa)
+#define UI_COLOR_DARK_GRAY                  UIColorFromRGB(0x414141)
+#define UI_COLOR_GRAY                       UIColorFromRGB(0x909090)
+#define UI_COLOR_MEDIUM_GRAY                UIColorFromRGB(0x7B7B7B)
+#define UI_COLOR_BLACK                      UIColorFromRGB(0x000000)
 
-#define APPLICATION_DEFAULT_TEXT_COLOR      UI_COLOR_DARK_GRAY
+#define APPLICATION_DEFAULT_TEXT_COLOR      UI_COLOR_SUPER_DARK_GRAY
+
 #define ENROLLMENT_STATUS_OE_MIN_NOTMET     UI_COLOR_RED
 #define ENROLLMENT_STATUS_OE_MIN_MET        UI_COLOR_GREEN
 #define ENROLLMENT_STATUS_RENEWAL_IN_PROG   UI_COLOR_YELLOW
@@ -58,5 +64,13 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 #define EMPLOYER_DETAIL_PARTICIPATION_ENROLLED          UI_COLOR_GREEN
 #define EMPLOYER_DETAIL_PARTICIPATION_WAIVED            UI_COLOR_YELLOW
 #define EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED      UI_COLOR_RED
-#define EMPLOYER_DETAIL_PARTICIPATION_TERMINATED        UI_COLOR_PURPLE
+#define EMPLOYER_DETAIL_PARTICIPATION_TERMINATED        UI_COLOR_DARK_GRAY
 #define EMPLOYER_DETAIL_PARTICIPATION_ALL               UI_COLOR_DARK_GRAY
+
+
+#define EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE             UI_COLOR_ANOTHER_BLUE
+#define EMPLOYER_PLAN_CONTRIBUTION_SPOUSE               UI_COLOR_ANOTHER_BLUE
+#define EMPLOYER_PLAN_CONTRIBUTION_PARTNER              UI_COLOR_ANOTHER_BLUE
+#define EMPLOYER_PLAN_CONTRIBUTION_CHILD                UI_COLOR_ANOTHER_BLUE
+
+

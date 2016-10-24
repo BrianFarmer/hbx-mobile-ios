@@ -50,10 +50,10 @@ alpha:1.0]
 
 - (void)layoutHeaderView:(brokerEmployersData *)eData
 {
-    [self layoutHeaderView:eData showcoverage:YES];
+    [self layoutHeaderView:eData showcoverage:YES showplanyear:NO];
 }
 
-- (void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage;
+- (void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear
 {
     employerData = eData;
     
@@ -77,9 +77,6 @@ alpha:1.0]
     if (labelSize.height > 40)
         pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height - 30);
    
-//    pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height);
-//    else
-    
     
     UILabel *pCompanyFooter = [[UILabel alloc] init];
     pCompanyFooter.font = [UIFont fontWithName:@"Roboto-Medium" size:16];
@@ -170,7 +167,7 @@ alpha:1.0]
         button.tag=30+btnCount;
     //    [button setFrame:CGRectMake(10, 95, 38, 38)];
         //[button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
-        [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - 48, 38, 38)];
+        [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 78:48), 38, 38)];
         
         [button setBackgroundColor:[UIColor clearColor]];
         UIImage *btnImage;
@@ -213,6 +210,93 @@ alpha:1.0]
         pLabelCoverage.frame = CGRectMake(pLabelCoverage.frame.origin.x,pLabelCoverage.frame.origin.y+10,pLabelCoverage.frame.size.width,pLabelCoverage.frame.size.height);
     }
 
+}
+
+-(int)layoutEmployeeProfile:(brokerEmployersData *)eData nameY:(int)nameY
+{
+    UILabel * pLabelCoverage;
+    
+        NSDateFormatter *f = [[NSDateFormatter alloc] init];
+        [f setDateFormat:@"yyyy-MM-dd"];
+        
+        NSDate *endDate = [f dateFromString:eData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+        
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+        [dateComponents setDay:364];
+        NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+        
+        [f setDateFormat:@"MMM dd, yyyy"];
+    
+        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, nameY, self.frame.size.width, 45)];
+        pLabelCoverage.tag = 975;
+        
+        pLabelCoverage.numberOfLines = 2;
+        pLabelCoverage.backgroundColor = [UIColor clearColor];
+        pLabelCoverage.font = [UIFont fontWithName:@"Roboto-Medium" size:15];
+        pLabelCoverage.textAlignment = NSTextAlignmentCenter;
+        pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
+        
+        pLabelCoverage.hidden = FALSE;
+        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        
+        NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
+        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
+        
+        NSString *temp_a = @"Coverage Year";
+        NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
+        [string1 beginEditing];
+        [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
+        [string1 endEditing];
+        
+        [attributedTitle appendAttributedString:string1];
+        
+        pLabelCoverage.attributedText = attributedTitle;
+        
+        [self addSubview:pLabelCoverage];
+
+    for (int btnCount=0;btnCount<4;btnCount++)
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.tag=30+btnCount;
+        //    [button setFrame:CGRectMake(10, 95, 38, 38)];
+        //[button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
+        [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - 48, 38, 38)];
+        
+        [button setBackgroundColor:[UIColor clearColor]];
+        UIImage *btnImage;
+        switch(btnCount)
+        {
+            case 0:
+                btnImage = [UIImage imageNamed:@"phone.png"];
+                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 1:
+                btnImage = [UIImage imageNamed:@"message.png"];
+                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 2:
+                btnImage = [UIImage imageNamed:@"location.png"];
+                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+            case 3:
+                btnImage = [UIImage imageNamed:@"email.png"];
+                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                break;
+        }
+        
+        button.contentMode = UIViewContentModeScaleToFill;
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+        [button setImage:btnImage forState:UIControlStateNormal];
+        
+        [self addSubview:button];
+    }
+    
+    [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
+
+    return pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height;
+    
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
