@@ -90,6 +90,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonTapped:)];
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
 
+    bAllClientsSortedByClient = FALSE;
+    bSortAscending = YES;
+    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
@@ -471,7 +474,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         }
     }
     
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:YES];
+//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"planYear" ascending:YES];
     //    subscriberPlans = [all_others sortedArrayUsingDescriptors:@[sort]];
     
     [listOfCompanies addObject:open_enrollment];
@@ -632,8 +636,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0)
-        return 80.0;
+    if ([expandedSections containsIndex:section])// || )
+    {
+        if (section == 0 && clients_needing_immediate_attention > 0)
+            return 80;
+        if (section == 2)
+            return 90;
+    }
     
     return 60;
 }
@@ -642,7 +651,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 {
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (ttype.type == 1)
-        return 20;
+        return (indexPath.section == 2) ? 30:20;
     
     return EMPLOYER_LIST_ROW_HEIGHT;
 }
@@ -655,7 +664,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:80)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
     
     // Set a custom background color and a border
 //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
@@ -705,17 +714,20 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
         if ((section == 0 && clients_needing_immediate_attention > 0) || section > 0)
         {
-            UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, 20)];
-            subHeaderView.backgroundColor = UIColorFromRGB(0xebebeb);//UIColorFromRGB(0xD9D9D9);
+            UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, (section == 2) ? 30:20)];
+            subHeaderView.backgroundColor = UIColorFromRGB(0xebebeb);
             
-            UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
+            UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, (section == 2) ? 30:20)];
             headerTitle.text = @"CLIENT";
             headerTitle.textColor = [UIColor darkGrayColor];
             headerTitle.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+            headerTitle.userInteractionEnabled = NO;
+
             // Add the header title to the header view
             [subHeaderView addSubview:headerTitle];
 
             UILabel* headerTitle1 = [[UILabel alloc] init];
+            headerTitle1.userInteractionEnabled = NO;
             if (section == 0)
             {
                 [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 195, 0, 135, 20)];
@@ -723,8 +735,104 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             }
             else
             {
-                [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 180, 0, 135, 20)];
-                headerTitle1.text = @"PLAN YEAR";
+                if (section != 2)
+                {
+                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 170, 0, 100, 20)];
+                    headerTitle1.text = @"PLAN YEAR";
+                }
+                else
+                {
+                    /*
+                    UIButton* buttonClient = [[UIButton alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
+                    [buttonClient setBackgroundColor:[UIColor greenColor]];
+                    buttonClient.tag = section;
+                    buttonClient.titleLabel.textAlignment = NSTextAlignmentLeft;
+                    buttonClient.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                    
+                    buttonClient.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
+                    buttonClient.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+                    [buttonClient addTarget:self action:@selector(sortByClient:) forControlEvents:UIControlEventTouchUpInside];
+                    [buttonClient setTitle:@"CLIENT" forState:UIControlStateNormal];
+                    UIImage *pImage = [UIImage imageNamed:@"OpenCaret.png"];
+                    [buttonClient setImage:pImage forState:UIControlStateNormal];
+                    
+                    [buttonClient setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+                    
+                    buttonClient.imageEdgeInsets = UIEdgeInsetsMake(0., buttonClient.frame.size.width - (pImage.size.width + 15.), 0., 0.);
+                    buttonClient.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., pImage.size.width);
+                    
+                    [subHeaderView addSubview:buttonClient];
+
+                    */
+                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 170, 0, 90, 30)];
+                    headerTitle1.text = @"PLAN YEAR";
+
+                    headerTitle.userInteractionEnabled = YES;
+                    headerTitle1.userInteractionEnabled = YES;
+                    subHeaderView.userInteractionEnabled = YES;
+
+                    //This could go to handler to figure out which sort and automatically do the other one
+                    UITapGestureRecognizer * recognizerNil = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(nilTap:)];
+                    [subHeaderView addGestureRecognizer:recognizerNil];
+
+                    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sortByClient:)];
+                    [headerTitle addGestureRecognizer:recognizer];
+                    
+                    UITapGestureRecognizer * recognizer1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sortByPlanYear:)];
+                    [headerTitle1 addGestureRecognizer:recognizer1];
+
+                    UIImageView *imageHolder = [[UIImageView alloc] init];
+                    UIImage *image;
+                    if (bSortAscending)
+                        image = [UIImage imageNamed:@"OpenCaret.png"];
+                    else
+                        image = [UIImage imageNamed:@"CloseCaret.png"];
+                    
+                    imageHolder.image = image;
+                    imageHolder.tag = 321;
+                    imageHolder.userInteractionEnabled = YES;
+                    
+                    if (bAllClientsSortedByClient)
+                    {
+                        UITapGestureRecognizer * recognizerIcon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sortByClient:)];
+
+                        [imageHolder setFrame:CGRectMake(headerTitle.frame.origin.x + headerTitle.frame.size.width - 40, 15 - 7, 14, 14)];
+                        [imageHolder addGestureRecognizer:recognizerIcon];
+                    }
+                    else
+                    {
+                        UITapGestureRecognizer * recognizerIcon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sortByPlanYear:)];
+
+                        [imageHolder setFrame:CGRectMake(headerTitle1.frame.origin.x + headerTitle1.frame.size.width, 15 - 7, 14, 14)];
+                        [imageHolder addGestureRecognizer:recognizerIcon];
+                    }
+                    
+                    [subHeaderView addSubview:imageHolder];
+                    
+
+/*
+ 
+                    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 180, 0, 135, 20)];
+                    [button setBackgroundColor:[UIColor clearColor]];
+                    button.tag = section;
+                    button.titleLabel.textAlignment = NSTextAlignmentRight;
+                    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+                    
+                    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
+                    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
+                    [button addTarget:self action:@selector(sortByPlanYear:) forControlEvents:UIControlEventTouchUpInside];
+                    [button setTitle:@"PLAN YEAR" forState:UIControlStateNormal];
+                    UIImage *pImage = [UIImage imageNamed:@"OpenCaret.png"];
+                    [button setImage:pImage forState:UIControlStateNormal];
+                    
+                    [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+                    
+                    button.imageEdgeInsets = UIEdgeInsetsMake(0., button.frame.size.width - (pImage.size.width + 15.), 0., 0.);
+                    button.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., pImage.size.width);
+                    
+                    [subHeaderView addSubview:button];
+ */
+                }
             }
             
             headerTitle1.textAlignment = NSTextAlignmentCenter;
@@ -778,6 +886,39 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [headerView addGestureRecognizer:recognizer];
     
     return headerView;
+}
+
+- (void)nilTap:(id)sender {
+}
+
+- (void)sortByPlanYear:(id)sender {
+    if (bAllClientsSortedByClient)
+        bSortAscending = NO;
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"planYear" ascending:(bSortAscending ? NO:YES)];
+
+    [listOfCompanies replaceObjectAtIndex:2 withObject:[all_others sortedArrayUsingDescriptors:@[sort]]];
+    
+    bSortAscending = (bSortAscending ? NO:YES);
+    bAllClientsSortedByClient = NO;
+    [self.tableView reloadData];
+}
+
+- (void)sortByClient:(id)sender {
+    if (!bAllClientsSortedByClient)
+        bSortAscending = NO;
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:(bSortAscending ? NO:YES)];
+    
+    [listOfCompanies replaceObjectAtIndex:2 withObject:[all_others sortedArrayUsingDescriptors:@[sort]]];
+
+    bSortAscending = (bSortAscending ? NO:YES);
+    bAllClientsSortedByClient = YES;
+/*
+    UIImageView *pview = [self.view viewWithTag:321];
+    UIImage *image = [UIImage imageNamed:@"CloseCaret.png"];
+    pview.image = image;
+    */
+    [self.tableView reloadData];
 }
 
 - (void)handleButtonTap:(id)sender {
@@ -848,6 +989,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     UIButton *b1 = [cell.contentView viewWithTag:55];
     b1.frame = CGRectMake(tableView.frame.size.width - 20.0, 88/2-8, 16, 16);
+    b1.hidden = FALSE;
 /*
     UILabel *h1 = [cell.contentView viewWithTag:120];
     UILabel *h2 = [cell.contentView viewWithTag:121];

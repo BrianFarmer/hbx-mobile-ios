@@ -37,6 +37,9 @@
     
     UIImageView *pHeaderImage;
     BOOL bAddedOpenEnrollmentDivider;
+    
+    BOOL bAllClientsSortedByClient;
+    BOOL bSortAscending;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

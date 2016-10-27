@@ -57,6 +57,8 @@
          initWithString:@"Password"
          attributes:@{NSForegroundColorAttributeName:color}];
  
+        txtPassword.tintColor = [UIColor whiteColor];
+        
         int scaleWidth;
         
         if (self.view.frame.size.width <= 320)
