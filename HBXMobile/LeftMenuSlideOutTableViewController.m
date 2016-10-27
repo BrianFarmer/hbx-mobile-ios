@@ -8,6 +8,7 @@
 
 #import "LeftMenuSlideOutTableViewController.h"
 #import "CarrierListViewController.h"
+#import "Settings.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -108,6 +109,8 @@ alpha:1.0]
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (!PRODUCTION_BUILD)
+        return 4;
 
     return 3;
 }
@@ -116,18 +119,32 @@ alpha:1.0]
 {
 //    if (section == 0)
 //        return 2;
-    
-    if (section == 2)
-        return 2;
+    if (!PRODUCTION_BUILD)
+    {
+        if (section == 3)
+            return 2;
+    }
+    else
+    {
+        if (section == 2)
+            return 2;
+    }
     
     return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2)
-        return 90;
-    
+    if (!PRODUCTION_BUILD)
+    {
+        if (indexPath.section == 3)
+            return 90;
+    }
+    else
+    {
+        if (indexPath.section == 2)
+            return 90;
+    }
     return 54;
 }
 /*
@@ -195,9 +212,16 @@ viewForFooterInSection:(NSInteger)section {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 2)
-        return 50;
-    
+    if (!PRODUCTION_BUILD)
+    {
+        if (section == 3)
+            return 50;
+    }
+    else
+    {
+        if (section == 2)
+            return 50;
+    }
     return 0.0;
 }
 
@@ -283,6 +307,15 @@ viewForFooterInSection:(NSInteger)section {
         separator.frame = CGRectMake(0, 53, self.view.frame.size.width, 1);
         [cell.layer addSublayer:separator];
 
+    }
+    else if (!PRODUCTION_BUILD && indexPath.section == 2)
+    {
+        cell.textLabel.text = @"Debug";
+        CALayer *separator = [CALayer layer];
+        separator.backgroundColor = [UIColorFromRGB(0x0074BA) CGColor];
+        separator.frame = CGRectMake(0, 53, self.view.frame.size.width, 1);
+        [cell.layer addSublayer:separator];
+        
     }
     else
     {
@@ -469,6 +502,10 @@ viewForFooterInSection:(NSInteger)section {
     //        [[SlideNavigationController sharedInstance] popViewControllerAnimated:TRUE];
             [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:TRUE];
         }
+    }
+    else if (!PRODUCTION_BUILD && [indexPath section] == 2)
+    {
+        
     }
     else
     {

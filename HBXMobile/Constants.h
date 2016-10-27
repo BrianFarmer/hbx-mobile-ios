@@ -47,6 +47,13 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 
 #define APPLICATION_DEFAULT_TEXT_COLOR      UI_COLOR_SUPER_DARK_GRAY
 
+/////////////////////////////////////////////////////////////////////
+///
+/// MAIN BROKER PAGE
+///
+/////////////////////////////////////////////////////////////////////
+#define EMPLOYER_LIST_ROW_HEIGHT            88
+
 #define ENROLLMENT_STATUS_OE_MIN_NOTMET     UI_COLOR_RED
 #define ENROLLMENT_STATUS_OE_MIN_MET        UI_COLOR_GREEN
 #define ENROLLMENT_STATUS_RENEWAL_IN_PROG   UI_COLOR_YELLOW
@@ -56,6 +63,11 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 #define EMPLOYER_LIST_HEADER_DRAWERS_RIP    UI_COLOR_LIGHT_BLUE
 #define EMPLOYER_LIST_HEADER_DRAWERS_AC     UI_COLOR_LIGHT_BLUE
 
+/////////////////////////////////////////////////////////////////////
+///
+/// EMPLOYER/DETAIL/INFO PAGE
+///
+/////////////////////////////////////////////////////////////////////
 #define EMPLOYER_DETAIL_HEADER_DRAWER_RENEWAL           UI_COLOR_LIGHT_BLUE
 #define EMPLOYER_DETAIL_HEADER_DRAWER_PART              UI_COLOR_LIGHT_BLUE
 #define EMPLOYER_DETAIL_HEADER_DRAWER_COSTS             UI_COLOR_LIGHT_BLUE
@@ -67,7 +79,11 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 #define EMPLOYER_DETAIL_PARTICIPATION_TERMINATED        UI_COLOR_DARK_GRAY
 #define EMPLOYER_DETAIL_PARTICIPATION_ALL               UI_COLOR_DARK_GRAY
 
-
+/////////////////////////////////////////////////////////////////////
+///
+/// EMPLOYER/DETAIL/PLANS PAGE
+///
+/////////////////////////////////////////////////////////////////////
 #define EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE             UI_COLOR_ANOTHER_BLUE
 #define EMPLOYER_PLAN_CONTRIBUTION_SPOUSE               UI_COLOR_ANOTHER_BLUE
 #define EMPLOYER_PLAN_CONTRIBUTION_PARTNER              UI_COLOR_ANOTHER_BLUE

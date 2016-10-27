@@ -225,6 +225,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         subscriberPlans = nil;
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         subscriberPlans = [dictionary valueForKeyPath:@"broker_clients"];
+        
+        Settings *obj=[Settings getInstance];
+        obj.sUser = [dictionary valueForKey:@"broker_name"];
     }
     
     [self processBuckets];
@@ -641,7 +644,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if (ttype.type == 1)
         return 20;
     
-    return 88;
+    return EMPLOYER_LIST_ROW_HEIGHT;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -961,9 +964,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [cell.employeesLabel sizeToFit];
     [cell.daysleftLabel sizeToFit];
     
-    cell.daysleftLabel.frame = CGRectMake(tableView.frame.size.width - 82/2 - cell.daysleftLabel.frame.size.width/2, 0, cell.daysleftLabel.frame.size.width, 88);
-    cell.employeesLabel.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - 80 - iOffset, 0, cell.employeesLabel.frame.size.width, 88);
-    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, 1, cell.employeesLabel.frame.origin.x - 25, 88);
+    cell.daysleftLabel.frame = CGRectMake(tableView.frame.size.width - 82/2 - cell.daysleftLabel.frame.size.width/2, 0, cell.daysleftLabel.frame.size.width, EMPLOYER_LIST_ROW_HEIGHT);
+    cell.employeesLabel.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - 80 - iOffset, 0, cell.employeesLabel.frame.size.width, EMPLOYER_LIST_ROW_HEIGHT);
+    cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, 1, cell.employeesLabel.frame.origin.x - 25, EMPLOYER_LIST_ROW_HEIGHT);
 
     return cell;
     

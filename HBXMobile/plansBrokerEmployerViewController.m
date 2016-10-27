@@ -198,6 +198,13 @@
 //    int ii = 0;
     _pd = [[NSMutableArray alloc] init];
     
+    if ([plans count] == 0)
+    {
+        NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
+        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plans Available", nil]];
+         [_pd addObject:_planDetails];
+    }
+    
     for (int ii = 0;ii<[plans count];ii++)
     {
         NSLog(@"%@", plans);
@@ -438,6 +445,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    
     NSArray *_planDetails = [_pd objectAtIndex:indexPath.section];
     
     if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"CONTRIBUTION LEVELS"])
@@ -905,6 +913,8 @@
         [lblContributionPartner sizeToFit];
         
         NSString *childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
+        if (childCont == nil)
+            childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child_under_26"] stringValue];
         lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:EMPLOYER_PLAN_CONTRIBUTION_CHILD]; //UIColorFromRGB(0xf06eaa)
         
         [lblContributionChild sizeToFit];

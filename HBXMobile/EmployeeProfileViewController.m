@@ -41,7 +41,11 @@ alpha:1.0]
     pName.textAlignment = NSTextAlignmentCenter;
     NSString *sOwner =  ([[_employeeData valueForKey:@"is_business_owner"] boolValue] == TRUE) ? @"(Owner)" : @"";  //(clients_needing_immediate_attention > 1) ? @"have" : @"has"
     
-    pName.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [_employeeData valueForKey:@"first_name"], [_employeeData valueForKey:@"middle_name"], [_employeeData valueForKey:@"last_name"], sOwner];
+    NSString *sMiddle = [_employeeData valueForKey:@"middle_name"];
+    if (sMiddle == (NSString*)[NSNull null])
+        sMiddle = @"";
+    
+    pName.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [_employeeData valueForKey:@"first_name"], sMiddle, [_employeeData valueForKey:@"last_name"], sOwner];
     [pName sizeToFit];
     pName.frame = CGRectMake(self.view.frame.size.width/2 - pName.frame.size.width/2, 0, pName.frame.size.width, pName.frame.size.height);
 
@@ -58,14 +62,19 @@ alpha:1.0]
     pStatus_a.frame = CGRectMake(10, posY + 5, self.view.frame.size.width - 20, pStatus_a.frame.size.height); //pName.frame.origin.y + pName.frame.size.height
     pStatus_a.textAlignment = NSTextAlignmentCenter;
     
-    pStatus_b.text = [NSString stringWithFormat:@"%@ for next year", [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"]];
-    NSString *ptemp =  [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];
-    if ([ptemp isEqualToString:@"Enrolled"])
-        pStatus_b.textColor = UIColorFromRGB(0x00a99e);
-    if ([ptemp isEqualToString:@"Waived"])
-        pStatus_b.textColor = UIColorFromRGB(0x625ba8);
-    if ([ptemp isEqualToString:@"Not Enrolled"])
-        pStatus_b.textColor = [UIColor redColor];
+    NSString *sNextYearRenewal =  [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];
+
+    if (sNextYearRenewal != nil)
+    {
+        pStatus_b.text = [NSString stringWithFormat:@"%@ for next year", sNextYearRenewal];
+        
+        if ([sNextYearRenewal isEqualToString:@"Enrolled"])
+            pStatus_b.textColor = UIColorFromRGB(0x00a99e);
+        if ([sNextYearRenewal isEqualToString:@"Waived"])
+            pStatus_b.textColor = UIColorFromRGB(0x625ba8);
+        if ([sNextYearRenewal isEqualToString:@"Not Enrolled"])
+            pStatus_b.textColor = [UIColor redColor];
+    }
     
     pStatus_b.frame = CGRectMake(10, pStatus_a.frame.origin.y + pStatus_a.frame.size.height, self.view.frame.size.width - 20, pStatus_b.frame.size.height);
     pStatus_b.textAlignment = NSTextAlignmentCenter;
@@ -114,8 +123,15 @@ alpha:1.0]
         NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
         [f setDateFormat:@"MM/dd/yyyy"];
 
+        NSString *planName = [lo valueForKey:@"plan_name"];
+        if (planName == (NSString*)[NSNull null])
+            planName = [NSString stringWithFormat:@"%@(%@)", @"N/A", pStatus_a.text];
         
-        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", [lo valueForKey:@"metal_level"]], @"", nil];
+        NSString *metalLevel = [lo valueForKey:@"metal_level"];
+        if (metalLevel == (NSString*)[NSNull null])
+            metalLevel = @"N/A";
+        
+        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", planName], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", metalLevel], @"", nil];
     }
     profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -465,18 +481,31 @@ alpha:1.0]
             UILabel *lblContributionEmployer = (UILabel *)[cell viewWithTag:122];
             UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:123];
 
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+            [numberFormatter setMaximumFractionDigits:2];
+            
+            ;
+   /*
+            topSectionNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
+            topSectionValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
+*/
+            
             if (![[lo valueForKey:@"status"] isEqualToString:@"Not Enrolled"])
             {
-                NSString *totalCont = [NSString stringWithFormat:@"$%@",[[lo valueForKey:@"total_premium"] stringValue]];
+                NSString *totalCont = [NSString stringWithFormat:@"%@",  [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"total_premium"] floatValue]]]];
+                
+                                       
                 lblContributionTotal.attributedText = [self setAttributedLabel:totalCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
                 [lblContributionTotal sizeToFit];
                 
-                NSString *employerCont = [NSString stringWithFormat:@"$%@",[[lo valueForKey:@"employer_contribution"] stringValue]];
+                NSString *employerCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"employer_contribution"] floatValue]]]];
                 lblContributionEmployer.attributedText = [self setAttributedLabel:employerCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
                 
                 [lblContributionEmployer sizeToFit];
                 
-                NSString *employeeCont = [NSString stringWithFormat:@"$%@", [[lo valueForKey:@"employee_cost"] stringValue]];
+                NSString *employeeCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"employee_cost"] floatValue]]]];
                 lblContributionEmployee.attributedText = [self setAttributedLabel:employeeCont text2:@"\nEMPLOYEE\nPAYS" color:UIColorFromRGB(0x625ba8)];
                 [lblContributionEmployee sizeToFit];
                 
