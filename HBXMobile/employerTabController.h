@@ -22,4 +22,6 @@
 
 @property(nonatomic, assign) NSString *sortOrder;
 @property(nonatomic, assign) NSIndexPath *iPath;
+
+@property(strong, nonatomic) NSArray *rosterList;
 @end

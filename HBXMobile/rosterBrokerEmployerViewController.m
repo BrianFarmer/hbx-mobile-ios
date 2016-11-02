@@ -20,6 +20,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 75, 75)];
+    activityIndicator.layer.cornerRadius = 05;
+    activityIndicator.opaque = NO;
+    activityIndicator.tag = 44;
+    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    activityIndicator.center = self.view.center;
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;// UIActivityIndicatorViewStyleGray;
+    [activityIndicator setColor:[UIColor colorWithRed:0.6 green:0.8 blue:1.0 alpha:1.0]];
+    [self.view addSubview: activityIndicator];
+    [activityIndicator startAnimating];
+
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     employerData = tabBar.employerData;
@@ -80,32 +91,21 @@
     pRosterTable.sectionIndexColor = [UIColor darkGrayColor];
     pRosterTable.sectionIndexBackgroundColor = [UIColor clearColor];
     
-    
-     [self loadDictionary];
-   /*
-    NSString *substring = @"Enrolled";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"enrollments.active.health.status contains[c] %@",substring];
-
-    NSArray *filteredKeys = [rosterList filteredArrayUsingPredicate:predicate];
-    
-    displayArray = filteredKeys;
-    */
-/*
-    NSMutableArray *persons = [NSMutableArray array];
-    for (int i = 0; i < 20; i++) {
-        if (i < 10)
-            [persons addObject:@"First Lastname"];
-        else
-            [persons addObject:@"Something else"];
+    if (tabBar.rosterList == nil)
+        [self loadDictionary];
+    else
+    {
+        displayArray = tabBar.rosterList;
+        [self setDataSectionIndex];
     }
-    pArray = [NSArray arrayWithArray:persons];
-*/    
+/*
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
     for( NSString *string in [rosterList valueForKey:@"first_name"])
         [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+ */
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -169,7 +169,143 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)setDataSectionIndex
+{
+    NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
+    
+    for( NSString *string in [displayArray valueForKey:@"last_name"])
+        [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+    
+    sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    [pRosterTable reloadData];
+    UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+    [activityIndicator stopAnimating];
+    
+    [activityIndicator removeFromSuperview];
+    
+}
+
 -(void)loadDictionary
+{
+    NSString *pUrl;
+    NSString *e_url = employerData.roster_url;
+
+    if (! [e_url hasPrefix:@"https://"] && ![e_url hasPrefix:@"http://"])
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.roster_url];
+    else
+        pUrl = employerData.roster_url;
+
+    NSURL* url = [NSURL URLWithString:pUrl];
+    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];
+    [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+
+    [NSURLConnection sendAsynchronousRequest:urlRequest
+                                       queue:queue
+                           completionHandler:^(NSURLResponse* response,
+                                               NSData* data,
+                                               NSError* error)
+    {
+        if (data) {
+            NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+            // check status code and possibly MIME type (which shall start with "application/json"):
+  //          NSRange range = [response.MIMEType rangeOfString:@"application/json"];
+            
+            if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
+                NSError* error;
+                id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                if (jsonObject) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        // self.model = jsonObject;
+                        NSLog(@"jsonObject: %@", jsonObject);
+                        dictionary = jsonObject;
+                        
+                        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+                        NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+                        
+                        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+                        
+                        // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                        tabBar.rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                        
+                        displayArray = tabBar.rosterList;//rosterList;
+
+                        [self setDataSectionIndex];
+                        
+                        /*
+                        dictionary = jsonObject;
+                        
+                        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+                        NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+                        
+                        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
+                       // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                        tabBar.rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                        
+                        displayArray = tabBar.rosterList;//rosterList;
+
+                        NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
+                        
+                        for( NSString *string in [displayArray valueForKey:@"last_name"])
+                            [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+                        
+                        sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+
+                        [pRosterTable reloadData];
+                        UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+                        [activityIndicator stopAnimating];
+                        
+                        [activityIndicator removeFromSuperview];
+                         */
+
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        //[self handleError:error];
+                        NSLog(@"ERROR: %@", error);
+                    });
+                }
+            }
+            else {
+                // status code indicates error, or didn't receive type of data requested
+                NSString* desc = [[NSString alloc] initWithFormat:@"HTTP Request failed with status code: %d (%@)",
+                                  (int)(httpResponse.statusCode),
+                                  [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]];
+                NSError* error = [NSError errorWithDomain:@"HTTP Request"
+                                                     code:-1000
+                                                 userInfo:@{NSLocalizedDescriptionKey: desc}];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //[self handleError:error];  // execute on main thread!
+                    NSLog(@"ERROR: %@", error);
+                });
+            }
+        }
+        else {
+            // request failed - error contains info about the failure
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //[self handleError:error]; // execute on main thread!
+                NSLog(@"ERROR: %@", error);
+            });
+        }
+    }];
+}
+
+-(void)loadDictionary1
 {
     NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
     NSString *e_url = employerData.detail_url;
@@ -205,6 +341,8 @@
     NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
                                           returningResponse:&response
                                                       error:&error];
+//    NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+//    data = [NSData dataWithContentsOfURL:url];
     
     if (error == nil)
     {
@@ -213,7 +351,13 @@
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
     
-    rosterList = [dictionary valueForKey:@"roster"];//[0];// valueForKey:@"roster"][0];
+//    rosterList = [dictionary valueForKey:@"roster"];//[0];// valueForKey:@"roster"][0];
+    
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+    
+    rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+
     displayArray = rosterList;
 }
 
@@ -262,7 +406,10 @@
     label.numberOfLines = 1;
     label.textAlignment = NSTextAlignmentLeft;
     label.textColor = UIColorFromRGB(0x555555);//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+if ([displayArray count] == 0)
     label.text = @"NAME";
+else
+    label.text = [NSString stringWithFormat:@"NAME (%ld employees)", [displayArray count]]; //@"NAME";
 
     [headerView addSubview:label];
 /*
@@ -276,7 +423,7 @@
     lblStatus.text = @"STATUS";
     lblStatus.userInteractionEnabled = YES;
  */
-    
+
     UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(pRosterTable.frame.size.width/2, 0, pRosterTable.frame.size.width/2 - 10, headerHeight)];
 //    button.layer.cornerRadius = 16;
 //    button.layer.borderWidth = 2;
@@ -331,7 +478,7 @@
         return nil;
     return sectionIndex;//[[NSArray alloc] initWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", nil];
 }
-
+/*
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
     //sectionIndex was pArray
@@ -340,9 +487,31 @@
         return [string hasPrefix:title];
     }];
     
-//    int uu = [indexes firstIndex];
+    int uu = [indexes firstIndex];
     [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[indexes firstIndex] inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     return 1;
+}
+*/
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    
+    NSInteger newRow = [self indexForFirstChar:title inArray:displayArray];
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newRow inSection:0];
+    [tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    
+    return index;
+}
+
+// Return the index for the location of the first item in an array that begins with a certain character
+- (NSInteger)indexForFirstChar:(NSString *)character inArray:(NSArray *)array
+{
+    NSUInteger count = 0;
+    for (NSString *str in array) {
+        if ([[str valueForKey:@"last_name"] hasPrefix:character]) {
+            return count;
+        }
+        count++;
+    }
+    return 0;
 }
 /*
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {

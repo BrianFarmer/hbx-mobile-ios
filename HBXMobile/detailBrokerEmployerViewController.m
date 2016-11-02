@@ -82,6 +82,8 @@
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
+    [expandedSections addIndex:0];
+    
     sections = [[NSArray alloc] initWithObjects: @"RENEWAL DEADLINES", @"PARTICIPATION", @"MONTHLY COSTS", nil];
 
     detailTable.backgroundColor = [UIColor clearColor];
@@ -704,6 +706,7 @@
 
 -(void)userTappedOnEnrolledLink:(UIGestureRecognizer*)sender
 {
+    
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
     tabBar.sortOrder = @"Enrolled";

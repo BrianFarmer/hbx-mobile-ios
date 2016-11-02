@@ -526,7 +526,7 @@
             enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
             if (![enrollHost hasPrefix:@"http://"] && ![enrollHost hasPrefix:@"https://"])
             {
-                enrollHost = [NSString stringWithFormat:@"http://%@", enrollHost];
+                enrollHost = [NSString stringWithFormat:@"https://%@", enrollHost];
             }
             
             [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"%@/users/sign_in", enrollHost]];
@@ -720,8 +720,9 @@
     //    NSString *at1 = [csrfToken stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
-    NSString *post = [NSString stringWithFormat:@"user[login]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
+//    NSString *post = [NSString stringWithFormat:@"user[login]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
 //    NSString *post = [NSString stringWithFormat:@"user[login]=%@&user[password]=$RFde3#1!87&authenticity_token=%@", txtEmail.text, at];
+    NSString *post = [NSString stringWithFormat:@"user[login]=LoadTest18&user[password]=Test123!&authenticity_token=%@", at];
     
     NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
     

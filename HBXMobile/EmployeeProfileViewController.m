@@ -520,7 +520,15 @@ alpha:1.0]
         cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:12];
 
         NSArray *po = [_employeeData valueForKey:@"dependents"][indexPath.row];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [po valueForKey:@"first_name"], [po valueForKey:@"middle_name"], [po valueForKey:@"last_name"], [po valueForKey:@"name_suffix"]];
+        
+        NSString *sMiddle = [po valueForKey:@"middle_name"];
+        if (sMiddle == (NSString*)[NSNull null])
+            sMiddle = @"";
+        NSString *sSuffix = [po valueForKey:@"name_suffix"];
+        if (sSuffix == (NSString*)[NSNull null])
+            sSuffix = @"";
+        
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ %@", [po valueForKey:@"first_name"], sMiddle, [po valueForKey:@"last_name"], sSuffix];
         
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
