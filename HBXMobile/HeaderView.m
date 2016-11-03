@@ -56,7 +56,12 @@ alpha:1.0]
 - (void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear
 {
     employerData = eData;
-    
+/*
+    self.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(2, 2);
+    self.layer.shadowOpacity = 0.5;
+    self.layer.shadowRadius = 3.0;
+*/
     UILabel *pCompany = [[UILabel alloc] init];
     
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
@@ -174,19 +179,19 @@ alpha:1.0]
         switch(btnCount)
         {
             case 0:
-                btnImage = [UIImage imageNamed:@"phone.png"];
+                btnImage = [UIImage imageNamed:@"phone-2.png"];
                 [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 1:
-                btnImage = [UIImage imageNamed:@"message.png"];
+                btnImage = [UIImage imageNamed:@"message-2.png"];
                 [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 2:
-                btnImage = [UIImage imageNamed:@"location.png"];
+                btnImage = [UIImage imageNamed:@"location-2.png"];
                 [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 3:
-                btnImage = [UIImage imageNamed:@"email.png"];
+                btnImage = [UIImage imageNamed:@"email-2.png"];
                 [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
         }
@@ -268,19 +273,19 @@ alpha:1.0]
         switch(btnCount)
         {
             case 0:
-                btnImage = [UIImage imageNamed:@"phone.png"];
+                btnImage = [UIImage imageNamed:@"phone-2.png"];
                 [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 1:
-                btnImage = [UIImage imageNamed:@"message.png"];
+                btnImage = [UIImage imageNamed:@"message-2.png"];
                 [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 2:
-                btnImage = [UIImage imageNamed:@"location.png"];
+                btnImage = [UIImage imageNamed:@"location-2.png"];
                 [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
                 break;
             case 3:
-                btnImage = [UIImage imageNamed:@"email.png"];
+                btnImage = [UIImage imageNamed:@"email-2.png"];
                 [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
                 break;
         }

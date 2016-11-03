@@ -301,7 +301,9 @@
     pLogoOnTop = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-logoWidth/2, 25, logoWidth, logoWidth * .333)];
 //    UIImageView *pView = [[UIImageView alloc] initWithFrame:CGRectMake(screenSize.width/2-100, 50, 200, 45)];
     pLogoOnTop.backgroundColor = [UIColor clearColor];
-    pLogoOnTop.image = [UIImage imageNamed:@"BrokerMVP_AppHeader512x147.png"];
+    pLogoOnTop.image = [self imageWithImage:[UIImage imageNamed:@"BrokerMVP_AppHeader512x147.png"] scaledToSize:CGSizeMake(300, 86)];
+//    pLogoOnTop.image = [UIImage imageNamed:@"BrokerMVP_AppHeader512x147.png"];
+    
     pLogoOnTop.contentMode =  UIViewContentModeScaleAspectFill;
     
     [self.view addSubview:pLogoOnTop];
@@ -338,6 +340,14 @@
     
     Settings *obj=[Settings getInstance];
     obj.iPlanVersion = 1;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -526,7 +536,7 @@
             enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
             if (![enrollHost hasPrefix:@"http://"] && ![enrollHost hasPrefix:@"https://"])
             {
-                enrollHost = [NSString stringWithFormat:@"https://%@", enrollHost];
+                enrollHost = [NSString stringWithFormat:@"http://%@", enrollHost];
             }
             
             [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"%@/users/sign_in", enrollHost]];
@@ -722,7 +732,16 @@
     //    NSString *post = [NSString stringWithFormat:@"user[email]=frodo@shire.com&user[password]=Test123!&authenticity_token=%@", at];
 //    NSString *post = [NSString stringWithFormat:@"user[login]=bill.murray@example.com&user[password]=Test123!&authenticity_token=%@", at];
 //    NSString *post = [NSString stringWithFormat:@"user[login]=%@&user[password]=$RFde3#1!87&authenticity_token=%@", txtEmail.text, at];
-    NSString *post = [NSString stringWithFormat:@"user[login]=LoadTest18&user[password]=Test123!&authenticity_token=%@", at];
+//    NSString *post = [NSString stringWithFormat:@"user[login]=LoadTest18&user[password]=Test123!&authenticity_token=%@", at];
+    if (bUseTouchID && [txtPassword.text length] == 0)
+    {
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
+        szPassword = [keychainItem objectForKey:(__bridge id)kSecAttrAccount];
+    }
+    else
+        szPassword = txtPassword.text;
+
+    NSString *post = [NSString stringWithFormat:@"user[login]=%@&user[password]=%@&authenticity_token=%@", txtEmail.text, szPassword, at];
     
     NSLog(@"%@", @"\r\r\rLOGIN\r\r\r\r");
     
@@ -1338,11 +1357,16 @@
 
 -(void)customActivityView
 {
-    loading = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-110, 200, 220, 140)];
+    loading = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
+//    loading = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-110, 200, 220, 140)];
+    UIView *centerloading = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-110, self.view.frame.size.height/2-70, 220, 140)];
+    centerloading.layer.cornerRadius = 15;
+    centerloading.opaque = NO;
+    centerloading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
     
-    loading.layer.cornerRadius = 15;
+    loading.layer.cornerRadius = 0;
     loading.opaque = NO;
-    loading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    loading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
     
     loadLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, 200, 22)];
     
@@ -1351,15 +1375,14 @@
     loadLabel.textColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
     loadLabel.backgroundColor = [UIColor clearColor];
     
-    [loading addSubview:loadLabel];
+    [centerloading addSubview:loadLabel];
     
     UIActivityIndicatorView *spinning = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     spinning.frame = CGRectMake(220/2-18, 140/2-18, 37, 37);
     [spinning startAnimating];
     
-    [loading addSubview:spinning];
-    
-//    loading.frame = CGRectMake(100, 200, 200, 200);
+    [centerloading addSubview:spinning];
+    [loading addSubview:centerloading];
     [loading setHidden:TRUE];
     
     [self.view addSubview:loading];

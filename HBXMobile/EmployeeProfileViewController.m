@@ -289,8 +289,8 @@ alpha:1.0]
     {
         UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         imgVew.backgroundColor = [UIColor clearColor];
-        imgVew.image = [UIImage imageNamed:@"close_arrow32x32.png"];
-        imgVew.contentMode = UIViewContentModeScaleAspectFit;
+        imgVew.image = [self imageWithImage:[UIImage imageNamed:@"close_arrow32x32.png"]  scaledToSize:CGSizeMake(32, 32)];//[UIImage imageNamed:@"close_arrow32x32.png"];
+//        imgVew.contentMode = UIViewContentModeScaleAspectFit;
         // Add the image to the header view
         [headerView addSubview:imgVew];
     }
@@ -331,6 +331,14 @@ alpha:1.0]
     [headerView addGestureRecognizer:recognizer];
     
     return headerView;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)sender {
@@ -533,7 +541,7 @@ alpha:1.0]
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
         
-        NSDate *dob = [f dateFromString:[_employeeData valueForKey:@"date_of_birth"]];
+        NSDate *dob = [f dateFromString:[po valueForKey:@"date_of_birth"]];
         
         [f setDateFormat:@"MM/dd/yyyy"];
 

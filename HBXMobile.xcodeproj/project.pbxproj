@@ -81,6 +81,19 @@
 		4039C88C1D8C50AB00F7EA7B /* check_showall.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C8881D8C50AB00F7EA7B /* check_showall.png */; };
 		4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C8891D8C50AB00F7EA7B /* check_notenrolled.png */; };
 		4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4039C88A1D8C50AB00F7EA7B /* check_enrolled.png */; };
+		403B5E9D1DCB71D800A4FAD8 /* email-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5E9C1DCB71D800A4FAD8 /* email-2.png */; };
+		403B5E9F1DCB729600A4FAD8 /* location-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5E9E1DCB729600A4FAD8 /* location-2.png */; };
+		403B5EA21DCB72FB00A4FAD8 /* message-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EA01DCB72FB00A4FAD8 /* message-2.png */; };
+		403B5EA31DCB72FB00A4FAD8 /* phone-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EA11DCB72FB00A4FAD8 /* phone-2.png */; };
+		403B5EA91DCB8BD500A4FAD8 /* advice_blue-1-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EA81DCB8BD500A4FAD8 /* advice_blue-1-3.png */; };
+		403B5EAC1DCB8D3900A4FAD8 /* rosteractive48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EAA1DCB8D3900A4FAD8 /* rosteractive48.png */; };
+		403B5EAD1DCB8D3900A4FAD8 /* rosternormal48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EAB1DCB8D3900A4FAD8 /* rosternormal48.png */; };
+		403B5EB01DCB8E9200A4FAD8 /* costsactive48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EAE1DCB8E9200A4FAD8 /* costsactive48.png */; };
+		403B5EB11DCB8E9200A4FAD8 /* costsnormal48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EAF1DCB8E9200A4FAD8 /* costsnormal48.png */; };
+		403B5EB41DCB8F2600A4FAD8 /* plansactive48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EB21DCB8F2600A4FAD8 /* plansactive48.png */; };
+		403B5EB51DCB8F2600A4FAD8 /* plansnormal48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EB31DCB8F2600A4FAD8 /* plansnormal48.png */; };
+		403B5EB71DCB8F8200A4FAD8 /* infoactive48.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EB61DCB8F8200A4FAD8 /* infoactive48.png */; };
+		403B5EB91DCBCEC600A4FAD8 /* openarrow-down.png in Resources */ = {isa = PBXBuildFile; fileRef = 403B5EB81DCBCEC600A4FAD8 /* openarrow-down.png */; };
 		40D466AF1D3EC24200ADC1FC /* CarrierListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */; };
 		40ECFBFC1D8AF2ED003102E5 /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 40ECFBFB1D8AF2ED003102E5 /* XYPieChart.m */; };
 		40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */ = {isa = PBXBuildFile; fileRef = 40ECFC031D8B1BC9003102E5 /* tabBG1.png */; };
@@ -235,6 +248,19 @@
 		4039C8881D8C50AB00F7EA7B /* check_showall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_showall.png; sourceTree = "<group>"; };
 		4039C8891D8C50AB00F7EA7B /* check_notenrolled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_notenrolled.png; sourceTree = "<group>"; };
 		4039C88A1D8C50AB00F7EA7B /* check_enrolled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_enrolled.png; sourceTree = "<group>"; };
+		403B5E9C1DCB71D800A4FAD8 /* email-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "email-2.png"; sourceTree = "<group>"; };
+		403B5E9E1DCB729600A4FAD8 /* location-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location-2.png"; sourceTree = "<group>"; };
+		403B5EA01DCB72FB00A4FAD8 /* message-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message-2.png"; sourceTree = "<group>"; };
+		403B5EA11DCB72FB00A4FAD8 /* phone-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone-2.png"; sourceTree = "<group>"; };
+		403B5EA81DCB8BD500A4FAD8 /* advice_blue-1-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "advice_blue-1-3.png"; sourceTree = "<group>"; };
+		403B5EAA1DCB8D3900A4FAD8 /* rosteractive48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosteractive48.png; sourceTree = "<group>"; };
+		403B5EAB1DCB8D3900A4FAD8 /* rosternormal48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosternormal48.png; sourceTree = "<group>"; };
+		403B5EAE1DCB8E9200A4FAD8 /* costsactive48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = costsactive48.png; sourceTree = "<group>"; };
+		403B5EAF1DCB8E9200A4FAD8 /* costsnormal48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = costsnormal48.png; sourceTree = "<group>"; };
+		403B5EB21DCB8F2600A4FAD8 /* plansactive48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plansactive48.png; sourceTree = "<group>"; };
+		403B5EB31DCB8F2600A4FAD8 /* plansnormal48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plansnormal48.png; sourceTree = "<group>"; };
+		403B5EB61DCB8F8200A4FAD8 /* infoactive48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infoactive48.png; sourceTree = "<group>"; };
+		403B5EB81DCBCEC600A4FAD8 /* openarrow-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openarrow-down.png"; sourceTree = "<group>"; };
 		40D466AD1D3EC24200ADC1FC /* CarrierListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListViewController.h; sourceTree = "<group>"; };
 		40D466AE1D3EC24200ADC1FC /* CarrierListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListViewController.m; sourceTree = "<group>"; };
 		40ECFBFA1D8AF2ED003102E5 /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
@@ -504,6 +530,19 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				403B5EB81DCBCEC600A4FAD8 /* openarrow-down.png */,
+				403B5EB61DCB8F8200A4FAD8 /* infoactive48.png */,
+				403B5EB21DCB8F2600A4FAD8 /* plansactive48.png */,
+				403B5EB31DCB8F2600A4FAD8 /* plansnormal48.png */,
+				403B5EAE1DCB8E9200A4FAD8 /* costsactive48.png */,
+				403B5EAF1DCB8E9200A4FAD8 /* costsnormal48.png */,
+				403B5EAA1DCB8D3900A4FAD8 /* rosteractive48.png */,
+				403B5EAB1DCB8D3900A4FAD8 /* rosternormal48.png */,
+				403B5EA81DCB8BD500A4FAD8 /* advice_blue-1-3.png */,
+				403B5EA01DCB72FB00A4FAD8 /* message-2.png */,
+				403B5EA11DCB72FB00A4FAD8 /* phone-2.png */,
+				403B5E9E1DCB729600A4FAD8 /* location-2.png */,
+				403B5E9C1DCB71D800A4FAD8 /* email-2.png */,
 				40F8BFAA1DB94E3300FFEEDE /* check_purple.png */,
 				40F8BFA81DB94DE500FFEEDE /* check_green.png */,
 				40F8BFA61DB94D3F00FFEEDE /* check_yellow.png */,
@@ -674,11 +713,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F6DDA91D89ABF70095519C /* home.png in Resources */,
+				403B5EAD1DCB8D3900A4FAD8 /* rosternormal48.png in Resources */,
 				40003F3A1D4FFCFF00CD059B /* DCHealthLink_LogoWHT1.png in Resources */,
 				40003F2E1D4FE45800CD059B /* message.png in Resources */,
 				40F8BFA91DB94DE500FFEEDE /* check_green.png in Resources */,
 				40F8BFAB1DB94E3300FFEEDE /* check_purple.png in Resources */,
 				40003F311D4FE45800CD059B /* phoneWHT.png in Resources */,
+				403B5EB71DCB8F8200A4FAD8 /* infoactive48.png in Resources */,
+				403B5EA21DCB72FB00A4FAD8 /* message-2.png in Resources */,
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */,
 				4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */,
@@ -686,12 +728,17 @@
 				40EEC85F1D512B690071FFD5 /* chevron.png in Resources */,
 				40F6F8C31D88727D003279DD /* rosternormal32.png in Resources */,
 				400AE1F21D9407AE0097DEA6 /* costsactive32.png in Resources */,
+				403B5EAC1DCB8D3900A4FAD8 /* rosteractive48.png in Resources */,
+				403B5EB11DCB8E9200A4FAD8 /* costsnormal48.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
+				403B5EB51DCB8F2600A4FAD8 /* plansnormal48.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
 				134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */,
 				13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */,
+				403B5E9F1DCB729600A4FAD8 /* location-2.png in Resources */,
 				40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */,
 				13A382141CDB2E3E006B5984 /* Roboto-Bold.ttf in Resources */,
+				403B5EB41DCB8F2600A4FAD8 /* plansactive48.png in Resources */,
 				4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */,
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
 				4039C88C1D8C50AB00F7EA7B /* check_showall.png in Resources */,
@@ -711,7 +758,9 @@
 				4039C88B1D8C50AB00F7EA7B /* check_waived.png in Resources */,
 				40F6F8C61D887BE9003279DD /* plansnormal32.png in Resources */,
 				40003F321D4FE45800CD059B /* emailWHT.png in Resources */,
+				403B5E9D1DCB71D800A4FAD8 /* email-2.png in Resources */,
 				134A09DA1CBE7D7F00CD3229 /* server.der in Resources */,
+				403B5EA91DCB8BD500A4FAD8 /* advice_blue-1-3.png in Resources */,
 				40EEC8541D5104CB0071FFD5 /* emailus54x54.png in Resources */,
 				1385FE001D9C0E2800A277BC /* CloseCaret.png in Resources */,
 				40EEC8531D5104CB0071FFD5 /* callus54x54.png in Resources */,
@@ -723,6 +772,7 @@
 				13A382171CDB2E3E006B5984 /* Roboto-Light.ttf in Resources */,
 				13A382191CDB2E3E006B5984 /* Roboto-Medium.ttf in Resources */,
 				13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */,
+				403B5EB91DCBCEC600A4FAD8 /* openarrow-down.png in Resources */,
 				13A373071D084053008CA0E1 /* header-employer-2.png in Resources */,
 				40F6DDA51D89A3E50095519C /* infoactive32.png in Resources */,
 				13A382131CDB2E3E006B5984 /* Roboto-BlackItalic.ttf in Resources */,
@@ -739,8 +789,10 @@
 				4017F78E1D8077C00093CE90 /* StoryboardiPad.storyboard in Resources */,
 				40003F2D1D4FE45800CD059B /* phone.png in Resources */,
 				1385FE011D9C0E2800A277BC /* OpenCaret.png in Resources */,
+				403B5EB01DCB8E9200A4FAD8 /* costsactive48.png in Resources */,
 				13A3821A1CDB2E3E006B5984 /* Roboto-MediumItalic.ttf in Resources */,
 				13A382151CDB2E3E006B5984 /* Roboto-BoldItalic.ttf in Resources */,
+				403B5EA31DCB72FB00A4FAD8 /* phone-2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

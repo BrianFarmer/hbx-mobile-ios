@@ -88,8 +88,13 @@
 
     detailTable.backgroundColor = [UIColor clearColor];
     detailTable.backgroundView = nil;
-        
-    ((employerTabController *) self.tabBarController).detailDictionary = [self loadDictionary];
+    
+//    [self performSelector: @selector(loadDictionary)
+//               withObject: nil
+//               afterDelay: 0];
+//    return;
+    [self loadDictionary];
+    ((employerTabController *) self.tabBarController).detailDictionary = dictionary;
     
     int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
  
@@ -206,7 +211,8 @@
     //    self.secondViewController.aLabel.text = self.stringFromTableViewController;
 }
 
--(NSDictionary*)loadDictionary
+//-(NSDictionary*)loadDictionary
+-(void)loadDictionary
 {
     NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
     NSString *e_url = employerData.detail_url;
@@ -249,10 +255,10 @@
         
         dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         
-        return dictionary;
+//        return dictionary;
     }
     
-    return nil;
+//    return nil;
 }
 
 - (NSUInteger)numberOfSlicesInPieChart:(XYPieChart *)pieChart

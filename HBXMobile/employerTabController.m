@@ -20,6 +20,14 @@ alpha:1.0]
 
 @implementation employerTabController
 
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -36,22 +44,33 @@ alpha:1.0]
     [UITabBarItem.appearance setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
 
     
-    UITabBarItem *item0 = self.tabBar.items[0];
-    [item0 setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [item0 setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    UITabBarItem *item0 = self.tabBar.items[0];    
+//    self.tabBarItem.image = [self imageWithImage:image scaledToSize:CGSizeMake(30, 30)];
+    [item0 setImage:[[self imageWithImage:[UIImage imageNamed:@"infonormal48.png"] scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+//    [item0 setImage:[[UIImage imageNamed:@"infonormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//    [item0 setSelectedImage:[[UIImage imageNamed:@"infoactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [item0 setSelectedImage:[[self imageWithImage:[UIImage imageNamed:@"infoactive48.png"] scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     UITabBarItem *item1 = self.tabBar.items[1];
-    [item1 setImage:[[UIImage imageNamed:@"rosternormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [item1 setSelectedImage:[[UIImage imageNamed:@"rosteractive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [item1 setImage:[[self imageWithImage:[UIImage imageNamed:@"rosternormal48.png"]  scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [item1 setSelectedImage:[[self imageWithImage:[UIImage imageNamed:@"rosteractive48.png"] scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     UITabBarItem *item2 = self.tabBar.items[2];
+    [item2 setImage:[[self imageWithImage:[UIImage imageNamed:@"costsnormal48.png"]  scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [item2 setSelectedImage:[[self imageWithImage:[UIImage imageNamed:@"costsactive48.png"] scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+/*
     [item2 setImage:[[UIImage imageNamed:@"costsnormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [item2 setSelectedImage:[[UIImage imageNamed:@"costsactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-
+*/
     UITabBarItem *item3 = self.tabBar.items[3];
+    [item3 setImage:[[self imageWithImage:[UIImage imageNamed:@"plansnormal48.png"]  scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [item3 setSelectedImage:[[self imageWithImage:[UIImage imageNamed:@"plansactive48.png"] scaledToSize:CGSizeMake(32, 32)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
+ /*
     [item3 setImage:[[UIImage imageNamed:@"plansnormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [item3 setSelectedImage:[[UIImage imageNamed:@"plansactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-
+*/
 }
 
 - (void)didReceiveMemoryWarning {

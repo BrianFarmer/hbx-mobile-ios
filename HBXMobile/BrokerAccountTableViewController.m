@@ -1244,6 +1244,38 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if (ttype.type == 1)
         return;
  //   [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
+ /*
+    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 75, 75)];
+    activityIndicator.layer.cornerRadius = 05;
+    activityIndicator.opaque = NO;
+    activityIndicator.tag = 44;
+    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    activityIndicator.center = self.view.center;
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;// UIActivityIndicatorViewStyleGray;
+    [activityIndicator setColor:[UIColor colorWithRed:0.6 green:0.8 blue:1.0 alpha:1.0]];
+    [self.view addSubview: activityIndicator];
+    [activityIndicator startAnimating];
+*/
+    
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]; [self.view addSubview:spinner];
+    
+    //switch to background thread
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
+        //back to the main thread for the UI call
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [spinner startAnimating];
+        });
+        // more on the background thread
+        
+        // parsing code code
+        
+        //back to the main thread for the UI call
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [spinner stopAnimating];
+        });
+//    });
+    
     
     MGSwipeTableCell *cell = (MGSwipeTableCell *)[(UITableView *)self.view cellForRowAtIndexPath:indexPath];
     if (ttype.status == NEEDS_ATTENTION)
