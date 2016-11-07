@@ -14,6 +14,12 @@
 		13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13273AFC1D366FE60097D245 /* popupMessageBox.xib */; };
 		13316B141D21B0D9001A450C /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 13316B131D21B0D9001A450C /* Settings.m */; };
 		133254291D916C56003C621F /* plansBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 133254281D916C56003C621F /* plansBrokerEmployerViewController.m */; };
+		133EE5C71DCE09CC009646C6 /* chevronblue.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5C61DCE09CC009646C6 /* chevronblue.png */; };
+		133EE5C91DCE0D18009646C6 /* downBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5C81DCE0D18009646C6 /* downBlue.png */; };
+		133EE5CB1DCE0DED009646C6 /* upArrowBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5CA1DCE0DED009646C6 /* upArrowBlue.png */; };
+		133EE5CD1DCE1037009646C6 /* upArrowBlue1.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5CC1DCE1037009646C6 /* upArrowBlue1.png */; };
+		133EE5CF1DCE1287009646C6 /* upArrowBlue2.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5CE1DCE1287009646C6 /* upArrowBlue2.png */; };
+		133EE5D11DCE1352009646C6 /* upArrowBlue3.png in Resources */ = {isa = PBXBuildFile; fileRef = 133EE5D01DCE1352009646C6 /* upArrowBlue3.png */; };
 		134A09DA1CBE7D7F00CD3229 /* server.der in Resources */ = {isa = PBXBuildFile; fileRef = 134A09D91CBE7D7F00CD3229 /* server.der */; };
 		134A09DD1CBE817000CD3229 /* SSL Certificate Creation in Resources */ = {isa = PBXBuildFile; fileRef = 134A09DC1CBE817000CD3229 /* SSL Certificate Creation */; };
 		134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 134DE79D1CECEF6600F8958A /* MGSwipeButton.m */; };
@@ -158,6 +164,12 @@
 		13316B131D21B0D9001A450C /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		133254271D916C56003C621F /* plansBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plansBrokerEmployerViewController.h; sourceTree = "<group>"; };
 		133254281D916C56003C621F /* plansBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = plansBrokerEmployerViewController.m; sourceTree = "<group>"; };
+		133EE5C61DCE09CC009646C6 /* chevronblue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevronblue.png; sourceTree = "<group>"; };
+		133EE5C81DCE0D18009646C6 /* downBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downBlue.png; sourceTree = "<group>"; };
+		133EE5CA1DCE0DED009646C6 /* upArrowBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upArrowBlue.png; sourceTree = "<group>"; };
+		133EE5CC1DCE1037009646C6 /* upArrowBlue1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upArrowBlue1.png; sourceTree = "<group>"; };
+		133EE5CE1DCE1287009646C6 /* upArrowBlue2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upArrowBlue2.png; sourceTree = "<group>"; };
+		133EE5D01DCE1352009646C6 /* upArrowBlue3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upArrowBlue3.png; sourceTree = "<group>"; };
 		134A09D91CBE7D7F00CD3229 /* server.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.der; sourceTree = "<group>"; };
 		134A09DC1CBE817000CD3229 /* SSL Certificate Creation */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SSL Certificate Creation"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.python; };
 		134DE79C1CECEF6600F8958A /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
@@ -530,6 +542,12 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				133EE5D01DCE1352009646C6 /* upArrowBlue3.png */,
+				133EE5CE1DCE1287009646C6 /* upArrowBlue2.png */,
+				133EE5CC1DCE1037009646C6 /* upArrowBlue1.png */,
+				133EE5CA1DCE0DED009646C6 /* upArrowBlue.png */,
+				133EE5C81DCE0D18009646C6 /* downBlue.png */,
+				133EE5C61DCE09CC009646C6 /* chevronblue.png */,
 				403B5EB81DCBCEC600A4FAD8 /* openarrow-down.png */,
 				403B5EB61DCB8F8200A4FAD8 /* infoactive48.png */,
 				403B5EB21DCB8F2600A4FAD8 /* plansactive48.png */,
@@ -720,6 +738,7 @@
 				40F8BFAB1DB94E3300FFEEDE /* check_purple.png in Resources */,
 				40003F311D4FE45800CD059B /* phoneWHT.png in Resources */,
 				403B5EB71DCB8F8200A4FAD8 /* infoactive48.png in Resources */,
+				133EE5CD1DCE1037009646C6 /* upArrowBlue1.png in Resources */,
 				403B5EA21DCB72FB00A4FAD8 /* message-2.png in Resources */,
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */,
@@ -730,6 +749,7 @@
 				400AE1F21D9407AE0097DEA6 /* costsactive32.png in Resources */,
 				403B5EAC1DCB8D3900A4FAD8 /* rosteractive48.png in Resources */,
 				403B5EB11DCB8E9200A4FAD8 /* costsnormal48.png in Resources */,
+				133EE5D11DCE1352009646C6 /* upArrowBlue3.png in Resources */,
 				40003F2F1D4FE45800CD059B /* location.png in Resources */,
 				403B5EB51DCB8F2600A4FAD8 /* plansnormal48.png in Resources */,
 				13273AFE1D366FE60097D245 /* popupMessageBox.xib in Resources */,
@@ -742,7 +762,10 @@
 				4039C88E1D8C50AB00F7EA7B /* check_enrolled.png in Resources */,
 				13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */,
 				4039C88C1D8C50AB00F7EA7B /* check_showall.png in Resources */,
+				133EE5CB1DCE0DED009646C6 /* upArrowBlue.png in Resources */,
 				13A382121CDB2E3E006B5984 /* Roboto-Black.ttf in Resources */,
+				133EE5CF1DCE1287009646C6 /* upArrowBlue2.png in Resources */,
+				133EE5C91DCE0D18009646C6 /* downBlue.png in Resources */,
 				40F6DDB21D89BB280095519C /* rosteractive32.png in Resources */,
 				13A3821C1CDB2E3E006B5984 /* Roboto-Thin.ttf in Resources */,
 				13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */,
@@ -751,6 +774,7 @@
 				13A3821B1CDB2E3E006B5984 /* Roboto-Regular.ttf in Resources */,
 				40F6F8BA1D886413003279DD /* infonormal40.png in Resources */,
 				40F6DDA31D899F340095519C /* infonormal40_text.png in Resources */,
+				133EE5C71DCE09CC009646C6 /* chevronblue.png in Resources */,
 				13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */,
 				40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */,
 				40F6DDA71D89ABEA0095519C /* home_selected.png in Resources */,

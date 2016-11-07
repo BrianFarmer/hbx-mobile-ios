@@ -287,12 +287,39 @@ alpha:1.0]
     
     if ([expandedSections containsIndex:section])
     {
-        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
+        /*
+        UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
+        button.layer.cornerRadius = 16;
+        button.layer.borderWidth = 2;
+        button.layer.borderColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+        button.clipsToBounds = YES;
+        button.tag = section;
+        [button setTitleColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12.0];
+        [button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];
+        
+//        if (section == 2)
+//            [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[_employeeData valueForKey:@"dependents"] count]] forState:UIControlStateNormal];
+//        else
+//        {
+            button.titleLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16.0];
+     //       [button setTitle:[NSString stringWithFormat:@"%@", @"^"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"chevronblue.png"] forState:UIControlStateNormal];
+//        }
+        
+        [headerView addSubview:button];
+
+      */
+        
+        
+
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-51, 8, 34, 34)];
         imgVew.backgroundColor = [UIColor clearColor];
-        imgVew.image = [self imageWithImage:[UIImage imageNamed:@"close_arrow32x32.png"]  scaledToSize:CGSizeMake(32, 32)];//[UIImage imageNamed:@"close_arrow32x32.png"];
+        imgVew.image = [self imageWithImage:[UIImage imageNamed:@"upArrowBlue3.png"]  scaledToSize:CGSizeMake(34, 34)];//[UIImage imageNamed:@"close_arrow32x32.png"];
 //        imgVew.contentMode = UIViewContentModeScaleAspectFit;
         // Add the image to the header view
         [headerView addSubview:imgVew];
+ 
     }
     else
     {

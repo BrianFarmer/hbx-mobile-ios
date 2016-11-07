@@ -66,13 +66,13 @@
     bOpened = FALSE;
 }
 
--(void) handleLeftSwipe //:(int)is //(UISwipeGestureRecognizer *) recognizer {
+-(BOOL)handleLeftSwipe //:(int)is //(UISwipeGestureRecognizer *) recognizer {
 {
     if (bOpened)
     {
         [self handleRightSwipe:nil];
         bOpened = FALSE;
-        return;
+        return bOpened;
     }
     [self viewDidLoad];
     [UIView beginAnimations:nil context:NULL];
@@ -83,7 +83,8 @@
     [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.superview cache:YES]; //UIViewAnimationTransitionFlipFromRight
     [UIView commitAnimations];
     bOpened = TRUE;
-//    iSort = is;
+
+    return bOpened;
 }
 
 - (void)viewDidLoad

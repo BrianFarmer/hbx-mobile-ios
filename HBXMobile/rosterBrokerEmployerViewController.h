@@ -32,6 +32,9 @@
     NSArray *rosterList;
     
     NSArray *displayArray;
+    
+    BOOL bFilterOpen;
+    BOOL bDataLoading;
 }
 
 @property(nonatomic, assign) NSString *enrollHost;

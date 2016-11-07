@@ -26,6 +26,6 @@
 
 @property (nonatomic, weak) id<uiSlideViewDelegate> delegate;
 
--(void) handleLeftSwipe;//:(NSIndexPath*)iSort;
+-(BOOL)handleLeftSwipe;//:(NSIndexPath*)iSort;
 
 @end

@@ -413,6 +413,16 @@ alpha:1.0]
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         
+        UILabel* detailLabel = [[UILabel alloc] init];
+        detailLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - (iLabelWidth * 2), 44);
+        detailLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
+        detailLabel.tag = 33;
+        detailLabel.hidden = FALSE;
+        detailLabel.numberOfLines = 0;
+        detailLabel.textAlignment = NSTextAlignmentLeft;
+        detailLabel.textColor = UIColorFromRGB(0x555555);
+     //   detailLabel.backgroundColor = [UIColor greenColor];
+        [cell.contentView addSubview:detailLabel];
         
         UILabel* detailLabel_2 = [[UILabel alloc] init];
         detailLabel_2.frame = CGRectMake(tableView.frame.size.width - iLabelWidth - iLabelWidth, 12, iLabelWidth, 20);
@@ -422,8 +432,6 @@ alpha:1.0]
         detailLabel_2.textAlignment = NSTextAlignmentCenter;
         detailLabel_2.textColor = UIColorFromRGB(0x555555);
         [cell.contentView addSubview:detailLabel_2];
-         
-        
         
         UILabel* detailLabel_3 = [[UILabel alloc] init];
         detailLabel_3.frame = CGRectMake(tableView.frame.size.width - iLabelWidth - 3, 12, iLabelWidth, 20);
@@ -436,17 +444,24 @@ alpha:1.0]
          
     }
     
+    UILabel *dt1 = [cell viewWithTag:33];
     UILabel *dt2 = [cell viewWithTag:34];
     UILabel *dt3 = [cell viewWithTag:35];
-    
+
+    dt1.textColor = UIColorFromRGB(0x555555);
     dt2.textColor = UIColorFromRGB(0x555555);
     dt3.textColor = UIColorFromRGB(0x555555);
-    
+/*
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
-    
+    cell.textLabel.numberOfLines = 0;
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
-    
+*/
+
+    dt1.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
+
     NSString *oo = [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
     NSString *ll =  [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
     

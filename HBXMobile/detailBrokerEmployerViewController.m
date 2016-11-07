@@ -96,14 +96,28 @@
     [self loadDictionary];
     ((employerTabController *) self.tabBarController).detailDictionary = dictionary;
     
-    int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
- 
+    int emp_total = ([dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_total"] intValue];
+
+    int emp_enr = ([dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_enrolled"] intValue];
+
+    int emp_waiv = ([dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_waived"] intValue];
+
+    int iNotEnrolled = emp_total - emp_waiv - emp_enr;
+
+//    int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
+/*
     NSNumber *one = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_enrolled"] intValue]];
     [_slices addObject:one];
     
     NSNumber *two = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_waived"] intValue]];
     [_slices addObject:two];
+*/
+    NSNumber *one = [NSNumber numberWithInt:emp_enr];
+    [_slices addObject:one];
     
+    NSNumber *two = [NSNumber numberWithInt:emp_waiv];
+    [_slices addObject:two];
+
     NSNumber *three = [NSNumber numberWithInt:iNotEnrolled];
     [_slices addObject:three];
 
@@ -685,17 +699,26 @@
     {
         if (indexPath.row == 0)
         {
+            
+            int emp_total = ([dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_total"] intValue];
+            
+            int emp_enr = ([dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_enrolled"] intValue];
+            
+            int emp_waiv = ([dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_waived"] intValue];
+            
+            int iNotEnrolled = emp_total - emp_waiv - emp_enr;
+
             pEnrolled.hidden = FALSE;
-            pEnrolled.text = [NSString stringWithFormat:@"%@\nENROLLED", [dictionary valueForKey:@"employees_enrolled"]];
+            pEnrolled.text = [NSString stringWithFormat:@"%i\nENROLLED", emp_enr];
             
             pWaived.hidden = FALSE;
-            pWaived.text = [NSString stringWithFormat:@"%@\nWAIVED", [dictionary valueForKey:@"employees_waived"]];
+            pWaived.text = [NSString stringWithFormat:@"%i\nWAIVED", emp_waiv];
 
             pNotEnrolled.hidden = FALSE;
-            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue]]; //@"4\nNOT ENROLLED";
+            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", iNotEnrolled];
             
             pTotalEmployees.hidden = FALSE;
-            pTotalEmployees.text = [NSString stringWithFormat:@"%@\nTOTAL EMPLOYEES", [dictionary valueForKey:@"employees_total"]]; //@"30\nTOTAL EMPLOYEES";
+            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", emp_total];
             
             pChart.hidden = FALSE;
             [pChart reloadData];

@@ -98,6 +98,8 @@
         displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
     }
+    
+    bFilterOpen = FALSE;
 /*
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
@@ -178,6 +180,8 @@
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     
+    bDataLoading = FALSE;
+    
     [pRosterTable reloadData];
     UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
     [activityIndicator stopAnimating];
@@ -191,6 +195,8 @@
     NSString *pUrl;
     NSString *e_url = employerData.roster_url;
 
+    bDataLoading = TRUE;
+    
     if (! [e_url hasPrefix:@"https://"] && ![e_url hasPrefix:@"http://"])
         pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.roster_url];
     else
@@ -378,7 +384,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [displayArray count];
+    if (bDataLoading)
+        return 0;
+    
+    NSInteger actualNumberOfRows = [displayArray count];
+    return (actualNumberOfRows == 0) ? 1:actualNumberOfRows;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -464,11 +474,14 @@ else
 
 - (void)handleTap:(UIButton *)sender {
     [sender setBackgroundColor:[UIColor clearColor]];
+    UIImage *pImage;
     
-    UIImage *pImage = [UIImage imageNamed:@"CloseCaret.png"];
+    if ((bFilterOpen = [slideView handleLeftSwipe]))
+        pImage = [UIImage imageNamed:@"CloseCaret.png"];
+    else
+        pImage = [UIImage imageNamed:@"OpenCaret.png"];
+    
     [sender setImage:pImage forState:UIControlStateNormal];
-    
-    [slideView handleLeftSwipe];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -606,6 +619,19 @@ else
 
     cell.textLabel.textColor = UIColorFromRGB(0x555555);
 //    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
+    
+    cell.textLabel.numberOfLines = 0;
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    if ([displayArray count] == 0)
+    {
+        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16];
+        cell.textLabel.text = @"No data for selected filter";
+        cell.detailTextLabel.text = @"";
+        cell.detailTextLabel.attributedText = nil;
+        return cell;
+    }
+    
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[displayArray objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[displayArray objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
     
 
@@ -685,6 +711,13 @@ else
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (bFilterOpen)
+    {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        (bFilterOpen = [slideView handleLeftSwipe]);
+        return;
+    }
+    
     NSArray *po = [displayArray objectAtIndex:indexPath.row] ;
     [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
@@ -694,9 +727,10 @@ else
     NSPredicate *predicate;
     NSString *substring = @"Enrolled";
     NSString *type = @"active";
-    
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
     if (idx.section == 2)
-        displayArray = rosterList;
+        displayArray =  tabBar.rosterList;
     else
     {
         if (idx.section == 0)
@@ -723,7 +757,7 @@ else
 //        predicate = [NSPredicate predicateWithFormat:@"enrollments.active.health.status contains[c] %@", substring];
         predicate = [NSPredicate predicateWithFormat:@"enrollments.%@.health.status == %@", type, substring];
         
-        NSArray *filteredKeys = [rosterList filteredArrayUsingPredicate:predicate];
+        NSArray *filteredKeys = [tabBar.rosterList filteredArrayUsingPredicate:predicate];
         
         displayArray = filteredKeys;
     }
