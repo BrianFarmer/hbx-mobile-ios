@@ -198,6 +198,14 @@
 //    int ii = 0;
     _pd = [[NSMutableArray alloc] init];
     
+    if ([plans isKindOfClass:[NSNull class]])
+    {
+        NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
+        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plans Available", nil]];
+        [_pd addObject:_planDetails];
+        return;
+    }
+
     if ([plans count] == 0)
     {
         NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
@@ -402,7 +410,7 @@
 {
 //    if ([_planDentalDetails count] > 0)
 //        return 2;
-    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
         return 1;
     
     return [_pd count];
@@ -410,7 +418,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
         return 1;
 
     if ([expandedSections containsIndex:section])
@@ -669,8 +677,8 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
-        return nil;
+    if((planYearControl.selectedSegmentIndex == 1) && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+        return nil;//[[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
 
     // The view for the header
     //    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(tableView.frame.size.width/2 - 75, 0, 150, 34)];

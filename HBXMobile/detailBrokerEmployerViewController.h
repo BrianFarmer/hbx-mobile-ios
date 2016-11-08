@@ -29,15 +29,18 @@
     
     UIImageView *navImage;
     
-    NSDictionary *dictionary;
+//    NSDictionary *dictionary;
     NSArray *monthlyCostValues;
     NSArray *monthlyCostNames;
 
     NSArray *renewalValues;
     NSArray *renewalNames;
+    
+    BOOL    dataNotLoaded;
 }
 
 @property (strong, nonatomic) brokerEmployersData *employerData;
+@property (strong, nonatomic) NSDictionary *dictionary;
 @property(nonatomic, assign) long bucket;
 @property(nonatomic, assign) NSString *enrollHost;
 @property(nonatomic, assign) NSString *customCookie_a;

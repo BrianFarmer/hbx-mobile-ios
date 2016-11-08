@@ -20,6 +20,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveRosterNotification:)
+                                                 name:@"rosterLoaded"
+                                               object:nil];
+    
     UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 75, 75)];
     activityIndicator.layer.cornerRadius = 05;
     activityIndicator.opaque = NO;
@@ -91,13 +96,13 @@
     pRosterTable.sectionIndexColor = [UIColor darkGrayColor];
     pRosterTable.sectionIndexBackgroundColor = [UIColor clearColor];
     
-    if (tabBar.rosterList == nil)
-        [self loadDictionary];
-    else
-    {
+//    if (tabBar.rosterList == nil)
+//        [self loadDictionary];
+//    else
+//    {
         displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
-    }
+//    }
     
     bFilterOpen = FALSE;
 /*
@@ -174,9 +179,22 @@
 -(void)setDataSectionIndex
 {
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
+//    double employer_contribution = 0;
+//    double employee_cost = 0;
     
-    for( NSString *string in [displayArray valueForKey:@"last_name"])
+//    for( NSString *string in [displayArray valueForKey:@"last_name"])
+    for (id myArrayElement in displayArray)
+    {
+        NSString *string = [myArrayElement valueForKey:@"last_name"];
         [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+/*
+        NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+        NSString *ll =  [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+
+        employer_contribution += [oo doubleValue];
+        employee_cost += [ll doubleValue];
+ */
+    }
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     
@@ -188,6 +206,21 @@
     
     [activityIndicator removeFromSuperview];
     
+}
+
+-(void)receiveRosterNotification:(NSNotification *) notification
+{
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+    
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+//    tabBar.rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+    
+    displayArray = tabBar.rosterList;//rosterList;
+    
+    [self setDataSectionIndex];
 }
 
 -(void)loadDictionary
@@ -440,7 +473,7 @@ else
 //    button.layer.borderColor = [UIColor whiteColor].CGColor;
 //    button.clipsToBounds = YES;
     [button setBackgroundColor:[UIColor clearColor]];
-    button.tag = section;
+    button.tag = 77;//section;
     button.titleLabel.textAlignment = NSTextAlignmentRight;
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     
@@ -714,7 +747,17 @@ else
     if (bFilterOpen)
     {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        (bFilterOpen = [slideView handleLeftSwipe]);
+  //      (bFilterOpen = [slideView handleLeftSwipe]);
+        UIImage *pImage;
+        
+        if ((bFilterOpen = [slideView handleLeftSwipe]))
+            pImage = [UIImage imageNamed:@"CloseCaret.png"];
+        else
+            pImage = [UIImage imageNamed:@"OpenCaret.png"];
+        
+        UIButton *pbut = [self.view viewWithTag:77];
+        [pbut setImage:pImage forState:UIControlStateNormal];
+
         return;
     }
     
@@ -729,6 +772,8 @@ else
     NSString *type = @"active";
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
+    bFilterOpen = FALSE;
+    
     if (idx.section == 2)
         displayArray =  tabBar.rosterList;
     else

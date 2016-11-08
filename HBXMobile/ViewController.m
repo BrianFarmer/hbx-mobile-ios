@@ -638,6 +638,7 @@
 
 -(void)MOBILE_SERVER_Login:(NSString*)pUrl host:(NSString*)host
 {
+                    methodStart = [NSDate date];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *post;
     
@@ -1097,8 +1098,41 @@
                 
                 szPassword = @"";
                 
-                loadLabel.text = @"Getting broker id";
-                [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"%@/broker_agencies", enrollHost]]; //remove http:// new server sends http with it
+                /////////***************************//////////
+//                NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+//                NSError *error = nil;
+//                NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                
+                Settings *obj=[Settings getInstance];
+                _brokerId = [dictionary valueForKey:@"id"];
+                obj.sUser = [dictionary valueForKey:@"first"];
+                
+                methodStart = [NSDate date];
+                
+                loadLabel.text = @"Loading employer data";
+                if (iServerType == 1001)
+                {
+                    //            http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
+                    //            [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/api/v1/mobile_api/employers_list", enrollHost]];
+                }
+                else
+                {
+                    [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/api/v1/mobile_api/employers_list", enrollHost]];
+                    //                   [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
+                }
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+ //               loadLabel.text = @"Getting broker id";
+   //             [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"%@/broker_agencies", enrollHost]]; //remove http:// new server sends http with it
             }
             break;
         case INITIAL_GET:       //Only used for Enroll Server Login
@@ -1126,6 +1160,10 @@
             
             securityQuestion = [dictionary valueForKey:@"security_question"];
             
+            NSDate *methodFinish = [NSDate date];
+            NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+            NSLog(@"executionTime = %f\n\n\n", executionTime);
+
             [self askSecurityQuestionFromMobileServer:TRUE];
         }
             break;
@@ -1362,11 +1400,11 @@
     UIView *centerloading = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-110, self.view.frame.size.height/2-70, 220, 140)];
     centerloading.layer.cornerRadius = 15;
     centerloading.opaque = NO;
-    centerloading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    centerloading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.7f];
     
     loading.layer.cornerRadius = 0;
     loading.opaque = NO;
-    loading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.2f];
+    loading.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.1f];
     
     loadLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, 200, 22)];
     

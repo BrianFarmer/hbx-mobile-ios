@@ -11,6 +11,7 @@
 #import "employerTabController.h"
 #import "rosterBrokerEmployerViewController.h"
 #import "Constants.h"
+#import "Settings.h"
 
 @interface detailBrokerEmployerViewController ()
 
@@ -26,6 +27,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    dataNotLoaded = TRUE;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveRosterCostsNotification:)
+                                                 name:@"rosterCostsLoaded"
+                                               object:nil];
     //if Custom class
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
@@ -46,39 +53,7 @@
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     [vHeader layoutHeaderView:employerData];
-/*
-    pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
-    pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width-20, 65);
 
-    pCompany.textAlignment = NSTextAlignmentCenter;
-    pCompany.text = employerData.companyName;
-
-    pCompanyFooter.frame = CGRectMake(10, pCompany.frame.origin.y + pCompany.frame.size.height, self.view.frame.size.width - 20, pCompanyFooter.frame.size.height);
-    pCompanyFooter.textAlignment = NSTextAlignmentCenter;
-    
-    if (employerData.status == (enrollmentState)NEEDS_ATTENTION)
-    {
-        pCompanyFooter.text = NSLocalizedString(@"TITLE_NOTE", @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET");
-        pCompanyFooter.textColor = [UIColor redColor];
-        
-    }
-    else if (employerData.status == (enrollmentState)OPEN_ENROLLMENT_MET)
-    {
-        pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS";
-        pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f]; //[UIColor yellowColor];
-        
-    }
-    else if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS)
-    {
-        pCompanyFooter.text = @"RENEWAL PENDING"; //@"RENEWAL IN PROGRESS";
-        pCompanyFooter.textColor = [UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f];
-    }
-    else if (employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
-    {
-        pCompanyFooter.text = @"IN COVERAGE";
-        pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
-    }
-*/    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
@@ -89,29 +64,19 @@
     detailTable.backgroundColor = [UIColor clearColor];
     detailTable.backgroundView = nil;
     
-//    [self performSelector: @selector(loadDictionary)
-//               withObject: nil
-//               afterDelay: 0];
-//    return;
-    [self loadDictionary];
-    ((employerTabController *) self.tabBarController).detailDictionary = dictionary;
+//    [self loadDictionary];
+    _dictionary = ((employerTabController *) self.tabBarController).detailDictionary;
     
-    int emp_total = ([dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_total"] intValue];
+    int emp_total = ([_dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_total"] intValue];
 
-    int emp_enr = ([dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_enrolled"] intValue];
+    int emp_enr = ([_dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_enrolled"] intValue];
 
-    int emp_waiv = ([dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_waived"] intValue];
+    int emp_waiv = ([_dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_waived"] intValue];
 
     int iNotEnrolled = emp_total - emp_waiv - emp_enr;
 
 //    int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
 /*
-    NSNumber *one = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_enrolled"] intValue]];
-    [_slices addObject:one];
-    
-    NSNumber *two = [NSNumber numberWithInt:[[dictionary valueForKey:@"employees_waived"] intValue]];
-    [_slices addObject:two];
-*/
     NSNumber *one = [NSNumber numberWithInt:emp_enr];
     [_slices addObject:one];
     
@@ -120,12 +85,17 @@
 
     NSNumber *three = [NSNumber numberWithInt:iNotEnrolled];
     [_slices addObject:three];
-
-    NSDate *today = [NSDate date];
-    
+*/
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
-
+    [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+//    [f setDateStyle:NSDateFormatterFullStyle];
+//    [f setTimeStyle:NSDateFormatterNoStyle];
+    
+    NSDate *today = [NSDate date];
+    NSString *todayDateString = [f stringFromDate:[NSDate date]];
+    
+    
     NSDateFormatter *out = [[NSDateFormatter alloc] init];
 //    [out setDateFormat:@"MMM dd, yyyy"];
     [out setDateFormat:@"MM/dd/yyyy"];
@@ -134,10 +104,12 @@
     
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                        fromDate:today
+                                                        fromDate:[f dateFromString:todayDateString] //today
                                                           toDate:endDate
                                                          options:NSCalendarWrapComponents];
 
+    long ddif = [components day];
+    
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
     [numberFormatter setMaximumFractionDigits:2];
@@ -190,9 +162,17 @@
         
         renewalValues = [[NSArray alloc] initWithObjects: @"0", [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], employerData.binder_payment_due, nil];
     }
-    
+ /*
     monthlyCostNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
-    monthlyCostValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
+    monthlyCostValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[_dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[_dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[_dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
+  */
+    
+    Settings *obj=[Settings getInstance];
+    
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:obj.dTimingStart];
+    NSLog(@"executionTime = %f\n\n\n", executionTime);
+
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -216,13 +196,45 @@
         
         lastButton = thisButton;
     }
-    
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     //    self.secondViewController = (YourSecondViewController*) viewController;
     //    self.secondViewController.aLabel.text = self.stringFromTableViewController;
+}
+
+-(void)receiveRosterCostsNotification:(NSNotification *) notification
+{
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+    
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    NSNumber *one = [NSNumber numberWithInt:tabBar.enrolled];
+    [_slices addObject:one];
+    
+    NSNumber *two = [NSNumber numberWithInt:tabBar.waived];
+    [_slices addObject:two];
+    
+    NSNumber *three = [NSNumber numberWithInt:tabBar.notenrolled];
+    [_slices addObject:three];
+
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    [numberFormatter setMaximumFractionDigits:2];
+
+    monthlyCostNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
+    monthlyCostValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: tabBar.employee_costs]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: tabBar.employer_contribution]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat:tabBar.employee_costs + tabBar.employer_contribution]], nil];
+    [detailTable reloadData];
+    
+    Settings *obj=[Settings getInstance];
+    
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:obj.dTimingStart];
+    NSLog(@"executionWithRosterTime = %f\n\n\n", executionTime);
+
+    dataNotLoaded = FALSE;
 }
 
 //-(NSDictionary*)loadDictionary
@@ -267,12 +279,8 @@
     {
         NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         
-        dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        
-//        return dictionary;
+        _dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
-    
-//    return nil;
 }
 
 - (NSUInteger)numberOfSlicesInPieChart:(XYPieChart *)pieChart
@@ -527,7 +535,7 @@
                     iPos = 170;
                 else
                     iPos = 200;
-                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(iPos, 45, iPos, iPos)];
+                XYPieChart *pieChartRight = [[XYPieChart alloc] initWithFrame:CGRectMake(detailTable.frame.size.width - 170, 60, iPos, iPos)]; //(iPos, 45, iPos, iPos)];
                 [pieChartRight setDelegate:self];
                 [pieChartRight setDataSource:self];
                 [pieChartRight setPieCenter:CGPointMake(60, 60)];
@@ -545,6 +553,20 @@
                 pieChartRight.hidden = TRUE;
                 
                 [cell.contentView addSubview:pieChartRight];
+ /*
+                CGFloat x = UIScreen.mainScreen.applicationFrame.size.width/2;
+                CGFloat y = UIScreen.mainScreen.applicationFrame.size.height/2;
+                // Offset. If tableView has been scrolled
+                CGFloat yOffset = detailTable.contentOffset.y;
+*/
+                UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(detailTable.frame.size.width - 150, 50, 100, 100)]; //(x - 50, (y + yOffset) - 50, 100, 100)]; //self.view.frame.origin.y
+                activityIndicator.layer.cornerRadius = 05;
+                activityIndicator.opaque = NO;
+                activityIndicator.tag = 3;
+                activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.7f];
+                activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;// UIActivityIndicatorViewStyleGray;
+                [activityIndicator setColor:[UIColor whiteColor]];
+                [cell.contentView addSubview:activityIndicator];
                 
                 UILabel *pEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 150, 50)];
                 pEnrolled.tag = 971;
@@ -651,6 +673,10 @@
     cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
     cell.detailTextLabel.textColor = UIColorFromRGB(0x555555);
 
+    UIActivityIndicatorView *spinner = [cell viewWithTag:3];
+    spinner.hidden = TRUE;
+    [spinner stopAnimating];
+    
     if (indexPath.section == 0)
     {
         if (indexPath.row > 0)
@@ -699,29 +725,42 @@
     {
         if (indexPath.row == 0)
         {
+/*
+            int emp_total = ([_dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_total"] intValue];
             
-            int emp_total = ([dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_total"] intValue];
+            int emp_enr = ([_dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_enrolled"] intValue];
             
-            int emp_enr = ([dictionary valueForKey:@"employees_enrolled"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_enrolled"] intValue];
-            
-            int emp_waiv = ([dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[dictionary valueForKey:@"employees_waived"] intValue];
+            int emp_waiv = ([_dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_waived"] intValue];
             
             int iNotEnrolled = emp_total - emp_waiv - emp_enr;
+*/
+            employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
             pEnrolled.hidden = FALSE;
-            pEnrolled.text = [NSString stringWithFormat:@"%i\nENROLLED", emp_enr];
+            pEnrolled.text = [NSString stringWithFormat:@"%i\nENROLLED", tabBar.enrolled];
             
             pWaived.hidden = FALSE;
-            pWaived.text = [NSString stringWithFormat:@"%i\nWAIVED", emp_waiv];
+            pWaived.text = [NSString stringWithFormat:@"%i\nWAIVED", tabBar.waived];
 
             pNotEnrolled.hidden = FALSE;
-            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", iNotEnrolled];
+            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", tabBar.notenrolled];
             
             pTotalEmployees.hidden = FALSE;
-            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", emp_total];
+            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled];
             
-            pChart.hidden = FALSE;
-            [pChart reloadData];
+            if (dataNotLoaded)
+            {
+//                UIActivityIndicatorView *spinner = [cell viewWithTag:3];
+                spinner.hidden = FALSE;
+                [spinner startAnimating];
+            }
+            else
+            {
+                spinner.hidden = TRUE;
+                [spinner stopAnimating];
+                pChart.hidden = FALSE;
+                [pChart reloadData];
+            }
         }
     }
     else

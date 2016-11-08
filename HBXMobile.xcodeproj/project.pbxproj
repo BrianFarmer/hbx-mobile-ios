@@ -111,6 +111,7 @@
 		40EEC85B1D5112EE0071FFD5 /* tutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC8591D5112EE0071FFD5 /* tutorialViewController.xib */; };
 		40EEC85F1D512B690071FFD5 /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 40EEC85E1D512B690071FFD5 /* chevron.png */; };
 		40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */; };
+		40F117AA1DD0F22A00D05B30 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F117A91DD0F22A00D05B30 /* bell.png */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
 		40F63B6B1DAE5ED5006CDA13 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */; };
@@ -290,6 +291,7 @@
 		40EEC85E1D512B690071FFD5 /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
 		40F07D3D1D84360400BD3B7C /* detailBrokerEmployerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detailBrokerEmployerViewController.h; sourceTree = "<group>"; };
 		40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailBrokerEmployerViewController.m; sourceTree = "<group>"; };
+		40F117A91DD0F22A00D05B30 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 		13FF47461C8A2D2900C7C851 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				40F117A91DD0F22A00D05B30 /* bell.png */,
 				133EE5D01DCE1352009646C6 /* upArrowBlue3.png */,
 				133EE5CE1DCE1287009646C6 /* upArrowBlue2.png */,
 				133EE5CC1DCE1037009646C6 /* upArrowBlue1.png */,
@@ -740,6 +743,7 @@
 				403B5EB71DCB8F8200A4FAD8 /* infoactive48.png in Resources */,
 				133EE5CD1DCE1037009646C6 /* upArrowBlue1.png in Resources */,
 				403B5EA21DCB72FB00A4FAD8 /* message-2.png in Resources */,
+				40F117AA1DD0F22A00D05B30 /* bell.png in Resources */,
 				13A382161CDB2E3E006B5984 /* Roboto-Italic.ttf in Resources */,
 				40ECFC041D8B1BC9003102E5 /* tabBG1.png in Resources */,
 				4039C88D1D8C50AB00F7EA7B /* check_notenrolled.png in Resources */,

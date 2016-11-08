@@ -23,7 +23,16 @@ alpha:1.0]
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    //
+    //Add reminder code when ready
+    //
+/*
+    UIButton *button1 = [[UIButton alloc] initWithFrame:CGRectMake(0,0,24,24)];
+    [button1 setBackgroundImage:[UIImage imageNamed: @"bell.png"] forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(addReminder:) forControlEvents:UIControlEventTouchUpInside];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button1];
+*/
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
     navImage.backgroundColor = [UIColor clearColor];
@@ -602,6 +611,11 @@ alpha:1.0]
     [attributedTitle appendAttributedString:attributedTitle2];
     
     return attributedTitle;
+}
+
+-(void)addReminder:(id)sender
+{
+    
 }
 
 @end

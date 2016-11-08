@@ -591,6 +591,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     return [self createLeftButtons:4];
 }
 
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 -(NSArray *) createLeftButtons: (int) number
 {
     NSMutableArray * result = [NSMutableArray array];
@@ -598,10 +606,18 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         [UIColor clearColor],
         [UIColor clearColor],[UIColor clearColor]};
 //    UIImage * icons[4] = {[UIImage imageNamed:@"phone.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"email.png"]};
-    UIImage * icons[4] = {[UIImage imageNamed:@"email.png"],  [UIImage imageNamed:@"location.png"], [UIImage imageNamed:@"message.png"], [UIImage imageNamed:@"phone.png"]};
+    UIImage *pEmail = [[self imageWithImage:[UIImage imageNamed:@"email-2.png"] scaledToSize:CGSizeMake(38, 38)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *pLocation = [[self imageWithImage:[UIImage imageNamed:@"location-2.png"] scaledToSize:CGSizeMake(38, 38)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *pMsg = [[self imageWithImage:[UIImage imageNamed:@"message-2.png"] scaledToSize:CGSizeMake(38, 38)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *pPhone = [[self imageWithImage:[UIImage imageNamed:@"phone-2.png"] scaledToSize:CGSizeMake(38, 38)] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
+    UIImage * icons[4] = {pEmail, pLocation, pMsg, pPhone};
+    
+//    UIImage * icons[4] = {[UIImage imageNamed:@"email-2.png"],  [UIImage imageNamed:@"location-2.png"], [UIImage imageNamed:@"message-2.png"], [UIImage imageNamed:@"phone-2.png"]};
     for (int i = 0; i < number; ++i)
     {
-        MGSwipeButton * button = [MGSwipeButton buttonWithTitle:@"" icon:icons[i] backgroundColor:colors[i] padding:10 callback:^BOOL(MGSwipeTableCell * sender){
+        MGSwipeButton * button = [MGSwipeButton buttonWithTitle:@"" icon:icons[i] backgroundColor:colors[i] padding:10 callback:^BOOL(MGSwipeTableCell * sender)
+        {
             NSLog(@"Convenience callback received (left).");
             if (i == 3)
             {
@@ -639,6 +655,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if ([expandedSections containsIndex:section])// || )
     {
         if (section == 0 && clients_needing_immediate_attention > 0)
+            return 80;
+        if (section == 1)
             return 80;
         if (section == 2)
             return 90;
@@ -737,7 +755,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             {
                 if (section != 2)
                 {
-                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 170, 0, 100, 20)];
+                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 165, 0, 100, 20)];
                     headerTitle1.text = @"PLAN YEAR";
                 }
                 else
@@ -764,7 +782,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                     [subHeaderView addSubview:buttonClient];
 
                     */
-                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 170, 0, 90, 30)];
+                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 165, 0, 100, 30)];
                     headerTitle1.text = @"PLAN YEAR";
 
                     headerTitle.userInteractionEnabled = YES;
@@ -1095,9 +1113,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     }
     else
     {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+        NSString *dateString=[dateFormatter stringFromDate:[NSDate date]];
+        
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
-                                                            fromDate:[NSDate date]
+                                                            fromDate:[self userVisibleDateTimeForRFC3339Date:dateString]
                                                               toDate:[self userVisibleDateTimeForRFC3339Date:ttype.open_enrollment_ends]
                                                              options:NSCalendarWrapComponents];
         cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
@@ -1222,69 +1244,140 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     {
 //        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         // Get destination view
- //       UITabBarController *tabar=segue.destinationViewController;
         employerTabController *tabar=segue.destinationViewController;
-        tabar.employerData = (brokerEmployersData*)sender;
+        
+        NSMutableArray *sequeTransfer = sender;
+        
+        tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
+        tabar.detailDictionary = [sequeTransfer objectAtIndex:1];
         tabar.enrollHost = _enrollHost;
         tabar.customCookie_a = _customCookie_a;
-/*
-        int uu = [tabar.viewControllers count];
-        detailBrokerEmployerViewController *vc = [tabar.viewControllers objectAtIndex:0]; //[segue destinationViewController];
-        vc.bucket = indexPath.section;
-        vc.employerData = (brokerEmployersData*)sender;
-        vc.enrollHost = _enrollHost;
-        vc.customCookie_a = _customCookie_a;
- */
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Settings *obj=[Settings getInstance];
+    obj.dTimingStart = [NSDate date];
+    
     brokerEmployersData *ttype = [[self.filteredProducts objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     if (ttype.type == 1)
         return;
  //   [self performSegueWithIdentifier:@"Broker Detail Page" sender:ttype];
- /*
-    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 75, 75)];
+ 
+    CGFloat x = UIScreen.mainScreen.applicationFrame.size.width/2;
+    CGFloat y = UIScreen.mainScreen.applicationFrame.size.height/2;
+    // Offset. If tableView has been scrolled
+    CGFloat yOffset = self.tableView.contentOffset.y;
+    
+    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(x - 50, (y + yOffset) - 50, 100, 100)]; //self.view.frame.origin.y
     activityIndicator.layer.cornerRadius = 05;
     activityIndicator.opaque = NO;
     activityIndicator.tag = 44;
-    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
-    activityIndicator.center = self.view.center;
+    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.7f];
     activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;// UIActivityIndicatorViewStyleGray;
-    [activityIndicator setColor:[UIColor colorWithRed:0.6 green:0.8 blue:1.0 alpha:1.0]];
+    [activityIndicator setColor:[UIColor whiteColor]];
     [self.view addSubview: activityIndicator];
     [activityIndicator startAnimating];
-*/
-    
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]; [self.view addSubview:spinner];
-    
-    //switch to background thread
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        
-        //back to the main thread for the UI call
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner startAnimating];
-        });
-        // more on the background thread
-        
-        // parsing code code
-        
-        //back to the main thread for the UI call
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopAnimating];
-        });
-//    });
-    
     
     MGSwipeTableCell *cell = (MGSwipeTableCell *)[(UITableView *)self.view cellForRowAtIndexPath:indexPath];
     if (ttype.status == NEEDS_ATTENTION)
         cell.leftColor.backgroundColor = [UIColor redColor];
 
-    [self performSegueWithIdentifier:@"Broker Employer Detail" sender:ttype];
-    
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self loadJSON:ttype];
+
     return;
+}
+
+-(void)loadJSON:(brokerEmployersData*)eData
+{
+    
+    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *e_url = eData.detail_url;
+    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+    BOOL pp = [e_url hasPrefix:@"https://"];
+    BOOL ll = [e_url hasPrefix:@"http://"];
+    if (!pp && !ll)
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, eData.detail_url];
+    else
+        pUrl = eData.detail_url;
+
+    NSURL* url = [NSURL URLWithString:pUrl];
+    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];
+    [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:urlRequest
+                                       queue:queue
+                           completionHandler:^(NSURLResponse* response,
+                                               NSData* data,
+                                               NSError* error)
+     {
+         if (data) {
+             NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+             
+             if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
+                 NSError* error;
+                 id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                 if (jsonObject) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         // self.model = jsonObject;
+                         NSLog(@"jsonObject: %@", jsonObject);
+
+                         NSMutableArray *segueTransfer = [[NSMutableArray alloc] init];
+                         
+                         [segueTransfer addObject:eData];
+                         [segueTransfer addObject:jsonObject];
+                         
+                         UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+                         [activityIndicator stopAnimating];
+                         [activityIndicator removeFromSuperview];
+                         
+                         [self performSegueWithIdentifier:@"Broker Employer Detail" sender:segueTransfer];
+
+                     });
+                 } else {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         //[self handleError:error];
+                         NSLog(@"ERROR: %@", error);
+                     });
+                 }
+             }
+             else {
+                 // status code indicates error, or didn't receive type of data requested
+                 NSString* desc = [[NSString alloc] initWithFormat:@"HTTP Request failed with status code: %d (%@)",
+                                   (int)(httpResponse.statusCode),
+                                   [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]];
+                 NSError* error = [NSError errorWithDomain:@"HTTP Request"
+                                                      code:-1000
+                                                  userInfo:@{NSLocalizedDescriptionKey: desc}];
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     //[self handleError:error];  // execute on main thread!
+                     NSLog(@"ERROR: %@", error);
+                 });
+             }
+         }
+         else {
+             // request failed - error contains info about the failure
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 //[self handleError:error]; // execute on main thread!
+                 NSLog(@"ERROR: %@", error);
+             });
+         }
+     }];
 }
 
 - (void)didSelectSearchItem:(id)ttype

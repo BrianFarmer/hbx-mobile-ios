@@ -14,6 +14,8 @@ green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
 blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
 alpha:1.0]
 
+NSString * const rosterLoadedNotification = @"rosterLoaded";
+
 @interface employerTabController ()
 
 @end
@@ -71,6 +73,7 @@ alpha:1.0]
     [item3 setImage:[[UIImage imageNamed:@"plansnormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [item3 setSelectedImage:[[UIImage imageNamed:@"plansactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 */
+    [self loadDictionary];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,6 +81,186 @@ alpha:1.0]
     // Dispose of any resources that can be recreated.
 }
 
+-(void)loadDictionary
+{
+    NSString *pUrl;
+    NSString *e_url = _employerData.roster_url;
+    
+    NSLog(@"HERE IN tabbar:LOAD DICTIONARY\n");
+//    bDataLoading = TRUE;
+    
+    if (! [e_url hasPrefix:@"https://"] && ![e_url hasPrefix:@"http://"])
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, _employerData.roster_url];
+    else
+        pUrl = _employerData.roster_url;
+    
+    NSURL* url = [NSURL URLWithString:pUrl];
+    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];
+    [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                _enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                _customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:urlRequest
+                                       queue:queue
+                           completionHandler:^(NSURLResponse* response,
+                                               NSData* data,
+                                               NSError* error)
+     {
+         if (data) {
+             NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+             // check status code and possibly MIME type (which shall start with "application/json"):
+             //          NSRange range = [response.MIMEType rangeOfString:@"application/json"];
+             
+             if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
+                 NSError* error;
+                 id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                 if (jsonObject) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         // self.model = jsonObject;
+                         NSLog(@"jsonObject: %@", jsonObject);
+                         _rosterDictionary = jsonObject;
+                         
+                         NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+                         NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+                         
+     //                    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+                         
+                         // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                         _rosterList = [[_rosterDictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                         
+ //                        displayArray = tabBar.rosterList;//rosterList;
+                         
+//                         [self setDataSectionIndex];
+                         NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+                         [dnc postNotificationName:rosterLoadedNotification
+                                            object:self
+                                          userInfo:nil];
+                         
+                         for (id myArrayElement in _rosterList)
+                         {
+//                             NSString *string = [myArrayElement valueForKey:@"last_name"];
+//                             [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+                             
+                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+                             NSString *ll =  [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+                             
+                             _employer_contribution += [oo doubleValue];
+                             _employee_costs += [ll doubleValue];
+                             
+                             NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+
+                             if ([status isEqualToString:@"Enrolled"])
+                                 _enrolled += 1;
+                             if ([status isEqualToString:@"Waived"])
+                                 _waived += 1;
+                             if ([status isEqualToString:@"Not Enrolled"])
+                                 _notenrolled += 1;
+                             
+                         }
+                         
+ //                        NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+                         [dnc postNotificationName:@"rosterCostsLoaded"
+                                            object:self
+                                          userInfo:nil];
+
+                     });
+                 } else {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         //[self handleError:error];
+                         NSLog(@"ERROR: %@", error);
+                     });
+                 }
+             }
+             else {
+                 // status code indicates error, or didn't receive type of data requested
+                 NSString* desc = [[NSString alloc] initWithFormat:@"HTTP Request failed with status code: %d (%@)",
+                                   (int)(httpResponse.statusCode),
+                                   [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]];
+                 NSError* error = [NSError errorWithDomain:@"HTTP Request"
+                                                      code:-1000
+                                                  userInfo:@{NSLocalizedDescriptionKey: desc}];
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     //[self handleError:error];  // execute on main thread!
+                     NSLog(@"ERROR: %@", error);
+                 });
+             }
+         }
+         else {
+             // request failed - error contains info about the failure
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 //[self handleError:error]; // execute on main thread!
+                 NSLog(@"ERROR: %@", error);
+             });
+         }
+     }];
+}
+/*
+-(NSString*)getRenewalEnrollment:(NSInteger)row
+{
+    NSArray *pk = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"];
+    
+    for (int ii=0;ii<[pk count];ii++)
+    {
+        NSDictionary *pp = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        
+        NSString *a;
+        NSString *b;
+        NSString *c;
+        
+        a = [pp valueForKey:@"coverage_kind"];
+        b = [pp valueForKey:@"period_type"];
+        c = [pp valueForKey:@"status"];
+        
+        if ([b isEqualToString:@"renewal"])
+            if ([a isEqualToString:@"health"])
+                return c;
+        
+        NSLog(@"%@    ---   %@   -----   %@", a,b,c);
+        
+    }
+    return nil;
+}
+
+-(NSString*)getActiveEnrollment:(NSInteger)row
+{
+    NSArray *pk = [[displayArray objectAtIndex:row] valueForKey:@"enrollments"];
+    
+    for (int ii=0;ii<[pk count];ii++)
+    {
+        //        NSDictionary *pp = [[rosterList objectAtIndex:row] valueForKey:@"enrollments"][ii]; //[pk value:ii];
+        NSDictionary *pp = [[[[[displayArray objectAtIndex:row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
+        
+        NSString *a;
+        NSString *b;
+        NSString *c;
+        
+        a = [pp valueForKey:@"coverage_kind"];
+        b = [pp valueForKey:@"period_type"];
+        c = [pp valueForKey:@"status"];
+        
+        if ([b isEqualToString:@"active"])
+            if ([a isEqualToString:@"health"])
+                return c;
+        
+        NSLog(@"%@    ---   %@   -----   %@", a,b,c);
+        
+    }
+    return nil;
+}
+*/
+                         
 /*
 #pragma mark - Navigation
 
@@ -129,7 +312,7 @@ alpha:1.0]
      
                      completion:^(BOOL finished) {
                          if (finished) {
-                             
+ 
                              // Remove the old view from the tabbar view.
                              [fromView removeFromSuperview];
                              tabBarController.selectedIndex = controllerIndex;
