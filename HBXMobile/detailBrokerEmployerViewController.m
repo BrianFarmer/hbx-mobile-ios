@@ -617,8 +617,12 @@
                 pTotalEmployees.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
                 pTotalEmployees.textColor = EMPLOYER_DETAIL_PARTICIPATION_ALL;
                 pTotalEmployees.backgroundColor = [UIColor clearColor];
-                [cell.contentView addSubview:pTotalEmployees];
+                UITapGestureRecognizer* gestureTotalEmployees = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnTotalLink:)];
                 
+                [pTotalEmployees setUserInteractionEnabled:YES];
+                [pTotalEmployees addGestureRecognizer:gestureTotalEmployees];
+
+                [cell.contentView addSubview:pTotalEmployees];
             }
         
 //            if (indexPath.section == 0 && indexPath.row == 0)
@@ -802,4 +806,15 @@
     
     [self.tabBarController setSelectedIndex:1];
 }
+
+-(void)userTappedOnTotalLink:(UIGestureRecognizer*)sender
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    tabBar.sortOrder = @"";
+    tabBar.iPath = nil;
+    
+    [self.tabBarController setSelectedIndex:1];
+}
+
 @end

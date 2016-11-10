@@ -148,13 +148,20 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                                             object:self
                                           userInfo:nil];
                          
+                         NSString *sKey;
+                         
+                         if (_employerData.status == (enrollmentState)NO_ACTION_REQUIRED) //NEEDS_ATTEENTION) OPEN_ENROLLMENT_MET
+                             sKey = @"active";
+                         else
+                             sKey = @"renewal";
+                         
                          for (id myArrayElement in _rosterList)
                          {
 //                             NSString *string = [myArrayElement valueForKey:@"last_name"];
 //                             [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
                              
-                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
-                             NSString *ll =  [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+                             NSString *ll =  [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
                              
                              _employer_contribution += [oo doubleValue];
                              _employee_costs += [ll doubleValue];

@@ -147,7 +147,11 @@
     slideView.frame = CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 34, 200, pRosterTable.frame.size.height - 34);
     
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
+    {
+        displayArray =  tabBar.rosterList;
+        [pRosterTable reloadData];
         return;
+    }
     if (tabBar.iPath == nil)
     {
         NSIndexPath *myIP;
