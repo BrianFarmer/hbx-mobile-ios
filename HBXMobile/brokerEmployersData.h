@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, retain) NSString *open_enrollment_ends;
 @property (nonatomic, retain) NSString *renewal_application_available;
 @property (nonatomic, retain) NSString *renewal_application_due;
+@property (nonatomic, assign) BOOL renewal_in_progress;
 @property (nonatomic, retain) NSString *binder_payment_due;
 //@property (nonatomic, retain) NSString *total_premium;
 //@property (nonatomic, retain) NSString *employee_contribution;

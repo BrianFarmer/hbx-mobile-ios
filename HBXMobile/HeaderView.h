@@ -12,12 +12,18 @@
 #import "popupMessageBox.h"
 #import "brokerEmployersData.h"
 
+@protocol HeaderViewDelegate
+-(void)HandleSegmentControlAction:(UISegmentedControl *)segment;
+@end
+
 @interface HeaderView : UIView <MFMessageComposeViewControllerDelegate, popupMessageBoxDelegate>
 {
     brokerEmployersData *employerData;
+    UISegmentedControl *planYearControl;
 }
 
 @property (nonatomic, retain) NSArray *dataArray;
+@property (nonatomic, weak)id<HeaderViewDelegate> delegate;
 
 -(void)layoutHeaderView:(brokerEmployersData *)eData;
 -(void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;

@@ -37,6 +37,7 @@
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,215);
+    vHeader.delegate = self;
     [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:YES];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
@@ -73,7 +74,9 @@
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = [UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
     }
-*/    
+*/
+    
+/*
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
                                 [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
@@ -89,7 +92,8 @@
     planYearControl.selectedSegmentIndex = 0;
     
     [self.view addSubview:planYearControl];
-
+*/
+    
     Settings *obj=[Settings getInstance];
 
     if (obj.iPlanVersion == 2)
@@ -133,7 +137,7 @@
         
         scrollView.contentSize = CGSizeMake(frameX*[po count], self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height - 40);//200);
 
-        
+
         // Init Page Control
         pageControl = [[UIPageControl alloc] init];
     //    pageControl.frame = CGRectMake(10, scrollView.frame.origin.y - 20, scrollView.frame.size.width, 20);
@@ -146,6 +150,7 @@
         pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
         pageControl.pageIndicatorTintColor = [UIColor grayColor];
         [self.view addSubview:pageControl];
+ 
     }
     else
     {
@@ -298,6 +303,7 @@
 - (void)HandleSegmentControlAction:(UISegmentedControl *)segment
 {
     Settings *obj=[Settings getInstance];
+    selectedSegmentIndex = segment.selectedSegmentIndex;
     
     if (obj.iPlanVersion == 1)
     {
@@ -410,7 +416,8 @@
 {
 //    if ([_planDentalDetails count] > 0)
 //        return 2;
-    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+//    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+    if(([plans isKindOfClass:[NSNull class]] || plans == nil))
         return 1;
     
     return [_pd count];
@@ -418,7 +425,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+//    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+    if(([plans isKindOfClass:[NSNull class]] || plans == nil))
         return 1;
 
     if ([expandedSections containsIndex:section])
@@ -677,9 +685,12 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if((planYearControl.selectedSegmentIndex == 1) && ([plans isKindOfClass:[NSNull class]] || plans == nil))
-        return nil;//[[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
+//    if((planYearControl.selectedSegmentIndex == 1) && ([plans isKindOfClass:[NSNull class]] || plans == nil))
+//        return nil;
 
+    if([plans isKindOfClass:[NSNull class]] || plans == nil)
+        return nil;
+    
     // The view for the header
     //    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(tableView.frame.size.width/2 - 75, 0, 150, 34)];
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 50)];
@@ -1005,7 +1016,7 @@
     UILabel *pSeperator = [cell viewWithTag:976];
     pSeperator.hidden = TRUE;
 
-    if(planYearControl.selectedSegmentIndex == 1 && plans == nil)
+    if(selectedSegmentIndex == 1 && plans == nil)
     {
         cell.textLabel.text = @"Renewal Plan Starts";
         

@@ -52,7 +52,10 @@
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
-    [vHeader layoutHeaderView:employerData];
+//    [vHeader layoutHeaderView:employerData];
+    vHeader.delegate = self;
+    //[vHeader layoutHeaderView:employerData];
+    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -138,12 +141,16 @@
     }
 }
 
+- (void)HandleSegmentControlAction:(UISegmentedControl *)segment
+{
+    
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
-    pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
+    pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
     slideView.frame = CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 34, 200, pRosterTable.frame.size.height - 34);
     
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)

@@ -11,7 +11,7 @@
 #import "employerTabController.h"
 #import "HeaderView.h"
 
-@interface rosterCostsBrokerEmployerViewController : UIViewController
+@interface rosterCostsBrokerEmployerViewController : UIViewController <HeaderViewDelegate>
 {
     IBOutlet UITableView *pRosterTable;
     

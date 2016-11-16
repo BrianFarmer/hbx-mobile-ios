@@ -96,6 +96,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
+//    [expandedSections addIndex:1];
+//    [expandedSections addIndex:0];
+    
     sections = [[NSArray alloc] initWithObjects: NSLocalizedString(@"table-section-open-enrollment", @"OPEN ENROLLMENT IN PROGRESS"), NSLocalizedString(@"table-section-renewals-in-progress", @"RENEWALS IN PROGRESS"), NSLocalizedString(@"table-section-all-others", @"ALL OTHER CLIENTS"), nil];
 
     listOfCompanies = [[NSMutableArray alloc] init];
@@ -424,7 +427,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                // dateFromString = [dateFormatter dateFromString:pCompany.open_enrollment_begins];
                 NSDate *endEnrollmentDate = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_ends]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
                 
-                NSDate *today = [NSDate date];
+                NSDateFormatter *f = [[NSDateFormatter alloc] init];
+                [f setDateFormat:@"yyyy-MM-dd"];
+                [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+
+                NSString *todayDateString = [f stringFromDate:[NSDate date]];
+                
+                NSDate *today = [f dateFromString:todayDateString];
                 
                 if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
                 {
@@ -652,14 +661,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([expandedSections containsIndex:section])// || )
+    if ([expandedSections containsIndex:section])
     {
         if (section == 0 && clients_needing_immediate_attention > 0)
             return 80;
         if (section == 1)
             return 80;
         if (section == 2)
-            return 90;
+        return 90;
     }
     
     return 60;
@@ -676,19 +685,36 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+//    NSLog(@"%li\n", (long)section);
     return 2;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 2)];//([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
+    
+    // Set a custom background color and a border
+    //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
+    //    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+    //    headerView.layer.borderWidth = 1.0;
+    
+    headerView.backgroundColor = [UIColor clearColor];
+    headerView.tag = section;
+
+    return headerView;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     // The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, ([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 90)];//([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
     
     // Set a custom background color and a border
 //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
 //    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
 //    headerView.layer.borderWidth = 1.0;
     
+//    headerView.backgroundColor = [UIColor greenColor];
     headerView.tag = section;
     
     // Add a label
@@ -712,6 +738,11 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             break;
     }
 
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [headerView addGestureRecognizer:recognizer];
+
+//    return headerView;
+    
     headerLabel.frame = CGRectMake(8, 0, tableView.frame.size.width - 5, 60);
     headerLabel.textColor = [UIColor whiteColor];
     headerLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0];
@@ -720,7 +751,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     // Add the label to the header view
     [headerView addSubview:headerLabel];
     
-
     if ([expandedSections containsIndex:section])
     {
         UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 14, 32, 32)];
@@ -760,28 +790,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 }
                 else
                 {
-                    /*
-                    UIButton* buttonClient = [[UIButton alloc] initWithFrame:CGRectMake(8, 0, 100, 20)];
-                    [buttonClient setBackgroundColor:[UIColor greenColor]];
-                    buttonClient.tag = section;
-                    buttonClient.titleLabel.textAlignment = NSTextAlignmentLeft;
-                    buttonClient.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-                    
-                    buttonClient.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
-                    buttonClient.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
-                    [buttonClient addTarget:self action:@selector(sortByClient:) forControlEvents:UIControlEventTouchUpInside];
-                    [buttonClient setTitle:@"CLIENT" forState:UIControlStateNormal];
-                    UIImage *pImage = [UIImage imageNamed:@"OpenCaret.png"];
-                    [buttonClient setImage:pImage forState:UIControlStateNormal];
-                    
-                    [buttonClient setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-                    
-                    buttonClient.imageEdgeInsets = UIEdgeInsetsMake(0., buttonClient.frame.size.width - (pImage.size.width + 15.), 0., 0.);
-                    buttonClient.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., pImage.size.width);
-                    
-                    [subHeaderView addSubview:buttonClient];
-
-                    */
                     [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 165, 0, 100, 30)];
                     headerTitle1.text = @"PLAN YEAR";
 
@@ -826,33 +834,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                     }
                     
                     [subHeaderView addSubview:imageHolder];
-                    
-
-/*
- 
-                    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(tableView.frame.size.width - 180, 0, 135, 20)];
-                    [button setBackgroundColor:[UIColor clearColor]];
-                    button.tag = section;
-                    button.titleLabel.textAlignment = NSTextAlignmentRight;
-                    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-                    
-                    button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 20);
-                    button.titleLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
-                    [button addTarget:self action:@selector(sortByPlanYear:) forControlEvents:UIControlEventTouchUpInside];
-                    [button setTitle:@"PLAN YEAR" forState:UIControlStateNormal];
-                    UIImage *pImage = [UIImage imageNamed:@"OpenCaret.png"];
-                    [button setImage:pImage forState:UIControlStateNormal];
-                    
-                    [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-                    
-                    button.imageEdgeInsets = UIEdgeInsetsMake(0., button.frame.size.width - (pImage.size.width + 15.), 0., 0.);
-                    button.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., pImage.size.width);
-                    
-                    [subHeaderView addSubview:button];
- */
                 }
             }
-            
+ 
             headerTitle1.textAlignment = NSTextAlignmentCenter;
             headerTitle1.textColor = [UIColor darkGrayColor];
             headerTitle1.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
@@ -871,6 +855,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
             [headerView addSubview:subHeaderView];
         }
+
     }
     else
     {
@@ -899,9 +884,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         }
         [headerView addSubview:button];
     }
-    
-    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [headerView addGestureRecognizer:recognizer];
+
     
     return headerView;
 }
@@ -990,8 +973,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     
     MGSwipeTableCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+//    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+
     if (!cell) {
         cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier2];
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier2];
+
         
         UIImage *image = [UIImage imageNamed:@"chevron_right.png"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1003,26 +990,16 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         button.hidden = FALSE;
         
         [cell.contentView addSubview:button];
+ 
     }
 
     UIButton *b1 = [cell.contentView viewWithTag:55];
     b1.frame = CGRectMake(tableView.frame.size.width - 20.0, 88/2-8, 16, 16);
-    b1.hidden = FALSE;
-/*
-    UILabel *h1 = [cell.contentView viewWithTag:120];
-    UILabel *h2 = [cell.contentView viewWithTag:121];
-    UILabel *h3 = [cell.contentView viewWithTag:122];
+    b1.hidden = FALSE; //shows chevron
 
-    h1.hidden = TRUE;
-    h2.hidden = TRUE;
-    h3.hidden = TRUE;
-
-    b1.hidden = FALSE;    //shows chevron
-*/
     cell.headerTitle.hidden = TRUE;
     cell.headerTitle1.hidden = TRUE;
     cell.headerTitle2.hidden = TRUE;
-    
 
     if (ttype.type == 1)
     {
@@ -1041,21 +1018,18 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         
         cell.headerTitle2.frame = CGRectMake(tableView.frame.size.width - 70, 0, 75, 20);
         cell.headerTitle1.frame = CGRectMake(cell.headerTitle2.frame.origin.x - cell.headerTitle1.frame.size.width - 20, 0, cell.headerTitle1.frame.size.width, 20);
-//        h1.hidden = FALSE;
-//        h2.hidden = FALSE;
-//        h3.hidden = FALSE;
+
         b1.hidden = TRUE;    //hides chevron
-        
-//        NSString *pp = h3.text;
-//        h3.text = @"DAYS LEFT";
 
         return cell;
     }
     else
         cell.backgroundColor = [UIColor clearColor];
-    
+
+    int iOffset = 0;
+
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
+//    cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.height);
 
 //    cell.leftColor.frame = CGRectMake(0, 0, 5, 10);
     
@@ -1079,10 +1053,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     cell.leftColor.hidden = TRUE;
     
-    int iOffset = 0;
-    
     cell.lblEmployeesNeeded.text = @"";
-    
+
     if (ttype.status == NEEDS_ATTENTION)
     {
         cell.daysleftLabel.textColor = UIColorFromRGB(0x555555);
@@ -1094,7 +1066,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     }
     else
         cell.employeesLabel.text = [NSString stringWithFormat:@"%d", [ttype.employeesEnrolled intValue] ]; //removed "waived" on 09-21-16.
-    
+
     if (ttype.status == RENEWAL_IN_PROGRESS || ttype.status == NO_ACTION_REQUIRED || indexPath.section == 2)
     {
         cell.employeesLabel.text = [self userVisibleDateTime:ttype.planYear];;
@@ -1124,10 +1096,11 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                                                              options:NSCalendarWrapComponents];
         cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
     }
+
     
     [cell.employeesLabel sizeToFit];
     [cell.daysleftLabel sizeToFit];
-    
+
     cell.daysleftLabel.frame = CGRectMake(tableView.frame.size.width - 82/2 - cell.daysleftLabel.frame.size.width/2, 0, cell.daysleftLabel.frame.size.width, EMPLOYER_LIST_ROW_HEIGHT);
     cell.employeesLabel.frame = CGRectMake(cell.daysleftLabel.frame.origin.x - 80 - iOffset, 0, cell.employeesLabel.frame.size.width, EMPLOYER_LIST_ROW_HEIGHT);
     cell.employerLabel.frame = CGRectMake(cell.employerLabel.frame.origin.x, 1, cell.employeesLabel.frame.origin.x - 25, EMPLOYER_LIST_ROW_HEIGHT);

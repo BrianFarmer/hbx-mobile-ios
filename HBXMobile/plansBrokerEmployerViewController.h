@@ -14,7 +14,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "HeaderView.h"
 
-@interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate>
+@interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate, HeaderViewDelegate>
 {
     UIPageControl *pageControl;
     
@@ -37,7 +37,8 @@
     NSMutableIndexSet *expandedSections;
 
     NSArray *plans;
-    UISegmentedControl *planYearControl;
+//    UISegmentedControl *planYearControl;
+    NSInteger selectedSegmentIndex;
 }
 
 @end

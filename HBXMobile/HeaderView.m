@@ -215,6 +215,29 @@ alpha:1.0]
         pLabelCoverage.frame = CGRectMake(pLabelCoverage.frame.origin.x,pLabelCoverage.frame.origin.y+10,pLabelCoverage.frame.size.width,pLabelCoverage.frame.size.height);
     }
 
+    if (bShowPlanYear)
+    {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIFont fontWithName:@"Roboto-Bold" size:12], NSFontAttributeName,
+                                    [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1], NSForegroundColorAttributeName, nil];
+        
+        NSArray *itemArray = [NSArray arrayWithObjects: @"ACTIVE YEAR", @"IN RENEWAL", nil];
+        planYearControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+        planYearControl.frame = CGRectMake(self.frame.size.width/2 - 80, [self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height + 10, 160, 30);
+        [planYearControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+        
+        [planYearControl setTintColor:[UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]];
+        
+        [planYearControl addTarget:self action:@selector(HandleSegmentControlAction:) forControlEvents: UIControlEventValueChanged];
+        planYearControl.selectedSegmentIndex = 0;
+        
+        [self addSubview:planYearControl];
+    }
+}
+
+- (void)HandleSegmentControlAction:(UISegmentedControl *)segment
+{
+    [_delegate HandleSegmentControlAction:segment];
 }
 
 -(int)layoutEmployeeProfile:(brokerEmployersData *)eData nameY:(int)nameY

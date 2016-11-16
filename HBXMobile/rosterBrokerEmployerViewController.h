@@ -12,7 +12,7 @@
 #import "UISlideView.h"
 #import "HeaderView.h"
 
-@interface rosterBrokerEmployerViewController : UIViewController <uiSlideViewDelegate>
+@interface rosterBrokerEmployerViewController : UIViewController <uiSlideViewDelegate, HeaderViewDelegate>
 {
     IBOutlet UITableView *pRosterTable;
     

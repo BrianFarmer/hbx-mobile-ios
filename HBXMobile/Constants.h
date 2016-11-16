@@ -52,7 +52,7 @@ blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 alpha:1.0]
 /// MAIN BROKER PAGE
 ///
 /////////////////////////////////////////////////////////////////////
-#define EMPLOYER_LIST_ROW_HEIGHT            88
+#define EMPLOYER_LIST_ROW_HEIGHT            90 //88
 
 #define ENROLLMENT_STATUS_OE_MIN_NOTMET     UI_COLOR_RED
 #define ENROLLMENT_STATUS_OE_MIN_MET        UI_COLOR_GREEN

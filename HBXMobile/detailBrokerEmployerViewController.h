@@ -12,7 +12,7 @@
 #import "XYGraph/XYPieChart.h"
 #import "HeaderView.h"
 
-@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate>
+@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate, HeaderViewDelegate>
 {
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;

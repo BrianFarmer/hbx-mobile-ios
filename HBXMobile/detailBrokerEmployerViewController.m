@@ -52,8 +52,10 @@
     
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
-    [vHeader layoutHeaderView:employerData];
-
+    vHeader.delegate = self;
+    //[vHeader layoutHeaderView:employerData];
+    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
+    
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
     
@@ -65,6 +67,7 @@
     detailTable.backgroundView = nil;
     
 //    [self loadDictionary];
+    /*
     _dictionary = ((employerTabController *) self.tabBarController).detailDictionary;
     
     int emp_total = ([_dictionary valueForKey:@"employees_total"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_total"] intValue];
@@ -74,7 +77,7 @@
     int emp_waiv = ([_dictionary valueForKey:@"employees_waived"] == (NSString *)[NSNull null]) ? 0:[[_dictionary valueForKey:@"employees_waived"] intValue];
 
     int iNotEnrolled = emp_total - emp_waiv - emp_enr;
-
+*/
 //    int iNotEnrolled = [[dictionary valueForKey:@"employees_total"] intValue] - [[dictionary valueForKey:@"employees_waived"] intValue] - [[dictionary valueForKey:@"employees_enrolled"] intValue];
 /*
     NSNumber *one = [NSNumber numberWithInt:emp_enr];
@@ -86,6 +89,11 @@
     NSNumber *three = [NSNumber numberWithInt:iNotEnrolled];
     [_slices addObject:three];
 */
+    [self processData];
+}
+
+-(void)processData
+{
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
     [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
@@ -172,8 +180,8 @@
     NSDate *methodFinish = [NSDate date];
     NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:obj.dTimingStart];
     NSLog(@"executionTime = %f\n\n\n", executionTime);
-
 }
+
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
     int widthOfAllButtons = 0;
@@ -196,6 +204,11 @@
         
         lastButton = thisButton;
     }
+}
+
+- (void)HandleSegmentControlAction:(UISegmentedControl *)segment
+{
+    [self processData];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
@@ -237,7 +250,7 @@
     dataNotLoaded = FALSE;
 }
 
-//-(NSDictionary*)loadDictionary
+/*
 -(void)loadDictionary
 {
     NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
@@ -282,6 +295,7 @@
         _dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     }
 }
+*/
 
 - (NSUInteger)numberOfSlicesInPieChart:(XYPieChart *)pieChart
 {
@@ -304,7 +318,7 @@
 {
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
-    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -741,13 +755,13 @@
             employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
             pEnrolled.hidden = FALSE;
-            pEnrolled.text = [NSString stringWithFormat:@"%i\nENROLLED", tabBar.enrolled];
+            pEnrolled.text = [NSString stringWithFormat:@"%@\nENROLLED", (tabBar.enrolled > -1) ? [NSString stringWithFormat:@"%d", tabBar.enrolled]:@"--"];
             
             pWaived.hidden = FALSE;
-            pWaived.text = [NSString stringWithFormat:@"%i\nWAIVED", tabBar.waived];
+            pWaived.text = [NSString stringWithFormat:@"%@\nWAIVED", (tabBar.waived > -1) ? [NSString stringWithFormat:@"%d", tabBar.waived]:@"--"];
 
             pNotEnrolled.hidden = FALSE;
-            pNotEnrolled.text = [NSString stringWithFormat:@"%i\nNOT ENROLLED", tabBar.notenrolled];
+            pNotEnrolled.text = [NSString stringWithFormat:@"%@\nNOT ENROLLED", (tabBar.notenrolled > -1) ? [NSString stringWithFormat:@"%d", tabBar.notenrolled]:@"--"];
             
             pTotalEmployees.hidden = FALSE;
             pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled];

@@ -73,6 +73,11 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     [item3 setImage:[[UIImage imageNamed:@"plansnormal32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [item3 setSelectedImage:[[UIImage imageNamed:@"plansactive32.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 */
+    _enrolled = -1;
+    _waived = -1;
+    _notenrolled = -1;
+    _total_employees = -1;
+    
     [self loadDictionary];
 }
 
@@ -150,10 +155,31 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          
                          NSString *sKey;
                          
+                         NSDateFormatter *f = [[NSDateFormatter alloc] init];
+                         [f setDateFormat:@"yyyy-MM-dd"];
+                         [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                         
+                         NSString *todayDateString = [f stringFromDate:[NSDate date]];
+                         
+                         NSDate *planYear = [f dateFromString:_employerData.planYear];
+                         
+                         BOOL bPlanYearInTheFuture = FALSE;
+                         
+                         if ([[f dateFromString:todayDateString] compare:planYear] == NSOrderedAscending)
+                         {
+                             bPlanYearInTheFuture = TRUE;
+                         }
+                         
                          if (_employerData.status == (enrollmentState)NO_ACTION_REQUIRED) //NEEDS_ATTEENTION) OPEN_ENROLLMENT_MET
                              sKey = @"active";
                          else
                              sKey = @"renewal";
+                         
+                          sKey = @"active";
+                         
+                         _enrolled = 0;
+                         _waived = 0;
+                         _notenrolled = 0;
                          
                          for (id myArrayElement in _rosterList)
                          {
@@ -161,13 +187,15 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
 //                             [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
                              
                              NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
-                             NSString *ll =  [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+                             NSString *ll = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
                              
                              _employer_contribution += [oo doubleValue];
                              _employee_costs += [ll doubleValue];
                              
-                             NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
-
+                             NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"status"];
+                             if (status == nil && [sKey isEqualToString:@"renewal"])
+                                status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+                             
                              if ([status isEqualToString:@"Enrolled"])
                                  _enrolled += 1;
                              if ([status isEqualToString:@"Waived"])
