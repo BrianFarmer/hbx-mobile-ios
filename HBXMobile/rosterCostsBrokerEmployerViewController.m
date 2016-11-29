@@ -487,8 +487,14 @@ alpha:1.0]
         
         if ([dt2.text isEqualToString:@"Not Enrolled"])
         {
-            dt2.textColor = [UIColor redColor];
-            dt3.textColor = [UIColor redColor];
+            dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
+            dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
+        }
+
+        if ([dt2.text isEqualToString:@"Terminated"])
+        {
+            dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
+            dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
         }
 
     }

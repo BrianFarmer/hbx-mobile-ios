@@ -202,6 +202,8 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                                  _waived += 1;
                              if ([status isEqualToString:@"Not Enrolled"])
                                  _notenrolled += 1;
+                             if ([status isEqualToString:@"Terminated"])
+                                 _terminated += 1;
                              
                          }
                          

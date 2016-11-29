@@ -223,7 +223,7 @@
             case 3:
                 cell.textLabel.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
                 if (iSort == indexPath)
-                    cell.imageView.image = [UIImage imageNamed:@"check_showall.png"];
+                    cell.imageView.image = [UIImage imageNamed:@"check_purple.png"];
                 break;
         }
     }
@@ -249,7 +249,7 @@
             [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_notenrolled.png"];
         break;
     case 3:
-            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_showall.png"];
+            [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_purple.png"];
             break;
     }
     

@@ -219,8 +219,8 @@
 
 -(void)receiveRosterCostsNotification:(NSNotification *) notification
 {
-    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+//    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
@@ -232,6 +232,9 @@
     
     NSNumber *three = [NSNumber numberWithInt:tabBar.notenrolled];
     [_slices addObject:three];
+
+    NSNumber *four = [NSNumber numberWithInt:tabBar.terminated];
+    [_slices addObject:four];
 
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -312,6 +315,28 @@
  //   if(pieChart == pieChartRight)
  //       return nil;
     return [self.sliceColors objectAtIndex:(index % self.sliceColors.count)];
+}
+
+- (void)pieChart:(XYPieChart *)pieChart didSelectSliceAtIndex:(NSUInteger)index
+{
+    switch (index) {
+        case 0:
+            [self userTappedOnEnrolledLink:nil];
+            break;
+        case 1:
+            [self userTappedOnWaivedLink:nil];
+            break;
+        case 2:
+            [self userTappedOnNotEnrolledLink:nil];
+            break;
+        case 3:
+            [self userTappedOnTerminatedLink:nil];
+            break;
+            
+        default:
+            break;
+    }
+ //   userTappedOnNotEnrolledLink
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -562,6 +587,7 @@
                                    EMPLOYER_DETAIL_PARTICIPATION_ENROLLED,
                                    EMPLOYER_DETAIL_PARTICIPATION_WAIVED,
                                    EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED,
+                                   UI_COLOR_PURPLE,
                                    nil];
                 
                 pieChartRight.hidden = TRUE;
@@ -582,11 +608,11 @@
                 [activityIndicator setColor:[UIColor whiteColor]];
                 [cell.contentView addSubview:activityIndicator];
                 
-                UILabel *pEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 150, 50)];
+                UILabel *pEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 150, 50)];
                 pEnrolled.tag = 971;
                 pEnrolled.hidden = TRUE;
                 pEnrolled.numberOfLines = 2;
-                pEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
+                pEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0f];
                 pEnrolled.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;//UIColorFromRGB(0x00a99e);
                 pEnrolled.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnEnrolledLink:)];
@@ -594,13 +620,20 @@
                 [pEnrolled setUserInteractionEnabled:YES];
                 [pEnrolled addGestureRecognizer:gesture];
                 [cell.contentView addSubview:pEnrolled];
+                /*
+                CAGradientLayer *gradient = [CAGradientLayer layer];
+                gradient.frame = pEnrolled.bounds;
+                UIColor *startColour = [UIColor colorWithHue:.580555 saturation:0.31 brightness:0.90 alpha:1.0];
+                UIColor *endColour = [UIColor colorWithHue:.58333 saturation:0.50 brightness:0.62 alpha:1.0];
+                gradient.colors = [NSArray arrayWithObjects:(id)[startColour CGColor], (id)[endColour CGColor], nil];
+                [pEnrolled.layer insertSublayer:gradient atIndex:0];
+                */
                 
-                
-                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 70, 150, 50)];
+                UILabel *pWaived = [[UILabel alloc] initWithFrame:CGRectMake(10, 50, 150, 50)];
                 pWaived.tag = 972;
                 pWaived.hidden = TRUE;
                 pWaived.numberOfLines = 2;
-                pWaived.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
+                pWaived.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0f];
                 pWaived.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED; //UIColorFromRGB(0x625ba8);
                 pWaived.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gestureWaived = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnWaivedLink:)];
@@ -610,11 +643,11 @@
                 [cell.contentView addSubview:pWaived];
 
                 
-                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 130, 150, 50)];
+                UILabel *pNotEnrolled = [[UILabel alloc] initWithFrame:CGRectMake(10, 95, 150, 50)];
                 pNotEnrolled.tag = 973;
                 pNotEnrolled.hidden = TRUE;
                 pNotEnrolled.numberOfLines = 2;
-                pNotEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
+                pNotEnrolled.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0f];
                 pNotEnrolled.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
                 pNotEnrolled.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gestureNotEnrolled = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnNotEnrolledLink:)];
@@ -623,12 +656,25 @@
                 [pNotEnrolled addGestureRecognizer:gestureNotEnrolled];
                 [cell.contentView addSubview:pNotEnrolled];
                 
+                UILabel *pTerminated = [[UILabel alloc] initWithFrame:CGRectMake(10, 140, 150, 50)];
+                pTerminated.tag = 974;
+                pTerminated.hidden = TRUE;
+                pTerminated.numberOfLines = 2;
+                pTerminated.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0f];
+                pTerminated.textColor = UI_COLOR_PURPLE;
+                pTerminated.backgroundColor = [UIColor clearColor];
+                UITapGestureRecognizer* gestureTerminated = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnTerminatedLink:)];
                 
-                UILabel *pTotalEmployees = [[UILabel alloc] initWithFrame:CGRectMake(10, 180, 150, 50)];
-                pTotalEmployees.tag = 974;
+                [pTerminated setUserInteractionEnabled:YES];
+                [pTerminated addGestureRecognizer:gestureTerminated];
+                [cell.contentView addSubview:pTerminated];
+
+                
+                UILabel *pTotalEmployees = [[UILabel alloc] initWithFrame:CGRectMake(10, 185, 150, 50)];
+                pTotalEmployees.tag = 975;
                 pTotalEmployees.hidden = TRUE;
                 pTotalEmployees.numberOfLines = 2;
-                pTotalEmployees.font = [UIFont fontWithName:@"Roboto-Bold" size:16.0f];
+                pTotalEmployees.font = [UIFont fontWithName:@"Roboto-Bold" size:15.0f];
                 pTotalEmployees.textColor = EMPLOYER_DETAIL_PARTICIPATION_ALL;
                 pTotalEmployees.backgroundColor = [UIColor clearColor];
                 UITapGestureRecognizer* gestureTotalEmployees = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnTotalLink:)];
@@ -642,7 +688,7 @@
 //            if (indexPath.section == 0 && indexPath.row == 0)
             {
                 UILabel * labelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, tableView.frame.size.width, 50)];
-                labelCoverage.tag = 975;
+                labelCoverage.tag = 976;
                 labelCoverage.hidden = TRUE;
                 labelCoverage.numberOfLines = 2;
                 labelCoverage.backgroundColor = [UIColor clearColor];
@@ -654,7 +700,7 @@
                 CGRect sepFrame = CGRectMake(0, 70, tableView.frame.size.width - 10, 1);
                 UIView *seperatorView = [[UIView alloc] initWithFrame:sepFrame];
                 seperatorView.hidden = TRUE;
-                seperatorView.tag = 976;
+                seperatorView.tag = 977;
                 seperatorView.backgroundColor = [UIColor colorWithWhite:224.0/255.0 alpha:1.0];
                 [cell.contentView addSubview:seperatorView];
             }
@@ -672,14 +718,17 @@
     
     UILabel *pNotEnrolled = [cell viewWithTag:973];
     pNotEnrolled.hidden = TRUE;
-    
-    UILabel *pTotalEmployees = [cell viewWithTag:974];
+
+    UILabel *pTerminated = [cell viewWithTag:974];
+    pTerminated.hidden = TRUE;
+
+    UILabel *pTotalEmployees = [cell viewWithTag:975];
     pTotalEmployees.hidden = TRUE;
 
-    UILabel *pLabelCoverage = [cell viewWithTag:975];
+    UILabel *pLabelCoverage = [cell viewWithTag:976];
     pLabelCoverage.hidden = TRUE;
     
-    UILabel *pSeperator = [cell viewWithTag:976];
+    UILabel *pSeperator = [cell viewWithTag:977];
     pSeperator.hidden = TRUE;
     
     cell.textLabel.text = @"";
@@ -762,7 +811,10 @@
 
             pNotEnrolled.hidden = FALSE;
             pNotEnrolled.text = [NSString stringWithFormat:@"%@\nNOT ENROLLED", (tabBar.notenrolled > -1) ? [NSString stringWithFormat:@"%d", tabBar.notenrolled]:@"--"];
-            
+
+            pTerminated.hidden = FALSE;
+            pTerminated.text = [NSString stringWithFormat:@"%@\nTERMINATED", (tabBar.terminated > -1) ? [NSString stringWithFormat:@"%d", tabBar.terminated]:@"--"];
+
             pTotalEmployees.hidden = FALSE;
             pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled];
             
@@ -820,6 +872,17 @@
     
     [self.tabBarController setSelectedIndex:1];
 }
+
+-(void)userTappedOnTerminatedLink:(UIGestureRecognizer*)sender
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    tabBar.sortOrder = @"Terminated";
+    tabBar.iPath = nil;
+    
+    [self.tabBarController setSelectedIndex:1];
+}
+
 
 -(void)userTappedOnTotalLink:(UIGestureRecognizer*)sender
 {

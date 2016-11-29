@@ -67,25 +67,36 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     
     [self.tableView addSubview:refreshControl];
     
-    self.view.autoresizesSubviews = YES;
+ //   self.view.autoresizesSubviews = YES;
     
     bAlreadyShownTutorial = [[NSUserDefaults standardUserDefaults] boolForKey:@"alreadyShownTutorial"];
     
-    brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
+//    brokerSearchResultTableViewController *_resultsTableController = [[brokerSearchResultTableViewController alloc] init];
+  //  self.searchController = [[UISearchController alloc] initWithSearchResultsController:_resultsTableController];
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+
     self.searchController.delegate = self;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.dimsBackgroundDuringPresentation = YES;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.showsCancelButton = TRUE;
-    _resultsTableController.delegate = self;
+//    _resultsTableController.delegate = self;
+//    self.searchController.searchBar.tintColor = [UIColor blueColor];
+    
+    [self.searchController.searchBar setTintColor:[UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor darkGrayColor]];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
 
-    self.definesPresentationContext = YES;
+    self.definesPresentationContext = NO;   //IF THIS IS YES THE SEARCH RESULTS TABLE WILL APPEAR UNDERNEATH THE NAVIGATION BAR
+    
+//    self.extendedLayoutIncludesOpaqueBars = YES;
+//    self.edgesForExtendedLayout=UIRectEdgeNone;
+//    self.extendedLayoutIncludesOpaqueBars=NO;
+//    self.automaticallyAdjustsScrollViewInsets=NO;
     
     searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonTapped:)];
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
@@ -108,7 +119,16 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
     [self processData];
 }
+/*
+-(void)viewWillAppear:(BOOL)animated
+{
+    CGRect rc = self.tableView.frame;
+    self.tableView.frame = CGRectMake(0, 196, self.tableView.frame.size.width, self.tableView.frame.size.height);
+    self.searchController.searchResultsController.view.frame = CGRectMake(0, 196, self.tableView.frame.size.width, self.tableView.frame.size.height);
 
+
+}
+*/
 -(void)viewDidAppear:(BOOL)animated
 {
     if (!bAlreadyShownTutorial)
@@ -163,13 +183,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
-        self.tableView.frame = CGRectMake(0, 64, self.tableView.frame.size.width, self.tableView.frame.size.height);
+//        self.tableView.frame = CGRectMake(0, 64, self.tableView.frame.size.width, self.tableView.frame.size.height);
 //    [self.searchController.searchBar resignFirstResponder];
 }
 
 -(void)willPresentSearchController:(UISearchController *)searchController
 {
 //    [self.searchController setActive:TRUE];
+    self.tableView.tableHeaderView = nil;
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController
@@ -192,6 +213,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     self.searchController.searchBar.hidden = TRUE;
     self.navigationController.navigationBar.topItem.rightBarButtonItem = searchButton;
     self.navigationItem.titleView = pHeaderImage;
+    
+    [self setIntroHeader:12];
 }
 
 -(void)processData
@@ -511,6 +534,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     [self filterContentForSearchText:searchController.searchBar.text scope:@""];
+    
+        [self.tableView reloadData];
 }
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
@@ -550,12 +575,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             }
             
         }
-        //self.filteredProducts = searchData;
+        
+        self.filteredProducts = searchData;
         
         // hand over the filtered results to our search results table
-        brokerSearchResultTableViewController *tableController = (brokerSearchResultTableViewController *)self.searchController.searchResultsController;
-        tableController.filteredProducts = searchData;
-        [tableController.tableView reloadData];
+  //      brokerSearchResultTableViewController *tableController = (brokerSearchResultTableViewController *)self.searchController.searchResultsController;
+  //      tableController.filteredProducts = searchData;
+  //      [tableController.tableView reloadData];
         
     }
     else
@@ -691,17 +717,17 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 2)];//([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
+    UIView* footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 2)];//([expandedSections containsIndex:section] && clients_needing_immediate_attention > 0) ? 60:90)];
     
     // Set a custom background color and a border
     //    headerView.backgroundColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f];
     //    headerView.layer.borderColor = [UIColor colorWithRed:236.0f/255.0f green:236.0f/255.0f blue:236.0f/255.0f alpha:1.0f].CGColor;//[UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
     //    headerView.layer.borderWidth = 1.0;
     
-    headerView.backgroundColor = [UIColor clearColor];
-    headerView.tag = section;
+    footerView.backgroundColor = [UIColor clearColor];
+    footerView.tag = section;
 
-    return headerView;
+    return footerView;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -1230,6 +1256,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    self.tableView.frame = CGRectMake(0, 196, self.tableView.frame.size.width, self.tableView.frame.size.height);
+
     Settings *obj=[Settings getInstance];
     obj.dTimingStart = [NSDate date];
     
@@ -1358,8 +1386,28 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     firstTime = TRUE;
     if (((brokerEmployersData *)ttype).type == 1)
         return;
-    [self performSegueWithIdentifier:@"Broker Employer Detail" sender:(brokerEmployersData *)ttype];
-    return;
+//    [self performSegueWithIdentifier:@"Broker Employer Detail" sender:(brokerEmployersData *)ttype];
+    CGFloat x = UIScreen.mainScreen.applicationFrame.size.width/2;
+    CGFloat y = UIScreen.mainScreen.applicationFrame.size.height/2;
+    // Offset. If tableView has been scrolled
+    CGFloat yOffset = self.tableView.contentOffset.y;
+    
+    UIActivityIndicatorView *activityIndicator= [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(x - 50, (y + yOffset) - 50, 100, 100)]; //self.view.frame.origin.y
+    activityIndicator.layer.cornerRadius = 05;
+    activityIndicator.opaque = NO;
+    activityIndicator.tag = 44;
+    activityIndicator.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.7f];
+    activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;// UIActivityIndicatorViewStyleGray;
+    [activityIndicator setColor:[UIColor whiteColor]];
+    [self.view addSubview: activityIndicator];
+    [activityIndicator startAnimating];
+    
+//    MGSwipeTableCell *cell = (MGSwipeTableCell *)[(UITableView *)self.view cellForRowAtIndexPath:indexPath];
+//    if (ttype.status == NEEDS_ATTENTION)
+//        cell.leftColor.backgroundColor = [UIColor redColor];
+    
+    [self loadJSON:ttype];
+
 }
 
 

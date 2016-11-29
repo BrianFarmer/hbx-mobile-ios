@@ -32,6 +32,7 @@
 @property (nonatomic, assign) int enrolled;
 @property (nonatomic, assign) int waived;
 @property (nonatomic, assign) int notenrolled;
+@property (nonatomic, assign) int terminated;
 @property (nonatomic, assign) int total_employees;
 
 @end
