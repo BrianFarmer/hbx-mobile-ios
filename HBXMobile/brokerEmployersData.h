@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, enrollmentState) {
 @property (nonatomic, assign) enrollmentState status;
 @property (nonatomic, retain) NSString *companyName;
 @property (nonatomic, retain) NSString *planYear;
+@property (nonatomic, retain) NSArray  *plans;
 @property (nonatomic, retain) NSString *billing_report_date;
 @property (nonatomic, retain) NSString *employeesEnrolled;
 @property (nonatomic, retain) NSString *employeesWaived;

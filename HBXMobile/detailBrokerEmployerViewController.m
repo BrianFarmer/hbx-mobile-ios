@@ -108,7 +108,9 @@
 //    [out setDateFormat:@"MMM dd, yyyy"];
     [out setDateFormat:@"MM/dd/yyyy"];
     
-    NSDate *endDate = [f dateFromString:employerData.open_enrollment_ends];
+    NSArray *employerData1 = [employerData.plans objectAtIndex:[employerData.plans count]-1];
+    
+    NSDate *endDate = [f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]];
     
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
@@ -159,7 +161,7 @@
     }
     else
     {
-        NSDate *startDate = [f dateFromString:employerData.open_enrollment_begins];
+        NSDate *startDate = [f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]]; //employerData.open_enrollment_begins];
  //       [f setDateFormat:@"MMM dd, yyyy"];
         [f setDateFormat:@"MM/dd/yyyy"];
         

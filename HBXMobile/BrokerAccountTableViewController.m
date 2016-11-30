@@ -379,6 +379,253 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     for (int x=0;x<[subscriberPlans count];x++)
     {
         ck = [subscriberPlans objectAtIndex:x];
+        
+        if ([ck valueForKey:@"plan_year_begins"] != [NSNull null])
+        {
+            total_active_clients += 1;
+            brokerEmployersData *pCompany = [[brokerEmployersData alloc] init];
+            pCompany.type = 0;
+            
+            pCompany.companyName = [ck valueForKey:@"employer_name"];
+            
+            pCompany.plans = [ck valueForKeyPath:@"plan_years"];
+            
+             pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
+             pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
+             pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
+            
+            pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
+            pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
+            pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
+            
+            pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];
+            pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
+            
+            pCompany.detail_url = [ck valueForKeyPath:@"employer_details_url"];
+            pCompany.roster_url = [ck valueForKeyPath:@"employee_roster_url"];
+            
+            pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
+            pCompany.contact_info = [ck valueForKeyPath:@"contact_info"];
+            
+            pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
+            
+            if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
+                pCompany.binder_payment_due = @"";
+            else
+                pCompany.binder_payment_due = [ck valueForKey:@"binder_payment_due"];
+            
+            pCompany.active_general_agency = [ck valueForKey:@"active_general_agency"];
+            
+            NSLog(@"%@", pCompany.plans);
+            
+            
+            if ([pCompany.plans count] == 0)
+            {
+                pCompany.status = NO_ACTION_REQUIRED;
+                [all_others addObject:pCompany];
+            }
+            else
+            {
+                NSArray *pPlan = [pCompany.plans objectAtIndex:[pCompany.plans count]-1];
+                
+                NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+                
+                
+                NSDateFormatter *f = [[NSDateFormatter alloc] init];
+                [f setDateFormat:@"yyyy-MM-dd"];
+                [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                
+                NSString *todayDateString = [f stringFromDate:[NSDate date]];
+                
+                NSDate *today = [f dateFromString:todayDateString];
+                
+                if ([planYearBegins compare:today] == NSOrderedAscending) // && [endEnrollmentDate compare:today] == NSOrderedDescending)
+                {
+                    pCompany.status = NO_ACTION_REQUIRED;
+                    [all_others addObject:pCompany];
+                }
+                else
+                {
+                    NSDate *startEnrollmentDate = [self userVisibleDateTimeForRFC3339Date:[self getValue:pPlan valueForKey:@"open_enrollment_begins"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+                    NSDate *endEnrollmentDate = [self userVisibleDateTimeForRFC3339Date: [self getValue:pPlan valueForKey:@"open_enrollment_ends"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+
+                    if ([startEnrollmentDate compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
+                    {
+                        if (([pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
+                        {
+                            pCompany.status = NEEDS_ATTENTION;
+                            //  [open_enrollment addObject:pCompany];
+                            [open_enrollment insertObject:pCompany atIndex:0];
+                            clients_needing_immediate_attention += 1;
+                        }
+                        else if ( [pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue] >= [pCompany.planMinimum intValue] )
+                        {
+                            if (!bAddedOpenEnrollmentDivider)
+                            {
+                                brokerEmployersData *pCompanyDivider = [[brokerEmployersData alloc] init];
+                                pCompanyDivider.type = 1;
+                                [open_enrollment addObject:pCompanyDivider];
+                                bAddedOpenEnrollmentDivider = TRUE;
+                            }
+                            pCompany.status = OPEN_ENROLLMENT_MET;
+                            [open_enrollment addObject:pCompany];
+                        }
+                        [all_others addObject:pCompany];
+                    }
+                    else
+                    {
+                        
+                        NSLog(@"%@\n",[pPlan valueForKey:@"renewal_in_progress"]);
+                        
+                        BOOL bRenewal = FALSE;
+                        if ([pPlan valueForKey:@"renewal_in_progress"] == (NSString *)[NSNull null])
+                            bRenewal = FALSE;
+                        else
+                            bRenewal = [[pPlan valueForKey:@"renewal_in_progress"] boolValue];
+                        
+                        if (bRenewal)
+                        {
+                            pCompany.status = RENEWAL_IN_PROGRESS;
+                            [renewals addObject:pCompany];
+                      //      [all_others addObject:pCompany];
+                        }
+                        else
+                        {
+                            pCompany.status = NO_ACTION_REQUIRED;
+                            [all_others addObject:pCompany];
+                        }
+                        
+                    }
+                }
+                
+            }
+            
+            
+/*
+            
+            if ([pCompany.open_enrollment_begins isEqualToString:@""])
+            {
+                BOOL bRenewal = FALSE;
+                if ([ck valueForKey:@"renewal_in_progress"] == (NSString *)[NSNull null])
+                    bRenewal = FALSE;
+                else
+                    bRenewal = [[ck valueForKey:@"renewal_in_progress"] boolValue];
+                
+                pCompany.open_enrollment_begins = @"";
+                
+                if (bRenewal)
+                {
+                    pCompany.status = RENEWAL_IN_PROGRESS;
+                    [renewals addObject:pCompany];
+                    [all_others addObject:pCompany];
+                }
+                else
+                {
+                    pCompany.status = NO_ACTION_REQUIRED;
+                    [all_others addObject:pCompany];
+                }
+            }
+            else
+            {
+ 
+                // NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                 // this is important - we set our input date format to match our input string
+                 // if format doesn't match you'll get nil from your string, so be careful
+                 //[dateFormatter setDateFormat:@"yyyy-MM-dd"];
+                 //NSDate *dateFromString = [[NSDate alloc] init];
+ 
+                NSDate *dateFromString = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_begins];
+                
+                // dateFromString = [dateFormatter dateFromString:pCompany.open_enrollment_begins];
+                NSDate *endEnrollmentDate = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_ends]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+                
+                NSDateFormatter *f = [[NSDateFormatter alloc] init];
+                [f setDateFormat:@"yyyy-MM-dd"];
+                [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                
+                NSString *todayDateString = [f stringFromDate:[NSDate date]];
+                
+                NSDate *today = [f dateFromString:todayDateString];
+                
+                if ([dateFromString compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
+                {
+                    if (([pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
+                    {
+                        pCompany.status = NEEDS_ATTENTION;
+                        //  [open_enrollment addObject:pCompany];
+                        [open_enrollment insertObject:pCompany atIndex:0];
+                        clients_needing_immediate_attention += 1;
+                    }
+                    else if ( [pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue] >= [pCompany.planMinimum intValue] )
+                    {
+                        if (!bAddedOpenEnrollmentDivider)
+                        {
+                            brokerEmployersData *pCompanyDivider = [[brokerEmployersData alloc] init];
+                            pCompanyDivider.type = 1;
+                            [open_enrollment addObject:pCompanyDivider];
+                            bAddedOpenEnrollmentDivider = TRUE;
+                        }
+                        pCompany.status = OPEN_ENROLLMENT_MET;
+                        [open_enrollment addObject:pCompany];
+                    }
+                    [all_others addObject:pCompany];
+                }
+                else
+                {
+                    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+                    NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
+                                                                        fromDate:today
+                                                                          toDate:endEnrollmentDate
+                                                                         options:NSCalendarWrapComponents];
+                    
+                    if ([components day] <= 60 && [components day] >= 0)
+                    {
+                        pCompany.status = RENEWAL_IN_PROGRESS;
+                        [renewals addObject:pCompany];
+                        [all_others addObject:pCompany];
+                    }
+                    else
+                    {
+                        pCompany.status = NO_ACTION_REQUIRED;
+                        [all_others addObject:pCompany];
+                    }
+                    
+                }
+            }
+ */
+        }
+    }
+    
+    //    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"companyName" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"planYear" ascending:YES];
+    //    subscriberPlans = [all_others sortedArrayUsingDescriptors:@[sort]];
+    
+    [listOfCompanies addObject:open_enrollment];
+    [listOfCompanies addObject:renewals];
+    [listOfCompanies addObject:[all_others sortedArrayUsingDescriptors:@[sort]]]; //all_others];
+    
+    if ([open_enrollment count] > 0)
+        [expandedSections addIndex:0];
+    else
+    {
+        if ([renewals count] > 0)
+            [expandedSections addIndex:1];
+        else
+            [expandedSections addIndex:2];
+    }
+    //    self.displayedItems = listOfCompanies;
+    self.filteredProducts = listOfCompanies;
+}
+
+-(void)processBuckets1
+{
+    NSArray *ck;
+    bAddedOpenEnrollmentDivider = FALSE;
+    total_active_clients = 0;
+    
+    for (int x=0;x<[subscriberPlans count];x++)
+    {
+        ck = [subscriberPlans objectAtIndex:x];
 
         if ([ck valueForKey:@"plan_year_begins"] != [NSNull null])
         {
@@ -388,10 +635,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             
             pCompany.companyName = [ck valueForKey:@"employer_name"];
             
+            pCompany.plans = [ck valueForKeyPath:@"plan_years"];
+/*
             pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
             pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
             pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
-
+*/
             pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
             pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
             pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
@@ -1114,11 +1363,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
         [dateFormatter setDateFormat:@"YYYY-MM-dd"];
         NSString *dateString=[dateFormatter stringFromDate:[NSDate date]];
+        NSString *open_enrollment_ends = [[ttype.plans objectAtIndex:[ttype.plans count] -1] valueForKey:@"open_enrollment_ends"];
         
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay
                                                             fromDate:[self userVisibleDateTimeForRFC3339Date:dateString]
-                                                              toDate:[self userVisibleDateTimeForRFC3339Date:ttype.open_enrollment_ends]
+                                                              toDate:[self userVisibleDateTimeForRFC3339Date:open_enrollment_ends] // ttype.open_enrollment_ends]
                                                              options:NSCalendarWrapComponents];
         cell.daysleftLabel.text = [NSString stringWithFormat:@"%ld", (long)[components day]];
     }
