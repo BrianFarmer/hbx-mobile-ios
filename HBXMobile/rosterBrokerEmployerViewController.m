@@ -152,6 +152,8 @@
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
+    if ([displayArray count] > 0)
+    {
     int iCnt = 0;
     NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
     for (id py in pp1)
@@ -161,7 +163,8 @@
             enrollmentIndex = iCnt;
         iCnt++;
     }
-
+    }
+    
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
     [pRosterTable reloadData];
@@ -698,9 +701,15 @@ else
     NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
 //    NSString *sActive = [[[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
 
-    NSArray *pp = [[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    NSArray *pp1 = [[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    NSString *sActive = @"Not Enrolled";
     
-    NSString *sActive = [pp valueForKey:@"status"];
+    if ([pp1 count] > 0)
+    {
+        NSArray *pp = [[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    
+        sActive = [pp valueForKey:@"status"];
+    }
     
 //    NSDictionary *courseDetail = [[pp valueForKey:@"status"] objectAtIndex:0];
     

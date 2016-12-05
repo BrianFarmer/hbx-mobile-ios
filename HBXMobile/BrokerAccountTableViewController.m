@@ -110,7 +110,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 //    [expandedSections addIndex:1];
 //    [expandedSections addIndex:0];
     
-    sections = [[NSArray alloc] initWithObjects: NSLocalizedString(@"table-section-open-enrollment", @"OPEN ENROLLMENT IN PROGRESS"), NSLocalizedString(@"table-section-renewals-in-progress", @"RENEWALS IN PROGRESS"), NSLocalizedString(@"table-section-all-others", @"ALL OTHER CLIENTS"), nil];
+    sections = [[NSArray alloc] initWithObjects: NSLocalizedString(@"table-section-open-enrollment", @"OPEN ENROLLMENT IN PROGRESS"), NSLocalizedString(@"table-section-renewals-in-progress", @"RENEWALS IN PROGRESS"), NSLocalizedString(@"table-section-all-others", @"ALL CLIENTS"), nil];
 
     listOfCompanies = [[NSMutableArray alloc] init];
     open_enrollment = [[NSMutableArray alloc] init];

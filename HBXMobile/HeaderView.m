@@ -121,12 +121,19 @@ alpha:1.0]
         pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
         
         pLabelCoverage.hidden = FALSE;
-        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        NSString *lblCoverageYear;
         
+        if ([employerData.plans count] > 1)
+            lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        else
+            lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        
+            
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
-        NSString *temp_a = @"Coverage Year \u25BE";
+//        NSString *temp_a = @"Coverage Year \u25BE";
+        NSString *temp_a = @"Coverage Year";
         
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
         [string1 beginEditing];
@@ -139,7 +146,7 @@ alpha:1.0]
         
  //       [self addSubview:pLabelCoverage];
         
-        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-100, pCompany.frame.origin.y + pCompany.frame.size.height, 200, 45)];
+        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height, 220, 45)];
         [coverageButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         
         coverageButton.layer.cornerRadius = 10;
@@ -160,7 +167,10 @@ alpha:1.0]
 
         [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
 
-        [self addSubview:coverageButton];
+        if ([employerData.plans count] > 1)
+            [self addSubview:coverageButton];
+        else
+            [self addSubview:pLabelCoverage];
         
         pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height, self.frame.size.width - 20, 20);
 
@@ -308,12 +318,14 @@ alpha:1.0]
         pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
         
         pLabelCoverage.hidden = FALSE;
-        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
         
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
-        NSString *temp_a = @"Coverage Year \u25BE";
+        //NSString *temp_a = @"Coverage Year \u25BE";
+        NSString *temp_a = @"Coverage Year";
+    
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
         [string1 beginEditing];
         [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
@@ -327,7 +339,7 @@ alpha:1.0]
     
     //       [self addSubview:pLabelCoverage];
     
-        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-100, nameY, 200, 45)];
+        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, nameY, 220, 45)];
     
         [coverageButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         
@@ -351,7 +363,7 @@ alpha:1.0]
         
         [self addSubview:coverageButton];
     
-
+/*
     for (int btnCount=0;btnCount<4;btnCount++)
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -391,7 +403,7 @@ alpha:1.0]
     }
     
     [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
-
+*/
     return pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height;
     
 }
@@ -609,12 +621,14 @@ alpha:1.0]
     
     [f setDateFormat:@"MMM dd, yyyy"];
     
-    NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+    NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
     
     NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
     
-    NSString *temp_a = @"Coverage Year \u25BE";
+//    NSString *temp_a = @"Coverage Year \u25BE";
+    NSString *temp_a = @"Coverage Year";
+    
     NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
     [string1 beginEditing];
     [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];

@@ -467,7 +467,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    if(planYearControl.selectedSegmentIndex == 1 && ([plans isKindOfClass:[NSNull class]] || plans == nil))
-    if(([plans isKindOfClass:[NSNull class]] || plans == nil))
+    if(([plans isKindOfClass:[NSNull class]] || plans == nil) || [plans count] == 0)
         return 1;
 
     if ([expandedSections containsIndex:section])
@@ -729,7 +729,7 @@
 //    if((planYearControl.selectedSegmentIndex == 1) && ([plans isKindOfClass:[NSNull class]] || plans == nil))
 //        return nil;
 
-    if([plans isKindOfClass:[NSNull class]] || plans == nil)
+    if([plans isKindOfClass:[NSNull class]] || plans == nil || [plans count] == 0)
         return nil;
     
     // The view for the header
@@ -937,7 +937,9 @@
             sKey = @"dental";
         
         NSString *empCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"employee"] stringValue];
-        lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE]; //UIColorFromRGB(0x00a3e2)
+        
+        if (empCont != nil)
+            lblContributionEmployee.attributedText = [self setAttributedLabel1:empCont text2:@"EMPLOYEE" color:EMPLOYER_PLAN_CONTRIBUTION_EMPLOYEE];
         
         [lblContributionEmployee sizeToFit];
         
@@ -946,13 +948,14 @@
         if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] == (NSString *)[NSNull null])
         {
             spouseCont = @"Not\nCovered";
-            lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
-            
+            if (spouseCont != nil)
+                lblContributionSpouse.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
         }
         else
         {
             spouseCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"spouse"] stringValue];
-            lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
+            if (spouseCont != nil)
+                lblContributionSpouse.attributedText = [self setAttributedLabel1:spouseCont text2:@"SPOUSE" color:EMPLOYER_PLAN_CONTRIBUTION_SPOUSE]; //UIColorFromRGB(0x00a99e)
         }
         
         [lblContributionSpouse sizeToFit];
@@ -961,21 +964,26 @@
         if ([[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] == (NSString *)[NSNull null])
         {
             partnerCont = @"Not\nCovered";
-            lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER]; //UIColorFromRGB(0x625ba8)
+            if (partnerCont != nil)
+                lblContributionPartner.attributedText = [self setAttributedLabel3:@"NOT\nCOVERED" text2:@"" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER]; //UIColorFromRGB(0x625ba8)
             
         }
         else
         {
             partnerCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"domestic_partner"] stringValue];
-            lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER];
+            if (partnerCont != nil)
+                lblContributionPartner.attributedText = [self setAttributedLabel1:partnerCont text2:@"DOMESTIC\nPARTNER" color:EMPLOYER_PLAN_CONTRIBUTION_PARTNER];
         }
         
         [lblContributionPartner sizeToFit];
         
         NSString *childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child"] stringValue];
+        
         if (childCont == nil)
             childCont =  [[[[plans[indexPath.section] valueForKey:sKey] valueForKey:@"employer_contribution_by_relationship"] valueForKey:@"child_under_26"] stringValue];
-        lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:EMPLOYER_PLAN_CONTRIBUTION_CHILD]; //UIColorFromRGB(0xf06eaa)
+
+        if (childCont != nil)
+            lblContributionChild.attributedText = [self setAttributedLabel1:childCont text2:@"CHILD <26" color:EMPLOYER_PLAN_CONTRIBUTION_CHILD];
         
         [lblContributionChild sizeToFit];
         

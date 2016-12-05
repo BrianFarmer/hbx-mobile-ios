@@ -142,18 +142,21 @@ alpha:1.0]
 -(void)viewWillAppear:(BOOL)animated
 {
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
-    
-    employerTabController *tabBar = (employerTabController *) self.tabBarController;
-    
-    int iCnt = 0;
-    NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
-    for (id py in pp1)
+
+    if ([rosterList count] > 0)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
-        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
-            enrollmentIndex = iCnt;
-        iCnt++;
-    }
+        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+        
+        int iCnt = 0;
+        NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
+        for (id py in pp1)
+        {
+            NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+            if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
+                enrollmentIndex = iCnt;
+            iCnt++;
+        }
+        }
     
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
@@ -489,10 +492,20 @@ alpha:1.0]
     
  //   NSArray *pp = [[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"health"];
     
+    NSArray *pp1 = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    NSString *sStatus = @"Not Enrolled";
+    NSArray *pp;
     
-    NSArray *pp = [[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    if ([pp1 count] > 0)
+    {
+        pp = [[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+        
+        sStatus = [pp valueForKey:@"status"];
+    }
     
-    NSString *sStatus = [pp valueForKey:@"status"];
+ //   NSArray *pp = [[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    
+ //   NSString *sStatus = [pp valueForKey:@"status"];
 
 /*
     NSString *oo = [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
