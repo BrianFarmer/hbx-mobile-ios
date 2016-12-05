@@ -114,7 +114,6 @@
 		40F117AA1DD0F22A00D05B30 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F117A91DD0F22A00D05B30 /* bell.png */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
-		40F58E251DDCBA3C003D0D22 /* CourageConsulting in Resources */ = {isa = PBXBuildFile; fileRef = 40F58E241DDCBA3C003D0D22 /* CourageConsulting */; };
 		40F63B6B1DAE5ED5006CDA13 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */; };
 		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
 		40F6DDA11D8987020095519C /* open_plus32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9F1D8987020095519C /* open_plus32x32.png */; };
@@ -296,7 +295,6 @@
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
-		40F58E241DDCBA3C003D0D22 /* CourageConsulting */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CourageConsulting; path = ../../CourageConsulting; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.javascript; };
 		40F63B691DAE5ED5006CDA13 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		40F6DD9E1D8987020095519C /* close_arrow32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close_arrow32x32.png; sourceTree = "<group>"; };
@@ -411,7 +409,6 @@
 		13FF47001C8A2C5600C7C851 = {
 			isa = PBXGroup;
 			children = (
-				40F58E241DDCBA3C003D0D22 /* CourageConsulting */,
 				40F1FB931D84DD75005EF01F /* CoreGraphics.framework */,
 				130AA2821CEE568900B43F24 /* MessageUI.framework */,
 				134DE7A51CED442E00F8958A /* MapKit.framework */,
@@ -814,7 +811,6 @@
 				4036BEEF1D5E616B000F6182 /* refresh.png in Resources */,
 				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
 				40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */,
-				40F58E251DDCBA3C003D0D22 /* CourageConsulting in Resources */,
 				40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */,
 				13A382181CDB2E3E006B5984 /* Roboto-LightItalic.ttf in Resources */,
 				400AE1F41D940C6F0097DEA6 /* plansactive32.png in Resources */,

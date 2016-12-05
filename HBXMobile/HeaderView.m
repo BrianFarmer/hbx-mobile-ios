@@ -93,7 +93,15 @@ alpha:1.0]
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
         
-        NSDate *endDate = [f dateFromString:employerData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+        
+        NSArray *pPlan = [employerData.plans objectAtIndex:_iCurrentPlanIndex];
+        
+        //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+        
+ //       NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
+        
+        
+        NSDate *endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
         
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
@@ -118,7 +126,8 @@ alpha:1.0]
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
-        NSString *temp_a = @"Coverage Year";
+        NSString *temp_a = @"Coverage Year \u25BE";
+        
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
         [string1 beginEditing];
         [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
@@ -128,7 +137,31 @@ alpha:1.0]
         
         pLabelCoverage.attributedText = attributedTitle;
         
-        [self addSubview:pLabelCoverage];
+ //       [self addSubview:pLabelCoverage];
+        
+        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-100, pCompany.frame.origin.y + pCompany.frame.size.height, 200, 45)];
+        [coverageButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
+        
+        coverageButton.layer.cornerRadius = 10;
+        coverageButton.clipsToBounds = YES;
+        coverageButton.tag = 99;
+        
+        coverageButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        coverageButton.titleLabel.numberOfLines = 2;
+        coverageButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        
+  //      coverageButton.layer.borderWidth = 2.0f;
+  //      coverageButton.layer.borderColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+        coverageButton.backgroundColor = UIColorFromRGB(0xE0FFFF); //0xBFEFFF);//  [UIColor clearColor];
+
+        coverageButton.titleLabel.font = [UIFont fontWithName:@"Roboto-Medium" size:15];
+        coverageButton.tintColor = [UIColor purpleColor];
+        [coverageButton setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+
+        [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
+
+        [self addSubview:coverageButton];
+        
         pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height, self.frame.size.width - 20, 20);
 
     }
@@ -242,12 +275,21 @@ alpha:1.0]
 
 -(int)layoutEmployeeProfile:(brokerEmployersData *)eData nameY:(int)nameY
 {
+        employerData = eData;
     UILabel * pLabelCoverage;
     
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
-        
-        NSDate *endDate = [f dateFromString:eData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+    NSArray *pPlan = [eData.plans objectAtIndex:_iCurrentPlanIndex];
+    
+    //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+    
+    //       NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
+    
+    
+    NSDate *endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+
+//        NSDate *endDate = [f dateFromString:eData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
         
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
@@ -271,7 +313,7 @@ alpha:1.0]
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
-        NSString *temp_a = @"Coverage Year";
+        NSString *temp_a = @"Coverage Year \u25BE";
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
         [string1 beginEditing];
         [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
@@ -281,7 +323,34 @@ alpha:1.0]
         
         pLabelCoverage.attributedText = attributedTitle;
         
-        [self addSubview:pLabelCoverage];
+//        [self addSubview:pLabelCoverage];
+    
+    //       [self addSubview:pLabelCoverage];
+    
+        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-100, nameY, 200, 45)];
+    
+        [coverageButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
+        
+        coverageButton.layer.cornerRadius = 10;
+        coverageButton.clipsToBounds = YES;
+        coverageButton.tag = 99;
+        
+        coverageButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        coverageButton.titleLabel.numberOfLines = 2;
+        coverageButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        
+        //      coverageButton.layer.borderWidth = 2.0f;
+        //      coverageButton.layer.borderColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1].CGColor;
+        coverageButton.backgroundColor = UIColorFromRGB(0xE0FFFF); //0xBFEFFF);//  [UIColor clearColor];
+        
+        coverageButton.titleLabel.font = [UIFont fontWithName:@"Roboto-Medium" size:15];
+        coverageButton.tintColor = [UIColor purpleColor];
+        [coverageButton setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+        
+        [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self addSubview:coverageButton];
+    
 
     for (int btnCount=0;btnCount<4;btnCount++)
     {
@@ -493,4 +562,149 @@ alpha:1.0]
      }];
 }
 
+-(void)changeCoverageYear:(id)sender
+{
+    actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Coverage Year" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    actionSheet.delegate = self;
+    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
+    actionSheet.tag = 3;
+    
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
+
+    for (int ii=0;ii<[employerData.plans count];ii++)
+    {
+        [f setDateFormat:@"yyyy-MM-dd"];
+        NSDate *planYear = [f dateFromString:[[employerData.plans objectAtIndex:ii] valueForKey:@"plan_year_begins"]];
+
+        [f setDateFormat:@"MM/dd/yyyy"];
+        
+        if (ii==[_delegate getPlanIndex])
+            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"\u2705 %@", [f stringFromDate:planYear]]];
+        else
+            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"%@", [f stringFromDate:planYear]]];
+ //       [[[actionSheet valueForKey:@"_buttons"] objectAtIndex:0] setImage:[UIImage imageNamed:@"check_green.png"] forState:UIControlStateNormal];
+    }
+    
+//        [employerData.plans objectAtIndex:[employerData.plans count]-1];
+    
+    [actionSheet showInView:self];
+}
+
+-(void)drawCoverageYear:(NSInteger)index
+{
+    UIButton *pBut = [self viewWithTag:99];
+    
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
+    
+    NSArray *pPlan = [employerData.plans objectAtIndex:index];
+    
+    NSDate *endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:364];
+    NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+    
+    [f setDateFormat:@"MMM dd, yyyy"];
+    
+    NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+    
+    NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
+    
+    NSString *temp_a = @"Coverage Year \u25BE";
+    NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
+    [string1 beginEditing];
+    [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
+    [string1 endEditing];
+    
+    [attributedTitle appendAttributedString:string1];
+    
+ //   [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attributedTitle.length)];
+    
+    [pBut setAttributedTitle:attributedTitle forState:UIControlStateNormal];
+ }
+
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (popup.tag) {
+        case 3: {
+            
+            if (buttonIndex>0)
+            {
+                _iCurrentPlanIndex = buttonIndex-1;
+                
+                [self drawCoverageYear:_iCurrentPlanIndex];
+
+                [_delegate changeCoverageYear:buttonIndex-1];
+            }
+            
+            /*
+            switch (buttonIndex) {
+             
+                case 0:
+ //                   [self FBShare];
+                    break;
+                case 1:
+//                    [self TwitterShare];
+                    break;
+                case 2:
+ //                   [self emailContent];
+                    break;
+                case 3:
+ //                   [self saveContent];
+                    break;
+                case 4:
+ //                   [self rateAppYes];
+                    break;
+                default:
+                    break;
+            }
+            break;
+             */
+        }
+        default:
+            break;
+    }
+}
+/*
+-(void)datePickerDoneClicked
+{
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"dd/MM/yyyy"];
+    NSString *tmp=[outputFormatter stringFromDate:datePicker.date];
+    if (isSelectDate==TRUE) {
+        [btnfrom setTitle:tmp forState:UIControlStateNormal];
+    }
+    else{
+        [btnTo setTitle:tmp forState:UIControlStateNormal];
+        
+    }
+    [outputFormatter release];
+    
+    [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
+}
+*/
+/*
+-(void)datePickerCancelClicked
+{
+    [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+#pragma mark -Button Click Event
+
+-(IBAction)btnfromPress:(id)sender
+{
+    isSelectDate=TRUE;
+//    [self openactionsheetWithDatePicker];
+}
+
+-(IBAction)btnToPress:(id)sender
+{
+    isSelectDate =FALSE;
+//    [self openactionsheetWithDatePicker];
+}
+ */
 @end

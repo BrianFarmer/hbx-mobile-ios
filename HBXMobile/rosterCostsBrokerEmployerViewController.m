@@ -143,7 +143,21 @@ alpha:1.0]
 {
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
     
- //   self.view.transform = CGAffineTransformMakeScale(22, 22);
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    int iCnt = 0;
+    NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
+    for (id py in pp1)
+    {
+        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
+            enrollmentIndex = iCnt;
+        iCnt++;
+    }
+    
+    [vHeader drawCoverageYear:[self getPlanIndex]];
+    
+    [pRosterTable reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -471,27 +485,53 @@ alpha:1.0]
 
     dt1.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
 
+//    NSArray *pp1 = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    
+ //   NSArray *pp = [[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"health"];
+    
+    
+    NSArray *pp = [[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    
+    NSString *sStatus = [pp valueForKey:@"status"];
+
+/*
     NSString *oo = [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
     NSString *ll =  [[[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+*/
+    NSString *oo = [[pp valueForKey:@"employer_contribution"] stringValue];
+    NSString *ll =  [[pp valueForKey:@"employee_cost"] stringValue];
     
+    /*
+    NSDictionary *dictEmployerContribution = [[pp valueForKey:@"employer_contribution"] objectAtIndex:0];
+    NSDictionary *dictEmployeeCost = [[pp valueForKey:@"employee_cost"] objectAtIndex:0];
+
+    NSString *sEmployerContribution = ([dictEmployerContribution isKindOfClass:[NSNull class]]) ? @"0" : [NSString stringWithFormat:@"%@", dictEmployerContribution];
+    NSString *sEmployerCost = ([dictEmployeeCost isKindOfClass:[NSNull class]]) ? @"0" : [NSString stringWithFormat:@"%@", dictEmployeeCost];
+*/
     if ([oo isEqualToString:@"0"] || !oo)
     {
+     //   NSDictionary *courseDetail = [[pp valueForKey:@"status"] objectAtIndex:0];
+        
+      //  NSString *sStatus = [NSString stringWithFormat:@"%@", courseDetail];
+        dt3.text = sStatus;
+        
+/*
         dt2.text = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];;
         dt3.text =  [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
-        
-        if ([dt2.text isEqualToString:@"Waived"])
+ */
+        if ([dt3.text isEqualToString:@"Waived"])
         {
             dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;//UIColorFromRGB(0x625ba8);
             dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;//UIColorFromRGB(0x625ba8);
         }
         
-        if ([dt2.text isEqualToString:@"Not Enrolled"])
+        if ([dt3.text isEqualToString:@"Not Enrolled"])
         {
             dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
             dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
         }
 
-        if ([dt2.text isEqualToString:@"Terminated"])
+        if ([dt3.text isEqualToString:@"Terminated"])
         {
             dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
             dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
@@ -504,9 +544,11 @@ alpha:1.0]
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         [numberFormatter setMaximumFractionDigits:2];
         
-        oo = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[oo floatValue]]];
-        ll = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[ll floatValue]]];
-        
+//        sEmployerContribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[sEmployerContribution floatValue]]];
+//        sEmployerCost = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[sEmployerCost floatValue]]];
+                oo = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[oo floatValue]]];
+               ll = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[ll floatValue]]];
+     
         //        pCompany.employee_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employee_contribution"] floatValue]]];
         //        pCompany.employer_contribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[ck valueForKeyPath:@"estimated_premium.employer_contribution"] floatValue]]];
 
@@ -556,6 +598,9 @@ alpha:1.0]
         EmployeeProfileViewController *vc = [segue destinationViewController];
         vc.employeeData = (NSArray*)sender;
         vc.employerData = employerData;
+        vc.enrollmentIndex = enrollmentIndex;
+        vc.currentCoverageYearIndex = [self getPlanIndex];
+        vc.delegate = self;
     }
 }
 
@@ -565,4 +610,39 @@ alpha:1.0]
     [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
 
+-(void)changeCoverageYear:(NSInteger)index
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    vHeader.iCurrentPlanIndex = index;
+    tabBar.current_coverage_year_index = index;
+    
+    int iCnt = 0;
+    NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
+    for (id py in pp1)
+    {
+        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
+            enrollmentIndex = iCnt;
+        iCnt++;
+    }
+    
+    [pRosterTable reloadData];
+}
+
+-(NSInteger)getPlanIndex
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.current_coverage_year_index;
+}
+
+-(void)setCoverageYearIndex:(NSInteger)index
+{
+    //Used from Employee Profile
+    
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    tabBar.current_coverage_year_index = index;
+}
 @end

@@ -54,6 +54,12 @@
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
+    vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index; //[employerData.plans count]-1;
+//    tabBar.current_coverage_year_index = [employerData.plans count]-1;
+    
+    
+//    iCurrentPlanIndex = [employerData.plans count]-1;
+    
     [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
     
     if (!expandedSections)
@@ -89,6 +95,7 @@
     NSNumber *three = [NSNumber numberWithInt:iNotEnrolled];
     [_slices addObject:three];
 */
+    
     [self processData];
 }
 
@@ -108,7 +115,9 @@
 //    [out setDateFormat:@"MMM dd, yyyy"];
     [out setDateFormat:@"MM/dd/yyyy"];
     
-    NSArray *employerData1 = [employerData.plans objectAtIndex:[employerData.plans count]-1];
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
+    NSArray *employerData1 = [employerData.plans objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
     
     NSDate *endDate = [f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]];
     
@@ -118,7 +127,7 @@
                                                           toDate:endDate
                                                          options:NSCalendarWrapComponents];
 
-    long ddif = [components day];
+//    long ddif = [components day];
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -126,8 +135,8 @@
 
     if (employerData.status == (enrollmentState)RENEWAL_IN_PROGRESS || employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
     {
-        NSDate *employerApplicationDate = [f dateFromString:employerData.renewal_application_due];
-        NSDate *planYearDate = [f dateFromString:employerData.planYear]; //plan_year_begins
+        NSDate *employerApplicationDate = [f dateFromString:[employerData1 valueForKey:@"renewal_application_due"]];
+        NSDate *planYearDate = [f dateFromString:[employerData1 valueForKey:@"plan_year_begins"]];//]employerData.planYear]; //plan_year_begins
         NSDate *binderDate = [f dateFromString:employerData.binder_payment_due];
         
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -140,7 +149,7 @@
         if (employerData.status == (enrollmentState)NO_ACTION_REQUIRED)
         {
             renewalNames = [[NSArray alloc] initWithObjects: @"", @"Renewal Available", @"Next Coverage Year Begins", @"Open Enrollment Ends", nil];
-            renewalValues = [[NSArray alloc] initWithObjects: @"0", [out stringFromDate:[f dateFromString:employerData.renewal_application_available]], [out stringFromDate:planYearDate], [out stringFromDate:[f dateFromString:employerData.open_enrollment_ends]], nil];
+            renewalValues = [[NSArray alloc] initWithObjects: @"0", [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"renewal_application_available"]]], [out stringFromDate:planYearDate], [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]]], nil];
         }
         else
         {
@@ -343,9 +352,15 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [vHeader drawCoverageYear:[self getPlanIndex]];
+    
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
     detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    
+    [self processData];
+    
+    [detailTable reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -896,4 +911,21 @@
     [self.tabBarController setSelectedIndex:1];
 }
 
+-(void)changeCoverageYear:(NSInteger)index
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
+
+    tabBar.current_coverage_year_index = index;
+//    iCurrentPlanIndex = index;
+    [self processData];
+    [detailTable reloadData];
+}
+
+-(NSInteger)getPlanIndex
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.current_coverage_year_index;
+}
 @end

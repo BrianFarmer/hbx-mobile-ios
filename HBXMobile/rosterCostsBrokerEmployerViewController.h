@@ -10,8 +10,9 @@
 #import "brokerEmployersData.h"
 #import "employerTabController.h"
 #import "HeaderView.h"
+#import "EmployeeProfileViewController.h"
 
-@interface rosterCostsBrokerEmployerViewController : UIViewController <HeaderViewDelegate>
+@interface rosterCostsBrokerEmployerViewController : UIViewController <HeaderViewDelegate, EmployeeProfileDelegate>
 {
     IBOutlet UITableView *pRosterTable;
     
@@ -28,6 +29,8 @@
     
     NSDictionary *dictionary;
     NSArray *rosterList;
+    
+    int enrollmentIndex;
 }
 
 @property(nonatomic, assign) NSString *enrollHost;

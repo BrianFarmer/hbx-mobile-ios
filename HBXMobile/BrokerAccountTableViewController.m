@@ -204,6 +204,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     self.searchController.searchBar.hidden = FALSE;
     self.navigationItem.rightBarButtonItem = nil;
 
+    [expandedSections addIndex:0];
+    [expandedSections addIndex:1];
+    [expandedSections addIndex:2];
+    
     [self.searchController.searchBar becomeFirstResponder];
 }
 
@@ -237,7 +241,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 1003 || [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue] == 0)
         {
             // NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/feature/multiple-contacts/enroll/broker/employers_list/response/example.json"];
-            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+       //     NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
+            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/v0.2/enroll/broker/employers_list/response/example.json"];
             data = [NSData dataWithContentsOfURL:url];
         }
         else
@@ -807,6 +812,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             
             for(element in group)
             {
+                NSLog(@"%@", element.companyName);
                 NSRange range = [element.companyName rangeOfString:searchText
                                                            options:NSCaseInsensitiveSearch];
                 
@@ -815,7 +821,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 }
             }
             
-            if ([newGroup count] > 0)
+ //           if ([newGroup count] > 0)
             {
                 if (searchData == nil)
                     searchData = [[NSMutableArray alloc] init];

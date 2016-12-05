@@ -78,6 +78,8 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     _notenrolled = -1;
     _total_employees = -1;
     
+    _current_coverage_year_index = [_employerData.plans count]-1;
+
     [self loadDictionary];
 }
 
@@ -127,6 +129,8 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
              NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
              // check status code and possibly MIME type (which shall start with "application/json"):
              //          NSRange range = [response.MIMEType rangeOfString:@"application/json"];
+             NSString *myString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+             NSLog(@"\n%@\n", myString);
              
              if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
                  NSError* error;
@@ -137,17 +141,27 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          NSLog(@"jsonObject: %@", jsonObject);
                          _rosterDictionary = jsonObject;
                          
+                         NSError *error;
+                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:_rosterDictionary
+                                                                            options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                                              error:&error];
+                         
+                         if (! jsonData) {
+                             NSLog(@"Got an error: %@", error);
+                         } else {
+                             NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                            NSLog(@"\n%@\n", jsonString);
+                         }
+                         
                          NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
                          NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
                          
      //                    employerTabController *tabBar = (employerTabController *) self.tabBarController;
                          
                          // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+ 
                          _rosterList = [[_rosterDictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
                          
- //                        displayArray = tabBar.rosterList;//rosterList;
-                         
-//                         [self setDataSectionIndex];
                          NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
                          [dnc postNotificationName:rosterLoadedNotification
                                             object:self
@@ -161,7 +175,11 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          
                          NSString *todayDateString = [f stringFromDate:[NSDate date]];
                          
-                         NSDate *planYear = [f dateFromString:_employerData.planYear];
+                         NSArray *pPlan = [_employerData.plans objectAtIndex:[_employerData.plans count]-1];
+                         
+    //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+
+                         NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]]; //_employerData.planYear];
                          
                          BOOL bPlanYearInTheFuture = FALSE;
                          
@@ -170,12 +188,14 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                              bPlanYearInTheFuture = TRUE;
                          }
                          
-                         if (_employerData.status == (enrollmentState)NO_ACTION_REQUIRED) //NEEDS_ATTEENTION) OPEN_ENROLLMENT_MET
-                             sKey = @"active";
-                         else
-                             sKey = @"renewal";
+                       //  if (_employerData.status == (enrollmentState)NO_ACTION_REQUIRED) //NEEDS_ATTEENTION) OPEN_ENROLLMENT_MET
+                       //      sKey = [_employerData.plans objectAtIndex:[_employerData.plans count]];//]@"active";
+                       //  else
+                             sKey = [_employerData.plans objectAtIndex:[_employerData.plans count]-1];//@"renewal";
                          
-                          sKey = @"active";
+                       //   sKey = @"active";
+                         
+     //                    NSLog(@"%@\n", [[_employerData.plans valueForKey:@"enrollments"] valueForKey:sKey]); //[_employerData.plans valueForKey:@"start_on"]);
                          
                          _enrolled = 0;
                          _waived = 0;
@@ -183,31 +203,54 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          
                          for (id myArrayElement in _rosterList)
                          {
-//                             NSString *string = [myArrayElement valueForKey:@"last_name"];
-//                             [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
+//                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+  //                           NSString *ll = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
                              
-                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
-                             NSString *ll = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
                              
-                             _employer_contribution += [oo doubleValue];
-                             _employee_costs += [ll doubleValue];
+   //                          NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"status"];
+   //                          if (status == nil && [sKey isEqualToString:@"renewal"])
+   //                              status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
                              
-                             NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"status"];
-                             if (status == nil && [sKey isEqualToString:@"renewal"])
-                                status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+                            NSDictionary *pp = [[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"];
                              
-                             if ([status isEqualToString:@"Enrolled"])
-                                 _enrolled += 1;
-                             if ([status isEqualToString:@"Waived"])
-                                 _waived += 1;
-                             if ([status isEqualToString:@"Not Enrolled"])
-                                 _notenrolled += 1;
-                             if ([status isEqualToString:@"Terminated"])
-                                 _terminated += 1;
-                             
+                            if ([pp count] > 0)
+                            {
+                                 NSDictionary *courseDetail = [[pp valueForKey:@"status"] objectAtIndex:0];
+                                 
+                                 NSString *status = [NSString stringWithFormat:@"%@", courseDetail];
+                                 
+     //                           NSString *status = [[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"status"];
+                        
+                                 if ([status isEqualToString:@"Not Enrolled"])
+                                     _notenrolled += 1;
+                                 else
+                                 {
+                                     if ([status isEqualToString:@"Enrolled"])
+                                         _enrolled += 1;
+                                     if ([status isEqualToString:@"Waived"])
+                                         _waived += 1;
+                                     if ([status isEqualToString:@"Terminated"])
+                                         _terminated += 1;
+
+       //                              NSString *oo = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
+         //                            NSString *ll = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
+
+                                    NSDictionary *emp_contr = [[pp valueForKey:@"employer_contribution"] objectAtIndex:0];
+                                    NSDictionary *emp_cost = [[pp valueForKey:@"employee_cost"] objectAtIndex:0];
+                                     
+                                    NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
+                                    NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
+                                   
+                                     _employer_contribution += [oo doubleValue];
+                                     _employee_costs += [ll doubleValue];
+                                 }
+                                 
+                             }
                          }
                          
- //                        NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+  //                       _current_coverage_year_index = [_employerData.plans count]-1;
+                         
+//                        NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
                          [dnc postNotificationName:@"rosterCostsLoaded"
                                             object:self
                                           userInfo:nil];

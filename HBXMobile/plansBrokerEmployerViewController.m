@@ -36,9 +36,9 @@
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,215);
+    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185); //215
     vHeader.delegate = self;
-    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:YES];
+    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -154,7 +154,25 @@
     }
     else
     {
-        plans = [[tabBar.detailDictionary valueForKey:@"plan_offerings"] valueForKey:@"active"];// valueForKey:@"active"];
+        
+        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+        
+        int enrollmentIndex = 0;
+        
+        int iCnt = 0;
+        NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
+        for (id py in pp1)
+        {
+            NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+            if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
+                enrollmentIndex = iCnt;
+            iCnt++;
+        }
+
+        NSArray *py = [[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:enrollmentIndex];
+        
+        plans = [py valueForKey:@"plan_offerings"];// valueForKey:@"active"];// valueForKey:@"active"];
+//        plans = [[tabBar.detailDictionary valueForKey:@"plan_offerings"] valueForKey:@"active"];// valueForKey:@"active"];
 
         planTable = [[UITableView alloc] initWithFrame:CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.view.frame.size.height - 65) style:UITableViewStyleGrouped];
         planTable.dataSource = self;
@@ -284,6 +302,29 @@
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
     planTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.view.frame.size.height - navbarHeight - vHeader.frame.size.height);
+    
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    int enrollmentIndex = 0;
+    
+    int iCnt = 0;
+    NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
+    for (id py in pp1)
+    {
+        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
+            enrollmentIndex = iCnt;
+        iCnt++;
+    }
+    
+    NSArray *py = [[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:enrollmentIndex];
+    
+    plans = [py valueForKey:@"plan_offerings"];
+    
+    [vHeader drawCoverageYear:[self getPlanIndex]];
+    
+    [planTable reloadData];
+
 }
 
 -(void)scrolltoNextPage:(int)page
@@ -1319,6 +1360,41 @@
     [attributedTitle appendAttributedString:attributedTitle2];
     
     return attributedTitle;
+}
+
+-(void)changeCoverageYear:(NSInteger)index
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    vHeader.iCurrentPlanIndex = index;
+    tabBar.current_coverage_year_index = index;
+    
+    int enrollmentIndex = 0;
+    
+    int iCnt = 0;
+    NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
+    for (id py in pp1)
+    {
+        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
+            enrollmentIndex = iCnt;
+        iCnt++;
+    }
+    
+    NSArray *py = [[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:enrollmentIndex];
+    
+    plans = [py valueForKey:@"plan_offerings"];
+    
+    [vHeader drawCoverageYear:[self getPlanIndex]];
+    
+    [planTable reloadData];
+}
+
+-(NSInteger)getPlanIndex
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.current_coverage_year_index;
 }
 
 @end

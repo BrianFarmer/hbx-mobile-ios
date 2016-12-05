@@ -11,8 +11,9 @@
 #import "employerTabController.h"
 #import "UISlideView.h"
 #import "HeaderView.h"
+#import "EmployeeProfileViewController.h"
 
-@interface rosterBrokerEmployerViewController : UIViewController <uiSlideViewDelegate, HeaderViewDelegate>
+@interface rosterBrokerEmployerViewController : UIViewController <uiSlideViewDelegate, HeaderViewDelegate, EmployeeProfileDelegate>
 {
     IBOutlet UITableView *pRosterTable;
     
@@ -35,6 +36,8 @@
     
     BOOL bFilterOpen;
     BOOL bDataLoading;
+    
+    int enrollmentIndex;
 }
 
 @property(nonatomic, assign) NSString *enrollHost;

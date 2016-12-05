@@ -7,6 +7,7 @@
 //
 
 #import "EmployeeProfileViewController.h"
+#import "constants.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -43,6 +44,9 @@ alpha:1.0]
 
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
 
+    vHeader.iCurrentPlanIndex = _currentCoverageYearIndex;
+    
+        vHeader.delegate = self;
 //    [vHeader layoutHeaderView:_employerData];
 
     pName.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
@@ -60,17 +64,30 @@ alpha:1.0]
 
     int posY = [vHeader layoutEmployeeProfile:_employerData nameY:pName.frame.origin.y + pName.frame.size.height];
     
-    pStatus_a.text = [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
+    
+//    int enrollmentIndex = 0;
+    int iCnt = 0;
+//    NSArray *pp1 = [[_employerData objectAtIndex:0] valueForKey:@"enrollments"];
+    NSArray *pp = [[[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex]  valueForKey:@"health"];
+
+    
+    NSString *sStatus = [pp valueForKey:@"status"];
+    
+
+    pStatus_a.text = sStatus; //[[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
     if ([pStatus_a.text isEqualToString:@"Enrolled"])
-        pStatus_a.textColor = UIColorFromRGB(0x00a99e);
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
     if ([pStatus_a.text isEqualToString:@"Waived"])
-        pStatus_a.textColor = UIColorFromRGB(0x625ba8);
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;
     if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
-        pStatus_a.textColor = [UIColor redColor];
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
+    if ([pStatus_a.text isEqualToString:@"Terminated"])
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
     
     pStatus_a.frame = CGRectMake(10, posY + 5, self.view.frame.size.width - 20, pStatus_a.frame.size.height); //pName.frame.origin.y + pName.frame.size.height
     pStatus_a.textAlignment = NSTextAlignmentCenter;
     
+    /*
     NSString *sNextYearRenewal =  [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];
 
     if (sNextYearRenewal != nil)
@@ -88,7 +105,7 @@ alpha:1.0]
     pStatus_b.frame = CGRectMake(10, pStatus_a.frame.origin.y + pStatus_a.frame.size.height, self.view.frame.size.width - 20, pStatus_b.frame.size.height);
     pStatus_b.textAlignment = NSTextAlignmentCenter;
     
-
+*/
     
     
     sections = [[NSArray alloc] initWithObjects: @"DETAILS", @"HEALTH PLAN", @"DEPENDENTS", nil];
@@ -103,11 +120,10 @@ alpha:1.0]
     NSDate *dob = [f dateFromString:[_employeeData valueForKey:@"date_of_birth"]];
     NSDate *hired_on = [f dateFromString:[_employeeData valueForKey:@"hired_on"]];
 
-    NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
+    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
     
-    NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"plan_start_on"]];
-
-    
+    NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
+//    NSDate *plan_start_on = [f dateFromString:[pp valueForKey:@"plan_start_on"]];
     [f setDateFormat:@"MM/dd/yyyy"];
 
     detailValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"DOB: %@", [f stringFromDate:dob]], [NSString stringWithFormat:@"SSN: %@", [_employeeData valueForKey:@"ssn_masked"]], [NSString stringWithFormat:@"Hired on: %@", [f stringFromDate:hired_on]], nil];
@@ -117,10 +133,10 @@ alpha:1.0]
     if ([pStatus_a.text isEqualToString:@"Terminated"])
     {
         [f setDateFormat:@"yyyy-MM-dd"];
-        NSDate *term_on = [f dateFromString:[lo valueForKey:@"terminated_on"]];
+        NSDate *term_on = [f dateFromString:[[lo valueForKey:@"health"] valueForKey:@"terminated_on"]];
         [f setDateFormat:@"MM/dd/yyyy"];
 
-        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Terminated On: %@", [f stringFromDate:term_on]], [NSString stringWithFormat:@"Terminated Reason: %@", [lo valueForKey:@"terminate_reason"]], [NSString stringWithFormat:@"Metal Level: %@", [lo valueForKey:@"metal_level"]], @"", nil];
+        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [[lo valueForKey:@"health"] valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [[lo valueForKey:@"health"] valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Terminated On: %@", [f stringFromDate:term_on]], [NSString stringWithFormat:@"Terminated Reason: %@", [[lo valueForKey:@"health"] valueForKey:@"terminate_reason"]], [NSString stringWithFormat:@"Metal Level: %@", [[lo valueForKey:@"health"] valueForKey:@"metal_level"]], @"", nil];
     }
     else if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
     {
@@ -129,18 +145,20 @@ alpha:1.0]
     else
     {
         [f setDateFormat:@"yyyy-MM-dd"];
-        NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
+ //       NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
+        NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
+
         [f setDateFormat:@"MM/dd/yyyy"];
 
-        NSString *planName = [lo valueForKey:@"plan_name"];
+        NSString *planName = [[lo valueForKey:@"health"] valueForKey:@"plan_name"];
         if (planName == (NSString*)[NSNull null])
             planName = [NSString stringWithFormat:@"%@(%@)", @"N/A", pStatus_a.text];
         
-        NSString *metalLevel = [lo valueForKey:@"metal_level"];
+        NSString *metalLevel = [[lo valueForKey:@"health"] valueForKey:@"metal_level"];
         if (metalLevel == (NSString*)[NSNull null])
             metalLevel = @"N/A";
         
-        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", planName], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", metalLevel], @"", nil];
+        dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [[lo valueForKey:@"health"] valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", planName], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", metalLevel], @"", nil];
     }
     profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -170,6 +188,9 @@ alpha:1.0]
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    
+//    [vHeader drawCoverageYear:_currentCoverageYearIndex];
+    
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
     profileTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - navbarHeight - vHeader.frame.size.height);
@@ -518,7 +539,8 @@ alpha:1.0]
             cell.textLabel.text = [dependentValues objectAtIndex:indexPath.row];
         else
         {
-            NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
+   //         NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
+            NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"]
             
             lblContributionView.hidden = NO;
             UILabel *lblContributionTotal = (UILabel *)[cell viewWithTag:121];
@@ -536,20 +558,20 @@ alpha:1.0]
             topSectionValues = [[NSArray alloc] initWithObjects: [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employee_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"employer_contribution"] floatValue]]], [numberFormatter stringFromNumber:[NSNumber numberWithFloat: [[dictionary valueForKeyPath:@"total_premium"] floatValue]]], nil];
 */
             
-            if (![[lo valueForKey:@"status"] isEqualToString:@"Not Enrolled"])
+            if (![[[lo valueForKey:@"health"] valueForKey:@"status"] isEqualToString:@"Not Enrolled"])
             {
-                NSString *totalCont = [NSString stringWithFormat:@"%@",  [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"total_premium"] floatValue]]]];
+                NSString *totalCont = [NSString stringWithFormat:@"%@",  [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[[lo valueForKey:@"health"] valueForKey:@"total_premium"] floatValue]]]];
                 
                                        
                 lblContributionTotal.attributedText = [self setAttributedLabel:totalCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
                 [lblContributionTotal sizeToFit];
                 
-                NSString *employerCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"employer_contribution"] floatValue]]]];
+                NSString *employerCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[[lo valueForKey:@"health"] valueForKey:@"employer_contribution"] floatValue]]]];
                 lblContributionEmployer.attributedText = [self setAttributedLabel:employerCont text2:@"\nEMPLOYER\nCONTRIBUTION" color:UIColorFromRGB(0x00a99e)];
                 
                 [lblContributionEmployer sizeToFit];
                 
-                NSString *employeeCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[lo valueForKey:@"employee_cost"] floatValue]]]];
+                NSString *employeeCont = [NSString stringWithFormat:@"%@", [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[[lo valueForKey:@"health"] valueForKey:@"employee_cost"] floatValue]]]];
                 lblContributionEmployee.attributedText = [self setAttributedLabel:employeeCont text2:@"\nEMPLOYEE\nPAYS" color:UIColorFromRGB(0x625ba8)];
                 [lblContributionEmployee sizeToFit];
                 
@@ -616,6 +638,50 @@ alpha:1.0]
 -(void)addReminder:(id)sender
 {
     
+}
+
+-(void)changeCoverageYear:(NSInteger)index
+{
+//    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    _currentCoverageYearIndex = index;
+    vHeader.iCurrentPlanIndex = index;
+//    tabBar.current_coverage_year_index = index;
+    
+    int iCnt = 0;
+    NSArray *pp1 = [_employeeData valueForKey:@"enrollments"];
+//    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"]
+
+    for (id py in pp1)
+    {
+        NSString *sPlanYear = [[_employerData.plans objectAtIndex:index] valueForKey:@"plan_year_begins"];
+        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
+        {
+            _enrollmentIndex = iCnt;
+            NSString *sStatus = [[py valueForKey:@"health"] valueForKey:@"status"];
+            
+            pStatus_a.text = sStatus;
+            if ([pStatus_a.text isEqualToString:@"Enrolled"])
+                pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
+            if ([pStatus_a.text isEqualToString:@"Waived"])
+                pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;
+            if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
+                pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
+            if ([pStatus_a.text isEqualToString:@"Terminated"])
+                pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
+        }
+        iCnt++;
+    }
+    
+    [_delegate setCoverageYearIndex:index];
+    
+    [profileTable reloadData];
+}
+
+-(NSInteger)getPlanIndex
+{
+//    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return _currentCoverageYearIndex;//tabBar.current_coverage_year_index;
 }
 
 @end

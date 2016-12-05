@@ -37,6 +37,8 @@
     NSArray *renewalNames;
     
     BOOL    dataNotLoaded;
+    
+//    NSInteger iCurrentPlanIndex;
 }
 
 @property (strong, nonatomic) brokerEmployersData *employerData;

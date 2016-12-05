@@ -35,4 +35,6 @@
 @property (nonatomic, assign) int terminated;
 @property (nonatomic, assign) int total_employees;
 
+@property (nonatomic, assign) NSInteger current_coverage_year_index;
+
 @end

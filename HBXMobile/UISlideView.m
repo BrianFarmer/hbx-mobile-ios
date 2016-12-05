@@ -116,7 +116,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -124,7 +124,7 @@
     if ([pCounts count] == 0)
         return 0;
     
-    if (section == 2)
+    if (section == 1)
         return 1;
     if (section == 0)
         return 4;
@@ -163,8 +163,8 @@
 
     if (section == 0)
         headerLabel.text = @"ACTIVE STATUS";
-    else if (section == 1)
-        headerLabel.text = @"RENEWAL STATUS";
+ //   else if (section == 1)
+   //     headerLabel.text = @"RENEWAL STATUS";
     else
         headerLabel.text = @"";
     
@@ -188,12 +188,12 @@
     cell.backgroundColor = [UIColor clearColor];
     
     cell.textLabel.textAlignment = NSTextAlignmentRight;
-    if (indexPath.section == 0 || indexPath.section == 2)
+    if (indexPath.section == 0 || indexPath.section == 1)
         cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:16];
     else
         cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:12];
     
-    if (indexPath.section == 2)
+    if (indexPath.section == 1)
     {
         cell.textLabel.textColor = UIColorFromRGB(0x555555);
         cell.textLabel.text = @"Show All";
@@ -237,7 +237,7 @@
     switch (indexPath.row)
     {
     case 0:
-        if (indexPath.section == 2)
+        if (indexPath.section == 1)
             [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_showall.png"];
         else
             [tableView cellForRowAtIndexPath:indexPath].imageView.image = [UIImage imageNamed:@"check_green.png"];
