@@ -38,7 +38,7 @@ alpha:1.0]
 
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
-    employerData = tabBar.employerData;
+//    employerData = tabBar.employerData;
     _enrollHost = tabBar.enrollHost;
     _customCookie_a = tabBar.customCookie_a;
     
@@ -54,7 +54,7 @@ alpha:1.0]
 //    [vHeader layoutHeaderView:employerData];
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
-    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
+    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);

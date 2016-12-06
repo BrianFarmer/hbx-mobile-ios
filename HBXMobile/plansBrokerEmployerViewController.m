@@ -25,7 +25,7 @@
     // Do any additional setup after loading the view.
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
-    employerData = tabBar.employerData;
+//    employerData = tabBar.employerData;
 
     navImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, 0, 200, 40)];
     
@@ -38,7 +38,7 @@
     //self.navigationController.topViewController.title = @"info";
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185); //215
     vHeader.delegate = self;
-    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
+    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -163,7 +163,7 @@
         NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
         for (id py in pp1)
         {
-            NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+            NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
             if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
                 enrollmentIndex = iCnt;
             iCnt++;
@@ -180,6 +180,7 @@
         planTable.rowHeight = 44.0f;
         planTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         planTable.separatorColor = [UIColor whiteColor];
+        planTable.allowsSelection = NO;
         
         [planTable setBackgroundView:nil];
         [planTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
@@ -311,7 +312,7 @@
     NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
     for (id py in pp1)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
         if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
             enrollmentIndex = iCnt;
         iCnt++;
@@ -1072,7 +1073,10 @@
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
         
-        NSDate *renewalDate = [f dateFromString:employerData.renewal_application_available];
+         employerTabController *tabBar = (employerTabController *) self.tabBarController;
+//        NSDate *renewalDate = [f dateFromString:employerData.renewal_application_available];
+        NSDate *renewalDate = [f dateFromString:[[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"]];
+        //renewal_application_available];
         
         [f setDateFormat:@"MM/dd/yyyy"];
 
@@ -1383,7 +1387,7 @@
     NSArray *pp1 =  [tabBar.detailDictionary valueForKey:@"plan_years"];// objectAtIndex:0] ;//[[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
     for (id py in pp1)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
         if ([[py valueForKey:@"plan_year_begins"] isEqualToString:sPlanYear])
             enrollmentIndex = iCnt;
         iCnt++;

@@ -23,7 +23,7 @@
     
     IBOutlet HeaderView *vHeader;
     
-    brokerEmployersData *employerData;
+//    brokerEmployersData *employerData;
     UIImageView *navImage;
     
     UIScrollView  *scrollView;

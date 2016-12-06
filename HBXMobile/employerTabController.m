@@ -78,7 +78,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     _notenrolled = -1;
     _total_employees = -1;
     
-    _current_coverage_year_index = [_employerData.plans count]-1;
+    _current_coverage_year_index = [[_detailDictionary valueForKey:@"plan_years"] count]-1;
 
     [self loadDictionary];
 }

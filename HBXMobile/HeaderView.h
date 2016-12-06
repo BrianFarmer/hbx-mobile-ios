@@ -20,7 +20,8 @@
 
 @interface HeaderView : UIView <MFMessageComposeViewControllerDelegate, popupMessageBoxDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
 {
-    brokerEmployersData *employerData;
+//    brokerEmployersData *employerData;
+    NSDictionary *employerDetail;
     UISegmentedControl *planYearControl;
     
     UIPickerView *pickerView;
@@ -44,7 +45,8 @@
 
 
 -(void)layoutHeaderView:(brokerEmployersData *)eData;
--(void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;
+//-(void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;
+-(void)layoutHeaderView:(NSDictionary *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;
 -(int)layoutEmployeeProfile:(brokerEmployersData *)eData nameY:(int)y;
 -(void)drawCoverageYear:(NSInteger)index;
 

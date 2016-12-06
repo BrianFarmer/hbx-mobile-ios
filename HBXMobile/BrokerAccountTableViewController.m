@@ -1503,7 +1503,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         
         NSMutableArray *sequeTransfer = sender;
         
-        tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
+ //       tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
         tabar.detailDictionary = [sequeTransfer objectAtIndex:1];
         tabar.enrollHost = _enrollHost;
         tabar.customCookie_a = _customCookie_a;

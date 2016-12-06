@@ -17,6 +17,7 @@
 #define INITIAL_LOGIN_NS        1004
 #define IS_SECURITY_VALID       1005
 #define MOBILE_POST_LOGIN_DONE  1006
+#define GET_EMPLOYER_DETAILS    1007
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate>
 {

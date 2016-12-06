@@ -1037,6 +1037,17 @@
                 }
             }
             break;
+        case GET_EMPLOYER_DETAILS:
+        {
+            [loading setHidden:TRUE];
+            Settings *obj=[Settings getInstance];
+            obj.sEnrollServer = enrollHost;
+            obj.sMobileServer = mobileHost;
+
+            [self performSegueWithIdentifier:@"EmployerDetail" sender:nil];
+        }
+        break;
+            
         case GET_BROKER_EMPLOYERS:
         {
             //[spinningWheel stopAnimating];
@@ -1054,6 +1065,16 @@
                 bUseTouchID = YES;
             }
             
+            NSData* data = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error = nil;
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            
+            if ( [[dictionary valueForKey:@"error"] isEqualToString:@"no broker agency profile or broker role found"] )
+            {
+                [self makeWebRequest:enrollHost type:GET_EMPLOYER_DETAILS url:[NSString stringWithFormat:@"%@/api/v1/mobile_api/employers_details", enrollHost]];
+                break;
+            }
+
             [self performSegueWithIdentifier:@"BrokerTable" sender:nil];
         }
             break;
@@ -1121,14 +1142,6 @@
                     [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/api/v1/mobile_api/employers_list", enrollHost]];
                     //                   [self makeWebRequest:enrollHost type:GET_BROKER_EMPLOYERS url:[NSString stringWithFormat:@"%@/broker_agencies/profiles/employers_api?id=%@", enrollHost, _brokerId]];
                 }
-
-                
-                
-                
-                
-                
-                
-                
                 
                 
  //               loadLabel.text = @"Getting broker id";

@@ -38,7 +38,7 @@
 
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
-    employerData = tabBar.employerData;
+//    employerData = tabBar.employerData;
     _enrollHost = tabBar.enrollHost;
     _customCookie_a = tabBar.customCookie_a;
     
@@ -57,7 +57,7 @@
     //[vHeader layoutHeaderView:employerData];
         vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index;
     
-    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
+    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -158,7 +158,7 @@
     NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
     for (id py in pp1)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
         if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
             enrollmentIndex = iCnt;
         iCnt++;

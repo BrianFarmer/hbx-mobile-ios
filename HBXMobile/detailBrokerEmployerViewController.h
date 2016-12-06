@@ -21,7 +21,7 @@
     
     IBOutlet UITableView *detailTable;
     
-    brokerEmployersData *employerData;
+//    brokerEmployersData *employerData;
     
     NSMutableIndexSet *expandedSections;
     
@@ -41,7 +41,7 @@
 //    NSInteger iCurrentPlanIndex;
 }
 
-@property (strong, nonatomic) brokerEmployersData *employerData;
+//@property (strong, nonatomic) brokerEmployersData *employerData;
 @property (strong, nonatomic) NSDictionary *dictionary;
 @property(nonatomic, assign) long bucket;
 @property(nonatomic, assign) NSString *enrollHost;

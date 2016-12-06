@@ -19,7 +19,7 @@
 
 @implementation detailBrokerEmployerViewController
 
-@synthesize employerData;
+//@synthesize employerData;
 //@synthesize pieChartRight = _pieChart;
 //@synthesize slices = _slices;
 //@synthesize sliceColors = _sliceColors;
@@ -36,7 +36,7 @@
     //if Custom class
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
-    employerData = tabBar.employerData;
+//    employerData = tabBar.employerData;
     _enrollHost = tabBar.enrollHost;
     _customCookie_a = tabBar.customCookie_a;
     
@@ -54,13 +54,13 @@
     vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
-    vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index; //[employerData.plans count]-1;
+    vHeader.iCurrentPlanIndex = (tabBar.current_coverage_year_index > -1) ? (tabBar.current_coverage_year_index > -1) : [[tabBar.detailDictionary valueForKey:@"plan_years"] count]-1;
 //    tabBar.current_coverage_year_index = [employerData.plans count]-1;
     
     
 //    iCurrentPlanIndex = [employerData.plans count]-1;
     
-    [vHeader layoutHeaderView:employerData showcoverage:YES showplanyear:NO];
+    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
     
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
@@ -99,6 +99,7 @@
     [self processData];
 }
 
+
 -(void)processData
 {
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
@@ -117,7 +118,8 @@
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
-    NSArray *employerData1 = [employerData.plans objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
+//    NSArray *employerData1 = [employerData.plans objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
+    NSArray *employerData1 = [[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
     
     NSDate *endDate = [f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]];
     
