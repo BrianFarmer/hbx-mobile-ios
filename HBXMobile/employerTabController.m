@@ -91,7 +91,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
 -(void)loadDictionary
 {
     NSString *pUrl;
-    NSString *e_url = _employerData.roster_url;
+    NSString *e_url = [NSString stringWithFormat:@"%@/api/v1/mobile_api/employee_roster", _enrollHost];  //_employerData.roster_url;
     
     NSLog(@"HERE IN tabbar:LOAD DICTIONARY\n");
 //    bDataLoading = TRUE;
@@ -99,7 +99,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     if (! [e_url hasPrefix:@"https://"] && ![e_url hasPrefix:@"http://"])
         pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, _employerData.roster_url];
     else
-        pUrl = _employerData.roster_url;
+        pUrl = e_url; //_employerData.roster_url;
     
     NSURL* url = [NSURL URLWithString:pUrl];
     NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];

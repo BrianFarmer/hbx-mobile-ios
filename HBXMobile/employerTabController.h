@@ -37,4 +37,5 @@
 
 @property (nonatomic, assign) NSInteger current_coverage_year_index;
 
+@property (nonatomic, assign) BOOL isBroker;
 @end

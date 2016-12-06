@@ -44,10 +44,12 @@
 @property (nonatomic, assign) NSInteger iCurrentPlanIndex;
 
 
--(void)layoutHeaderView:(brokerEmployersData *)eData;
+-(void)layoutHeaderView:(NSDictionary *)eData;
 //-(void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;
 -(void)layoutHeaderView:(NSDictionary *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear;
+-(void)layoutHeaderView:(NSDictionary *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear showcontactbuttons:(BOOL)bShowContactButtons;
+
 -(int)layoutEmployeeProfile:(brokerEmployersData *)eData nameY:(int)y;
 -(void)drawCoverageYear:(NSInteger)index;
-
+-(enrollmentState)getEnrollmentState:(NSDictionary*)eData;
 @end

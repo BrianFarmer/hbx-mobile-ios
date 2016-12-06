@@ -48,13 +48,18 @@ alpha:1.0]
  //   [self addSubview:self.view];
 }
 
-- (void)layoutHeaderView:(brokerEmployersData *)eData
+- (void)layoutHeaderView:(NSDictionary *)eData
 {
     [self layoutHeaderView:eData showcoverage:YES showplanyear:NO];
 }
 
 ///- (void)layoutHeaderView:(brokerEmployersData *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear
 - (void)layoutHeaderView:(NSDictionary *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear
+{
+    [self layoutHeaderView:eData showcoverage:YES showplanyear:NO showcontactbuttons:YES];
+}
+
+- (void)layoutHeaderView:(NSDictionary *)eData showcoverage:(BOOL)bShowCoverage showplanyear:(BOOL)bShowPlanYear showcontactbuttons:(BOOL)bShowContactButtons
 {
 //    employerData = eData;
     employerDetail = eData;
@@ -214,46 +219,48 @@ alpha:1.0]
     [self addSubview:pCompany];
     [self addSubview:pCompanyFooter];
     
-    for (int btnCount=0;btnCount<4;btnCount++)
+    if (bShowContactButtons)
     {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag=30+btnCount;
-    //    [button setFrame:CGRectMake(10, 95, 38, 38)];
-        //[button setFrame:CGRectMake(10, pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height + 10, 38, 38)];
-        [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 78:48), 38, 38)];
-        
-        [button setBackgroundColor:[UIColor clearColor]];
-        UIImage *btnImage;
-        switch(btnCount)
+        for (int btnCount=0;btnCount<4;btnCount++)
         {
-            case 0:
-                btnImage = [UIImage imageNamed:@"phone-2.png"];
-                [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 1:
-                btnImage = [UIImage imageNamed:@"message-2.png"];
-                [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 2:
-                btnImage = [UIImage imageNamed:@"location-2.png"];
-                [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
-                break;
-            case 3:
-                btnImage = [UIImage imageNamed:@"email-2.png"];
-                [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
-                break;
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.tag=30+btnCount;
+
+            [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 78:48), 38, 38)];
+            
+            [button setBackgroundColor:[UIColor clearColor]];
+            UIImage *btnImage;
+            switch(btnCount)
+            {
+                case 0:
+                    btnImage = [UIImage imageNamed:@"phone-2.png"];
+                    [button addTarget:self action:@selector(phoneEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+                case 1:
+                    btnImage = [UIImage imageNamed:@"message-2.png"];
+                    [button addTarget:self action:@selector(smsEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+                case 2:
+                    btnImage = [UIImage imageNamed:@"location-2.png"];
+                    [button addTarget:self action:@selector(showDirections:) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+                case 3:
+                    btnImage = [UIImage imageNamed:@"email-2.png"];
+                    [button addTarget:self action:@selector(emailEmployer:) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+            }
+            
+            button.contentMode = UIViewContentModeScaleToFill;
+            button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+            button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
+            [button setImage:btnImage forState:UIControlStateNormal];
+            
+            [self addSubview:button];
         }
         
-        button.contentMode = UIViewContentModeScaleToFill;
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
-        button.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
-        [button setImage:btnImage forState:UIControlStateNormal];
-        
-        [self addSubview:button];
+        [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
     }
     
-    [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
-
     int jj = pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height;
     int bb = [self viewWithTag:30].frame.origin.y;
     if (bb - jj > 15)

@@ -1507,6 +1507,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         tabar.detailDictionary = [sequeTransfer objectAtIndex:1];
         tabar.enrollHost = _enrollHost;
         tabar.customCookie_a = _customCookie_a;
+        tabar.isBroker = YES;
     }
 }
 
