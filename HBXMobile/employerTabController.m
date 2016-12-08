@@ -17,6 +17,8 @@ alpha:1.0]
 
 NSString * const rosterLoadedNotification = @"rosterLoaded";
 
+const CGFloat kBarHeight = 49;
+
 @interface employerTabController ()
 
 @end
@@ -36,6 +38,14 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     if (_isBroker)
         return NO;
     return YES;
+}
+
+- (void)viewWillLayoutSubviews {
+    
+    CGRect tabFrame = self.tabBar.frame; //self.TabBar is IBOutlet of your TabBar
+    tabFrame.size.height = kBarHeight;
+    tabFrame.origin.y = self.view.frame.size.height - kBarHeight;
+    self.tabBar.frame = tabFrame;
 }
 
 - (void)viewDidLoad {
@@ -171,7 +181,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                             NSLog(@"\n%@\n", jsonString);
                          }
                          
-                         NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+                         NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"first_name" ascending:YES];
                          NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
                          
      //                    employerTabController *tabBar = (employerTabController *) self.tabBarController;
@@ -219,6 +229,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                              
                          }
                          
+                      //   _rosterList =
                          NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
                          [dnc postNotificationName:rosterLoadedNotification
                                             object:self
@@ -232,8 +243,8 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          
                          NSString *todayDateString = [f stringFromDate:[NSDate date]];
                          
-                         NSArray *pPlan = [_employerData.plans objectAtIndex:[_employerData.plans count]-1];
-                         
+                  //       NSArray *pPlan = [_employerData.plans objectAtIndex:[_employerData.plans count]-1];
+                         NSArray *pPlan = [[_detailDictionary valueForKey:@"plan_years"] objectAtIndex:[[_detailDictionary valueForKey:@"plan_years"] count]-1];
     //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
 
                          NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]]; //_employerData.planYear];
@@ -245,38 +256,18 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                              bPlanYearInTheFuture = TRUE;
                          }
                          
-                       //  if (_employerData.status == (enrollmentState)NO_ACTION_REQUIRED) //NEEDS_ATTEENTION) OPEN_ENROLLMENT_MET
-                       //      sKey = [_employerData.plans objectAtIndex:[_employerData.plans count]];//]@"active";
-                       //  else
-                             sKey = [_employerData.plans objectAtIndex:[_employerData.plans count]-1];//@"renewal";
-                         
-                       //   sKey = @"active";
-                         
-     //                    NSLog(@"%@\n", [[_employerData.plans valueForKey:@"enrollments"] valueForKey:sKey]); //[_employerData.plans valueForKey:@"start_on"]);
-                         
                          _enrolled = 0;
                          _waived = 0;
                          _notenrolled = 0;
+                         _terminated = 0;
+                         _renewing = 0;
                          
-                         for (id myArrayElement in _rosterList)
+                        NSString *rosterDate = [f stringFromDate:planYear];
+                         NSArray *pRoster = [_rosterDictionary valueForKey:rosterDate];
+                         
+                         for (id myArrayElement in pRoster)
                          {
-//                             NSString *oo = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
-  //                           NSString *ll = [[[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
-                             
-                             
-   //                          NSString *status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:sKey] valueForKey:@"health"] valueForKey:@"status"];
-   //                          if (status == nil && [sKey isEqualToString:@"renewal"])
-   //                              status = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
-                             
-                            NSDictionary *pp = [[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"];
-                             
-                            if ([pp count] > 0)
-                            {
-                                 NSDictionary *courseDetail = [[pp valueForKey:@"status"] objectAtIndex:0];
-                                 
-                                 NSString *status = [NSString stringWithFormat:@"%@", courseDetail];
-                                 
-     //                           NSString *status = [[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"status"];
+                             NSString *status = [[[myArrayElement valueForKey:@"enrollment" ] valueForKey:@"health"] valueForKey:@"status"];// objectAtIndex:0];
                         
                                  if ([status isEqualToString:@"Not Enrolled"])
                                      _notenrolled += 1;
@@ -286,14 +277,14 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                                          _enrolled += 1;
                                      if ([status isEqualToString:@"Waived"])
                                          _waived += 1;
+                                     if ([status isEqualToString:@"Renewing"])
+                                         _renewing += 1;
                                      if ([status isEqualToString:@"Terminated"])
                                          _terminated += 1;
 
-       //                              NSString *oo = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"employer_contribution"] stringValue];
-         //                            NSString *ll = [[[[myArrayElement valueForKey:@"enrollments"] valueForKey:@"health"] valueForKey:@"employee_cost"] stringValue];
 
-                                    NSDictionary *emp_contr = [[pp valueForKey:@"employer_contribution"] objectAtIndex:0];
-                                    NSDictionary *emp_cost = [[pp valueForKey:@"employee_cost"] objectAtIndex:0];
+                                    NSDictionary *emp_contr = [[pPlan valueForKey:@"employer_contribution"] objectAtIndex:0];
+                                    NSDictionary *emp_cost = [[pPlan valueForKey:@"employee_cost"] objectAtIndex:0];
                                      
                                     NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
                                     NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
@@ -302,7 +293,7 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                                      _employee_costs += [ll doubleValue];
                                  }
                                  
-                             }
+
                          }
                          
   //                       _current_coverage_year_index = [_employerData.plans count]-1;

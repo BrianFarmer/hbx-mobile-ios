@@ -714,7 +714,7 @@ else
     if ([displayArray count] == 0)
     {
         cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16];
-        cell.textLabel.text = @"No data for selected filter";
+        cell.textLabel.text = @"No roster data for selected coverage year";
         cell.detailTextLabel.text = @"";
         cell.detailTextLabel.attributedText = nil;
         return cell;
@@ -883,7 +883,8 @@ else
            default:
                 break;
         }
-       predicate = [NSPredicate predicateWithFormat:@"enrollments.health.status contains[c] %@", substring];
+        
+       predicate = [NSPredicate predicateWithFormat:@"enrollment.health.status contains[c] %@", substring];
 //        predicate = [NSPredicate predicateWithFormat:@"enrollments.%@.health.status == %@", type, substring];
  //      predicate = [NSPredicate predicateWithFormat:@"enrollments.health.status == %@", substring];
    //     NSString *str = <search string>;
@@ -894,9 +895,16 @@ else
         //       NSArray *result = [tabBar.rosterList filteredArrayUsingPredicate:pred];
  //       BOOL success = result.count > 0;
         
-        NSArray *filteredKeys = [tabBar.rosterList filteredArrayUsingPredicate:predicate];
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        
+//        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+        NSArray *filteredKeys = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
+//        NSArray *filteredKeys = [displayArray filteredArrayUsingPredicate:predicate];
+        
         if ([filteredKeys count] > 0)
         {
+            /*
             NSMutableArray *tempArray = [[NSMutableArray alloc] init];
             for (NSArray *pa in filteredKeys)
             {
@@ -907,6 +915,8 @@ else
             }
             if ([tempArray count] > 0)
                 displayArray = tempArray;//filteredKeys;
+             */
+            displayArray = filteredKeys;
         }
 
     }
@@ -943,6 +953,53 @@ else
     */
     NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
     displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+    tabBar.enrolled = 0;
+    tabBar.waived = 0;
+    tabBar.notenrolled = 0;
+    tabBar.terminated = 0;
+    tabBar.renewing = 0;
+    tabBar.employer_contribution = 0;
+    tabBar.employee_costs = 0;
+    
+    for (id myArrayElement in displayArray)
+    {
+            NSArray *pp = [[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+            
+            NSString *status = [pp valueForKey:@"status"];
+        
+            if ([status isEqualToString:@"Not Enrolled"])
+                tabBar.notenrolled += 1;
+            else
+            {
+                if ([status isEqualToString:@"Enrolled"])
+                    tabBar.enrolled += 1;
+                if ([status isEqualToString:@"Renewing"])
+                    tabBar.renewing += 1;
+                if ([status isEqualToString:@"Waived"])
+                    tabBar.waived += 1;
+                if ([status isEqualToString:@"Terminated"])
+                    tabBar.terminated += 1;
+                
+                NSDictionary *emp_contr = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employer_contribution"];// objectAtIndex:0];
+                NSDictionary *emp_cost = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employee_cost"];// objectAtIndex:0];
+                
+                NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
+                NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
+                
+                tabBar.employer_contribution += [oo doubleValue];
+                tabBar.employee_costs += [ll doubleValue];
+            }
+    }
+
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+//    [dnc postNotificationName:rosterLoadedNotification
+//                       object:self
+//                     userInfo:nil];
+    
+    [dnc postNotificationName:@"rosterCostsLoaded"
+                       object:self
+                     userInfo:nil];
     
     [pRosterTable reloadData];
 }
@@ -954,12 +1011,26 @@ else
     return tabBar.current_coverage_year_index;
 }
 
--(NSArray*)getEmployeeData
+-(BOOL)isEmployeeProfileDataAvailable:(NSInteger)index empId:(NSString*)employee_id
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:index] valueForKey:@"plan_year_begins"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", employee_id];                     //]@"Test_CensusEmp_12_0"];
+    NSArray *results = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
+
+    return (results && [results count] > 0) ? YES : NO;
+}
+
+-(NSArray*)getEmployeeData:(NSString*)employee_id
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
 
-    return [tabBar.rosterDictionary valueForKey:sPlanYear];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", employee_id];                     //]@"Test_CensusEmp_12_0"];
+    NSArray *results = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
+
+    return (results && [results count] > 0) ? [results objectAtIndex:0] : nil;
 }
 
 -(void)setCoverageYearIndex:(NSInteger)index

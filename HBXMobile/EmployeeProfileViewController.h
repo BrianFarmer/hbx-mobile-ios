@@ -12,7 +12,8 @@
 
 @protocol EmployeeProfileDelegate
 -(void)setCoverageYearIndex:(NSInteger)index;
--(NSArray*)getEmployeeData;
+-(BOOL)isEmployeeProfileDataAvailable:(NSInteger)index empId:(NSString*)employee_id;
+-(NSArray*)getEmployeeData:(NSString*)employee_id;
 @end
 
 @interface EmployeeProfileViewController : UIViewController <HeaderViewDelegate>

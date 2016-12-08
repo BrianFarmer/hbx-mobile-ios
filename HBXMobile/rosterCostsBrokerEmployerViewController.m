@@ -106,13 +106,18 @@ alpha:1.0]
     pRosterTable.sectionIndexBackgroundColor = [UIColor clearColor];
     
 //    [self loadDictionary];
-    if (tabBar.rosterList == nil)
-        [self loadDictionary];
-    else
-    {
-        rosterList = tabBar.rosterList;
+//    if (tabBar.rosterList == nil)
+//        [self loadDictionary];
+//    else
+//    {
+    
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+//        displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
-    }
+//    }
 
 /*
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
@@ -156,12 +161,15 @@ alpha:1.0]
 {
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
 
-    if ([rosterList count] > 0)
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    /*
+    if ([displayArray count] > 0)
     {
         employerTabController *tabBar = (employerTabController *) self.tabBarController;
         
         int iCnt = 0;
-        NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
+        NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
         for (id py in pp1)
         {
             NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
@@ -170,7 +178,13 @@ alpha:1.0]
             iCnt++;
         }
     }
+*/
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
     
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+    
+//    [pRosterTable reloadData];
+
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
     [pRosterTable reloadData];
@@ -183,11 +197,11 @@ alpha:1.0]
 
 -(void)setDataSectionIndex
 {
-    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+//    employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
     
-    for( NSString *string in [tabBar.rosterList valueForKey:@"last_name"])
+    for( NSString *string in [displayArray valueForKey:@"last_name"]) //tabBar.rosterList
         [firstCharacters addObject:[NSString stringWithString:[string substringToIndex:1]]];
     
     sectionIndex = [[firstCharacters allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -253,8 +267,8 @@ alpha:1.0]
                          NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
                          
                          employerTabController *tabBar = (employerTabController *) self.tabBarController;
-                         rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
-                         tabBar.rosterList = rosterList;
+                         displayArray = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                         tabBar.rosterList = displayArray;
                          
                         [self setDataSectionIndex];
    //                      displayArray = rosterList;
@@ -354,7 +368,7 @@ alpha:1.0]
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
 
-    rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+    displayArray = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 /*
@@ -374,7 +388,7 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [rosterList count];
+    return [displayArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -499,19 +513,20 @@ alpha:1.0]
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
 */
 
-    dt1.text = [NSString stringWithFormat:@"%@ %@", [[rosterList objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[rosterList objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
+    dt1.text = [NSString stringWithFormat:@"%@ %@", [[displayArray objectAtIndex:indexPath.row] valueForKey:@"first_name"],[[displayArray objectAtIndex:indexPath.row] valueForKey:@"last_name"]];
 
 //    NSArray *pp1 = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
     
  //   NSArray *pp = [[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"health"];
     
-    NSArray *pp1 = [[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    NSArray *pp1 = [[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollment"];
+    
     NSString *sStatus = @"Not Enrolled";
     NSArray *pp;
     
     if ([pp1 count] > 0)
     {
-        pp = [[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+        pp = [[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
         
         sStatus = [pp valueForKey:@"status"];
     }
@@ -545,6 +560,7 @@ alpha:1.0]
         dt2.text = [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];;
         dt3.text =  [[[[[rosterList objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
  */
+
         if ([dt3.text isEqualToString:@"Waived"])
         {
             dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;//UIColorFromRGB(0x625ba8);
@@ -569,7 +585,10 @@ alpha:1.0]
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
         [numberFormatter setMaximumFractionDigits:2];
-        
+
+        dt2.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
+        dt3.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
+
 //        sEmployerContribution = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[sEmployerContribution floatValue]]];
 //        sEmployerCost = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[sEmployerCost floatValue]]];
                 oo = [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[oo floatValue]]];
@@ -595,7 +614,7 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
     
-    NSInteger newRow = [self indexForFirstChar:title inArray:rosterList];
+    NSInteger newRow = [self indexForFirstChar:title inArray:displayArray];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newRow inSection:0];
     [tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     
@@ -634,7 +653,7 @@ alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *po = [rosterList objectAtIndex:indexPath.row] ;
+    NSArray *po = [displayArray objectAtIndex:indexPath.row] ;
     [self performSegueWithIdentifier:@"ShowEmployeeProfile" sender:po];
 }
 
@@ -644,18 +663,77 @@ alpha:1.0]
     
     vHeader.iCurrentPlanIndex = index;
     tabBar.current_coverage_year_index = index;
+
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+    tabBar.enrolled = 0;
+    tabBar.waived = 0;
+    tabBar.notenrolled = 0;
+    tabBar.terminated = 0;
+    tabBar.renewing = 0;
+    tabBar.employer_contribution = 0;
+    tabBar.employee_costs = 0;
     
-    int iCnt = 0;
-    NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
-    for (id py in pp1)
+    for (id myArrayElement in displayArray)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
-        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
-            enrollmentIndex = iCnt;
-        iCnt++;
+        NSArray *pp = [[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+        
+        NSString *status = [pp valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"Not Enrolled"])
+            tabBar.notenrolled += 1;
+        else
+        {
+            if ([status isEqualToString:@"Enrolled"])
+                tabBar.enrolled += 1;
+            if ([status isEqualToString:@"Renewing"])
+                tabBar.renewing += 1;
+            if ([status isEqualToString:@"Waived"])
+                tabBar.waived += 1;
+            if ([status isEqualToString:@"Terminated"])
+                tabBar.terminated += 1;
+            
+            NSDictionary *emp_contr = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employer_contribution"];// objectAtIndex:0];
+            NSDictionary *emp_cost = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employee_cost"];// objectAtIndex:0];
+            
+            NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
+            NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
+            
+            tabBar.employer_contribution += [oo doubleValue];
+            tabBar.employee_costs += [ll doubleValue];
+        }
     }
     
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    
+    [dnc postNotificationName:@"rosterCostsLoaded"
+                       object:self
+                     userInfo:nil];
+ 
     [pRosterTable reloadData];
+}
+
+-(BOOL)isEmployeeProfileDataAvailable:(NSInteger)index empId:(NSString*)employee_id
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:index] valueForKey:@"plan_year_begins"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", employee_id];
+    NSArray *results = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
+    
+    return (results && [results count] > 0) ? YES : NO;
+}
+
+-(NSArray*)getEmployeeData:(NSString*)employee_id
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id = %@", employee_id];                     //]@"Test_CensusEmp_12_0"];
+    NSArray *results = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
+    
+    return (results && [results count] > 0) ? [results objectAtIndex:0] : nil;
 }
 
 -(NSInteger)getPlanIndex

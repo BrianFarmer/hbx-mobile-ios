@@ -28,7 +28,7 @@
     NSArray *sectionIndex;
     
     NSDictionary *dictionary;
-    NSArray *rosterList;
+    NSArray *displayArray;
     
     int enrollmentIndex;
 }

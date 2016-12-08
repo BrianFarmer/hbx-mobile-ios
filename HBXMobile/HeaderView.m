@@ -83,12 +83,17 @@ alpha:1.0]
     CGSize labelSize = CGSizeMake(200.0, 20.0);
     UIFont *cellFont = [UIFont fontWithName:@"Roboto-Bold" size:24];
     
+    int iOffset = 0;
+    
     if ([pCompany.text length] > 0)
         labelSize = [pCompany.text sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
     
     if (labelSize.height > 40)
+    {
         pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height - 30);
-   
+        if (labelSize.height > 65)
+            iOffset = 10;
+    }
     
     UILabel *pCompanyFooter = [[UILabel alloc] init];
     pCompanyFooter.font = [UIFont fontWithName:@"Roboto-Medium" size:16];
@@ -118,7 +123,7 @@ alpha:1.0]
         [f setDateFormat:@"MMM dd, yyyy"];
         
 //        UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
-        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height, 220, 45)];
+        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height - iOffset, 220, 45)];
         pLabelCoverage.tag = 975;
         
         pLabelCoverage.numberOfLines = 2;
@@ -153,7 +158,7 @@ alpha:1.0]
         
  //       [self addSubview:pLabelCoverage];
         
-        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height, 220, 45)];
+        UIButton *coverageButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height - iOffset, 220, 45)]; //pCompany.frame.origin.y + pCompany.frame.size.height - 140
         [coverageButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         
         coverageButton.layer.cornerRadius = 10;
@@ -175,11 +180,16 @@ alpha:1.0]
         [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
 
         if ([[eData valueForKey:@"plan_years"] count] > 1)
+        {
             [self addSubview:coverageButton];
+            pCompanyFooter.frame = CGRectMake(10, coverageButton.frame.origin.y + coverageButton.frame.size.height - iOffset/2, self.frame.size.width - 20, 20);
+        }
         else
+        {
             [self addSubview:pLabelCoverage];
+            pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height - iOffset/2, self.frame.size.width - 20, 20);
+        }
         
-        pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height, self.frame.size.width - 20, 20);
 
     }
     else
@@ -226,7 +236,10 @@ alpha:1.0]
             UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.tag=30+btnCount;
 
-            [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 78:48), 38, 38)];
+            if (labelSize.height > 40)
+                [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 68:38), 38, 38)];
+            else
+                [button setFrame:CGRectMake(10, self.frame.origin.y + self.frame.size.height - (bShowPlanYear ? 78:48), 38, 38)];
             
             [button setBackgroundColor:[UIColor clearColor]];
             UIImage *btnImage;
@@ -386,8 +399,15 @@ alpha:1.0]
         pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
         
         pLabelCoverage.hidden = FALSE;
-        NSString *lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
-        
+    NSString *lblCoverageYear;// = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+
+    if ([[eData valueForKey:@"plan_years"] count] > 1)
+        lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+    else
+        lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+
+    
+    
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
@@ -428,8 +448,12 @@ alpha:1.0]
         [coverageButton setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
         
         [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
-        
+    
+    if ([[eData valueForKey:@"plan_years"] count] > 1)
         [self addSubview:coverageButton];
+    else
+        [self addSubview:pLabelCoverage];
+
     
 /*
     for (int btnCount=0;btnCount<4;btnCount++)
@@ -724,77 +748,16 @@ alpha:1.0]
             
             if (buttonIndex>0)
             {
-                _iCurrentPlanIndex = buttonIndex-1;
-                
-                [self drawCoverageYear:_iCurrentPlanIndex];
-
-                [_delegate changeCoverageYear:buttonIndex-1];
+                if ([_delegate changeCoverageYear:buttonIndex-1])
+                {
+                    _iCurrentPlanIndex = buttonIndex-1;
+                    
+                    [self drawCoverageYear:_iCurrentPlanIndex];
+                }
             }
-            
-            /*
-            switch (buttonIndex) {
-             
-                case 0:
- //                   [self FBShare];
-                    break;
-                case 1:
-//                    [self TwitterShare];
-                    break;
-                case 2:
- //                   [self emailContent];
-                    break;
-                case 3:
- //                   [self saveContent];
-                    break;
-                case 4:
- //                   [self rateAppYes];
-                    break;
-                default:
-                    break;
-            }
-            break;
-             */
         }
         default:
             break;
     }
 }
-/*
--(void)datePickerDoneClicked
-{
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"dd/MM/yyyy"];
-    NSString *tmp=[outputFormatter stringFromDate:datePicker.date];
-    if (isSelectDate==TRUE) {
-        [btnfrom setTitle:tmp forState:UIControlStateNormal];
-    }
-    else{
-        [btnTo setTitle:tmp forState:UIControlStateNormal];
-        
-    }
-    [outputFormatter release];
-    
-    [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
-}
-*/
-/*
--(void)datePickerCancelClicked
-{
-    [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
-}
-
-#pragma mark -Button Click Event
-
--(IBAction)btnfromPress:(id)sender
-{
-    isSelectDate=TRUE;
-//    [self openactionsheetWithDatePicker];
-}
-
--(IBAction)btnToPress:(id)sender
-{
-    isSelectDate =FALSE;
-//    [self openactionsheetWithDatePicker];
-}
- */
 @end

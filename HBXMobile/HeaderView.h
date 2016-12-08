@@ -14,7 +14,7 @@
 
 @protocol HeaderViewDelegate
 -(void)HandleSegmentControlAction:(UISegmentedControl *)segment;
--(void)changeCoverageYear:(NSInteger)index;
+-(BOOL)changeCoverageYear:(NSInteger)index;
 -(NSInteger)getPlanIndex;
 @end
 

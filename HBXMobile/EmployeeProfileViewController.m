@@ -142,7 +142,7 @@ alpha:1.0]
     NSDate *dob = [f dateFromString:[_employeeData valueForKey:@"date_of_birth"]];
     NSDate *hired_on = [f dateFromString:[_employeeData valueForKey:@"hired_on"]];
     
-    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
+    NSArray *lo = [_employeeData valueForKey:@"enrollment"]; //[[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
     
     NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
     //    NSDate *plan_start_on = [f dateFromString:[pp valueForKey:@"plan_start_on"]];
@@ -562,7 +562,7 @@ alpha:1.0]
         else
         {
    //         NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
-            NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"]
+            NSArray *lo = [_employeeData valueForKey:@"enrollment"];// objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"]
             
             lblContributionView.hidden = NO;
             UILabel *lblContributionTotal = (UILabel *)[cell viewWithTag:121];
@@ -665,9 +665,24 @@ alpha:1.0]
     
 }
 
--(void)changeCoverageYear:(NSInteger)index
+-(BOOL)changeCoverageYear:(NSInteger)index
 {
 //    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    if (![_delegate isEmployeeProfileDataAvailable:index empId:[_employeeData valueForKey:@"id"]])
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"No data available"
+                                                                                 message:@"The employee does not have any data available for the coverage year you selected."
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        //We add buttons to the alert controller by creating UIAlertActions:
+        UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"Ok"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil]; //You can use a block here to handle a press on this button
+        [alertController addAction:actionOk];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        return FALSE;
+    }
+    
     _currentCoverageYearIndex = index;
     vHeader.iCurrentPlanIndex = index;
 //    tabBar.current_coverage_year_index = index;
@@ -702,7 +717,7 @@ alpha:1.0]
 //    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
 
     [_delegate setCoverageYearIndex:index];
-    _employeeData = [_delegate getEmployeeData];
+    _employeeData = [_delegate getEmployeeData:[_employeeData valueForKey:@"id"]];
     
     NSString *sStatus = @"Not Enrolled";
     
@@ -726,6 +741,8 @@ alpha:1.0]
     [self processData];
     
     [profileTable reloadData];
+    
+    return TRUE;
 }
 
 -(NSInteger)getPlanIndex

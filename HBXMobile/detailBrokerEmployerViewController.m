@@ -255,6 +255,8 @@
 //    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    [_slices removeAllObjects];
+    
     
     NSNumber *one = [NSNumber numberWithInt:tabBar.enrolled];
     [_slices addObject:one];
@@ -371,6 +373,11 @@
  //   userTappedOnNotEnrolledLink
 }
 
+- (void)viewDidLayoutSubviews
+{
+    
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
 
@@ -387,7 +394,16 @@
     
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
     
-    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    
+    int tt = self.tabBarController.tabBar.frame.size.height;
+    int yy = vHeader.frame.size.height;
+//    int uu = self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height;
+//    int kk = self.view.frame.size.height;
+    
+    //    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - navbarHeight - vHeader.frame.size.height);
+    detailTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, screenSize.height - tt - navbarHeight - yy);
     
     [self processData];
     
@@ -864,7 +880,7 @@
             pTerminated.text = [NSString stringWithFormat:@"%@\nTERMINATED", (tabBar.terminated > -1) ? [NSString stringWithFormat:@"%d", tabBar.terminated]:@"--"];
 
             pTotalEmployees.hidden = FALSE;
-            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled];
+            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled + tabBar.terminated];
             
             if (dataNotLoaded)
             {
@@ -942,15 +958,65 @@
     [self.tabBarController setSelectedIndex:1];
 }
 
--(void)changeCoverageYear:(NSInteger)index
+-(BOOL)changeCoverageYear:(NSInteger)index
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
-
     tabBar.current_coverage_year_index = index;
-//    iCurrentPlanIndex = index;
+
     [self processData];
+    
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    NSArray *displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+    tabBar.enrolled = 0;
+    tabBar.waived = 0;
+    tabBar.notenrolled = 0;
+    tabBar.terminated = 0;
+    tabBar.renewing = 0;
+    tabBar.employer_contribution = 0;
+    tabBar.employee_costs = 0;
+    
+    for (id myArrayElement in displayArray)
+    {
+        NSArray *pp = [[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"];
+        
+        NSString *status = [pp valueForKey:@"status"];
+        
+        if ([status isEqualToString:@"Not Enrolled"])
+            tabBar.notenrolled += 1;
+        else
+        {
+            if ([status isEqualToString:@"Enrolled"])
+                tabBar.enrolled += 1;
+            if ([status isEqualToString:@"Renewing"])
+                tabBar.renewing += 1;
+            if ([status isEqualToString:@"Waived"])
+                tabBar.waived += 1;
+            if ([status isEqualToString:@"Terminated"])
+                tabBar.terminated += 1;
+            
+            NSDictionary *emp_contr = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employer_contribution"];
+            NSDictionary *emp_cost = [[[myArrayElement valueForKey:@"enrollment"] valueForKey:@"health"] valueForKey:@"employee_cost"];
+            
+            NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
+            NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
+            
+            tabBar.employer_contribution += [oo doubleValue];
+            tabBar.employee_costs += [ll doubleValue];
+        }
+    }
+
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    
+    [dnc postNotificationName:@"rosterCostsLoaded"
+                       object:self
+                     userInfo:nil];
+    
+
     [detailTable reloadData];
+    
+    return TRUE;
 }
 
 -(NSInteger)getPlanIndex
@@ -959,4 +1025,5 @@
     
     return tabBar.current_coverage_year_index;
 }
+
 @end

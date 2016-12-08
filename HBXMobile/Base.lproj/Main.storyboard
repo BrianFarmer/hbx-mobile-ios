@@ -286,7 +286,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GaO-sp-O9j" id="q7r-5S-xmZ">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                    <frame key="frameInset" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -622,7 +622,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WaD-cc-pb3" id="DYy-jW-za7">
-                                            <frame key="frameInset" width="320" height="44"/>
+                                            <frame key="frameInset" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Employer" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="r6m-2T-XPo">
@@ -718,7 +718,7 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                                 <rect key="frame" x="0.0" y="28" width="375" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kf2-MS-2uN" id="Ex9-Jh-qSC">
-                                    <frame key="frameInset" width="375" height="53"/>
+                                    <frame key="frameInset" width="375" height="53.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -820,10 +820,10 @@ If you are not an exisiting customer please sign up on your home computer.</stri
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="-200" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LeftMenuCell" id="fww-Xf-muZ">
-                                <rect key="frame" x="0.0" y="56" width="375" height="54"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fww-Xf-muZ" id="B50-6N-CVP">
-                                    <frame key="frameInset" width="375" height="53"/>
+                                    <frame key="frameInset" width="375" height="53.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
