@@ -24,9 +24,17 @@
 //@synthesize slices = _slices;
 //@synthesize sliceColors = _sliceColors;
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+ //   self.navigationController.navigationBar.topItem.hidesBackButton = YES;
+   // self.navigationController.navigationBar.topItem.leftBarButtonItem = nil;
+   // self.navigationItem.hidesBackButton=YES;
+   // self.navigationItem.leftBarButtonItem = nil;
+    self.navigationController.navigationBarHidden = NO;
+
     dataNotLoaded = TRUE;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -51,19 +59,25 @@
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
-    vHeader.iCurrentPlanIndex = (tabBar.current_coverage_year_index > -1) ? (tabBar.current_coverage_year_index > -1) : [[tabBar.detailDictionary valueForKey:@"plan_years"] count]-1;
+    vHeader.iCurrentPlanIndex = (tabBar.current_coverage_year_index > -1) ? 0 : [[tabBar.detailDictionary valueForKey:@"plan_years"] count]-1;
 //    tabBar.current_coverage_year_index = [employerData.plans count]-1;
     
     
 //    iCurrentPlanIndex = [employerData.plans count]-1;
     
     if (tabBar.isBroker)
+    {
+            vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
         [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
+    }
     else
+    {
+            vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
         [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:NO];
+    }
     
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
@@ -359,6 +373,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+
+//    self.navigationController.navigationItem.hidesBackButton = YES;
+//    self.navigationController.navigationItem.leftBarButtonItem = nil;
+ 
+//    self.navigationController.navigationBar.topItem.hidesBackButton = YES;
+//    self.navigationController.navigationBar.topItem.leftBarButtonItem = nil;
+ 
+//    self.navigationItem.hidesBackButton = YES;
+//    self.navigationItem.leftBarButtonItem = nil;
+    
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)

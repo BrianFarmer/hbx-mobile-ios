@@ -36,9 +36,21 @@
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185); //215
+//    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185); //215
     vHeader.delegate = self;
-    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
+//    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
+    
+    if (tabBar.isBroker)
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
+    }
+    else
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:NO];
+    }
+
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);

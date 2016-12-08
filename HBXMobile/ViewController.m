@@ -12,8 +12,9 @@
 #import "LeftMenuSlideOutTableViewController.h"
 #import "BrokerAccountTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "employerTabController.h"
 #import "Settings.h"
-
+#import "popupMessageBox.h"
 
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
@@ -360,6 +361,9 @@
     
     [spinningWheel stopAnimating];
     
+    txtEmail.clearButtonMode = UITextFieldViewModeWhileEditing;
+    txtPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
     self.navigationController.navigationBarHidden = YES;
 #if (!PRODUCTION_BUILD)
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"whichServer"] intValue] == 1001)
@@ -473,12 +477,50 @@
     [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
 }
 
-- (IBAction)handleButtonClick:(id)sender
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)clickedDefaultLoginAtIndex:(NSInteger)buttonIndex
 {
     [self customActivityView];
     [loading setHidden:FALSE];
     loadLabel.text = @"Loading";
     
+    if (buttonIndex == 0)
+    {
+        txtEmail.text = @"sample.employer@example.com";
+        txtPassword.text = @"Test123!";
+    }
+    else
+    {
+        txtEmail.text = @"bill.murray@example.com";
+        txtPassword.text = @"Test123!";
+    }
+
+    if (switchSaveMe.isOn)
+    {
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"DCHLApp"  accessGroup:nil];
+        //        [keychainItem setObject:@"password" forKey:(__bridge id)kSecAttrAccount];
+        [keychainItem setObject:txtEmail.text forKey:(__bridge id)kSecAttrLabel];
+        //   [keychainItem setObject:@"" forKey:(__bridge id)kSecAttrDescription];
+    }
+    else
+    {
+        //delete information
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
+    [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
+    
+            enrollHost = [[NSUserDefaults standardUserDefaults] stringForKey:@"enrollServer"];
+            if (![enrollHost hasPrefix:@"http://"] && ![enrollHost hasPrefix:@"https://"])
+            {
+                enrollHost = [NSString stringWithFormat:@"http://%@", enrollHost];
+            }
+            
+            [self login:enrollHost type:INITIAL_GET url:[NSString stringWithFormat:@"%@/users/sign_in", enrollHost]];
+}
+
+- (IBAction)handleButtonClick:(id)sender
+{
     iServerType = [[[NSUserDefaults standardUserDefaults] stringForKey:@"whichServer"] intValue];
     if (PRODUCTION_BUILD)
     {
@@ -490,9 +532,119 @@
         {
             if ([txtEmail.text length] == 0)
             {
-                txtEmail.text = @"bill.murray@example.com";
-                txtPassword.text = @"Test123!";
+                    //       txtEmail.text = @"billybob@example.com"; //@"bill.murray@example.com";
+                    //       txtPassword.text = @"Test123!";
+                
+                 UIAlertController *alertView=   [UIAlertController
+                 alertControllerWithTitle:@"Default Login"
+                 message:@"Select your Choice"
+                 preferredStyle:UIAlertControllerStyleActionSheet];
+                 
+                 UIAlertAction *first = [UIAlertAction
+                 actionWithTitle:@"Employer (sample.employer)"
+                 style:UIAlertActionStyleDefault
+                 handler:^(UIAlertAction * action)
+                 {
+                     //Do some thing here
+                     [self clickedDefaultLoginAtIndex:0];
+                     [alertView dismissViewControllerAnimated:YES completion:nil];
+                 }];
+                
+                 UIAlertAction *second = [UIAlertAction
+                 actionWithTitle:@"Broker (bill.murray)"
+                 style:UIAlertActionStyleDefault
+                 handler:^(UIAlertAction * action)
+                 {
+                    [self clickedDefaultLoginAtIndex:1];
+                     [alertView dismissViewControllerAnimated:YES completion:nil];
+                 }];
+                 
+                 UIAlertAction *cancel = [UIAlertAction
+                 actionWithTitle:@"Cancel"
+                 style:UIAlertActionStyleCancel
+                 handler:^(UIAlertAction * action)
+                 {
+                 [alertView dismissViewControllerAnimated:YES completion:nil];
+                 }];
+                 
+                 [first setValue:[[UIImage imageNamed:@"check-green.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+                 
+                 
+                 [alertView addAction:first];
+                 [alertView addAction:second];
+                 [alertView addAction:cancel];
+                 
+                 
+                 [self presentViewController:alertView animated:YES completion:nil];
+                 //UIViewController *topVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+                 //[topVC presentViewController:alertView animated:YES completion:nil];
+                
+/*
+
+                UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Select Login Type"
+                                                                  message:@""
+                                                                 delegate:self
+                                                        cancelButtonTitle:nil
+                                                        otherButtonTitles:nil];
+
+      //          alertView.title = @"Select Login Type";
+                
+                
+                // Adding Your Buttons
+                [message addButtonWithTitle:@"Employer (sample.employer)"];
+                [message addButtonWithTitle:@"Broker (bill.murray)"];
+            //    [alertView addButtonWithTitle:@"Button3"];
+            //    [alertView addButtonWithTitle:@"Button4"];
+                
+                
+                // Add a Space for Text View
+                message.message = @"\n";
+                
+                
+                // View heirarchy, set its frame and begin bounce animation
+                [message show];
+                */
+                return;
             }
+            /*
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Call Carrier"
+                                                  message:@"Login Type"
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           NSLog(@"OK action");
+                      //                     [[SlideNavigationController sharedInstance] closeMenuWithCompletion:^{
+                                               //           [SlideNavigationController sharedInstance].menuRevealAnimationDuration = animationDuration;
+                                               //        [SlideNavigationController sharedInstance].menuRevealAnimator = revealAnimator;
+                                  //         }];
+                                           
+                      //                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", cell.detailTextLabel.text]]];
+                                       }];
+            UIAlertAction *cancelAction = [UIAlertAction
+                                           actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                           style:UIAlertActionStyleCancel
+                                           handler:^(UIAlertAction *action)
+                                           {
+                                               NSLog(@"Cancel action");
+                                           }];
+ 
+            UIAlertAction *cancelAction1 = [UIAlertAction
+                                           actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                           style:UIAlertActionStyleCancel
+                                           handler:^(UIAlertAction *action)
+                                           {
+                                               NSLog(@"Cancel action");
+                                           }];
+
+            [alertController addAction:okAction];
+            [alertController addAction:cancelAction];
+              [alertController addAction:cancelAction1];
+            [self presentViewController:alertController animated:YES completion:nil];
+*/
         }
 
         if (iServerType == 1002)
@@ -525,6 +677,10 @@
     {
         //delete information
     }
+    
+    [self customActivityView];
+    [loading setHidden:FALSE];
+    loadLabel.text = @"Loading";
     
     [[NSUserDefaults standardUserDefaults] setBool:switchSaveMe.isOn forKey:@"saveUserInfo"];
     [[NSUserDefaults standardUserDefaults] setBool:switchTouchId.isOn forKey:@"useTouchID"];
@@ -924,6 +1080,8 @@
     
     if (code == 502)
         REQUEST_TYPE = 502;
+   if (code == 406)
+        REQUEST_TYPE = 406;
     
     _responseData = [[NSMutableData alloc] init];
 
@@ -1008,6 +1166,18 @@
             NSLog(@"%@\n", csrfToken);
         }
     
+        NSRange startRange1 = [responseString rangeOfString:@"/employers/employer_profiles/"];
+        if (startRange1.length > 0 && [employerID length] == 0)
+        {
+            NSString *substring = [responseString substringFromIndex:startRange1.location+29];
+            NSRange endRange = [substring rangeOfString:@"\">"];
+            
+            employerID = [substring substringWithRange:NSMakeRange(0, endRange.location)];
+            
+            NSLog(@"%@\n", employerID);
+        }
+
+    
 //    http://ec2-54-234-22-53.compute-1.amazonaws.com:3002/api/v1/mobile_api/employers_list
     
     switch (REQUEST_TYPE) {
@@ -1043,8 +1213,10 @@
             Settings *obj=[Settings getInstance];
             obj.sEnrollServer = enrollHost;
             obj.sMobileServer = mobileHost;
-
-            [self performSegueWithIdentifier:@"EmployerDetail" sender:nil];
+        //    obj.sEmployerId = employerID;
+            
+            [self loadEmployerDetailJSON];
+//            [self performSegueWithIdentifier:@"EmployerDetail" sender:nil];
         }
         break;
             
@@ -1155,6 +1327,7 @@
             [self makeWebRequest:enrollHost type:GET_BROKER_ID url:[NSString stringWithFormat:@"%@/broker_agencies", enrollHost]];
 
             break;
+        case 406:
         case 502:   //Only used for Enroll Server Login
             {
                 [spinningWheel stopAnimating];
@@ -1241,6 +1414,106 @@
     }
 }
 
+-(void)loadEmployerDetailJSON //:(brokerEmployersData*)eData
+{
+    
+    NSString *pUrl;// = [NSString stringWithFormat:@"%@%@", _enrollHost, employerData.detail_url];
+    NSString *empId = @"";
+    
+    Settings *obj=[Settings getInstance];
+    
+    if ([obj.sEmployerId length]>0)
+        empId = [NSString stringWithFormat:@"/%@", obj.sEmployerId];
+    
+    NSString *e_url = [NSString stringWithFormat:@"%@/api/v1/mobile_api/employer_details%@", obj.sEnrollServer, empId];
+    
+    //if (![e_url hasPrefix:@"http://"] || ![e_url hasPrefix:@"https://"])
+    BOOL pp = [e_url hasPrefix:@"https://"];
+    BOOL ll = [e_url hasPrefix:@"http://"];
+    if (!pp && !ll)
+        pUrl = [NSString stringWithFormat:@"%@%@", enrollHost, e_url];
+    else
+        pUrl = e_url;
+    
+    NSURL* url = [NSURL URLWithString:pUrl];
+    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url];
+    [urlRequest addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                enrollHost, NSHTTPCookieDomain,
+                                @"/", NSHTTPCookiePath,  // IMPORTANT!
+                                @"_session_id", NSHTTPCookieName,
+                                customCookie_a, NSHTTPCookieValue,
+                                nil];
+    
+    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:properties];
+    NSArray* cookies = [NSArray arrayWithObjects: cookie, nil];
+    NSDictionary * headers = [NSHTTPCookie requestHeaderFieldsWithCookies:cookies];
+    
+    [urlRequest setAllHTTPHeaderFields:headers];
+    
+    [NSURLConnection sendAsynchronousRequest:urlRequest
+                                       queue:queue
+                           completionHandler:^(NSURLResponse* response,
+                                               NSData* data,
+                                               NSError* error)
+     {
+         if (data) {
+             NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+             
+             if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
+                 NSError* error;
+                 id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                 if (jsonObject) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         // self.model = jsonObject;
+                         NSLog(@"jsonObject: %@", jsonObject);
+                         
+                         NSMutableArray *segueTransfer = [[NSMutableArray alloc] init];
+                         
+            //             [segueTransfer addObject:eData];
+                         [segueTransfer addObject:jsonObject];
+                         
+                         UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+                         [activityIndicator stopAnimating];
+                         [activityIndicator removeFromSuperview];
+                         
+                         [self performSegueWithIdentifier:@"EmployerDetail" sender:segueTransfer];
+                      //   [self performSegueWithIdentifier:@"Broker Employer Detail" sender:segueTransfer];
+                         
+                     });
+                 } else {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         //[self handleError:error];
+                         NSLog(@"ERROR: %@", error);
+                     });
+                 }
+             }
+             else {
+                 // status code indicates error, or didn't receive type of data requested
+                 NSString* desc = [[NSString alloc] initWithFormat:@"HTTP Request failed with status code: %d (%@)",
+                                   (int)(httpResponse.statusCode),
+                                   [NSHTTPURLResponse localizedStringForStatusCode:httpResponse.statusCode]];
+                 NSError* error = [NSError errorWithDomain:@"HTTP Request"
+                                                      code:-1000
+                                                  userInfo:@{NSLocalizedDescriptionKey: desc}];
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     //[self handleError:error];  // execute on main thread!
+                     NSLog(@"ERROR: %@", error);
+                 });
+             }
+         }
+         else {
+             // request failed - error contains info about the failure
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 //[self handleError:error]; // execute on main thread!
+                 NSLog(@"ERROR: %@", error);
+             });
+         }
+     }];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"BrokerTable"])
@@ -1252,6 +1525,28 @@
         vc.enrollHost = enrollHost;
         vc._brokerId = _brokerId;
     }
+
+    if ([[segue identifier] isEqualToString:@"EmployerDetail"])
+    {
+        // Get destination view
+ //       BrokerAccountTableViewController *vc = [segue destinationViewController];
+//        vc.jsonData = responseString;
+//        vc.customCookie_a = customCookie_a;
+//        vc.enrollHost = enrollHost;
+//        vc._brokerId = _brokerId;
+        
+        employerTabController *tabar=segue.destinationViewController;
+        
+        NSMutableArray *sequeTransfer = sender;
+        
+        //       tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
+        tabar.detailDictionary = [sequeTransfer objectAtIndex:0];
+        tabar.enrollHost = enrollHost;
+        tabar.customCookie_a = customCookie_a;
+        tabar.isBroker = NO;
+
+    }
+
 }
 
 -(void)dismissKeyboard {
@@ -1264,8 +1559,18 @@
 
     [loading setHidden:TRUE];
     
+/*
+    
+    NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:@"Google"];
+    [str addAttribute: NSLinkAttributeName value: @"http://www.google.com" range: NSMakeRange(0, str.length)];
+//    yourTextView.attributedText = str;
+ 
     alertController = [UIAlertController  alertControllerWithTitle:@"Login Error"
-                                                           message:@"Account has been locked"
+                                                           message:@""
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+*/
+    alertController = [UIAlertController  alertControllerWithTitle:@"Login Error"
+                                                           message:@"We could not log you in as an employer or broker. If you believe you have received this message in error, please 1(855) 532-5465. If you are looking for healthcare as an employee or individual, please visit www.dchealthlink.com"
                                                     preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *okAction = [UIAlertAction
@@ -1279,10 +1584,24 @@
     
     [alertController addAction:okAction];
     
+  //  [alertController setValue:str forKey:@"contentViewController"];
+//        [alertController setValue:str forKey:@"attributedTitle"];
+//    alertController.setValue(str, forKey: "attributedTitle");
+    
+    
     [alertController.view setNeedsLayout];
     
     [self presentViewController:alertController animated:YES completion:nil];
-    
+ 
+/*
+        popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+        sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            sub.messageTitle = @"Login Error";
+        //    sub.messageArray = employerData.contact_info;
+        sub.messageType = typePopupAlert;
+        [self presentViewController:sub animated:YES completion: nil];
+*/
 }
 
 -(void)askSecurityQuestionFromMobileServer:(BOOL)bIncorrect

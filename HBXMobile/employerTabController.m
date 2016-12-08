@@ -7,6 +7,7 @@
 //
 
 #import "employerTabController.h"
+#import "Settings.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -28,6 +29,13 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    if (_isBroker)
+        return NO;
+    return YES;
 }
 
 - (void)viewDidLoad {
@@ -91,13 +99,23 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
 -(void)loadDictionary
 {
     NSString *pUrl;
-    NSString *e_url = [NSString stringWithFormat:@"%@/api/v1/mobile_api/employee_roster", _enrollHost];  //_employerData.roster_url;
+//    NSString *empId = @"";
+    NSString *e_url = @"";
+    
+    Settings *obj=[Settings getInstance];
+
+ //   if ([obj.sEmployerId length]>0)
+ //       empId = [NSString stringWithFormat:@"/%@", obj.sEmployerId];
+    if (_roster_url)
+        e_url = _roster_url;
+    else
+        e_url = [NSString stringWithFormat:@"%@/api/v1/mobile_api/employee_roster", obj.sEnrollServer];  //_employerData.roster_url;
     
     NSLog(@"HERE IN tabbar:LOAD DICTIONARY\n");
 //    bDataLoading = TRUE;
     
     if (! [e_url hasPrefix:@"https://"] && ![e_url hasPrefix:@"http://"])
-        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, _employerData.roster_url];
+        pUrl = [NSString stringWithFormat:@"%@%@", _enrollHost, _roster_url];
     else
         pUrl = e_url; //_employerData.roster_url;
     
@@ -139,10 +157,10 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                      dispatch_async(dispatch_get_main_queue(), ^{
                          // self.model = jsonObject;
                          NSLog(@"jsonObject: %@", jsonObject);
-                         _rosterDictionary = jsonObject;
+                 //        _rosterDictionary = jsonObject;
                          
                          NSError *error;
-                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:_rosterDictionary
+                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject
                                                                             options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
                                                                               error:&error];
                          
@@ -160,7 +178,46 @@ NSString * const rosterLoadedNotification = @"rosterLoaded";
                          
                          // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
  
-                         _rosterList = [[_rosterDictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                         _rosterList = [[jsonObject valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+                         
+                         NSMutableDictionary *pArray;
+                         
+                         _rosterDictionary = [[NSMutableDictionary alloc] init];
+                         
+                         for (pArray in _rosterList)
+                         {
+                             NSMutableArray *pRoster;// = [[NSMutableArray alloc] init];
+                             
+                             NSMutableDictionary * mutableDict = [NSMutableDictionary dictionary];
+                             [mutableDict addEntriesFromDictionary:pArray];
+                             [mutableDict removeObjectForKey:@"enrollments"];
+
+                             int iIndex = 0;
+                             NSArray *enrollment = [pArray valueForKey:@"enrollments"];
+                             for (id plans in enrollment)
+                             {
+                  //               [mutableDict removeObjectForKey:@"enrollment"];
+                                 NSLog(@"%@", plans);
+                                 pRoster = [_rosterDictionary valueForKey:[plans valueForKey:@"start_on"]];
+                                 if (pRoster == nil)
+                                 {
+                                    [mutableDict setObject:plans forKey:@"enrollment"];
+                                     
+                                    pRoster = [[NSMutableArray alloc] init];
+                                    [pRoster addObject:[mutableDict mutableCopy]];
+                                    [_rosterDictionary setValue:pRoster forKey:[plans valueForKey:@"start_on"]];
+                                 }
+                                 else
+                                 {
+                                     [mutableDict setObject:plans forKey:@"enrollment"];
+
+                                    [pRoster addObject:mutableDict];
+                                    [_rosterDictionary setValue:pRoster forKey:[plans valueForKey:@"start_on"]];
+                                 }
+                                 iIndex++;
+                             }
+                             
+                         }
                          
                          NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
                          [dnc postNotificationName:rosterLoadedNotification

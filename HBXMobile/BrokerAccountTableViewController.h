@@ -40,6 +40,8 @@
     
     BOOL bAllClientsSortedByClient;
     BOOL bSortAscending;
+    
+    BOOL bUsesGIT;
 }
 
 @property (strong, nonatomic) UISearchController *searchController;

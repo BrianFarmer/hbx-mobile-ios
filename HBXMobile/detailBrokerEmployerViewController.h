@@ -11,8 +11,9 @@
 #import "popupMessageBox.h"
 #import "XYGraph/XYPieChart.h"
 #import "HeaderView.h"
+#import "SlideNavigationController.h"
 
-@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate, HeaderViewDelegate>
+@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate, HeaderViewDelegate, SlideNavigationControllerDelegate>
 {
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;

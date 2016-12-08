@@ -19,7 +19,7 @@
 #define MOBILE_POST_LOGIN_DONE  1006
 #define GET_EMPLOYER_DETAILS    1007
 
-@interface ViewController : UIViewController <CLLocationManagerDelegate>
+@interface ViewController : UIViewController <CLLocationManagerDelegate, UIAlertViewDelegate>
 {
     IBOutlet UILabel                *lblDisclaimer;
     IBOutlet UITextField            *txtEmail;
@@ -57,6 +57,7 @@
     NSURLConnection *conn;
     
     NSString *_brokerId;
+    NSString *employerID;
     
     int REQUEST_TYPE;
     BOOL reLoad;

@@ -17,9 +17,13 @@
 
 @property (strong, nonatomic) brokerEmployersData *employerData;
 @property (strong, nonatomic) NSDictionary *detailDictionary;
-@property (strong, nonatomic) NSDictionary *rosterDictionary;
+//@property (strong, nonatomic) NSDictionary *rosterDictionary;
+@property (strong, nonatomic) NSMutableDictionary *rosterDictionary;
 @property(nonatomic, assign) NSString *enrollHost;
 @property(nonatomic, assign) NSString *customCookie_a;
+
+@property(nonatomic, assign) NSString *gitEmployer_detail;
+@property(nonatomic, assign) NSString *roster_url;
 
 @property(nonatomic, assign) NSString *sortOrder;
 @property(nonatomic, assign) NSIndexPath *iPath;

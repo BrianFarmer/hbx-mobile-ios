@@ -12,7 +12,7 @@
 
 @protocol EmployeeProfileDelegate
 -(void)setCoverageYearIndex:(NSInteger)index;
-//-(NSInteger)getPlanIndex;
+-(NSArray*)getEmployeeData;
 @end
 
 @interface EmployeeProfileViewController : UIViewController <HeaderViewDelegate>
@@ -35,8 +35,7 @@
 }
 
 @property (strong, nonatomic) NSArray *employeeData;
-@property (strong, nonatomic) brokerEmployersData *employerData;
-@property (nonatomic, assign) int  enrollmentIndex;
+@property (strong, nonatomic) NSDictionary *employerData;
 @property (nonatomic, assign) NSInteger  currentCoverageYearIndex;
 
 @property (nonatomic, weak)id<EmployeeProfileDelegate> delegate;

@@ -14,7 +14,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "HeaderView.h"
 
-@interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate, HeaderViewDelegate>
+@interface plansBrokerEmployerViewController : UIViewController <UIScrollViewDelegate, planCardViewDelegate, HeaderViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     UIPageControl *pageControl;
     

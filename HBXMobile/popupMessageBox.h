@@ -14,6 +14,7 @@
 #define typePopupSMS        1002
 #define typePopupMAP        1003
 #define typePopupEmpty      1004
+#define typePopupAlert      1005
 
 @protocol popupMessageBoxDelegate
 

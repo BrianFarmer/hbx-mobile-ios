@@ -50,11 +50,24 @@ alpha:1.0]
     
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+//    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
 //    [vHeader layoutHeaderView:employerData];
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
-    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
+//    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
+    vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index;
+    
+    if (tabBar.isBroker)
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
+    }
+    else
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:NO];
+    }
+
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -151,12 +164,12 @@ alpha:1.0]
         NSArray *pp1 = [[rosterList objectAtIndex:0] valueForKey:@"enrollments"];
         for (id py in pp1)
         {
-            NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+            NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
             if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
                 enrollmentIndex = iCnt;
             iCnt++;
         }
-        }
+    }
     
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
@@ -440,7 +453,7 @@ alpha:1.0]
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         
         UILabel* detailLabel = [[UILabel alloc] init];
-        detailLabel.frame = CGRectMake(5, 0, tableView.frame.size.width - (iLabelWidth * 2), 44);
+        detailLabel.frame = CGRectMake(15, 0, tableView.frame.size.width - (iLabelWidth * 2), 43);
         detailLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
         detailLabel.tag = 33;
         detailLabel.hidden = FALSE;
@@ -610,8 +623,10 @@ alpha:1.0]
         // Get destination view
         EmployeeProfileViewController *vc = [segue destinationViewController];
         vc.employeeData = (NSArray*)sender;
-        vc.employerData = employerData;
-        vc.enrollmentIndex = enrollmentIndex;
+        
+        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+        
+        vc.employerData = tabBar.detailDictionary;
         vc.currentCoverageYearIndex = [self getPlanIndex];
         vc.delegate = self;
     }

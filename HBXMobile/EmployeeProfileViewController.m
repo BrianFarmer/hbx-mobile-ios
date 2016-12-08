@@ -46,7 +46,7 @@ alpha:1.0]
 
     vHeader.iCurrentPlanIndex = _currentCoverageYearIndex;
     
-        vHeader.delegate = self;
+    vHeader.delegate = self;
 //    [vHeader layoutHeaderView:_employerData];
 
     pName.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
@@ -68,10 +68,26 @@ alpha:1.0]
 //    int enrollmentIndex = 0;
     int iCnt = 0;
 //    NSArray *pp1 = [[_employerData objectAtIndex:0] valueForKey:@"enrollments"];
-    NSArray *pp = [[[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex]  valueForKey:@"health"];
+    
+    
+//    NSArray *pp1 = [[_employeeData objectAtIndex:indexPath.row] valueForKey:@"enrollment"];
+    NSString *sStatus = @"Not Enrolled";
+    
+//    if ([pp1 count] > 0)
+//    {
+        NSArray *pp = [[_employeeData valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+        
+        sStatus = [pp valueForKey:@"status"];
+//    }
 
     
-    NSString *sStatus = [pp valueForKey:@"status"];
+    
+    
+    
+ //   NSArray *pp = [[[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex]  valueForKey:@"health"];
+
+    
+//    NSString *sStatus = [pp valueForKey:@"status"];
     
 
     pStatus_a.text = sStatus; //[[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];
@@ -113,29 +129,35 @@ alpha:1.0]
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
 
+    [self processData];
     
+    profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+-(void)processData
+{
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
-
+    
     NSDate *dob = [f dateFromString:[_employeeData valueForKey:@"date_of_birth"]];
     NSDate *hired_on = [f dateFromString:[_employeeData valueForKey:@"hired_on"]];
-
-    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
+    
+    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
     
     NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
-//    NSDate *plan_start_on = [f dateFromString:[pp valueForKey:@"plan_start_on"]];
+    //    NSDate *plan_start_on = [f dateFromString:[pp valueForKey:@"plan_start_on"]];
     [f setDateFormat:@"MM/dd/yyyy"];
-
+    
     detailValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"DOB: %@", [f stringFromDate:dob]], [NSString stringWithFormat:@"SSN: %@", [_employeeData valueForKey:@"ssn_masked"]], [NSString stringWithFormat:@"Hired on: %@", [f stringFromDate:hired_on]], nil];
-/*
-    dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [[lo valueForKey:@"employer_contribution"] stringValue], [[lo valueForKey:@"employee_cost"] stringValue], [[lo valueForKey:@"total_premium"] stringValue], [lo valueForKey:@"metal_level"], nil];
-*/
+    /*
+     dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [[lo valueForKey:@"employer_contribution"] stringValue], [[lo valueForKey:@"employee_cost"] stringValue], [[lo valueForKey:@"total_premium"] stringValue], [lo valueForKey:@"metal_level"], nil];
+     */
     if ([pStatus_a.text isEqualToString:@"Terminated"])
     {
         [f setDateFormat:@"yyyy-MM-dd"];
         NSDate *term_on = [f dateFromString:[[lo valueForKey:@"health"] valueForKey:@"terminated_on"]];
         [f setDateFormat:@"MM/dd/yyyy"];
-
+        
         dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [[lo valueForKey:@"health"] valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [[lo valueForKey:@"health"] valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Terminated On: %@", [f stringFromDate:term_on]], [NSString stringWithFormat:@"Terminated Reason: %@", [[lo valueForKey:@"health"] valueForKey:@"terminate_reason"]], [NSString stringWithFormat:@"Metal Level: %@", [[lo valueForKey:@"health"] valueForKey:@"metal_level"]], @"", nil];
     }
     else if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
@@ -145,11 +167,11 @@ alpha:1.0]
     else
     {
         [f setDateFormat:@"yyyy-MM-dd"];
- //       NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
+        //       NSDate *plan_start_on = [f dateFromString:_employerData.planYear];
         NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
-
+        
         [f setDateFormat:@"MM/dd/yyyy"];
-
+        
         NSString *planName = [[lo valueForKey:@"health"] valueForKey:@"plan_name"];
         if (planName == (NSString*)[NSNull null])
             planName = [NSString stringWithFormat:@"%@(%@)", @"N/A", pStatus_a.text];
@@ -160,7 +182,7 @@ alpha:1.0]
         
         dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [[lo valueForKey:@"health"] valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", planName], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [NSString stringWithFormat:@"Metal Level: %@", metalLevel], @"", nil];
     }
-    profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+
 }
 
 - (void) evenlySpaceTheseButtonsInThisView : (NSArray *) buttonArray : (UIView *) thisView {
@@ -540,13 +562,16 @@ alpha:1.0]
         else
         {
    //         NSArray *lo = [[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
-            NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"]
+            NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"]
             
             lblContributionView.hidden = NO;
             UILabel *lblContributionTotal = (UILabel *)[cell viewWithTag:121];
             UILabel *lblContributionEmployer = (UILabel *)[cell viewWithTag:122];
             UILabel *lblContributionEmployee = (UILabel *)[cell viewWithTag:123];
 
+            lblContributionTotal.frame = CGRectMake(20,10,100, 20);
+            lblContributionEmployer.frame = CGRectMake(100,10,100, 20);
+            lblContributionEmployee.frame = CGRectMake(200,10,100, 20);
             
             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
             [numberFormatter setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -562,7 +587,7 @@ alpha:1.0]
             {
                 NSString *totalCont = [NSString stringWithFormat:@"%@",  [numberFormatter stringFromNumber:[NSNumber numberWithFloat:[[[lo valueForKey:@"health"] valueForKey:@"total_premium"] floatValue]]]];
                 
-                                       
+                
                 lblContributionTotal.attributedText = [self setAttributedLabel:totalCont text2:@"\nPREMIUM" color:UIColorFromRGB(0x00a3e2)];
                 [lblContributionTotal sizeToFit];
                 
@@ -647,16 +672,17 @@ alpha:1.0]
     vHeader.iCurrentPlanIndex = index;
 //    tabBar.current_coverage_year_index = index;
     
-    int iCnt = 0;
-    NSArray *pp1 = [_employeeData valueForKey:@"enrollments"];
+//    int iCnt = 0;
+//    NSArray *pp1 = [_employeeData valueForKey:@"enrollment"];
 //    NSArray *lo = [[_employeeData valueForKey:@"enrollments"] objectAtIndex:_enrollmentIndex];//[[[_employeeData valueForKey:@"enrollments"]
-
+//    NSArray *employerData1 = [[_employerData valueForKey:@"plan_years"] objectAtIndex:_currentCoverageYearIndex];
+    /*
     for (id py in pp1)
     {
-        NSString *sPlanYear = [[_employerData.plans objectAtIndex:index] valueForKey:@"plan_year_begins"];
+        NSString *sPlanYear = [[[_employerData valueForKey:@"plan_years"] objectAtIndex:index] valueForKey:@"plan_year_begins"];
         if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
         {
-            _enrollmentIndex = iCnt;
+            _currentCoverageYearIndex = iCnt;
             NSString *sStatus = [[py valueForKey:@"health"] valueForKey:@"status"];
             
             pStatus_a.text = sStatus;
@@ -671,8 +697,33 @@ alpha:1.0]
         }
         iCnt++;
     }
-    
+    */
+//    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:_currentCoverageYearIndex] valueForKey:@"plan_year_begins"];
+//    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
     [_delegate setCoverageYearIndex:index];
+    _employeeData = [_delegate getEmployeeData];
+    
+    NSString *sStatus = @"Not Enrolled";
+    
+    //    if ([pp1 count] > 0)
+    //    {
+    NSArray *pp = [[_employeeData valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+    
+    sStatus = [pp valueForKey:@"status"];
+    pStatus_a.text = sStatus;
+    if ([pStatus_a.text isEqualToString:@"Enrolled"])
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
+    if ([pStatus_a.text isEqualToString:@"Waived"])
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;
+    if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
+    if ([pStatus_a.text isEqualToString:@"Terminated"])
+        pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_TERMINATED;
+
+
+    
+    [self processData];
     
     [profileTable reloadData];
 }

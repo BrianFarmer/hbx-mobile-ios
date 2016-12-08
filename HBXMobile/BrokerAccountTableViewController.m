@@ -231,6 +231,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [renewals removeAllObjects];
     [all_others removeAllObjects];
     clients_needing_immediate_attention = 0;
+    bUsesGIT = FALSE;
     
     if (PRODUCTION_BUILD)
         data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
@@ -242,8 +243,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         {
             // NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/feature/multiple-contacts/enroll/broker/employers_list/response/example.json"];
        //     NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/master/enroll/broker/employers_list/response/example.json"];
-            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/v0.2/enroll/broker/employers_list/response/example.json"];
+//            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/v0.2/enroll/broker/employers_list/response/example.json"];
+            NSURL *url = [NSURL URLWithString:@"https://raw.githubusercontent.com/dchealthlink/HBX-mobile-app-APIs/v0.2.1/enroll/broker/employers_list/response/example.json"];
             data = [NSData dataWithContentsOfURL:url];
+            bUsesGIT = TRUE;
         }
         else
             data = [_jsonData dataUsingEncoding:NSUTF8StringEncoding];
@@ -1484,6 +1487,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    /*
     if ([[segue identifier] isEqualToString:@"Broker Detail Page"])
     {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
@@ -1494,6 +1498,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         vc.enrollHost = _enrollHost;
         vc.customCookie_a = _customCookie_a;
     }
+    */
     
     if ([[segue identifier] isEqualToString:@"Broker Employer Detail"])
     {
@@ -1508,6 +1513,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         tabar.enrollHost = _enrollHost;
         tabar.customCookie_a = _customCookie_a;
         tabar.isBroker = YES;
+        
+//        if (bUsesGIT)
+//        {
+            brokerEmployersData *ttype = [sequeTransfer objectAtIndex:0];
+  //          tabar.gitEmployer_detail = ttype.detail_url;
+            tabar.roster_url = ttype.roster_url;
+//        }
     }
 }
 

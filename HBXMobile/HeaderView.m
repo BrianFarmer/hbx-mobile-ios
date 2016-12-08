@@ -118,7 +118,7 @@ alpha:1.0]
         [f setDateFormat:@"MMM dd, yyyy"];
         
 //        UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
-        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0, pCompany.frame.origin.y + pCompany.frame.size.height, self.frame.size.width, 45)];
+        pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2-110, pCompany.frame.origin.y + pCompany.frame.size.height, 220, 45)];
         pLabelCoverage.tag = 975;
         
         pLabelCoverage.numberOfLines = 2;
@@ -263,7 +263,7 @@ alpha:1.0]
     
     int jj = pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height;
     int bb = [self viewWithTag:30].frame.origin.y;
-    if (bb - jj > 15)
+//    if (bb - jj > 15)
     {
         pCompanyFooter.frame = CGRectMake(pCompanyFooter.frame.origin.x,pCompanyFooter.frame.origin.y+20,pCompanyFooter.frame.size.width,pCompanyFooter.frame.size.height);
         
@@ -353,21 +353,21 @@ alpha:1.0]
 
 -(int)layoutEmployeeProfile:(NSDictionary *)eData nameY:(int)nameY
 {
-//        employerData = eData;
+    employerDetail = eData;
     UILabel * pLabelCoverage;
     
-        NSDateFormatter *f = [[NSDateFormatter alloc] init];
-        [f setDateFormat:@"yyyy-MM-dd"];
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
     NSArray *pPlan = [[eData valueForKey:@"plan_years"] objectAtIndex:_iCurrentPlanIndex];
     
-    //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+    //   NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
     
-    //       NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
+    //   NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
     
     
     NSDate *endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
 
-//        NSDate *endDate = [f dateFromString:eData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+//      NSDate *endDate = [f dateFromString:eData.planYear];//[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
         
         NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
@@ -644,6 +644,7 @@ alpha:1.0]
 
 -(void)changeCoverageYear:(id)sender
 {
+    
     actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Coverage Year" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
     actionSheet.delegate = self;
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
@@ -660,7 +661,13 @@ alpha:1.0]
         [f setDateFormat:@"MM/dd/yyyy"];
         
         if (ii==[_delegate getPlanIndex])
-            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"\u2705 %@", [f stringFromDate:planYear]]];
+        {
+            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"\u2713 %@", [f stringFromDate:planYear]]];
+      //      [actionSheet setValue:[UIImage imageNamed:@"check-green.png"] forKey:@"_image"];
+     //       [online setValue:[[UIImage imageNamed:@"facebook.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
+     //       [[[actionSheet valueForKey:@"_buttons"] objectAtIndex:0] setImage:[UIImage imageNamed:@"check-green.png"] forState:UIControlStateNormal];
+
+        }
         else
             [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"%@", [f stringFromDate:planYear]]];
  //       [[[actionSheet valueForKey:@"_buttons"] objectAtIndex:0] setImage:[UIImage imageNamed:@"check_green.png"] forState:UIControlStateNormal];
@@ -669,6 +676,7 @@ alpha:1.0]
 //        [employerData.plans objectAtIndex:[employerData.plans count]-1];
     
     [actionSheet showInView:self];
+     
 }
 
 -(void)drawCoverageYear:(NSInteger)index

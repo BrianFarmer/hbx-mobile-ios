@@ -51,13 +51,24 @@
     self.navigationController.topViewController.navigationItem.titleView = navImage;
     
     //self.navigationController.topViewController.title = @"info";
-    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+//    vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
 //    [vHeader layoutHeaderView:employerData];
     vHeader.delegate = self;
     //[vHeader layoutHeaderView:employerData];
-        vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index;
+    vHeader.iCurrentPlanIndex = tabBar.current_coverage_year_index;
     
-    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
+    if (tabBar.isBroker)
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
+    }
+    else
+    {
+        vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,145);
+        [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:NO];
+    }
+
+//    [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO];
 /*
     pCompany.font = [UIFont fontWithName:@"Roboto-Bold" size:24];
     pCompany.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, 65);
@@ -105,7 +116,11 @@
 //        [self loadDictionary];
 //    else
 //    {
-        displayArray = tabBar.rosterList;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+//        displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
 //    }
     
@@ -151,19 +166,21 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
-    
+/*
     if ([displayArray count] > 0)
     {
-    int iCnt = 0;
-    NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
-    for (id py in pp1)
-    {
+        int iCnt = 0;
         NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
-        if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
-            enrollmentIndex = iCnt;
-        iCnt++;
+
+        NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
+        for (id py in pp1)
+        {
+            if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
+                enrollmentIndex = iCnt;
+            iCnt++;
+        }
     }
-    }
+    */
     
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
@@ -174,7 +191,11 @@
     
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
     {
-        displayArray =  tabBar.rosterList;
+ //       displayArray =  tabBar.rosterList;
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        
+        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
         [pRosterTable reloadData];
         return;
     }
@@ -248,7 +269,11 @@
     // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
 //    tabBar.rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
     
-    displayArray = tabBar.rosterList;//rosterList;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+
+//    displayArray = tabBar.rosterList;//rosterList;
     
     [self setDataSectionIndex];
 }
@@ -294,7 +319,7 @@
             // check status code and possibly MIME type (which shall start with "application/json"):
   //          NSRange range = [response.MIMEType rangeOfString:@"application/json"];
             
-            if (httpResponse.statusCode == 200) { // /* OK */ && range.length != 0) {
+            if (httpResponse.statusCode == 200) {
                 NSError* error;
                 id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
                 if (jsonObject) {
@@ -701,12 +726,12 @@ else
     NSDictionary *attrs;// = @{ NSForegroundColorAttributeName : UIColorFromRGB(0x00a99e)};//UIColorFromRGB(0x00a3e2) };
 //    NSString *sActive = [[[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"] valueForKey:@"status"];//[ii]; //[pk value:ii];
 
-    NSArray *pp1 = [[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"];
+    NSArray *pp1 = [[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollment"];
     NSString *sActive = @"Not Enrolled";
     
     if ([pp1 count] > 0)
     {
-        NSArray *pp = [[[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollments"] objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
+        NSArray *pp = [[[displayArray objectAtIndex:indexPath.row] valueForKey:@"enrollment"] valueForKey:@"health"]; //objectAtIndex:enrollmentIndex]  valueForKey:@"health"];
     
         sActive = [pp valueForKey:@"status"];
     }
@@ -792,8 +817,10 @@ else
         // Get destination view
         EmployeeProfileViewController *vc = [segue destinationViewController];
         vc.employeeData = (NSArray*)sender;
-        vc.employerData = employerData;
-        vc.enrollmentIndex = enrollmentIndex;
+        
+        employerTabController *tabBar = (employerTabController *) self.tabBarController;
+        
+        vc.employerData = tabBar.detailDictionary;
         vc.currentCoverageYearIndex = [self getPlanIndex];
         vc.delegate = self;
     }
@@ -903,16 +930,19 @@ else
     
     vHeader.iCurrentPlanIndex = index;
     tabBar.current_coverage_year_index = index;
-
+/*
     int iCnt = 0;
     NSArray *pp1 = [[displayArray objectAtIndex:0] valueForKey:@"enrollments"];
     for (id py in pp1)
     {
-        NSString *sPlanYear = [[employerData.plans objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
         if ([[py valueForKey:@"start_on"] isEqualToString:sPlanYear])
             enrollmentIndex = iCnt;
         iCnt++;
     }
+    */
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
     
     [pRosterTable reloadData];
 }
@@ -922,6 +952,14 @@ else
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     return tabBar.current_coverage_year_index;
+}
+
+-(NSArray*)getEmployeeData
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+
+    return [tabBar.rosterDictionary valueForKey:sPlanYear];
 }
 
 -(void)setCoverageYearIndex:(NSInteger)index

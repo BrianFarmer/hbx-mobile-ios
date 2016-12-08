@@ -22,6 +22,7 @@
 @property(nonatomic,retain)NSString *sUser;
 @property(nonatomic,assign)int iPlanVersion;
 @property(nonatomic,retain)NSDate *dTimingStart;
+@property(nonatomic,retain)NSString *sEmployerId;
 
 +(Settings*)getInstance;
 -(NSString*)getMobileServer;
