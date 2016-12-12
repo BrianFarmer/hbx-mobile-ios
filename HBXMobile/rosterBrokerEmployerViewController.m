@@ -116,12 +116,22 @@
 //        [self loadDictionary];
 //    else
 //    {
-    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
-    
-    displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] > 0)
+    {
+        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+        
+        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
 
-//        displayArray = tabBar.rosterList;
+    //        displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
+    }
+    else
+    {
+        UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+        [activityIndicator stopAnimating];
+        
+        [activityIndicator removeFromSuperview];
+    }
 //    }
     
     bFilterOpen = FALSE;
@@ -189,6 +199,9 @@
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
     slideView.frame = CGRectMake(self.view.frame.size.width, pRosterTable.frame.origin.y + 34, 200, pRosterTable.frame.size.height - 34);
     
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] == 0)
+        return;
+
     if ([tabBar.sortOrder isEqualToString:@"show all"] || [tabBar.sortOrder length] == 0)
     {
  //       displayArray =  tabBar.rosterList;
@@ -858,8 +871,11 @@ else
 
     bFilterOpen = FALSE;
     
+    NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+
     if (idx.section == 1) //2
-        displayArray =  tabBar.rosterList;
+        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
     else
     {
         if (idx.section == 0)
@@ -884,25 +900,22 @@ else
                 break;
         }
         
-       predicate = [NSPredicate predicateWithFormat:@"enrollment.health.status contains[c] %@", substring];
+ //      predicate = [NSPredicate predicateWithFormat:@"enrollment.health.status contains[c] %@", substring];
 //        predicate = [NSPredicate predicateWithFormat:@"enrollments.%@.health.status == %@", type, substring];
- //      predicate = [NSPredicate predicateWithFormat:@"enrollments.health.status == %@", substring];
+       predicate = [NSPredicate predicateWithFormat:@"enrollment.health.status == %@", substring];
    //     NSString *str = <search string>;
  //       NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY enrollments.start_on LIKE %@", @"2017-01-01"];
 //        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY enrollments.health.status LIKE %@ AND enrollments.start_on = '%@'", substring, @"2017-01-01"];
-
+        //        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
+        
+        NSArray *filteredKeys = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
         
         //       NSArray *result = [tabBar.rosterList filteredArrayUsingPredicate:pred];
  //       BOOL success = result.count > 0;
         
-        NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
-        
-//        displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
-
-        NSArray *filteredKeys = [[tabBar.rosterDictionary valueForKey:sPlanYear] filteredArrayUsingPredicate:predicate];
 //        NSArray *filteredKeys = [displayArray filteredArrayUsingPredicate:predicate];
         
-        if ([filteredKeys count] > 0)
+ //       if ([filteredKeys count] > 0)
         {
             /*
             NSMutableArray *tempArray = [[NSMutableArray alloc] init];
@@ -1040,5 +1053,12 @@ else
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     tabBar.current_coverage_year_index = index;
+}
+
+-(NSArray*)getEmployerContactInfo
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.employerData.contact_info;
 }
 @end

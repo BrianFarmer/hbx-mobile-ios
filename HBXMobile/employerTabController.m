@@ -196,7 +196,6 @@ const CGFloat kBarHeight = 49;
                          
                          for (pArray in _rosterList)
                          {
-                             NSMutableArray *pRoster;// = [[NSMutableArray alloc] init];
                              
                              NSMutableDictionary * mutableDict = [NSMutableDictionary dictionary];
                              [mutableDict addEntriesFromDictionary:pArray];
@@ -206,6 +205,8 @@ const CGFloat kBarHeight = 49;
                              NSArray *enrollment = [pArray valueForKey:@"enrollments"];
                              for (id plans in enrollment)
                              {
+                                 NSMutableArray *pRoster = nil;// = [[NSMutableArray alloc] init];
+
                   //               [mutableDict removeObjectForKey:@"enrollment"];
                                  NSLog(@"%@", plans);
                                  pRoster = [_rosterDictionary valueForKey:[plans valueForKey:@"start_on"]];
@@ -234,6 +235,16 @@ const CGFloat kBarHeight = 49;
                          [dnc postNotificationName:rosterLoadedNotification
                                             object:self
                                           userInfo:nil];
+                         
+                         if ([_rosterList count] == 0)
+                         {
+                             //This one just tells details threads are finished. since we end early here go ahead and tell details we are done
+                             [dnc postNotificationName:@"rosterCostsLoaded"
+                                                object:self
+                                              userInfo:nil];
+
+                             return;
+                         }
                          
                          NSString *sKey;
                          
@@ -283,11 +294,13 @@ const CGFloat kBarHeight = 49;
                                          _terminated += 1;
 
 
-                                    NSDictionary *emp_contr = [[pPlan valueForKey:@"employer_contribution"] objectAtIndex:0];
-                                    NSDictionary *emp_cost = [[pPlan valueForKey:@"employee_cost"] objectAtIndex:0];
+                                    //NSDictionary *emp_contr = [[pPlan valueForKey:@"employer_contribution"] objectAtIndex:0];
+                                    NSString *oo = [[[myArrayElement valueForKey:@"enrollment" ] valueForKey:@"health"] valueForKey:@"employer_contribution"];
+                                    NSString *ll = [[[myArrayElement valueForKey:@"enrollment" ] valueForKey:@"health"] valueForKey:@"employee_cost"];
+                                    //NSDictionary *emp_cost = [[pPlan valueForKey:@"employee_cost"] objectAtIndex:0];
                                      
-                                    NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
-                                    NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
+                                  //  NSString *oo = [NSString stringWithFormat:@"%@", emp_contr];
+                                  //  NSString *ll = [NSString stringWithFormat:@"%@", emp_cost];
                                    
                                      _employer_contribution += [oo doubleValue];
                                      _employee_costs += [ll doubleValue];

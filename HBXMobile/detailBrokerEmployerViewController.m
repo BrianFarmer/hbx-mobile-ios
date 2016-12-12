@@ -61,8 +61,9 @@
     //self.navigationController.topViewController.title = @"info";
 
     vHeader.delegate = self;
+    vHeader.eState = tabBar.eState;
     //[vHeader layoutHeaderView:employerData];
-    vHeader.iCurrentPlanIndex = (tabBar.current_coverage_year_index > -1) ? 0 : [[tabBar.detailDictionary valueForKey:@"plan_years"] count]-1;
+    vHeader.iCurrentPlanIndex = (tabBar.current_coverage_year_index > -1) ? [[tabBar.detailDictionary valueForKey:@"plan_years"] count]-1 : 0;
 //    tabBar.current_coverage_year_index = [employerData.plans count]-1;
     
     
@@ -81,8 +82,6 @@
     
     if (!expandedSections)
         expandedSections = [[NSMutableIndexSet alloc] init];
-    
-    [expandedSections addIndex:0];
     
     sections = [[NSArray alloc] initWithObjects: @"RENEWAL DEADLINES", @"PARTICIPATION", @"MONTHLY COSTS", nil];
 
@@ -119,6 +118,13 @@
 
 -(void)processData
 {
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] == 0)
+        return;
+    
+    [expandedSections addIndex:0];
+
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
     [f setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
@@ -133,7 +139,6 @@
 //    [out setDateFormat:@"MMM dd, yyyy"];
     [out setDateFormat:@"MM/dd/yyyy"];
     
-    employerTabController *tabBar = (employerTabController *) self.tabBarController;
 
 //    NSArray *employerData1 = [employerData.plans objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
     NSArray *employerData1 = [[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index];//[employerData.plans count]-1];
@@ -169,8 +174,11 @@
         
         if (eState == (enrollmentState)NO_ACTION_REQUIRED)
         {
+            [out setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+            NSString *ncyb = [out stringFromDate:planYearDate];
+            
             renewalNames = [[NSArray alloc] initWithObjects: @"", @"Renewal Available", @"Next Coverage Year Begins", @"Open Enrollment Ends", nil];
-            renewalValues = [[NSArray alloc] initWithObjects: @"0", [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"renewal_application_available"]]], [out stringFromDate:planYearDate], [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]]], nil];
+            renewalValues = [[NSArray alloc] initWithObjects: @"0", [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"renewal_application_available"]]], ncyb, [out stringFromDate:[f dateFromString:[employerData1 valueForKey:@"open_enrollment_ends"]]], nil];
         }
         else
         {
@@ -198,9 +206,11 @@
         if ([startDate compare:today] == NSOrderedAscending)
             renewalNames = [[NSArray alloc] initWithObjects: @"", @"Open Enrollment Began", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
         else
-            renewalNames = [[NSArray alloc] initWithObjects: @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"BINDER PAYMENT DUE", nil];
+            renewalNames = [[NSArray alloc] initWithObjects: @"", @"Open Enrollment Begins", @"Open Enrollment Closes", @"Days Left", @"Minimum Participation required", nil]; //BINDER PAYMENT DUE
         
-        renewalValues = [[NSArray alloc] initWithObjects: @"0", [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", (long)[components day]], [employerData1 valueForKey:@"binder_payment_due"], nil];
+        long i_daysLeft = ((long)[components day] > 0) ? (long)[components day] : 0;
+        
+        renewalValues = [[NSArray alloc] initWithObjects: @"0", [f stringFromDate:startDate], [f stringFromDate:endDate], [NSString stringWithFormat:@"%ld", i_daysLeft], [[employerData1 valueForKey:@"minimum_participation_required"] stringValue], nil]; //
     }
  /*
     monthlyCostNames = [[NSArray alloc] initWithObjects: @"Employee Contribution", @"Employer Contribution", @"TOTAL", nil];
@@ -390,6 +400,7 @@
 //    self.navigationItem.hidesBackButton = YES;
 //    self.navigationItem.leftBarButtonItem = nil;
     
+    
     [vHeader drawCoverageYear:[self getPlanIndex]];
     
     int navbarHeight = self.navigationController.navigationBar.frame.size.height + 25; //Extra 25 must be accounted for. It is the status bar height (clock, batttery indicator)
@@ -444,7 +455,12 @@
     if ([expandedSections containsIndex:section])
     {
         if (section == 0)
+        {
+//            if (eState == (enrollmentState)NEEDS_ATTENTION)
+  //              return 5;
+            
             return 4;
+        }
         
         if (section == 1)
             return 1;
@@ -812,6 +828,14 @@
     {
         if (indexPath.row > 0)
         {
+            /*
+            if (eState == (enrollmentState)NEEDS_ATTENTION)
+                if (indexPath.row == 4)
+                {
+                    cell.textLabel.textColor = [UIColor redColor];
+                    cell.detailTextLabel.textColor = [UIColor redColor];
+                }
+             */
             cell.textLabel.text = [renewalNames objectAtIndex:indexPath.row];
             cell.detailTextLabel.text = [renewalValues objectAtIndex:indexPath.row];
         }
@@ -880,7 +904,8 @@
             pTerminated.text = [NSString stringWithFormat:@"%@\nTERMINATED", (tabBar.terminated > -1) ? [NSString stringWithFormat:@"%d", tabBar.terminated]:@"--"];
 
             pTotalEmployees.hidden = FALSE;
-            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", tabBar.enrolled + tabBar.waived + tabBar.notenrolled + tabBar.terminated];
+            int iTotal = tabBar.enrolled + tabBar.waived + tabBar.notenrolled + tabBar.terminated;
+            pTotalEmployees.text = [NSString stringWithFormat:@"%i\nTOTAL EMPLOYEES", (iTotal > -1) ? iTotal : 0];
             
             if (dataNotLoaded)
             {
@@ -1026,4 +1051,10 @@
     return tabBar.current_coverage_year_index;
 }
 
+-(NSArray*)getEmployerContactInfo
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.employerData.contact_info;
+}
 @end

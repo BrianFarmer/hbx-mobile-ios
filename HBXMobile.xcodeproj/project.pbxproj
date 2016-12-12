@@ -54,7 +54,6 @@
 		13A382211CDB2F4D006B5984 /* menu-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */; };
 		13A382251CDB2FE8006B5984 /* carefirst_logo_k_2935.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A382231CDB2FE8006B5984 /* carefirst_logo_k_2935.png */; };
 		13A382261CDB2FE8006B5984 /* kaiser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 13A382241CDB2FE8006B5984 /* kaiser.jpg */; };
-		13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */; };
 		13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */; };
 		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
 		13CBA7101DA5838100481667 /* EmployeeProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CBA70F1DA5838100481667 /* EmployeeProfileViewController.m */; };
@@ -212,8 +211,6 @@
 		13A3821F1CDB2F4D006B5984 /* menu-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-icon@2x.png"; path = "images/menu-icon@2x.png"; sourceTree = "<group>"; };
 		13A382231CDB2FE8006B5984 /* carefirst_logo_k_2935.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = carefirst_logo_k_2935.png; path = images/carriers/carefirst_logo_k_2935.png; sourceTree = "<group>"; };
 		13A382241CDB2FE8006B5984 /* kaiser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = kaiser.jpg; path = images/carriers/kaiser.jpg; sourceTree = "<group>"; };
-		13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerPlanDetailViewController.h; sourceTree = "<group>"; };
-		13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerPlanDetailViewController.m; sourceTree = "<group>"; };
 		13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrokerAccountTableViewController.h; sourceTree = "<group>"; };
 		13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrokerAccountTableViewController.m; sourceTree = "<group>"; };
 		13B829921D2D30F600F1A571 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
@@ -459,8 +456,6 @@
 				137327551C8DECA800B0F6E1 /* SlideNavigationController.m */,
 				137327571C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.h */,
 				137327581C8F268D00B0F6E1 /* LeftMenuSlideOutTableViewController.m */,
-				13AC2A291CEA46CC0079DFF2 /* brokerPlanDetailViewController.h */,
-				13AC2A2A1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m */,
 				13A373101D0B279F008CA0E1 /* ConfigViewController.h */,
 				13A373111D0B279F008CA0E1 /* ConfigViewController.m */,
 				13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */,
@@ -871,7 +866,6 @@
 				13273AF61D352D520097D245 /* brokerEmployersData.m in Sources */,
 				40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */,
 				13FF47451C8A2D1B00C7C851 /* KeychainItemWrapper.m in Sources */,
-				13AC2A2B1CEA46CC0079DFF2 /* brokerPlanDetailViewController.m in Sources */,
 				13FF470E1C8A2C5600C7C851 /* main.m in Sources */,
 				138119DC1C9ADBF1000A75AA /* Constants.m in Sources */,
 				13B829911D2C6AF800F1A571 /* BrokerAccountTableViewController.m in Sources */,

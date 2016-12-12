@@ -421,7 +421,7 @@ alpha:1.0]
     else
     {
         [f setDateFormat:@"yyyy-MM-dd"];
-        NSDate *endDate = [f dateFromString:ttype.open_enrollment_ends];
+        NSDate *endDate;// = [f dateFromString:ttype.open_enrollment_ends];
         
         NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay

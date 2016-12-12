@@ -102,24 +102,30 @@ alpha:1.0]
     
     if (bShowCoverage)
     {
+        NSDate *endDate;
+        NSDate *targetDate;
+        
         NSDateFormatter *f = [[NSDateFormatter alloc] init];
         [f setDateFormat:@"yyyy-MM-dd"];
         
-        NSArray *pPlan = [[eData valueForKey:@"plan_years"] objectAtIndex:_iCurrentPlanIndex];
-//        NSArray *pPlan = [employerData.plans objectAtIndex:_iCurrentPlanIndex];
-        
-        //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
-        
- //       NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
-        
-        
-        NSDate *endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
-        
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-        [dateComponents setDay:364];
-        NSDate *targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
-        
+        if ([[eData valueForKey:@"plan_years"] count] > 0)
+        {
+            NSArray *pPlan = [[eData valueForKey:@"plan_years"] objectAtIndex:_iCurrentPlanIndex];
+    //        NSArray *pPlan = [employerData.plans objectAtIndex:_iCurrentPlanIndex];
+            
+            //                     NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
+            
+     //       NSDate *planYear = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];
+            
+            
+            endDate = [f dateFromString:[pPlan valueForKey:@"plan_year_begins"]];                 //[dictionary valueForKey:@"plan_year_begins"]]; //[f dateFromString:type.billing_report_date];
+            
+            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+            [dateComponents setDay:364];
+            targetDate = [gregorian dateByAddingComponents:dateComponents toDate:endDate  options:0];
+        }
+    
         [f setDateFormat:@"MMM dd, yyyy"];
         
 //        UILabel *pLabelCoverage = [[UILabel alloc] initWithFrame:CGRectMake(0,[self viewWithTag:30].frame.origin.y + [self viewWithTag:30].frame.size.height,self.frame.size.width, 45)];
@@ -135,17 +141,27 @@ alpha:1.0]
         pLabelCoverage.hidden = FALSE;
         NSString *lblCoverageYear;
         
+        //        NSString *temp_a = @"Coverage Year \u25BE";
+        NSString *temp_a = @"Coverage Year";
+        
         if ([[eData valueForKey:@"plan_years"] count] > 1)
             lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
         else
-            lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        {
+            if ([[eData valueForKey:@"plan_years"] count] == 0)
+            {
+                lblCoverageYear = @"There are no plans published for this company";
+                temp_a = @"";
+            }
+            else
+                lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        }
         
             
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
-//        NSString *temp_a = @"Coverage Year \u25BE";
-        NSString *temp_a = @"Coverage Year";
+
         
         NSMutableAttributedString *string1 = [[NSMutableAttributedString alloc] initWithString:temp_a attributes:attrs];
         [string1 beginEditing];
@@ -189,7 +205,6 @@ alpha:1.0]
             [self addSubview:pLabelCoverage];
             pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height - iOffset/2, self.frame.size.width - 20, 20);
         }
-        
 
     }
     else
@@ -200,27 +215,27 @@ alpha:1.0]
     pCompanyFooter.textColor = UIColorFromRGB(0x555555);
 //    pCompany.backgroundColor  = [UIColor greenColor];
     
-    enrollmentState eState = [self getEnrollmentState:eData];
+//    enrollmentState eState = [self getEnrollmentState:eData];
     
     //if (employerData.status == (enrollmentState)NEEDS_ATTENTION)
-    if (eState == (enrollmentState)NEEDS_ATTENTION)
+    if (_eState == (enrollmentState)NEEDS_ATTENTION)
     {
         pCompanyFooter.text = NSLocalizedString(@"TITLE_NOTE", @"OPEN ENROLLMENT IN PROGRESS - MINIMUM NOT MET");
         pCompanyFooter.textColor = ENROLLMENT_STATUS_OE_MIN_NOTMET;
         
     }
-    else if (eState == (enrollmentState)OPEN_ENROLLMENT_MET)
+    else if (_eState == (enrollmentState)OPEN_ENROLLMENT_MET)
     {
         pCompanyFooter.text = @"OPEN ENROLLMENT IN PROGRESS";
         pCompanyFooter.textColor = ENROLLMENT_STATUS_OE_MIN_MET;//[UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f]; //[UIColor yellowColor];
         
     }
-    else if (eState == (enrollmentState)RENEWAL_IN_PROGRESS)
+    else if (_eState == (enrollmentState)RENEWAL_IN_PROGRESS)
     {
         pCompanyFooter.text = @"RENEWAL PENDING"; //@"RENEWAL IN PROGRESS";
         pCompanyFooter.textColor = ENROLLMENT_STATUS_RENEWAL_IN_PROG;//[UIColor colorWithRed:218.0f/255.0f green:165.0f/255.0f blue:32.0f/255.0f alpha:1.0f];
     }
-    else if (eState == (enrollmentState)NO_ACTION_REQUIRED)
+    else if (_eState == (enrollmentState)NO_ACTION_REQUIRED)
     {
         pCompanyFooter.text = @"IN COVERAGE";
         pCompanyFooter.textColor = ENROLLMENT_STATUS_ALL_CLIENTS;//[UIColor colorWithRed:0.0f/255.0f green:139.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
@@ -328,16 +343,28 @@ alpha:1.0]
             return NO_ACTION_REQUIRED;
         else
         {
-            NSDate *startEnrollmentDate = [f dateFromString:[pPlan valueForKey:@"open_enrollment_begins"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
-            NSDate *endEnrollmentDate = [f dateFromString:[pPlan valueForKey:@"open_enrollment_ends"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+            NSDate *startEnrollmentDate;
+            NSDate *endEnrollmentDate;
+            
+            if ([pPlan valueForKey:@"open_enrollment_begins"] != [NSNull null])
+                startEnrollmentDate = [f dateFromString:[pPlan valueForKey:@"open_enrollment_begins"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
+            else
+                return NO_ACTION_REQUIRED;
+            
+            if ([pPlan valueForKey:@"open_enrollment_ends"] != [NSNull null])
+                endEnrollmentDate = [f dateFromString:[pPlan valueForKey:@"open_enrollment_ends"]]; //[dateFormatter dateFromString:pCompany.open_enrollment_ends];
             
             if ([startEnrollmentDate compare:today] == NSOrderedAscending && [endEnrollmentDate compare:today] == NSOrderedDescending) //If today is greater than open_enrollment_begin AND less than open_enrollment_end
             {
                 //if (([pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
-                //                if (([pPlan intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
-                //                    return NEEDS_ATTENTION;
-                //                else if ( [pCompany.employeesEnrolled intValue] + [pCompany.employeesWaived intValue] >= [pCompany.planMinimum intValue] )
-                //                    return OPEN_ENROLLMENT_MET;
+                if (([[pPlan valueForKey:@"employees_enrolled"] intValue] + [[pPlan valueForKey:@"employees_waived"] intValue]) < [[pPlan valueForKey:@"minimum_participation_required"] intValue])
+                    return NEEDS_ATTENTION;
+                else
+                    return OPEN_ENROLLMENT_MET;
+                    //if ( [[pPlan valueForKey:@"employees_enrolled"] intValue] + [[pPlan valueForKey:@"employees_waived"] intValue] >= [[pPlan valueForKey:@"minimum_participation_required"] intValue] )
+
+                
+                //                                if (([pPlan intValue] + [pCompany.employeesWaived intValue]) < [pCompany.planMinimum intValue])
             }
             else
             {
@@ -525,11 +552,12 @@ alpha:1.0]
 
 - (void)phoneEmployer:(id)sender
 {
+    
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
     sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    sub.messageTitle = employerData.companyName;
-//    sub.messageArray = employerData.contact_info;
+    sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
+    sub.messageArray = [_delegate getEmployerContactInfo];
     sub.messageType = typePopupPhone;
     UIViewController *currentTopVC = [self currentTopViewController];
     [currentTopVC presentViewController:sub animated:YES completion: nil];
@@ -541,8 +569,8 @@ alpha:1.0]
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
     sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    sub.messageTitle = employerData.companyName;
-//    sub.messageArray = employerData.contact_info;
+    sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
+    sub.messageArray = [_delegate getEmployerContactInfo];
     sub.messageType = typePopupEmail;
     
     UIViewController *currentTopVC = [self currentTopViewController];
@@ -561,8 +589,8 @@ alpha:1.0]
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
     sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    sub.messageTitle = employerData.companyName;
-//    sub.messageArray = employerData.contact_info;
+    sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
+    sub.messageArray = [_delegate getEmployerContactInfo];
     sub.messageType = typePopupSMS;
     sub.delegate = self;
     
@@ -617,8 +645,8 @@ alpha:1.0]
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
     sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    sub.messageTitle = employerData.companyName;
-//    sub.messageArray = employerData.contact_info;
+    sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
+    sub.messageArray = [_delegate getEmployerContactInfo];
     sub.messageType = typePopupMAP;
     sub.delegate = self;
     
@@ -705,6 +733,8 @@ alpha:1.0]
 
 -(void)drawCoverageYear:(NSInteger)index
 {
+    if ([[employerDetail valueForKey:@"plan_years"] count] == 0)
+        return;
     UIButton *pBut = [self viewWithTag:99];
     
     NSDateFormatter *f = [[NSDateFormatter alloc] init];

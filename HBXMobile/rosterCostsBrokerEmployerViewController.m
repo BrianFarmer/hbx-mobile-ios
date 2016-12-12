@@ -110,6 +110,8 @@ alpha:1.0]
 //        [self loadDictionary];
 //    else
 //    {
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] > 0)
+    {
     
     NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
     
@@ -117,7 +119,14 @@ alpha:1.0]
 
 //        displayArray = tabBar.rosterList;
         [self setDataSectionIndex];
-//    }
+    }
+    else
+    {
+        UIActivityIndicatorView *activityIndicator = [self.view viewWithTag:44];
+        [activityIndicator stopAnimating];
+        
+        [activityIndicator removeFromSuperview];
+    }
 
 /*
     NSMutableSet *firstCharacters = [NSMutableSet setWithCapacity:0];
@@ -162,6 +171,10 @@ alpha:1.0]
     pRosterTable.frame = CGRectMake(0, vHeader.frame.origin.y + vHeader.frame.size.height + 5, self.view.frame.size.width, self.tabBarController.tabBar.frame.origin.y - vHeader.frame.size.height);
 
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] == 0)
+        return;
+
     
     /*
     if ([displayArray count] > 0)
@@ -750,5 +763,12 @@ alpha:1.0]
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
     tabBar.current_coverage_year_index = index;
+}
+
+-(NSArray*)getEmployerContactInfo
+{
+    employerTabController *tabBar = (employerTabController *) self.tabBarController;
+    
+    return tabBar.employerData.contact_info;
 }
 @end

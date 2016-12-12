@@ -388,7 +388,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     {
         ck = [subscriberPlans objectAtIndex:x];
         
-        if ([ck valueForKey:@"plan_year_begins"] != [NSNull null])
+        NSLog(@"%@ -- %ld -- %i\n", [ck valueForKey:@"employer_name"], [[ck valueForKeyPath:@"plan_years"] count], x);
+//        if ([ck valueForKey:@"plan_year_begins"] != [NSNull null])
         {
             total_active_clients += 1;
             brokerEmployersData *pCompany = [[brokerEmployersData alloc] init];
@@ -398,33 +399,33 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             
             pCompany.plans = [ck valueForKeyPath:@"plan_years"];
             
-             pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
-             pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
-             pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
+//             pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
+//             pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
+//             pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
             
-            pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
-            pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
+//            pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
+//            pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
             pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
             
-            pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];
-            pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
+//            pCompany.renewal_application_due = [self getValue:ck valueForKey:@"renewal_application_due"];
+//            pCompany.renewal_application_available = [self getValue:ck valueForKey:@"renewal_application_available"];
             
             pCompany.detail_url = [ck valueForKeyPath:@"employer_details_url"];
             pCompany.roster_url = [ck valueForKeyPath:@"employee_roster_url"];
             
-            pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
+//            pCompany.emails = [ck valueForKeyPath:@"contact_info.emails"];
             pCompany.contact_info = [ck valueForKeyPath:@"contact_info"];
             
-            pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
-            
+//            pCompany.planMinimum = [self getValue:ck valueForKey:@"minimum_participation_required"];
+/*
             if ([ck valueForKey:@"binder_payment_due"] == (NSString *)[NSNull null])
                 pCompany.binder_payment_due = @"";
             else
                 pCompany.binder_payment_due = [ck valueForKey:@"binder_payment_due"];
-            
+*/
             pCompany.active_general_agency = [ck valueForKey:@"active_general_agency"];
             
-            NSLog(@"%@", pCompany.plans);
+//            NSLog(@"%@", pCompany.plans);
             
             
             if ([pCompany.plans count] == 0)
@@ -438,6 +439,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 
                 NSDate *planYearBegins = [self userVisibleDateTimeForRFC3339Date:[pPlan valueForKey:@"plan_year_begins"] ];
                 
+                pCompany.planYear = [self getValue:pPlan valueForKey:@"plan_year_begins"];
+                
+                pCompany.employeesTotal = [self getValue:pPlan valueForKey:@"employees_total"];
+                pCompany.employeesEnrolled = [self getValue:pPlan valueForKey:@"employees_enrolled"];
+                pCompany.employeesWaived = [self getValue:pPlan valueForKey:@"employees_waived"];
+                pCompany.planMinimum = [self getValue:pPlan valueForKey:@"minimum_participation_required"];
                 
                 NSDateFormatter *f = [[NSDateFormatter alloc] init];
                 [f setDateFormat:@"yyyy-MM-dd"];
@@ -495,7 +502,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                         {
                             pCompany.status = RENEWAL_IN_PROGRESS;
                             [renewals addObject:pCompany];
-                      //      [all_others addObject:pCompany];
+                            [all_others addObject:pCompany];
                         }
                         else
                         {
@@ -624,7 +631,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     //    self.displayedItems = listOfCompanies;
     self.filteredProducts = listOfCompanies;
 }
-
+/*
 -(void)processBuckets1
 {
     NSArray *ck;
@@ -644,11 +651,11 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             pCompany.companyName = [ck valueForKey:@"employer_name"];
             
             pCompany.plans = [ck valueForKeyPath:@"plan_years"];
-/*
-            pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
-            pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
-            pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
-*/
+
+//            pCompany.employeesTotal = [self getValue:ck valueForKey:@"employees_total"];
+//            pCompany.employeesEnrolled = [self getValue:ck valueForKey:@"employees_enrolled"];
+//            pCompany.employeesWaived = [self getValue:ck valueForKey:@"employees_waived"];
+
             pCompany.open_enrollment_begins = [self getValue:ck valueForKey:@"open_enrollment_begins"];
             pCompany.open_enrollment_ends = [self getValue:ck valueForKey:@"open_enrollment_ends"];
             pCompany.planYear = [self getValue:ck valueForKey:@"plan_year_begins"];
@@ -695,13 +702,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             }
             else
             {
-                /*
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                // this is important - we set our input date format to match our input string
-                // if format doesn't match you'll get nil from your string, so be careful
-                [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-                NSDate *dateFromString = [[NSDate alloc] init];
-                */
+                
+               // NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+               // // this is important - we set our input date format to match our input string
+               // // if format doesn't match you'll get nil from your string, so be careful
+               // [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+               // NSDate *dateFromString = [[NSDate alloc] init];
+                
                 NSDate *dateFromString = [self userVisibleDateTimeForRFC3339Date:pCompany.open_enrollment_begins];
                 
                // dateFromString = [dateFormatter dateFromString:pCompany.open_enrollment_begins];
@@ -783,7 +790,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     //    self.displayedItems = listOfCompanies;
     self.filteredProducts = listOfCompanies;
 }
-
+*/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -1508,11 +1515,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         
         NSMutableArray *sequeTransfer = sender;
         
- //       tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
+        tabar.employerData = [sequeTransfer objectAtIndex:0];// (brokerEmployersData*)sender;
         tabar.detailDictionary = [sequeTransfer objectAtIndex:1];
         tabar.enrollHost = _enrollHost;
         tabar.customCookie_a = _customCookie_a;
         tabar.isBroker = YES;
+        tabar.eState = tabar.employerData.status;
         
 //        if (bUsesGIT)
 //        {

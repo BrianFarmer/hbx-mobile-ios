@@ -16,6 +16,7 @@
 -(void)HandleSegmentControlAction:(UISegmentedControl *)segment;
 -(BOOL)changeCoverageYear:(NSInteger)index;
 -(NSInteger)getPlanIndex;
+-(NSArray*)getEmployerContactInfo;
 @end
 
 @interface HeaderView : UIView <MFMessageComposeViewControllerDelegate, popupMessageBoxDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
@@ -42,6 +43,7 @@
 @property (nonatomic, retain) UIPickerView *pickerView;
 @property (nonatomic, retain) NSMutableArray *coverageArray;
 @property (nonatomic, assign) NSInteger iCurrentPlanIndex;
+@property(nonatomic, assign) enrollmentState eState;
 
 
 -(void)layoutHeaderView:(NSDictionary *)eData;

@@ -39,6 +39,7 @@
     
     BOOL    dataNotLoaded;
     
+
 //    NSInteger iCurrentPlanIndex;
 }
 
@@ -50,5 +51,7 @@
 //@property (strong, nonatomic) IBOutlet XYPieChart *pieChartRight;
 @property(nonatomic, strong) NSMutableArray *slices;
 @property(nonatomic, strong) NSArray        *sliceColors;
+
+
 
 @end
