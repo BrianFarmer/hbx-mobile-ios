@@ -181,6 +181,10 @@ const CGFloat kBarHeight = 49;
                             NSLog(@"\n%@\n", jsonString);
                          }
                          
+                         NSDate *methodFinish = [NSDate date];
+                         NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:obj.dTimingStart];
+                         NSLog(@"executionNoProcessingRosterTime = %f\n\n\n", executionTime);
+                         
                          NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"first_name" ascending:YES];
                          NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
                          
@@ -236,7 +240,7 @@ const CGFloat kBarHeight = 49;
                                             object:self
                                           userInfo:nil];
                          
-                         if ([_rosterList count] == 0)
+                         if ([_rosterList count] == 0 || [[_detailDictionary valueForKey:@"plan_years"] count] == 0)
                          {
                              //This one just tells details threads are finished. since we end early here go ahead and tell details we are done
                              [dnc postNotificationName:@"rosterCostsLoaded"

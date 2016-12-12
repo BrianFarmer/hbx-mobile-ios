@@ -60,6 +60,7 @@ alpha:1.0]
     if (tabBar.isBroker)
     {
         vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        vHeader.eState = tabBar.eState;
         [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
     }
     else
@@ -401,7 +402,9 @@ alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [displayArray count];
+    NSInteger actualNumberOfRows = [displayArray count];
+    return (actualNumberOfRows == 0) ? 1:actualNumberOfRows;
+//    return [displayArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -517,6 +520,18 @@ alpha:1.0]
     dt1.textColor = UIColorFromRGB(0x555555);
     dt2.textColor = UIColorFromRGB(0x555555);
     dt3.textColor = UIColorFromRGB(0x555555);
+    
+    if ([displayArray count] == 0)
+    {
+        cell.textLabel.textColor = UIColorFromRGB(0x555555);
+
+        cell.textLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16];
+        cell.textLabel.text = @"No roster data for selected coverage year";
+        cell.detailTextLabel.text = @"";
+        cell.detailTextLabel.attributedText = nil;
+        return cell;
+    }
+
 /*
     cell.textLabel.font = [UIFont fontWithName:@"Roboto-Bold" size:(iOSDeviceScreenSize.width > 320) ? 16:14];
     cell.textLabel.textColor = UIColorFromRGB(0x555555);

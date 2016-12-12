@@ -60,6 +60,7 @@
     if (tabBar.isBroker)
     {
         vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        vHeader.eState = tabBar.eState;
         [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
     }
     else

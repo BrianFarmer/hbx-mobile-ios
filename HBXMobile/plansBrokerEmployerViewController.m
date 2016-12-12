@@ -43,6 +43,7 @@
     if (tabBar.isBroker)
     {
         vHeader.frame = CGRectMake(0,0,self.view.frame.size.width,185);
+        vHeader.eState = tabBar.eState;
         [vHeader layoutHeaderView:tabBar.detailDictionary showcoverage:YES showplanyear:NO showcontactbuttons:YES];
     }
     else
@@ -240,7 +241,7 @@
     if ([plans isKindOfClass:[NSNull class]])
     {
         NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
-        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plans Available", nil]];
+        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plan Data Available", nil]];
         [_pd addObject:_planDetails];
         return;
     }
@@ -248,7 +249,7 @@
     if ([plans count] == 0)
     {
         NSMutableArray *_planDetails = [[NSMutableArray alloc] init];
-        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plans Available", nil]];
+        [_planDetails addObject:[NSArray arrayWithObjects:@"NA", @"No Plan Data Available", nil]];
          [_pd addObject:_planDetails];
     }
     
@@ -930,6 +931,12 @@
 
     NSArray *_planDetails = [_pd objectAtIndex:indexPath.section];
 
+    if ([plans count] == 0) //[[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1] isEqualToString:@""])
+    {
+        cell.detailTextLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:16];
+        cell.detailTextLabel.text = [[_planDetails objectAtIndex:indexPath.row] objectAtIndex:1];
+    }
+    
     NSString *sKey;
     //if (indexPath.section == 0 && indexPath.row == 2)
     if ([[[_planDetails objectAtIndex:indexPath.row] objectAtIndex:0] isEqualToString:@"CONTRIBUTION LEVELS"])

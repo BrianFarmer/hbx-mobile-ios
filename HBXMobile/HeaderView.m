@@ -75,25 +75,59 @@ alpha:1.0]
     pCompany.text = [eData valueForKey:@"employer_name"];
     pCompany.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
     pCompany.numberOfLines = 0;
+//    pCompany.backgroundColor = [UIColor greenColor];
     
     pCompany.textAlignment = NSTextAlignmentCenter;
 //    [pCompany sizeToFit];
     pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, 40);
-  
-    CGSize labelSize = CGSizeMake(200.0, 20.0);
+    
+/*
     UIFont *cellFont = [UIFont fontWithName:@"Roboto-Bold" size:24];
     
+    CGRect textRect = [pCompany.text boundingRectWithSize:CGSizeMake(self.frame.size.width-20, 40.0)
+                                             options:NSStringDrawingUsesLineFragmentOrigin| NSStringDrawingUsesFontLeading
+                                          attributes:@{NSFontAttributeName:cellFont}
+                                             context:nil];
+    
+//    CGRect r = [self boundingRectWithSize:CGSizeMake(self.frame.size.width-20, 40.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: cellFont} context:context];
+
+//    CGSize labelSize = [pCompany.text sizeWithFont:cellFont
+//                                constrainedToSize:CGSizeMake(self.frame.size.width-20, 40.0)
+//                                    lineBreakMode:UILineBreakModeWordWrap];
+    
+    NSInteger lineCount = 0;
+    CGSize labelSize = (CGSize){self.frame.size.width-20, 40};//MAXFLOAT};
+    CGRect requiredSize = [pCompany.text boundingRectWithSize:labelSize  options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: pCompany.font} context:nil];
+    
+//    NSInteger lineCount = 0;
+    CGSize textSize = CGSizeMake(pCompany.frame.size.width, 40);//MAXFLOAT);
+    int rHeight = lroundf([pCompany sizeThatFits:textSize].height);
+    int charSize = lroundf(pCompany.font.leading);
+    lineCount = rHeight/charSize;
+    NSLog(@"No of lines: %li",(long)lineCount);
+    
+//    int charSize = lroundf(pCompany.font.leading);
+//    int rHeight = lroundf(requiredSize.height);
+//    lineCount = rHeight/charSize;
+//    NSLog(@"No of lines: %i",lineCount);
+    
+//    CGSize labelSize = CGSizeMake(self.frame.size.width-20, 40.0);
+*/
+    
     int iOffset = 0;
+    CGSize labelSize;
     
     if ([pCompany.text length] > 0)
-        labelSize = [pCompany.text sizeWithFont: cellFont constrainedToSize: CGSizeMake(labelSize.width, 1000) lineBreakMode: UILineBreakModeWordWrap];
+        labelSize = [pCompany.text sizeWithFont: pCompany.font constrainedToSize: CGSizeMake(self.frame.size.width-20, 80) lineBreakMode: UILineBreakModeWordWrap];
     
     if (labelSize.height > 40)
     {
-        pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height - 30);
+        pCompany.frame = CGRectMake(10, 0, self.frame.size.width-20, labelSize.height);// - 30);
         if (labelSize.height > 65)
-            iOffset = 10;
+            iOffset = 0;
     }
+    
+    CGRect r = pCompany.frame;
     
     UILabel *pCompanyFooter = [[UILabel alloc] init];
     pCompanyFooter.font = [UIFont fontWithName:@"Roboto-Medium" size:16];
@@ -195,15 +229,19 @@ alpha:1.0]
 
         [coverageButton addTarget:self action:@selector(changeCoverageYear:) forControlEvents:UIControlEventTouchUpInside];
 
+        iOffset = 20;
+        
+   //     pCompanyFooter.backgroundColor = [UIColor greenColor];
+        
         if ([[eData valueForKey:@"plan_years"] count] > 1)
         {
             [self addSubview:coverageButton];
-            pCompanyFooter.frame = CGRectMake(10, coverageButton.frame.origin.y + coverageButton.frame.size.height - iOffset/2, self.frame.size.width - 20, 20);
+            pCompanyFooter.frame = CGRectMake(10, coverageButton.frame.origin.y + coverageButton.frame.size.height + 8, self.frame.size.width - 20, 20);
         }
         else
         {
             [self addSubview:pLabelCoverage];
-            pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height - iOffset/2, self.frame.size.width - 20, 20);
+            pCompanyFooter.frame = CGRectMake(10, pLabelCoverage.frame.origin.y + pLabelCoverage.frame.size.height + 8, self.frame.size.width - 20, 20);
         }
 
     }
@@ -289,13 +327,13 @@ alpha:1.0]
         [self evenlySpaceTheseButtonsInThisView:@[[self viewWithTag:30], [self viewWithTag:31], [self viewWithTag:32], [self viewWithTag:33]] :self];
     }
     
-    int jj = pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height;
-    int bb = [self viewWithTag:30].frame.origin.y;
+//    int jj = pCompanyFooter.frame.origin.y + pCompanyFooter.frame.size.height;
+//    int bb = [self viewWithTag:30].frame.origin.y;
 //    if (bb - jj > 15)
     {
-        pCompanyFooter.frame = CGRectMake(pCompanyFooter.frame.origin.x,pCompanyFooter.frame.origin.y+20,pCompanyFooter.frame.size.width,pCompanyFooter.frame.size.height);
+//        pCompanyFooter.frame = CGRectMake(pCompanyFooter.frame.origin.x,pCompanyFooter.frame.origin.y+20,pCompanyFooter.frame.size.width,pCompanyFooter.frame.size.height);
         
-        pLabelCoverage.frame = CGRectMake(pLabelCoverage.frame.origin.x,pLabelCoverage.frame.origin.y+10,pLabelCoverage.frame.size.width,pLabelCoverage.frame.size.height);
+//        pLabelCoverage.frame = CGRectMake(pLabelCoverage.frame.origin.x,pLabelCoverage.frame.origin.y,pLabelCoverage.frame.size.width,pLabelCoverage.frame.size.height);
     }
 
     if (bShowPlanYear)
