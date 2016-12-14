@@ -193,6 +193,7 @@ const CGFloat kBarHeight = 49;
                          // rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
  
                          _rosterList = [[jsonObject valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
+ //                        NSMutableArray *pDict = [[NSMutableArray alloc] initWithArray:_rosterList];
                          
                          NSMutableDictionary *pArray;
                          
@@ -200,34 +201,34 @@ const CGFloat kBarHeight = 49;
                          
                          for (pArray in _rosterList)
                          {
-                             
-                             NSMutableDictionary * mutableDict = [NSMutableDictionary dictionary];
-                             [mutableDict addEntriesFromDictionary:pArray];
-                             [mutableDict removeObjectForKey:@"enrollments"];
 
                              int iIndex = 0;
                              NSArray *enrollment = [pArray valueForKey:@"enrollments"];
                              for (id plans in enrollment)
                              {
-                                 NSMutableArray *pRoster = nil;// = [[NSMutableArray alloc] init];
+                                 NSString *sStartOn = [plans valueForKey:@"start_on"];
+                                 NSMutableArray *pRoster = nil;                                         // = [[NSMutableArray alloc] init];
 
-                  //               [mutableDict removeObjectForKey:@"enrollment"];
+                                                                                                        // [mutableDict removeObjectForKey:@"enrollment"];
+                                 NSMutableDictionary * mutableDict = [NSMutableDictionary dictionary];
+                                 [mutableDict addEntriesFromDictionary:pArray];
+                                 [mutableDict removeObjectForKey:@"enrollments"];
+
                                  NSLog(@"%@", plans);
-                                 pRoster = [_rosterDictionary valueForKey:[plans valueForKey:@"start_on"]];
+                                 pRoster = [_rosterDictionary valueForKey:sStartOn];
                                  if (pRoster == nil)
                                  {
                                     [mutableDict setObject:plans forKey:@"enrollment"];
-                                     
                                     pRoster = [[NSMutableArray alloc] init];
-                                    [pRoster addObject:[mutableDict mutableCopy]];
-                                    [_rosterDictionary setValue:pRoster forKey:[plans valueForKey:@"start_on"]];
+                                    [pRoster addObject:mutableDict]; //[mutableDict mutableCopy]];
+                                    [_rosterDictionary setValue:pRoster forKey:sStartOn];
                                  }
                                  else
                                  {
-                                     [mutableDict setObject:plans forKey:@"enrollment"];
+                                    [mutableDict setObject:plans forKey:@"enrollment"];
 
                                     [pRoster addObject:mutableDict];
-                                    [_rosterDictionary setValue:pRoster forKey:[plans valueForKey:@"start_on"]];
+                                    [_rosterDictionary setValue:pRoster forKey:sStartOn];
                                  }
                                  iIndex++;
                              }

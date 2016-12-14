@@ -15,6 +15,8 @@
 #define typePopupMAP        1003
 #define typePopupEmpty      1004
 #define typePopupAlert      1005
+#define typePopupPlanYears  1006
+
 
 @protocol popupMessageBoxDelegate
 

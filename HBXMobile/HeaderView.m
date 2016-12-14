@@ -734,6 +734,27 @@ alpha:1.0]
 
 -(void)changeCoverageYear:(id)sender
 {
+    popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
+    sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
+    sub.messageArray = [employerDetail valueForKey:@"plan_years"];
+    sub.messageType = typePopupPlanYears;
+    UIViewController *currentTopVC = [self currentTopViewController];
+//    [currentTopVC presentViewController:sub animated:YES completion: nil];
+
+    CATransition *transition = [CATransition animation];
+    transition.duration = 3.3;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromBottom;
+    [sub.view.window.layer addAnimation:transition forKey:nil];
+
+    [currentTopVC presentViewController:sub animated:NO completion: nil];
+
+    //[currentTopVC presentModalViewController:sub animated:NO];
+    
+    return;
     
     actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Coverage Year" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
     actionSheet.delegate = self;

@@ -111,6 +111,8 @@
 		40F07D3F1D84360400BD3B7C /* detailBrokerEmployerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */; };
 		40F117AA1DD0F22A00D05B30 /* bell.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F117A91DD0F22A00D05B30 /* bell.png */; };
 		40F1FB941D84DD75005EF01F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F1FB931D84DD75005EF01F /* CoreGraphics.framework */; };
+		40F201561E01A04300670E7C /* selectPlanYearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F201541E01A04300670E7C /* selectPlanYearViewController.m */; };
+		40F201571E01A04300670E7C /* selectPlanYearViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40F201551E01A04300670E7C /* selectPlanYearViewController.xib */; };
 		40F241151D3E9D3100DC1439 /* CarrierListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */; };
 		40F63B6B1DAE5ED5006CDA13 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */; };
 		40F6DDA01D8987020095519C /* close_arrow32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F6DD9E1D8987020095519C /* close_arrow32x32.png */; };
@@ -287,6 +289,9 @@
 		40F07D3E1D84360400BD3B7C /* detailBrokerEmployerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detailBrokerEmployerViewController.m; sourceTree = "<group>"; };
 		40F117A91DD0F22A00D05B30 /* bell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bell.png; sourceTree = "<group>"; };
 		40F1FB931D84DD75005EF01F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		40F201531E01A04300670E7C /* selectPlanYearViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = selectPlanYearViewController.h; sourceTree = "<group>"; };
+		40F201541E01A04300670E7C /* selectPlanYearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = selectPlanYearViewController.m; sourceTree = "<group>"; };
+		40F201551E01A04300670E7C /* selectPlanYearViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = selectPlanYearViewController.xib; sourceTree = "<group>"; };
 		40F241131D3E9D3100DC1439 /* CarrierListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarrierListTableViewController.h; sourceTree = "<group>"; };
 		40F241141D3E9D3100DC1439 /* CarrierListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarrierListTableViewController.m; sourceTree = "<group>"; };
 		40F63B691DAE5ED5006CDA13 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
@@ -486,6 +491,9 @@
 				13CBA70F1DA5838100481667 /* EmployeeProfileViewController.m */,
 				40F63B691DAE5ED5006CDA13 /* HeaderView.h */,
 				40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */,
+				40F201531E01A04300670E7C /* selectPlanYearViewController.h */,
+				40F201541E01A04300670E7C /* selectPlanYearViewController.m */,
+				40F201551E01A04300670E7C /* selectPlanYearViewController.xib */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
@@ -799,6 +807,7 @@
 				13FF47171C8A2C5600C7C851 /* Main.storyboard in Resources */,
 				1385FDFD1D9BEF4600A277BC /* BrokerMVP_AppHeader512x147.png in Resources */,
 				4036BEEF1D5E616B000F6182 /* refresh.png in Resources */,
+				40F201571E01A04300670E7C /* selectPlanYearViewController.xib in Resources */,
 				13A3730F1D0B1B3F008CA0E1 /* gear.png in Resources */,
 				40F6F8B41D8861A0003279DD /* infonormal48.png in Resources */,
 				40F6DDAB1D89AC180095519C /* tabbar_selected.png in Resources */,
@@ -843,6 +852,7 @@
 				13CBA7101DA5838100481667 /* EmployeeProfileViewController.m in Sources */,
 				133254291D916C56003C621F /* plansBrokerEmployerViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
+				40F201561E01A04300670E7C /* selectPlanYearViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				139176641D91D80D005864D1 /* benefitGroupCardView.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,

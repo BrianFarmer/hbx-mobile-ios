@@ -275,8 +275,8 @@
 
 -(void)receiveRosterNotification:(NSNotification *) notification
 {
-    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
+//    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES];
+//    NSArray *sortDescriptors = [NSArray arrayWithObject:sort];
     
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
@@ -284,6 +284,8 @@
 //    tabBar.rosterList = [[dictionary valueForKey:@"roster"] sortedArrayUsingDescriptors:sortDescriptors];
     
     NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
+    
+    NSLog(@"%@", [tabBar.rosterDictionary valueForKey:sPlanYear] );
     
     displayArray = [tabBar.rosterDictionary valueForKey:sPlanYear];
 
@@ -948,7 +950,7 @@ else
     ((employerTabController *) self.tabBarController).iPath = idx;
 }
 
--(void)changeCoverageYear:(NSInteger)index
+-(BOOL)changeCoverageYear:(NSInteger)index
 {
     employerTabController *tabBar = (employerTabController *) self.tabBarController;
     
@@ -1007,15 +1009,17 @@ else
     }
 
     NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-//    [dnc postNotificationName:rosterLoadedNotification
-//                       object:self
-//                     userInfo:nil];
+    [dnc postNotificationName:@"rosterLoaded"
+                       object:self
+                     userInfo:nil];
     
     [dnc postNotificationName:@"rosterCostsLoaded"
                        object:self
                      userInfo:nil];
     
     [pRosterTable reloadData];
+    
+    return TRUE;
 }
 
 -(NSInteger)getPlanIndex

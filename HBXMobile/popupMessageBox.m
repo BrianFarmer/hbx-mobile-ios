@@ -47,20 +47,28 @@
             [self processMapFromArray];
             pImageView.image = [UIImage imageNamed:@"location.png"]; //@"markerWithCircleLightBlue.png"];
             break;
+        case typePopupPlanYears:
+            [self processPlanYearsFromArray];
+            pImageView.image = [UIImage imageNamed:@"location.png"];
+            break;
     }
     
     UIView* transparentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     transparentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25];
     [self.view addSubview:transparentView];
     
-    messageTable = [[UITableView alloc] initWithFrame:CGRectMake(30, 100, 300, 280) style:UITableViewStyleGrouped];
+    if (_messageType == typePopupPlanYears)
+        messageTable = [[UITableView alloc] initWithFrame:CGRectMake(30, 300, 300, 280) style:UITableViewStyleGrouped];
+    else
+        messageTable = [[UITableView alloc] initWithFrame:CGRectMake(30, 100, 300, 280) style:UITableViewStyleGrouped];
     messageTable.dataSource = self;
     messageTable.delegate = self;
     messageTable.rowHeight = 44.0f;
     messageTable.layer.cornerRadius = 10;
     
-    messageTable.center = transparentView.center;
-    messageTable.frame = CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y-55, messageTable.frame.size.width, messageTable.frame.size.height);
+    if (_messageType != typePopupPlanYears)
+        messageTable.center = transparentView.center;
+//    messageTable.frame = CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y-55, messageTable.frame.size.width, messageTable.frame.size.height);
     
     [messageTable setBackgroundView:nil];
     [messageTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
@@ -117,6 +125,23 @@
  */
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    CATransition *animation = [CATransition animation];
+    
+    [animation setDelegate:self];
+    [animation setType:kCATransitionPush];
+    [animation setSubtype:kCATransitionFromTop];
+    
+    [animation setDuration:0.30];
+    [animation setTimingFunction:
+     [CAMediaTimingFunction functionWithName:
+      kCAMediaTimingFunctionEaseInEaseOut]];
+    
+    
+    [self.view.layer addAnimation:animation forKey:kCATransition];
+}
+
 -(void)cancelButton:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -125,6 +150,84 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)processPlanYearsFromArray
+{
+    NSMutableArray *rootArray = [[NSMutableArray alloc] init];
+    NSDateFormatter *f = [[NSDateFormatter alloc] init];
+    [f setDateFormat:@"yyyy-MM-dd"];
+
+            NSMutableArray *pArray = [[NSMutableArray alloc] init];
+    
+    for (int ii=0;ii<[_messageArray count];ii++)
+    {
+
+        
+        [f setDateFormat:@"yyyy-MM-dd"];
+//        NSDate *planYear = [f dateFromString:[[[_messageArray valueForKey:@"plan_years"] objectAtIndex:ii] valueForKey:@"plan_year_begins"]];
+        NSDate *planYear = [f dateFromString:[[_messageArray objectAtIndex:ii] valueForKey:@"plan_year_begins"]];
+        
+        [f setDateFormat:@"MM/dd/yyyy"];
+        
+        if (ii==0)//[_delegate getPlanIndex])
+        {
+//            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"\u2713 %@", [f stringFromDate:planYear]]];
+            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+            [pDict setObject:[f stringFromDate:planYear] forKey:@"planYear"];
+//            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+//            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+//            [pDict setObject:@"office" forKey:@"type"];
+            [pArray addObject:pDict];
+
+        }
+        else
+        {
+//            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"%@", [f stringFromDate:planYear]]];
+            
+            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+            [pDict setObject:[f stringFromDate:planYear] forKey:@"planYear"];
+ //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
+ //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+ //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+ //           [pDict setObject:@"office" forKey:@"type"];
+            [pArray addObject:pDict];
+
+        }
+        
+//        if ([pArray count] > 0)
+ //           [rootArray addObject:pArray];
+        
+        /*
+        NSMutableArray *pArray = [[NSMutableArray alloc] init];
+        if (_messageType == typePopupPhone)
+        {
+            if ([[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] length] > 0)
+            {
+                NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+                [pDict setObject:@"office" forKey:@"type"];
+                [pArray addObject:pDict];
+                
+            }
+        }
+        if ([[[_messageArray objectAtIndex:ii] valueForKey:@"mobile"] length] > 0)
+        {
+            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"mobile"] forKey:@"phone"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
+            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
+            [pDict setObject:@"mobile" forKey:@"type"];
+            [pArray addObject:pDict];
+        }
+        if ([pArray count] > 0)
+            [rootArray addObject:pArray];
+         */
+    }
+    
+    _messageArray = pArray;//rootArray;
 }
 
 -(void)processPhoneFromArray
@@ -246,6 +349,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (_messageType == typePopupPlanYears)
+        return 1;
+    
     if ([_messageArray count] == 0)
     {
         _messageType = typePopupEmpty;
@@ -257,6 +363,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_messageType == typePopupPlanYears)
+        return [_messageArray count];
     
     if ([_messageArray count] == 0)
     {
@@ -282,6 +390,9 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if (_messageType == typePopupPlanYears)
+        return nil;
+    
     // The view for the header
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
     
@@ -368,6 +479,12 @@
                 cell.detailTextLabel.numberOfLines = 2;
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@\n%@", sDetail_1, sDetail_2];
             }
+            break;
+        case typePopupPlanYears:
+        {
+            cell.textLabel.text = [[_messageArray objectAtIndex:indexPath.row] valueForKey:@"planYear"];
+         //   cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"];
+        }
             break;
         case typePopupEmpty:
  //           cell.textLabel.text = @"No data available";
