@@ -780,10 +780,15 @@
     
     if ([expandedSections containsIndex:section])
     {
+        UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-51, 8, 34, 34)];
+        imgVew.backgroundColor = [UIColor clearColor];
+        imgVew.image = [self imageWithImage:[UIImage imageNamed:@"upArrowBlue3.png"]  scaledToSize:CGSizeMake(34, 34)];//[UIImage
+        /*
         UIImageView *imgVew = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.frame.size.width-50, 9, 32, 32)];
         imgVew.backgroundColor = [UIColor clearColor];
         imgVew.image = [UIImage imageNamed:@"close_arrow32x32.png"];
         imgVew.contentMode = UIViewContentModeScaleAspectFit;
+         */
         // Add the image to the header view
         [headerView addSubview:imgVew];
     }
@@ -813,6 +818,14 @@
     [headerView addGestureRecognizer:recognizer];
     
     return headerView;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)sender {

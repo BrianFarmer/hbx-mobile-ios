@@ -94,7 +94,11 @@ alpha:1.0]
     if ([pStatus_a.text isEqualToString:@"Enrolled"])
         pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_ENROLLED;
     if ([pStatus_a.text isEqualToString:@"Waived"])
+    {
         pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_WAIVED;
+        pStatus_b.text = [pp valueForKey:@"waiver_reason"];
+    }
+    
     if ([pStatus_a.text isEqualToString:@"Not Enrolled"])
         pStatus_a.textColor = EMPLOYER_DETAIL_PARTICIPATION_NOT_ENROLLED;
     if ([pStatus_a.text isEqualToString:@"Terminated"])
@@ -102,7 +106,10 @@ alpha:1.0]
     
     pStatus_a.frame = CGRectMake(10, posY + 5, self.view.frame.size.width - 20, pStatus_a.frame.size.height); //pName.frame.origin.y + pName.frame.size.height
     pStatus_a.textAlignment = NSTextAlignmentCenter;
-    
+
+    pStatus_b.frame = CGRectMake(20, pStatus_a.frame.origin.y + 20, self.view.frame.size.width - 40, pStatus_b.frame.size.height); //pName.frame.origin.y + pName.frame.size.height
+    pStatus_b.textAlignment = NSTextAlignmentCenter;
+
     /*
     NSString *sNextYearRenewal =  [[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"renewal"] valueForKey:@"health"] valueForKey:@"status"];
 
@@ -132,6 +139,7 @@ alpha:1.0]
     [self processData];
     
     profileTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    profileTable.allowsSelection = NO;
 }
 
 -(void)processData
@@ -144,11 +152,19 @@ alpha:1.0]
     
     NSArray *lo = [_employeeData valueForKey:@"enrollment"]; //[[_employeeData valueForKey:@"enrollments"] objectAtIndex:_currentCoverageYearIndex];//[[[_employeeData valueForKey:@"enrollments"] valueForKey:@"active"] valueForKey:@"health"];
     
-    NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
+//    NSDate *plan_start_on = [f dateFromString:[lo valueForKey:@"start_on"]];
     //    NSDate *plan_start_on = [f dateFromString:[pp valueForKey:@"plan_start_on"]];
     [f setDateFormat:@"MM/dd/yyyy"];
     
-    detailValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"DOB: %@", [f stringFromDate:dob]], [NSString stringWithFormat:@"SSN: %@", [_employeeData valueForKey:@"ssn_masked"]], [NSString stringWithFormat:@"Hired on: %@", [f stringFromDate:hired_on]], nil];
+    if ([pStatus_a.text isEqualToString:@"Waived"])
+    {
+        detailValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"DOB: %@", [f stringFromDate:dob]], [NSString stringWithFormat:@"SSN: %@", [_employeeData valueForKey:@"ssn_masked"]], [NSString stringWithFormat:@"Hired on: %@", [f stringFromDate:hired_on]], [NSString stringWithFormat:@"Waived Healthcare on: %@", [f stringFromDate:[_employeeData valueForKey:@"waived_on"]]], nil];
+        
+    }
+    else
+        detailValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"DOB: %@", [f stringFromDate:dob]], [NSString stringWithFormat:@"SSN: %@", [_employeeData valueForKey:@"ssn_masked"]], [NSString stringWithFormat:@"Hired on: %@", [f stringFromDate:hired_on]], nil];
+    
+    
     /*
      dependentValues = [[NSArray alloc] initWithObjects: [NSString stringWithFormat:@"Benefit Group: %@", [lo valueForKey:@"benefit_group_name"]], [NSString stringWithFormat:@"Plan Name: %@", [lo valueForKey:@"plan_name"]], [NSString stringWithFormat:@"Plan Start: %@", [f stringFromDate:plan_start_on]], [[lo valueForKey:@"employer_contribution"] stringValue], [[lo valueForKey:@"employee_cost"] stringValue], [[lo valueForKey:@"total_premium"] stringValue], [lo valueForKey:@"metal_level"], nil];
      */

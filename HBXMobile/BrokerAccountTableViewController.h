@@ -10,10 +10,10 @@
 #import <MessageUI/MessageUI.h>
 #import <MapKit/MapKit.h>
 #import "MGSwipeTableCell.h"
-#import "brokerSearchResultTableViewController.h"
+//#import "brokerSearchResultTableViewController.h"
 #import "popupMessagebox.h"
 
-@interface BrokerAccountTableViewController : UITableViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, MFMessageComposeViewControllerDelegate, MGSwipeTableCellDelegate, searchDelegate, popupMessageBoxDelegate>
+@interface BrokerAccountTableViewController : UITableViewController <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, MFMessageComposeViewControllerDelegate, MGSwipeTableCellDelegate, popupMessageBoxDelegate>
 {
     NSMutableArray *searchData;
     

@@ -88,6 +88,16 @@
     detailTable.backgroundColor = [UIColor clearColor];
     detailTable.backgroundView = nil;
     
+
+/*
+     detailTable.userInteractionEnabled = YES;
+    UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                     action:@selector(handleSwipeLeft:)];
+    [recognizer setDirection:(UISwipeGestureRecognizerDirectionLeft)];
+    recognizer.delegate = self;
+    [detailTable addGestureRecognizer:recognizer];
+*/
+    
 //    [self loadDictionary];
     /*
     _dictionary = ((employerTabController *) self.tabBarController).detailDictionary;
@@ -115,6 +125,30 @@
     [self processData];
 }
 
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    return YES;
+    UITableView *tableView = detailTable;//self.tableView;
+    CGPoint touchPoint = [touch locationInView:tableView];
+    
+    BOOL bVal = [tableView hitTest:touchPoint withEvent:nil]; //![tableView hitTest:touchPoint withEvent:nil];
+    return bVal;
+}
+
+- (void)handleSwipeLeft:(UISwipeGestureRecognizer *)gestureRecognizer
+{
+    NSUInteger selectedIndex = [self.tabBarController selectedIndex];
+    
+    [self.tabBarController setSelectedIndex:selectedIndex + 1];
+    
+    CATransition *anim= [CATransition animation];
+    [anim setType:kCATransitionPush];
+    [anim setSubtype:kCATransitionFromRight];
+    
+    [anim setDuration:.5];
+    [anim setTimingFunction:[CAMediaTimingFunction functionWithName:
+                             kCAMediaTimingFunctionEaseIn]];
+    [self.tabBarController.view.layer addAnimation:anim forKey:@"fadeTransition"];
+}
 
 -(void)processData
 {
@@ -399,7 +433,7 @@
  
 //    self.navigationItem.hidesBackButton = YES;
 //    self.navigationItem.leftBarButtonItem = nil;
-    
+
     
     [vHeader drawCoverageYear:[self getPlanIndex]];
     

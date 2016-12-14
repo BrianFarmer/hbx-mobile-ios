@@ -10,7 +10,7 @@
 #import "Settings.h"
 #import "MGSwipeButton.h"
 #import "brokerEmployersData.h"
-#import "brokerPlanDetailViewController.h"
+//#import "brokerPlanDetailViewController.h"
 #import "tutorialViewcontroller.h"
 #import "detailBrokerEmployerViewController.h"
 #import "employerTabController.h"
@@ -454,7 +454,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 
                 NSDate *today = [f dateFromString:todayDateString];
                 
-                if ([planYearBegins compare:today] == NSOrderedAscending) // && [endEnrollmentDate compare:today] == NSOrderedDescending)
+                if ([planYearBegins compare:today] == NSOrderedAscending) //If plan year begins is less than todays date
                 {
                     pCompany.status = NO_ACTION_REQUIRED;
                     [all_others addObject:pCompany];
@@ -1056,7 +1056,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
             UIView* subHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, tableView.frame.size.width, (section == 2) ? 30:20)];
             subHeaderView.backgroundColor = UIColorFromRGB(0xebebeb);
             
-            UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, 100, (section == 2) ? 30:20)];
+            UILabel* headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(8, 0, tableView.frame.size.width - 140, (section == 2) ? 30:20)];
             headerTitle.text = @"CLIENT";
             headerTitle.textColor = [UIColor darkGrayColor];
             headerTitle.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
@@ -1064,9 +1064,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 
             // Add the header title to the header view
             [subHeaderView addSubview:headerTitle];
-
+            
             UILabel* headerTitle1 = [[UILabel alloc] init];
             headerTitle1.userInteractionEnabled = NO;
+            headerTitle1.textAlignment = NSTextAlignmentCenter;
             if (section == 0)
             {
                 [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 195, 0, 135, 20)];
@@ -1081,13 +1082,21 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 }
                 else
                 {
-                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 165, 0, 100, 30)];
+                    [headerTitle1 setFrame:CGRectMake(tableView.frame.size.width - 140, 0, 100, 30)];
                     headerTitle1.text = @"PLAN YEAR";
 
                     headerTitle.userInteractionEnabled = YES;
                     headerTitle1.userInteractionEnabled = YES;
                     subHeaderView.userInteractionEnabled = YES;
 
+                    UIView* vertLineView = [[UIView alloc] initWithFrame:CGRectMake(headerTitle1.frame.origin.x - 8, 0, 1, subHeaderView.frame.size.height)];
+                    vertLineView.backgroundColor = [UIColor whiteColor];
+                    [subHeaderView addSubview:vertLineView];
+                    UIView* vertLineView1 = [[UIView alloc] initWithFrame:CGRectMake(headerTitle1.frame.origin.x - 7, 0, 1, subHeaderView.frame.size.height)];
+                    vertLineView1.backgroundColor = [UIColor lightGrayColor];
+                    [subHeaderView addSubview:vertLineView1];
+
+                    headerTitle1.textAlignment = NSTextAlignmentLeft;
                     //This could go to handler to figure out which sort and automatically do the other one
                     UITapGestureRecognizer * recognizerNil = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(nilTap:)];
                     [subHeaderView addGestureRecognizer:recognizerNil];
@@ -1120,7 +1129,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                     {
                         UITapGestureRecognizer * recognizerIcon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sortByPlanYear:)];
 
-                        [imageHolder setFrame:CGRectMake(headerTitle1.frame.origin.x + headerTitle1.frame.size.width, 15 - 7, 14, 14)];
+                        //[imageHolder setFrame:CGRectMake(headerTitle1.frame.origin.x + headerTitle1.frame.size.width, 15 - 7, 14, 14)];
+                        [imageHolder setFrame:CGRectMake(subHeaderView.frame.origin.x+subHeaderView.frame.size.width - 20, 15 - 7, 14, 14)];
                         [imageHolder addGestureRecognizer:recognizerIcon];
                     }
                     
@@ -1128,7 +1138,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                 }
             }
  
-            headerTitle1.textAlignment = NSTextAlignmentCenter;
+
             headerTitle1.textColor = [UIColor darkGrayColor];
             headerTitle1.font = [UIFont fontWithName:@"Roboto-Bold" size:10.0];
             // Add the header title to the header view
@@ -1171,7 +1181,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
         }
         else
         {
-        [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]] forState:UIControlStateNormal];
+            [button setTitle:[NSString stringWithFormat:@"%lu", (unsigned long)[[self.filteredProducts objectAtIndex:section] count]] forState:UIControlStateNormal];
         }
         [headerView addSubview:button];
     }

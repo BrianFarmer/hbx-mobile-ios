@@ -58,7 +58,6 @@
 		13B829961D2D32FA00F1A571 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13B829941D2D32FA00F1A571 /* Localizable.strings */; };
 		13CBA7101DA5838100481667 /* EmployeeProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CBA70F1DA5838100481667 /* EmployeeProfileViewController.m */; };
 		13F169A21D2D3E70004DF9B9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13F169A01D2D3E70004DF9B9 /* Localizable.strings */; };
-		13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */; };
 		13FF470E1C8A2C5600C7C851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF470D1C8A2C5600C7C851 /* main.m */; };
 		13FF47111C8A2C5600C7C851 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47101C8A2C5600C7C851 /* AppDelegate.m */; };
 		13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13FF47131C8A2C5600C7C851 /* ViewController.m */; };
@@ -219,8 +218,6 @@
 		13CBA70E1DA5838100481667 /* EmployeeProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmployeeProfileViewController.h; sourceTree = "<group>"; };
 		13CBA70F1DA5838100481667 /* EmployeeProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmployeeProfileViewController.m; sourceTree = "<group>"; };
 		13F169A11D2D3E70004DF9B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brokerSearchResultTableViewController.h; sourceTree = "<group>"; };
-		13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = brokerSearchResultTableViewController.m; sourceTree = "<group>"; };
 		13FF47091C8A2C5600C7C851 /* HBXMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HBXMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13FF470D1C8A2C5600C7C851 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		13FF470F1C8A2C5600C7C851 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -460,8 +457,6 @@
 				13A373111D0B279F008CA0E1 /* ConfigViewController.m */,
 				13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */,
 				13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */,
-				13F16A1E1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.h */,
-				13F16A1F1D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m */,
 				13273AF41D352D520097D245 /* brokerEmployersData.h */,
 				13273AF51D352D520097D245 /* brokerEmployersData.m */,
 				13273AFA1D366FE60097D245 /* popupMessageBox.h */,
@@ -848,7 +843,6 @@
 				13CBA7101DA5838100481667 /* EmployeeProfileViewController.m in Sources */,
 				133254291D916C56003C621F /* plansBrokerEmployerViewController.m in Sources */,
 				134DE7A01CECEF6600F8958A /* MGSwipeButton.m in Sources */,
-				13F16A201D2FFFC9004DF9B9 /* brokerSearchResultTableViewController.m in Sources */,
 				13FF47141C8A2C5600C7C851 /* ViewController.m in Sources */,
 				139176641D91D80D005864D1 /* benefitGroupCardView.m in Sources */,
 				137327561C8DECA800B0F6E1 /* SlideNavigationController.m in Sources */,

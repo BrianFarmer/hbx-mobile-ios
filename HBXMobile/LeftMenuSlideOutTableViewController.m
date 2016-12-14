@@ -109,16 +109,15 @@ alpha:1.0]
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (!PRODUCTION_BUILD)
-        return 4;
+//    if (!PRODUCTION_BUILD)
+//        return 4;
 
     return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    if (section == 0)
-//        return 2;
+/*
     if (!PRODUCTION_BUILD)
     {
         if (section == 3)
@@ -126,25 +125,26 @@ alpha:1.0]
     }
     else
     {
+ */
         if (section == 2)
             return 2;
-    }
+//    }
     
     return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!PRODUCTION_BUILD)
-    {
-        if (indexPath.section == 3)
-            return 90;
-    }
-    else
-    {
+//    if (!PRODUCTION_BUILD)
+//    {
+//        if (indexPath.section == 3)
+//            return 90;
+//    }
+//    else
+//    {
         if (indexPath.section == 2)
             return 90;
-    }
+//    }
     return 54;
 }
 /*
@@ -212,6 +212,7 @@ viewForFooterInSection:(NSInteger)section {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    /*
     if (!PRODUCTION_BUILD)
     {
         if (section == 3)
@@ -219,9 +220,10 @@ viewForFooterInSection:(NSInteger)section {
     }
     else
     {
+     */
         if (section == 2)
             return 50;
-    }
+  //  }
     return 0.0;
 }
 
@@ -308,6 +310,7 @@ viewForFooterInSection:(NSInteger)section {
         [cell.layer addSublayer:separator];
 
     }
+    /*
     else if (!PRODUCTION_BUILD && indexPath.section == 2)
     {
         cell.textLabel.text = @"Debug";
@@ -317,6 +320,7 @@ viewForFooterInSection:(NSInteger)section {
         [cell.layer addSublayer:separator];
         
     }
+     */
     else
     {
 //        cell.backgroundColor = [UIColor colorWithRed:.1 green:.1 blue:.1 alpha:.4];

@@ -13,7 +13,7 @@
 #import "HeaderView.h"
 #import "SlideNavigationController.h"
 
-@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate, HeaderViewDelegate, SlideNavigationControllerDelegate>
+@interface detailBrokerEmployerViewController : UIViewController <XYPieChartDelegate, XYPieChartDataSource, UITabBarControllerDelegate, HeaderViewDelegate, SlideNavigationControllerDelegate, UIGestureRecognizerDelegate>
 {
     IBOutlet UILabel *pCompany;
     IBOutlet UILabel *pCompanyFooter;
