@@ -7,6 +7,7 @@
 //
 
 #import "popupMessageBox.h"
+#import "Constants.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface popupMessageBox ()
@@ -25,7 +26,7 @@
     self.definesPresentationContext = YES;
     
     UIImageView *pImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,34,54)];
-    pImageView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];//[UIColor whiteColor];
+    pImageView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];   //[UIColor whiteColor];
 
     pImageView.contentMode = UIViewContentModeCenter;
     
@@ -49,18 +50,23 @@
             break;
         case typePopupPlanYears:
             [self processPlanYearsFromArray];
-            pImageView.image = [UIImage imageNamed:@"location.png"];
+            pImageView.image = nil;//[UIImage imageNamed:@"location.png"];
             break;
     }
     
     UIView* transparentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    transparentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25];
+//    if (_messageType == typePopupPlanYears)
+//        transparentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.05];
+//    else
+        transparentView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25];
+    
     [self.view addSubview:transparentView];
     
     if (_messageType == typePopupPlanYears)
-        messageTable = [[UITableView alloc] initWithFrame:CGRectMake(30, 300, 300, 280) style:UITableViewStyleGrouped];
+        messageTable = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-175, self.view.frame.size.height - 350, 350, 260) style:UITableViewStyleGrouped];
     else
         messageTable = [[UITableView alloc] initWithFrame:CGRectMake(30, 100, 300, 280) style:UITableViewStyleGrouped];
+    
     messageTable.dataSource = self;
     messageTable.delegate = self;
     messageTable.rowHeight = 44.0f;
@@ -74,8 +80,15 @@
     [messageTable setBackgroundColor:[UIColor whiteColor]];  //[UIColor colorWithRed:0.09f green:0.09f blue:0.09f alpha:1.0]];
     [self.view addSubview:messageTable];
     
-    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y + messageTable.frame.size.height + 2, messageTable.frame.size.width, 44)];
-    cancelButton.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(messageTable.frame.origin.x, messageTable.frame.origin.y + messageTable.frame.size.height + 2, messageTable.frame.size.width, 54)];
+    if (_messageType == typePopupPlanYears)
+    {
+        cancelButton.backgroundColor = [UIColor whiteColor];
+        [cancelButton setTitleColor:APPLICATION_DEFAULT_TEXT_COLOR forState:UIControlStateNormal];
+    }
+    else
+        cancelButton.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    
     cancelButton.layer.cornerRadius = 10;
     cancelButton.titleLabel.font = [UIFont fontWithName:@"Roboto-BOLD" size:18];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
@@ -85,20 +98,46 @@
     CGFloat headerHeight = 54.0f;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, headerHeight)];
     UIView *headerContentView = [[UIView alloc] initWithFrame:headerView.bounds];
-    headerContentView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    
+    if (_messageType == typePopupPlanYears)
+        headerContentView.backgroundColor = [UIColor whiteColor];
+    else
+        headerContentView.backgroundColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
+    
     headerContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, messageTable.frame.size.width - 35 -35, headerHeight)];
     label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
+
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.numberOfLines = 2;
     label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor whiteColor];//[UIColor colorWithRed:79.0f/255.0f green:148.0f/255.0f blue:205.0f/255.0f alpha:1.0f];//[UIColor darkGrayColor];
+    if (_messageType == typePopupPlanYears)
+    {
+        label.font = [UIFont fontWithName:@"Roboto-BOLD" size:18];
+        label.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
+        
+        UILabel *sublabel = [[UILabel alloc] initWithFrame:CGRectMake(0, label.frame.origin.y + label.frame.size.height, messageTable.frame.size.width, 20)];
+        sublabel.backgroundColor = [UIColor clearColor];
+        sublabel.font = [UIFont fontWithName:@"Roboto-BOLD" size:16];
+        sublabel.lineBreakMode = NSLineBreakByWordWrapping;
+        sublabel.numberOfLines = 1;
+        sublabel.textAlignment = NSTextAlignmentCenter;
+        sublabel.text = @"Choose Plan Year";
+        sublabel.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
+        [headerContentView addSubview:sublabel];
+    }
+    else
+    {
+        label.font = [UIFont fontWithName:@"Roboto-BOLD" size:15];
+        label.textColor = [UIColor whiteColor];
+    }
+    
     label.text = _messageTitle;
     [headerContentView addSubview:label];
     
-    [headerContentView addSubview:pImageView];
+    if (_messageType != typePopupPlanYears)
+        [headerContentView addSubview:pImageView];
     
     [headerView addSubview:headerContentView];
     messageTable.tableHeaderView = headerView;
@@ -154,80 +193,26 @@
 
 -(void)processPlanYearsFromArray
 {
-    NSMutableArray *rootArray = [[NSMutableArray alloc] init];
+//    NSMutableArray *rootArray = [[NSMutableArray alloc] init];
     NSDateFormatter *f = [[NSDateFormatter alloc] init];
     [f setDateFormat:@"yyyy-MM-dd"];
 
-            NSMutableArray *pArray = [[NSMutableArray alloc] init];
+    NSMutableArray *pArray = [[NSMutableArray alloc] init];
     
     for (int ii=0;ii<[_messageArray count];ii++)
     {
-
-        
         [f setDateFormat:@"yyyy-MM-dd"];
-//        NSDate *planYear = [f dateFromString:[[[_messageArray valueForKey:@"plan_years"] objectAtIndex:ii] valueForKey:@"plan_year_begins"]];
         NSDate *planYear = [f dateFromString:[[_messageArray objectAtIndex:ii] valueForKey:@"plan_year_begins"]];
         
         [f setDateFormat:@"MM/dd/yyyy"];
         
-        if (ii==0)//[_delegate getPlanIndex])
-        {
-//            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"\u2713 %@", [f stringFromDate:planYear]]];
-            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
-            [pDict setObject:[f stringFromDate:planYear] forKey:@"planYear"];
-//            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
-//            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
-//            [pDict setObject:@"office" forKey:@"type"];
-            [pArray addObject:pDict];
-
-        }
-        else
-        {
-//            [actionSheet addButtonWithTitle: [NSString stringWithFormat:@"%@", [f stringFromDate:planYear]]];
-            
-            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
-            [pDict setObject:[f stringFromDate:planYear] forKey:@"planYear"];
- //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
- //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
- //           [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
- //           [pDict setObject:@"office" forKey:@"type"];
-            [pArray addObject:pDict];
-
-        }
-        
-//        if ([pArray count] > 0)
- //           [rootArray addObject:pArray];
-        
-        /*
-        NSMutableArray *pArray = [[NSMutableArray alloc] init];
-        if (_messageType == typePopupPhone)
-        {
-            if ([[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] length] > 0)
-            {
-                NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
-                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"phone"] forKey:@"phone"];
-                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
-                [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
-                [pDict setObject:@"office" forKey:@"type"];
-                [pArray addObject:pDict];
-                
-            }
-        }
-        if ([[[_messageArray objectAtIndex:ii] valueForKey:@"mobile"] length] > 0)
-        {
-            NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"mobile"] forKey:@"phone"];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"last"] forKey:@"last"];
-            [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"first"] forKey:@"first"];
-            [pDict setObject:@"mobile" forKey:@"type"];
-            [pArray addObject:pDict];
-        }
-        if ([pArray count] > 0)
-            [rootArray addObject:pArray];
-         */
+        NSMutableDictionary *pDict = [[NSMutableDictionary alloc] init];
+        [pDict setObject:[f stringFromDate:planYear] forKey:@"planYear"];
+        [pDict setObject:[[_messageArray objectAtIndex:ii] valueForKey:@"state"] forKey:@"state"];
+        [pArray addObject:pDict];
     }
     
-    _messageArray = pArray;//rootArray;
+    _messageArray = pArray;
 }
 
 -(void)processPhoneFromArray
@@ -456,6 +441,8 @@
     cell.textLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1]; //[UIColor redColor];
     cell.detailTextLabel.textColor = [UIColor colorWithRed:(0/255.0) green:(123/255.0) blue:(196/255.0) alpha:1];
     
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
     switch (_messageType)
     {
         case typePopupEmail:
@@ -483,7 +470,11 @@
         case typePopupPlanYears:
         {
             cell.textLabel.text = [[_messageArray objectAtIndex:indexPath.row] valueForKey:@"planYear"];
-         //   cell.detailTextLabel.text = [[[_messageArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] valueForKey:@"phone"];
+            cell.detailTextLabel.text = [[_messageArray objectAtIndex:indexPath.row] valueForKey:@"state"];
+            if (_customCode == indexPath.row)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
             break;
         case typePopupEmpty:
@@ -526,6 +517,15 @@
             [self dismissViewControllerAnimated:YES completion:^{
                 NSLog(@"Dismiss completed");
                 [_delegate MAPTheseDirections:_messageArray];
+            }];
+        }
+            break;
+        case typePopupPlanYears:
+        {
+            [_delegate setCoverageYear:indexPath.row];
+            [self dismissViewControllerAnimated:YES completion:^{
+                NSLog(@"Dismiss completed");
+
             }];
         }
             break;

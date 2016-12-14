@@ -464,15 +464,14 @@ alpha:1.0]
         pLabelCoverage.textColor = APPLICATION_DEFAULT_TEXT_COLOR;
         
         pLabelCoverage.hidden = FALSE;
-    NSString *lblCoverageYear;// = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
-
-    if ([[eData valueForKey:@"plan_years"] count] > 1)
-        lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
-    else
-        lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
-
     
-    
+        NSString *lblCoverageYear;// = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+
+        if ([[eData valueForKey:@"plan_years"] count] > 1)
+            lblCoverageYear = [NSString stringWithFormat:@"%@ - %@  \u25BE\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+        else
+            lblCoverageYear = [NSString stringWithFormat:@"%@ - %@\n", [[f stringFromDate:endDate] uppercaseString], [[f stringFromDate:targetDate] uppercaseString]];
+
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : APPLICATION_DEFAULT_TEXT_COLOR };
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:lblCoverageYear attributes:attrs];
         
@@ -734,12 +733,15 @@ alpha:1.0]
 
 -(void)changeCoverageYear:(id)sender
 {
+
     popupMessageBox *sub = [[popupMessageBox alloc] initWithNibName:@"popupMessageBox" bundle:nil];
     sub.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     sub.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     sub.messageTitle =  [employerDetail valueForKey:@"employer_name"];
     sub.messageArray = [employerDetail valueForKey:@"plan_years"];
     sub.messageType = typePopupPlanYears;
+    sub.customCode = [_delegate getPlanIndex];
+    sub.delegate = self;
     UIViewController *currentTopVC = [self currentTopViewController];
 //    [currentTopVC presentViewController:sub animated:YES completion: nil];
 
@@ -829,6 +831,17 @@ alpha:1.0]
     
     [pBut setAttributedTitle:attributedTitle forState:UIControlStateNormal];
  }
+
+
+-(void)setCoverageYear:(NSInteger)index
+{
+    if ([_delegate changeCoverageYear:index])
+    {
+        _iCurrentPlanIndex = index;
+        
+        [self drawCoverageYear:_iCurrentPlanIndex];
+    }
+}
 
 - (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
     

@@ -22,7 +22,7 @@
 
 -(void)SMSThesePeople:(id)tt;
 -(void)MAPTheseDirections:(id)tt;
-
+-(void)setCoverageYear:(NSInteger)index;
 @end
 
 @interface popupMessageBox : UIViewController <UITableViewDataSource, UITableViewDelegate>
@@ -35,6 +35,7 @@
 @property (nonatomic, assign) int           messageType;
 @property (nonatomic, retain) NSArray       *resultArray;
 @property (nonatomic, assign) long           resultCode;
+@property (nonatomic, assign) int           customCode;
 
 @property (nonatomic, weak)id<popupMessageBoxDelegate> delegate;
 
