@@ -874,6 +874,7 @@ else
 
     bFilterOpen = FALSE;
     
+    if ([[tabBar.detailDictionary valueForKey:@"plan_years"] count] == nil) return;
     NSString *sPlanYear = [[[tabBar.detailDictionary valueForKey:@"plan_years"] objectAtIndex:tabBar.current_coverage_year_index] valueForKey:@"plan_year_begins"];
     
 

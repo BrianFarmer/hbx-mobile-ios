@@ -825,7 +825,7 @@ alpha:1.0]
     [string1 addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Roboto-Medium" size:15.0] range:NSMakeRange(0, string1.length)];
     [string1 endEditing];
     
-    [attributedTitle appendAttributedString:string1];
+	    [attributedTitle appendAttributedString:string1];
     
  //   [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attributedTitle.length)];
     
