@@ -50,7 +50,7 @@
 #define PASSWORD_USES_DATA
 
 #import "KeychainItemWrapper.h"
-#import <Security/Security.h>
+#	import <Security/Security.h>
 
 /*
  These are the default constants and their respective types,
@@ -114,7 +114,7 @@
             // Apps that are built for the simulator aren't signed, so there's no keychain access group
             // for the simulator to check. This means that all apps can see all keychain items when run
             // on the simulator.
-            //
+		            //
             // If a SecItem contains an access group attribute, SecItemAdd and SecItemUpdate on the
             // simulator will return -25243 (errSecNoAccessForItem).
 #else
@@ -326,7 +326,7 @@
     {
         // No previous item found; add the new one.
         result = SecItemAdd((__bridge CFDictionaryRef)[self dictionaryToSecItemFormat:keychainItemData], NULL);
-        NSAssert( result == noErr, @"Couldn't add the Keychain Item." );
+	        NSAssert( result == noErr, @"Couldn't add the Keychain Item." );
     }
     
     if(attributes) CFRelease(attributes);
