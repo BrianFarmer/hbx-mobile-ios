@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Settings.h"
 
+				
 @interface ConfigViewController : UIViewController <UITextFieldDelegate>
 {
     IBOutlet UITableView *configTable;
