@@ -316,6 +316,7 @@
 		40F8BFA61DB94D3F00FFEEDE /* check_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_yellow.png; sourceTree = "<group>"; };
 		40F8BFA81DB94DE500FFEEDE /* check_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_green.png; sourceTree = "<group>"; };
 		40F8BFAA1DB94E3300FFEEDE /* check_purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_purple.png; sourceTree = "<group>"; };
+		E1AFFB821E1328C5007FE801 /* 		 copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "\t\t copy-Info.plist"; path = "/Users/user122601/Documents/hbx-mobile-ios/\t\t copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +420,7 @@
 				13FF47281C8A2C5600C7C851 /* HBXMobileTests */,
 				13FF47331C8A2C5600C7C851 /* HBXMobileUITests */,
 				13FF470A1C8A2C5600C7C851 /* Products */,
+				E1AFFB821E1328C5007FE801 /* 		 copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -623,9 +625,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13FF47081C8A2C5600C7C851 /* 		 */ = {
+		13FF47081C8A2C5600C7C851 /* coverage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "		" */;
+			buildConfigurationList = 13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "coverage" */;
 			buildPhases = (
 				13FF47051C8A2C5600C7C851 /* Sources */,
 				13FF47061C8A2C5600C7C851 /* Frameworks */,
@@ -635,7 +637,7 @@
 			);
 			dependencies = (
 			);
-			name = "		";
+			name = coverage;
 			productName = HBXMobile;
 			productReference = 13FF47091C8A2C5600C7C851 /* HBXMobile.app */;
 			productType = "com.apple.product-type.application";
@@ -719,7 +721,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13FF47081C8A2C5600C7C851 /* 		 */,
+				13FF47081C8A2C5600C7C851 /* coverage */,
 				13FF47241C8A2C5600C7C851 /* HBXMobileTests */,
 				13FF472F1C8A2C5600C7C851 /* HBXMobileUITests */,
 			);
@@ -897,12 +899,12 @@
 /* Begin PBXTargetDependency section */
 		13FF47271C8A2C5600C7C851 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13FF47081C8A2C5600C7C851 /* 		 */;
+			target = 13FF47081C8A2C5600C7C851 /* coverage */;
 			targetProxy = 13FF47261C8A2C5600C7C851 /* PBXContainerItemProxy */;
 		};
 		13FF47321C8A2C5600C7C851 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13FF47081C8A2C5600C7C851 /* 		 */;
+			target = 13FF47081C8A2C5600C7C851 /* coverage */;
 			targetProxy = 13FF47311C8A2C5600C7C851 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1144,7 +1146,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "		" */ = {
+		13FF47391C8A2C5600C7C851 /* Build configuration list for PBXNativeTarget "coverage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13FF473A1C8A2C5600C7C851 /* Debug */,
