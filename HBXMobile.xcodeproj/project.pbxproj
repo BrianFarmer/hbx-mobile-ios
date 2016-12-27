@@ -461,6 +461,7 @@
 				13A373101D0B279F008CA0E1 /* ConfigViewController.h */,
 				13A373111D0B279F008CA0E1 /* ConfigViewController.m */,
 				13B8298F1D2C6AF800F1A571 /* BrokerAccountTableViewController.h */,
+				40F201551E01A04300670E7C /* selectPlanYearViewController.xib */,
 				13B829901D2C6AF800F1A571 /* BrokerAccountTableViewController.m */,
 				13273AF41D352D520097D245 /* brokerEmployersData.h */,
 				13273AF51D352D520097D245 /* brokerEmployersData.m */,
@@ -493,7 +494,6 @@
 				40F63B6A1DAE5ED5006CDA13 /* HeaderView.m */,
 				40F201531E01A04300670E7C /* selectPlanYearViewController.h */,
 				40F201541E01A04300670E7C /* selectPlanYearViewController.m */,
-				40F201551E01A04300670E7C /* selectPlanYearViewController.xib */,
 			);
 			path = HBXMobile;
 			sourceTree = "<group>";
